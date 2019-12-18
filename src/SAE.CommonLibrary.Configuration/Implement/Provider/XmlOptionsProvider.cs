@@ -19,6 +19,9 @@ namespace SAE.CommonLibrary.Configuration.Implement
 
         }
         private const string Suffix = ".config";
+
+        public event Func<Task> OnChange;
+
         public Task HandleAsync(OptionsContext context)
         {
             var path = Utils.Path.Config($"{context.Name}{Suffix}");
@@ -27,7 +30,7 @@ namespace SAE.CommonLibrary.Configuration.Implement
             {
                 var document = new XmlDocument();
                 document.Load(path);
-                context.Options = document.ToObject(context.Type);
+                context.SetOption(document.ToObject(context.Type));
                 context.Provider = this;
             }
             return Task.CompletedTask;

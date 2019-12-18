@@ -20,24 +20,22 @@ namespace SAE.CommonLibrary.Configuration.Implement
         /// 类型
         /// </summary>
         public Type Type { get; }
-        private object options;
         /// <summary>
         /// 内容
         /// </summary>
         public object Options
         {
-            get => this.options; 
-            set
-            {
-                if (value == null) return;
-                this.options = value;
-                this.Success();
-            }
+            get;
+            private set;
         }
         /// <summary>
         /// 提供程序
         /// </summary>
         public IOptionsProvider Provider { get; set; }
-
+        public void SetOption(object option)
+        {
+            this.Options = option;
+            this.Success();
+        }
     }
 }

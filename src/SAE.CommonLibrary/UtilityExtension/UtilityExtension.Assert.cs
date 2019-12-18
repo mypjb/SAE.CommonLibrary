@@ -1,4 +1,6 @@
-﻿namespace SAE.CommonLibrary.Extension
+﻿using System;
+
+namespace SAE.CommonLibrary.Extension
 {
     public static partial class UtilityExtension
     {
@@ -56,7 +58,6 @@
             return assert;
         }
         #endregion
-
 
         #region True
         /// <summary>
@@ -162,6 +163,13 @@
                 throw new SaeException(message);
             }
             return assert;
+        }
+        #endregion
+
+        #region Then
+        public static IAssert<TThen> Then<TAssert, TThen>(this IAssert<TAssert> assert, Func<TAssert, TThen> @delegate, string name = "") where TAssert : class
+        {
+            return Assert.Build(@delegate(assert.Current), name);
         }
         #endregion
     }

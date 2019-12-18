@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
 using SAE.CommonLibrary.Logging;
-using SAE.CommonLibrary.Logging.Implement;
+using SAE.CommonLibrary.Logging.Nlog;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -14,10 +14,14 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="serviceCollection"></param>
         /// <returns></returns>
-        public static IServiceCollection AddLogger(this IServiceCollection serviceCollection)
+        public static IServiceCollection AddNlogLogger(this IServiceCollection serviceCollection)
         {
-            serviceCollection.TryAddSingleton<ILoggingFactory, LoggingFactory>();
-            serviceCollection.TryAddSingleton(typeof(ILog<>),typeof(Logging<>));
+            if (!serviceCollection.IsRegister<ILoggingFactory>())
+            {
+                serviceCollection.AddSaeOptions<LoggingConfig>();
+                serviceCollection.TryAddSingleton<ILoggingFactory, LoggingFactory>();
+                serviceCollection.TryAddSingleton(typeof(ILogging<>), typeof(Logging<>));
+            }
             return serviceCollection;
         }
     }

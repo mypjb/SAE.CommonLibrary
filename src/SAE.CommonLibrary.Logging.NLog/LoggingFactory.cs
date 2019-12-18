@@ -1,5 +1,6 @@
 ﻿using NLog.Config;
 using SAE.CommonLibrary.Configuration;
+using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Logging.Nlog
 {
@@ -8,17 +9,24 @@ namespace SAE.CommonLibrary.Logging.Nlog
     /// </summary>
     public class LoggingFactory : ILoggingFactory
     {
+        private readonly IOptionsMonitor<LoggingConfig> _monitor;
+
         public LoggingFactory(IOptionsMonitor<LoggingConfig> monitor)
         {
-            var configuration = new XmlLoggingConfiguration(monitor.Option.Document.CreateReader());
-            NLog.LogManager.Configuration = configuration;
-
-            monitor.OnChange(option =>
-            {
-                var configuration = new XmlLoggingConfiguration(monitor.Option.Document.CreateReader());
-                NLog.LogManager.Configuration = configuration;
-            });
+            this.Config(monitor.Options);
+            this._monitor = monitor;
+            this._monitor.OnChange(this.Config);
         } 
+
+        private Task Config(LoggingConfig loggingConfig)
+        {
+            if (loggingConfig.Document != null)
+            {
+                var configuration = new XmlLoggingConfiguration(loggingConfig.Document.CreateReader());
+                NLog.LogManager.Configuration = configuration;
+            }
+            return Task.FromResult(0);
+        }
 
         /// <summary>
         /// 

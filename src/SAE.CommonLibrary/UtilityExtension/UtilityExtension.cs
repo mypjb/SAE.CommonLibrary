@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Extension
 {
@@ -48,6 +49,18 @@ namespace SAE.CommonLibrary.Extension
             return enumerable;
         }
 
+
+        public static async Task<IEnumerable<T>> ForEachAsync<T>(this IEnumerable<T> enumerable, Func<T,Task> @delegate)
+        {
+            if (enumerable != null)
+            {
+                foreach (var itm in enumerable)
+                {
+                    await @delegate(itm);
+                }
+            }
+            return enumerable;
+        }
 
     }
 }

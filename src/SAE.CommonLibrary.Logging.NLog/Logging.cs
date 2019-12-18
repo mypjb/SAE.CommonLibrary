@@ -23,13 +23,7 @@ namespace SAE.CommonLibrary.Logging.Nlog
         {
             _log = LogManager.GetLogger(name);
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool IsEnabled(Level level)
-        {
-            return this._log.IsEnabled(this.Convert(level));
-        }
+       
 
         #endregion Ctor
 
@@ -63,6 +57,13 @@ namespace SAE.CommonLibrary.Logging.Nlog
             return this;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsEnabled(Level level)
+        {
+            return this._log.IsEnabled(this.Convert(level));
+        }
 
         #endregion Log Member
     }

@@ -12,6 +12,9 @@ namespace SAE.CommonLibrary.Configuration.Implement
     public class JsonOptionsProvider : IOptionsProvider
     {
         private const string Suffix = ".json";
+
+        public event Func<Task> OnChange;
+
         public async Task HandleAsync(OptionsContext context)
         {
             var path = Utils.Path.Config($"{context.Name}{Suffix}");
@@ -19,7 +22,7 @@ namespace SAE.CommonLibrary.Configuration.Implement
             if (path.ExistFile())
             {
                 var json = await File.ReadAllTextAsync(path, Constant.Encoding);
-                context.Options = json.ToObject(context.Type);
+                context.SetOption(json.ToObject(context.Type));
                 context.Provider = this;
             }
         }

@@ -1,8 +1,10 @@
-﻿using SAE.CommonLibrary.Abstract.Responsibility;
+﻿using Newtonsoft.Json.Linq;
+using SAE.CommonLibrary.Abstract.Responsibility;
 using SAE.CommonLibrary.Extension;
 using SAE.CommonLibrary.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -16,11 +18,15 @@ namespace SAE.CommonLibrary.Configuration.Implement
     public class RemoteOptionsProvider : IOptionsProvider
     {
         private readonly RemoteConfig _remoteConfig;
-        private readonly ILogging _logging;
+        private readonly Lazy<ILogging<RemoteOptionsProvider>> _logging;
         private readonly HttpClient _clinet;
         private readonly Timer _timer;
+
+        public event Func<Task> OnChange;
+
         protected RemoteOption Option { get; set; }
-        public RemoteOptionsProvider(RemoteConfig remoteConfig, ILogging<RemoteOption> logging)
+
+        public RemoteOptionsProvider(RemoteConfig remoteConfig, Lazy<ILogging<RemoteOptionsProvider>> logging)
         {
             this._remoteConfig = remoteConfig;
             this._logging = logging;
@@ -53,13 +59,28 @@ namespace SAE.CommonLibrary.Configuration.Implement
                         throw new SaeException(response);
                     }
 
-                    this._logging.Debug($"从'{url}'拉取配置成功，远程配置版本号'{response.Body.Version}'");
+                    if (arg == null)
+                        this._logging.Value.Debug($"从'{url}'拉取配置成功，远程配置版本号'{response.Body.Version}'");
 
                     if (response.Body.Version > (this.Option?.Version ?? 0))
                     {
-                        this._logging.Info($"远程版本'{response.Body.Version}'高于本地'{response.Body.Version}',将本地配置替换为本地");
+                        if (arg == null)
+                            this._logging.Value.Info($"远程版本'{response.Body.Version}'高于本地'{response.Body.Version}',将本地配置替换为本地");
+
                         this.Option = response.Body;
-                        break;
+
+                        if (this.Option.Data.Type == JTokenType.Object)
+                        {
+                            if (arg == null)
+                            {
+                                this.OnChange?.Invoke();
+                            }
+                            break;
+                        }
+                        else
+                        {
+                            throw new SaeException($"'{this.Option.Data.Type}'不是一个有效的Json对象");
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -72,15 +93,22 @@ namespace SAE.CommonLibrary.Configuration.Implement
                         }
                     }
 
-                    this._logging.Error($"从远处'{url}'，拉取配置时，触发异常", ex);
+                    if (arg == null)
+                        this._logging.Value.Error($"从远处'{url}'，拉取配置时，触发异常", ex);
                 }
             }
             this._timer.Change(TimeSpan.FromSeconds(this._remoteConfig.UpdateFrequency), Timeout.InfiniteTimeSpan);
         }
 
-        public Task HandleAsync(OptionsContext context)
+        public async Task HandleAsync(OptionsContext context)
         {
-            throw new NotImplementedException();
+            var jObject = this.Option.Data as JObject;
+            var jProperty = jObject.Property(context.Name, StringComparison.CurrentCultureIgnoreCase);
+            if (jProperty != null)
+            {
+                var json = jProperty.ToString();
+                context.SetOption(json.ToObject(context.Type));
+            }
         }
 
         public async Task SaveAsync(string name, object options)
@@ -99,7 +127,7 @@ namespace SAE.CommonLibrary.Configuration.Implement
                     var result = await responseMessage.AsAsync<ResponseResult>();
                     if (result.StatusCode == StatusCode.Success)
                     {
-                        this._logging.Info($"'{url}'");
+                        this._logging.Value.Info($"数据提交至'{url}'");
                         break;
                     }
                     else
@@ -110,7 +138,7 @@ namespace SAE.CommonLibrary.Configuration.Implement
                 }
                 catch (Exception ex)
                 {
-                    this._logging.Error(ex);
+                    this._logging.Value.Error(ex);
                 }
 
             }
@@ -124,7 +152,7 @@ namespace SAE.CommonLibrary.Configuration.Implement
     {
         public RemoteConfig()
         {
-            this.UpdateFrequency = 100;
+            this.UpdateFrequency = 10;
         }
         private int updateFrequency;
 
@@ -146,6 +174,16 @@ namespace SAE.CommonLibrary.Configuration.Implement
         /// 配置节点
         /// </summary>
         public string[] Urls { get; set; }
+        /// <summary>
+        /// 检查配置
+        /// </summary>
+        internal void Check()
+        {
+            Assert.Build(Urls, nameof(Urls))
+                  .NotNull()
+                  .Then(s => s.Any(), nameof(Urls))
+                  .True();
+        }
     }
     public class RemotePostData
     {
@@ -163,6 +201,6 @@ namespace SAE.CommonLibrary.Configuration.Implement
         /// 版本号
         /// </summary>
         public int Version { get; set; }
-        public object Data { get; set; }
+        public JToken Data { get; set; }
     }
 }

@@ -43,8 +43,8 @@ namespace SAE.CommonLibrary.Abstract.Responsibility
         /// <param name="context"></param>
         public virtual async Task HandleAsync(TContext context)
         {
-            if (context.Complete) return;
-            await this.Responsibility?.HandleAsync(context);
+            if (context.Complete || this.Responsibility == null) return;
+            await this.Responsibility.HandleAsync(context);
         }
 
     }

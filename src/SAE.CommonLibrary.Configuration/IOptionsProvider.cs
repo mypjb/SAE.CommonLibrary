@@ -15,5 +15,10 @@ namespace SAE.CommonLibrary.Configuration
         /// <param name="options"></param>
         /// <returns></returns>
         Task SaveAsync(string name,object options);
+        /// <summary>
+        /// 事件更改
+        /// </summary>
+        /// <returns></returns>
+        event Func<Task> OnChange;
     }
 }

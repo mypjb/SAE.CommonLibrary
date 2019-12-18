@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SAE.CommonLibrary.Configuration.Implement;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ namespace SAE.CommonLibrary.Configuration
     public interface IOptionsSource
     {
         /// <summary>
-        /// 获得<typeparamref name="TOptions"/>
+        /// 根据<paramref name="name"/>获得<typeparamref name="TOptions"/>
         /// </summary>
         /// <typeparam name="TOptions"></typeparam>
         /// <param name="name"></param>
@@ -20,5 +21,6 @@ namespace SAE.CommonLibrary.Configuration
         /// <typeparam name="TOptions"></typeparam>
         /// <param name="name"></param>
         Task SaveAsync<TOptions>(string name,TOptions options) where TOptions : class, new();
+
     }
 }
