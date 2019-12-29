@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SAE.EventStore.Memory
+namespace SAE.CommonLibrary.EventStore.Document.Memory
 {
     /// <summary>
     /// 基于内存的事件存储

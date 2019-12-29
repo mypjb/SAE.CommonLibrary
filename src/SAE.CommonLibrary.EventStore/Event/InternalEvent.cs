@@ -20,8 +20,6 @@ namespace SAE.CommonLibrary.EventStore.Event
                                       .Serialize(@event);
             var type = @event.GetType();
             this.Type = $"{type.FullName},{type.Assembly.GetName().Name}";
-            this.Id = @event.Id;
-            this.Version = @event.Version;
         }
         /// <summary>
         /// 事件类型
@@ -32,9 +30,6 @@ namespace SAE.CommonLibrary.EventStore.Event
         /// </summary>
         public string Event { get; set; }
 
-        public string Id { get; set; }
-
-        public long Version { get; set; }
 
         public Type GetEventType()
         {

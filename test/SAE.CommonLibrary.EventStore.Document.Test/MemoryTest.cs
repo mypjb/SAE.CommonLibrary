@@ -29,7 +29,7 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
         {
             services.AddDefaultConfiguration();
             services.AddMemoryPersistenceService();
-            services.AddMemberDocument();
+            services.AddMemoryDocument();
             services.AddMemoryMessageQueue();
             base.ConfigureServices(services);
         }
@@ -41,14 +41,13 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
             user.Create(this.GetRandom(), Password);
             _documentStore.Save(user);
             this.WriteLine(user);
-            var newUser = await this._persistenceService.FindAsync(user.Identity);
+            var newUser = await this._persistenceService.FindAsync(user.Id.ToIdentity());
             Xunit.Assert.NotNull(newUser);
             Xunit.Assert.Equal(user.Id, newUser.Id);
             Xunit.Assert.Equal(user.LoginName, newUser.LoginName);
             Xunit.Assert.Equal(user.Name, newUser.Name);
             Xunit.Assert.Equal(user.Password, newUser.Password);
             Xunit.Assert.Equal(user.Sex, newUser.Sex);
-            Xunit.Assert.Equal(user.Version, newUser.Version);
             this.WriteLine(newUser);
             return user;
         }
@@ -57,10 +56,10 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
         public async Task ChangePassword()
         {
             var user = await this.Register();
-            user = await _documentStore.FindAsync<User>(user.Identity);
+            user = await _documentStore.FindAsync<User>(user.Id.ToIdentity());
             user.ChangePassword(Password, Password + "1");
             _documentStore.Save(user);
-            var newUser = await this._persistenceService.FindAsync(user.Identity);
+            var newUser = await this._persistenceService.FindAsync(user.Id.ToIdentity());
             Xunit.Assert.NotNull(newUser);
             Xunit.Assert.Equal(user.Id, newUser.Id);
             Xunit.Assert.Equal(user.LoginName, newUser.LoginName);
@@ -76,10 +75,10 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
         {
             var user = await this.Register();
 
-            user = await _documentStore.FindAsync<User>(user.Identity);
+            user = await _documentStore.FindAsync<User>(user.Id.ToIdentity());
             user.SetProperty(this.GetRandom(), Math.Abs(user.Sex-1));
             _documentStore.Save(user);
-            var newUser = await this._persistenceService.FindAsync(user.Identity);
+            var newUser = await this._persistenceService.FindAsync(user.Id.ToIdentity());
             Xunit.Assert.NotNull(newUser);
             Xunit.Assert.Equal(user.Id, newUser.Id);
             Xunit.Assert.Equal(user.LoginName, newUser.LoginName);
@@ -95,7 +94,7 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
         {
             var user = await this.Register();
             await this._documentStore.RemoveAsync(user);
-            Xunit.Assert.Null(await this._persistenceService.FindAsync(user.Identity));
+            Xunit.Assert.Null(await this._persistenceService.FindAsync(user.Id.ToIdentity()));
         }
 
     }

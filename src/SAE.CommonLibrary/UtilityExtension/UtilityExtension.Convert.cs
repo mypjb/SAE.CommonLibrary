@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SAE.CommonLibrary.ObjectMapper;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -60,8 +61,8 @@ namespace SAE.CommonLibrary.Extension
         public static TModel To<TModel>(this object o)
         {
             if (o == null) return default(TModel);
-            throw new NotImplementedException();
-            //return TinyMapper.Map<TModel>(o);
+            
+            return TinyMapper.Map<TModel>(o);
         }
 
         /// <summary>
@@ -76,7 +77,7 @@ namespace SAE.CommonLibrary.Extension
                   .NotNull();
             Assert.Build(attach)
                   .NotNull();
-            extendAction.Invoke(source, attach);
+            TinyMapper.Map(attach.GetType(), source.GetType(), attach, source);
         }
 
         /// <summary>

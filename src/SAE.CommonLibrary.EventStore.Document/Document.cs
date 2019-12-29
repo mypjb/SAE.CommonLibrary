@@ -1,0 +1,35 @@
+﻿using SAE.CommonLibrary.Extension;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace SAE.CommonLibrary.EventStore.Document
+{
+    public abstract class Document : IDocument
+    {
+        public Document()
+        {
+            this._status = new List<IEvent>();
+        }
+        private IList<IEvent> _status;
+        IIdentity IDocument.Identity => this.GetIdentity().ToIdentity();
+
+        IEnumerable<IEvent> IDocument.ChangeEvents => this._status;
+
+        int  IDocument.Version { get; set; }
+
+        void IDocument.Mutate(IEvent @event)
+        {
+            this.Extend(@event);
+        }
+
+        protected virtual void Apply(IEvent @event)
+        {
+            this._status.Add(@event);
+
+            ((IDocument)this).Mutate(@event);
+        }
+
+        protected abstract string GetIdentity();
+    }
+}

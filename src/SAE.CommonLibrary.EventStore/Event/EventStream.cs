@@ -55,8 +55,6 @@ namespace SAE.CommonLibrary.EventStore
             {
                 foreach (var @event in events)
                 {
-                    @event.Id = this.Identity.ToString();
-                    //@event.Version = this.Version;
                     this._store.Add(new InternalEvent(@event));
                 }
             }
@@ -109,8 +107,6 @@ namespace SAE.CommonLibrary.EventStore
             {
                 var internalEvent= e as InternalEvent;
                 var @event = (IEvent)SerializerProvider.Current.Deserialize(internalEvent.Event, internalEvent.GetEventType());
-                @event.Id = internalEvent.Id;
-                @event.Version = internalEvent.Version;
                 eventList.Add(@event);
             });
 

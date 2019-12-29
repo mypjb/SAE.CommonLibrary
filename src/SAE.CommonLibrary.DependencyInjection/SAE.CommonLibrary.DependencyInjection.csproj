@@ -1,6 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RepositoryUrl>https://github.com/mypjb/SAE.CommonLibrary</RepositoryUrl>
+    <RepositoryType>github</RepositoryType>
+    <PackageTags>SAE</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageIcon>nuget.png</PackageIcon>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
@@ -11,5 +16,10 @@
     <ProjectReference Include="..\SAE.CommonLibrary.Logging\SAE.CommonLibrary.Logging.csproj" />
     <ProjectReference Include="..\SAE.CommonLibrary\SAE.CommonLibrary.csproj" />
   </ItemGroup>
-
+  <ItemGroup>
+    <None Include="..\..\nuget.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 </Project>

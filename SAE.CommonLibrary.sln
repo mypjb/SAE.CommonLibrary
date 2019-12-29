@@ -37,7 +37,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAE.CommonLibrary.EventStor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAE.CommonLibrary.Test", "test\SAE.CommonLibrary.Test\SAE.CommonLibrary.Test.csproj", "{7501B2A3-192A-4636-B205-3D9736D62CC8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.Logging.Test", "test\SAE.CommonLibrary.Logging.Test\SAE.CommonLibrary.Logging.Test.csproj", "{7A6BA130-F6E1-46C7-AF2E-58C176FEA730}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAE.CommonLibrary.Logging.Test", "test\SAE.CommonLibrary.Logging.Test\SAE.CommonLibrary.Logging.Test.csproj", "{7A6BA130-F6E1-46C7-AF2E-58C176FEA730}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.TinyMapper", "src\SAE.CommonLibrary.TinyMapper\SAE.CommonLibrary.TinyMapper.csproj", "{89A0A7F1-C81E-4497-B1AF-1DDB8B6CABB3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.TinyMapper.Test", "test\SAE.CommonLibrary.TinyMapper.Test\SAE.CommonLibrary.TinyMapper.Test.csproj", "{90E0F332-F38F-49AD-BA9D-C1B04426690F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,6 +97,14 @@ Global
 		{7A6BA130-F6E1-46C7-AF2E-58C176FEA730}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A6BA130-F6E1-46C7-AF2E-58C176FEA730}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A6BA130-F6E1-46C7-AF2E-58C176FEA730}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89A0A7F1-C81E-4497-B1AF-1DDB8B6CABB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89A0A7F1-C81E-4497-B1AF-1DDB8B6CABB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89A0A7F1-C81E-4497-B1AF-1DDB8B6CABB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89A0A7F1-C81E-4497-B1AF-1DDB8B6CABB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90E0F332-F38F-49AD-BA9D-C1B04426690F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90E0F332-F38F-49AD-BA9D-C1B04426690F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90E0F332-F38F-49AD-BA9D-C1B04426690F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90E0F332-F38F-49AD-BA9D-C1B04426690F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -110,6 +122,8 @@ Global
 		{DC1207DF-E3CD-4C15-9842-6ECE5128BEAC} = {8AD43B5B-ED55-4712-B865-1E6E1D7B19FE}
 		{7501B2A3-192A-4636-B205-3D9736D62CC8} = {8AD43B5B-ED55-4712-B865-1E6E1D7B19FE}
 		{7A6BA130-F6E1-46C7-AF2E-58C176FEA730} = {8AD43B5B-ED55-4712-B865-1E6E1D7B19FE}
+		{89A0A7F1-C81E-4497-B1AF-1DDB8B6CABB3} = {78157883-8166-46DB-9754-E093FE2A3936}
+		{90E0F332-F38F-49AD-BA9D-C1B04426690F} = {8AD43B5B-ED55-4712-B865-1E6E1D7B19FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2FF66E70-E062-4202-A1AD-A821991FEA65}

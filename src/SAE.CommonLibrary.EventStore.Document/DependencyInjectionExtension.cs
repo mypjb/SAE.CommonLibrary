@@ -4,7 +4,6 @@ using SAE.CommonLibrary.EventStore.Document;
 using SAE.CommonLibrary.EventStore.Document.Default;
 using SAE.CommonLibrary.EventStore.Document.Memory;
 using SAE.CommonLibrary.EventStore.Snapshot;
-using SAE.EventStore.Memory;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -24,16 +23,16 @@ namespace Microsoft.Extensions.DependencyInjection
                 serviceCollection.TryAddSingleton<IDocumentEvent, DefaultDocumentEvent>();
                 serviceCollection.AddNlogLogger();
             }
-
+            
             return serviceCollection;
         }
 
         /// <summary>
-        /// 添加EventStore.Docment.Memory默认实现
+        /// 添加Memory默认实现
         /// </summary>
         /// <param name="serviceCollection"></param>
         /// <returns></returns>
-        public static IServiceCollection AddMemberDocument(this IServiceCollection serviceCollection)
+        public static IServiceCollection AddMemoryDocument(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddDocument();
             serviceCollection.TryAddSingleton<ISnapshotStore, MemorySnapshotStore>();
