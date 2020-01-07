@@ -36,16 +36,7 @@ namespace SAE.CommonLibrary.EventStore.Document
             this._documentEvents = documentEvents;
             this._config = config;
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TDocument"></typeparam>
-        /// <param name="identity"></param>
-        /// <returns></returns>
-        public virtual async Task<TDocument> FindAsync<TDocument>(IIdentity identity) where TDocument : IDocument, new()
-        {
-            return await this.FindAsync<TDocument>(identity, this._config.VersionPeak);
-        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -113,7 +104,7 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// </summary>
         /// <param name="document"></param>
         /// <returns></returns>
-        public virtual async Task SaveAsync<TDocument>(TDocument document) where TDocument : IDocument
+        public virtual async Task SaveAsync<TDocument>(TDocument document) where TDocument : IDocument, new()
         {
             var identity = document.Identity;
 
@@ -121,7 +112,7 @@ namespace SAE.CommonLibrary.EventStore.Document
 
             if (currentVersion > document.Version)
             {
-                throw new SaeException(StatusCode.ParamesterInvalid, "当前版本过低");
+                throw new Exception("版本不一致");
             }
             //将当前版本号+1以保持循序性
             var version = currentVersion + 1;
@@ -131,9 +122,9 @@ namespace SAE.CommonLibrary.EventStore.Document
             //累加事件流
             await this._eventStore.AppendAsync(eventStream);
 
-            await this._documentEvents.ForEachAsync(@event => @event.AppendAsync(document, eventStream));
             //附加事件
-            //await this._documentEvents.AppendAsync(document, eventStream);
+            await this._documentEvents.ForEachAsync(@event => @event.AppendAsync(document, eventStream));
+            
             //如果版本号满足快照要求就将对象存储到快照中
             if (version % this._config.SnapshotInterval != 0)
             {
@@ -151,7 +142,7 @@ namespace SAE.CommonLibrary.EventStore.Document
             //    document.Mutate(@event);
             //}
             //
-            await this._snapshot.SaveAsync(new Snapshot.Snapshot(identity, document, version));
+            await this._snapshot.SaveAsync(new Snapshot.Snapshot(identity, document, document.Version));
         }
 
         /// <summary>
@@ -159,7 +150,7 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// </summary>
         /// <param name="identity"></param>
         /// <returns></returns>
-        public async Task RemoveAsync<TDocument>(IIdentity identity) where TDocument : IDocument
+        public async Task RemoveAsync<TDocument>(IIdentity identity) where TDocument : IDocument, new()
         {
             await this._snapshot.RemoveAsync(identity);
             await this._eventStore.RemoveAsync(identity);

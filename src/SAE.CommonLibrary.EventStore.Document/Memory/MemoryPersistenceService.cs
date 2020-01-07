@@ -13,41 +13,21 @@ namespace SAE.CommonLibrary.EventStore.Document.Default
             this._store = new List<TDocument>();
         }
 
-        public Task AddAsync(TDocument document)
-        {
-            this._store.Add(document);
-            return Task.FromResult(0);
-        }
 
-        public Task<TDocument> FindAsync(IIdentity identity)
+        public Task RemoveAsync(IIdentity identity)
         {
-            return Task.FromResult(this._store.FirstOrDefault(s => s.Identity.Equals(identity)));
-        }
-
-        public Task RemoveAsync(TDocument docuemnt)
-        {
-            this._store.RemoveAll(s => s.Identity.Equals(docuemnt.Identity));
+            this._store.RemoveAll(s => s.Identity.Equals(identity));
             return Task.FromResult(0);
         }
 
         public async Task SaveAsync(TDocument document)
         {
             var index = this._store.FindIndex(s => s.Identity.Equals(document.Identity));
-            if (index == -1)
+            if (index != -1)
             {
-                await this.AddAsync(document);
+                await this.RemoveAsync(document.Identity);
             }
-            else
-            {
-                await this.UpdateAsync(document);
-            }
-
-        }
-
-        public async Task UpdateAsync(TDocument document)
-        {
-            await this.RemoveAsync(document);
-            await this.AddAsync(document);
+            this._store.Add(document);
         }
     }
 }

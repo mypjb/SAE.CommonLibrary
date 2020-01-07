@@ -39,9 +39,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAE.CommonLibrary.Test", "t
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAE.CommonLibrary.Logging.Test", "test\SAE.CommonLibrary.Logging.Test\SAE.CommonLibrary.Logging.Test.csproj", "{7A6BA130-F6E1-46C7-AF2E-58C176FEA730}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.TinyMapper", "src\SAE.CommonLibrary.TinyMapper\SAE.CommonLibrary.TinyMapper.csproj", "{89A0A7F1-C81E-4497-B1AF-1DDB8B6CABB3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAE.CommonLibrary.TinyMapper", "src\SAE.CommonLibrary.TinyMapper\SAE.CommonLibrary.TinyMapper.csproj", "{89A0A7F1-C81E-4497-B1AF-1DDB8B6CABB3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.TinyMapper.Test", "test\SAE.CommonLibrary.TinyMapper.Test\SAE.CommonLibrary.TinyMapper.Test.csproj", "{90E0F332-F38F-49AD-BA9D-C1B04426690F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAE.CommonLibrary.TinyMapper.Test", "test\SAE.CommonLibrary.TinyMapper.Test\SAE.CommonLibrary.TinyMapper.Test.csproj", "{90E0F332-F38F-49AD-BA9D-C1B04426690F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAE.CommonLibrary.AspNetCore", "src\SAE.CommonLibrary.AspNetCore\SAE.CommonLibrary.AspNetCore.csproj", "{EA613752-436B-40F6-B760-51ABBB986586}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.Abstract.Test", "test\SAE.CommonLibrary.Abstract.Test\SAE.CommonLibrary.Abstract.Test.csproj", "{BCB982B2-36E4-416B-9329-9CE47428BC1A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -105,6 +109,14 @@ Global
 		{90E0F332-F38F-49AD-BA9D-C1B04426690F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90E0F332-F38F-49AD-BA9D-C1B04426690F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90E0F332-F38F-49AD-BA9D-C1B04426690F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA613752-436B-40F6-B760-51ABBB986586}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA613752-436B-40F6-B760-51ABBB986586}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA613752-436B-40F6-B760-51ABBB986586}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA613752-436B-40F6-B760-51ABBB986586}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCB982B2-36E4-416B-9329-9CE47428BC1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCB982B2-36E4-416B-9329-9CE47428BC1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCB982B2-36E4-416B-9329-9CE47428BC1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCB982B2-36E4-416B-9329-9CE47428BC1A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -124,6 +136,8 @@ Global
 		{7A6BA130-F6E1-46C7-AF2E-58C176FEA730} = {8AD43B5B-ED55-4712-B865-1E6E1D7B19FE}
 		{89A0A7F1-C81E-4497-B1AF-1DDB8B6CABB3} = {78157883-8166-46DB-9754-E093FE2A3936}
 		{90E0F332-F38F-49AD-BA9D-C1B04426690F} = {8AD43B5B-ED55-4712-B865-1E6E1D7B19FE}
+		{EA613752-436B-40F6-B760-51ABBB986586} = {78157883-8166-46DB-9754-E093FE2A3936}
+		{BCB982B2-36E4-416B-9329-9CE47428BC1A} = {8AD43B5B-ED55-4712-B865-1E6E1D7B19FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2FF66E70-E062-4202-A1AD-A821991FEA65}

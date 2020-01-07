@@ -25,7 +25,7 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test.Domain
             {
                 LoginName = loginName,
                 Password = password,
-                Id = Utils.GenerateId().ToString("N")
+                Id = Utils.GenerateId()
             });
             
             this.SetProperty("pjb", 0);
@@ -51,8 +51,6 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test.Domain
                 Password = password
             });
         }
-
-        
 
         protected override string GetIdentity()
         {

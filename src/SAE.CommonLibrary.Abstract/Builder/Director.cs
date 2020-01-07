@@ -2,6 +2,7 @@
 using SAE.CommonLibrary.Extension;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Abstract.Builder
 {
@@ -17,14 +18,14 @@ namespace SAE.CommonLibrary.Abstract.Builder
             this._serviceProvider = serviceProvider;
         }
 
-        public virtual void Build<T>(T model) where T : class
+        public virtual async Task Build<T>(T model) where T : class
         {
             if (model.IsNull()) return;
             //只有注册了具体的建筑对象才实例化它
             IDirector<T> director;
             if (this._serviceProvider.TryGetService(out director))
             {
-                director.Build(model);
+                await director.Build(model);
             }
         }
     }
@@ -42,11 +43,11 @@ namespace SAE.CommonLibrary.Abstract.Builder
             this._builders = builders;
         }
 
-        public virtual void Build(T model)
+        public virtual async Task Build(T model)
         {
             if (model == null) return;
             foreach (var builder in this._builders)
-                builder.Build(model);
+                await builder.Build(model);
         }
     }
 }

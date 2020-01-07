@@ -24,24 +24,14 @@ namespace SAE.CommonLibrary.EventStore.Document
         {
             var persistenceService = this.GetService<TDocument>();
 
-            if (document.Version == 1)
-            {
-                await persistenceService.AddAsync(document);
-            }
-            else
-            {
-                await persistenceService.UpdateAsync(document);
-            }
+            await persistenceService.SaveAsync(document);
         }
 
         public async Task RemoveAsync<TDocument>(IIdentity identity) where TDocument : IDocument
         {
             var persistenceService = this.GetService<TDocument>();
 
-            var document = await persistenceService.FindAsync(identity);
-
-            if (document != null)
-                await persistenceService.RemoveAsync(document);
+            await persistenceService.RemoveAsync(identity);
         }
 
         private IPersistenceService<TDocument> GetService<TDocument>() where TDocument : IDocument

@@ -21,10 +21,10 @@ namespace SAE.CommonLibrary.ObjectMapper.Test
 
         private TTarget Map<TSource, TTarget>(TSource source)
         {
-            if (!TinyMapper.BindingExists<TSource, TTarget>())
-            {
-                TinyMapper.Bind<TSource, TTarget>();
-            }
+            //if (!TinyMapper.BindingExists<TSource, TTarget>())
+            //{
+            //    TinyMapper.Bind<TSource, TTarget>();
+            //}
             return TinyMapper.Map<TTarget>(source);
         }
     }
@@ -34,10 +34,10 @@ namespace SAE.CommonLibrary.ObjectMapper.Test
     {
         public static TTarget Map<TSource, TTarget>(this TSource source)
         {
-            if (!TinyMapper.BindingExists<TSource, TTarget>())
-            {
-                TinyMapper.Bind<TSource, TTarget>();
-            }
+            //if (!TinyMapper.BindingExists<TSource, TTarget>())
+            //{
+            //    TinyMapper.Bind<TSource, TTarget>();
+            //}
             return TinyMapper.Map<TTarget>(source);
         }
     }

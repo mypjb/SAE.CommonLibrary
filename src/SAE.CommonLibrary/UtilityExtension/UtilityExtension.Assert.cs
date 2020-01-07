@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SAE.CommonLibrary.Extension
 {
@@ -116,7 +118,7 @@ namespace SAE.CommonLibrary.Extension
         /// </summary>
         /// <param name="assert"></param>
         /// <returns></returns>
-        public static IAssert<TAssert> Null<TAssert>(this IAssert<TAssert> assert) where TAssert : class
+        public static IAssert<TAssert> Null<TAssert>(this IAssert<TAssert> assert)
         {
             return assert.Null($"{assert.Name},不为null");
         }
@@ -127,7 +129,7 @@ namespace SAE.CommonLibrary.Extension
         /// <param name="assert"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public static IAssert<TAssert> Null<TAssert>(this IAssert<TAssert> assert, string message) where TAssert : class
+        public static IAssert<TAssert> Null<TAssert>(this IAssert<TAssert> assert, string message)
         {
             if (assert.Current != null)
             {
@@ -145,7 +147,7 @@ namespace SAE.CommonLibrary.Extension
         /// </summary>
         /// <param name="assert"></param>
         /// <returns></returns>
-        public static IAssert<TAssert> NotNull<TAssert>(this IAssert<TAssert> assert) where TAssert : class
+        public static IAssert<TAssert> NotNull<TAssert>(this IAssert<TAssert> assert)
         {
             return assert.NotNull($"{assert.Name},不能为null");
         }
@@ -156,7 +158,7 @@ namespace SAE.CommonLibrary.Extension
         /// <param name="assert"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public static IAssert<TAssert> NotNull<TAssert>(this IAssert<TAssert> assert, string message) where TAssert : class
+        public static IAssert<TAssert> NotNull<TAssert>(this IAssert<TAssert> assert, string message)
         {
             if (assert.Current == null)
             {
@@ -167,9 +169,38 @@ namespace SAE.CommonLibrary.Extension
         #endregion
 
         #region Then
-        public static IAssert<TThen> Then<TAssert, TThen>(this IAssert<TAssert> assert, Func<TAssert, TThen> @delegate, string name = "") where TAssert : class
+        public static IAssert<TThen> Then<TAssert, TThen>(this IAssert<TAssert> assert, Func<TAssert, TThen> @delegate, string name = "")
         {
             return Assert.Build(@delegate(assert.Current), name);
+        }
+        #endregion
+
+        #region MyRegion
+
+        /// <summary>
+        /// <see cref="IAssert{TAssert}.Current"/>
+        /// </summary>
+        /// <param name="assert"></param>
+        /// <returns></returns>
+        public static IAssert<IEnumerable<TAssert>> Any<TAssert>(this IAssert<IEnumerable<TAssert>> assert, Func<TAssert, bool> predicate, string message = null)
+        {
+            assert.NotNull()
+                  .Then(s => s.Any(predicate))
+                  .True(message ?? "不存在匹配项");
+            return assert;
+        }
+
+        /// <summary>
+        /// <see cref="IAssert{TAssert}.Current"/>
+        /// </summary>
+        /// <param name="assert"></param>
+        /// <returns></returns>
+        public static IAssert<IEnumerable<TAssert>> NotAny<TAssert>(this IAssert<IEnumerable<TAssert>> assert, Func<TAssert, bool> predicate, string message = null)
+        {
+            assert.NotNull()
+                  .Then(s => s.Any(predicate))
+                  .False(message ?? "已存在匹配项");
+            return assert;
         }
         #endregion
     }

@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using SAE.CommonLibrary;
 using System;
 using System.Linq;
@@ -24,7 +25,6 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceProvider BuildAutofacProvider(this IServiceCollection serviceDescriptors, IContainer container)
         {
             var serviceProvider= new AutofacServiceProvider(container);
-            serviceProvider.SetServiceProvider();
             return serviceProvider;
         }
 
@@ -35,24 +35,14 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddServiceProvider(this IServiceCollection serviceDescriptors)
         {
-            serviceDescriptors.AddSingleton(provider =>
+            serviceDescriptors.TryAddSingleton(provider =>
             {
-                provider.SetServiceProvider();
-                return provider;
+                return new ServiceFacade(provider);
             });
             return serviceDescriptors;
         }
 
-        /// <summary>
-        /// 设置服务提供程序至<seealso cref="ServiceFacade.ServiceProvider"/>属性
-        /// </summary>
-        /// <param name="serviceCollection"></param>
-        /// <returns></returns>
-        public static IServiceProvider SetServiceProvider(this IServiceProvider serviceProvider)
-        {
-            ServiceFacade.ServiceProvider = serviceProvider;
-            return serviceProvider;
-        }
+       
         /// <summary>
         /// 是否注册
         /// </summary>

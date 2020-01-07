@@ -11,16 +11,30 @@ namespace SAE.CommonLibrary
     public class ResponseResult
     {
         /// <summary>
+        /// 空的成功输出输出结果
+        /// </summary>
+        public static ResponseResult Success = new ResponseResult();
+        /// <summary>
+        /// 使用<paramref name="body"/>作为主体创建一个<seealso cref="ResponseResult{TBody}"/>对象
+        /// </summary>
+        /// <typeparam name="TBody">主体类型</typeparam>
+        /// <param name="body"></param>
+        /// <returns></returns>
+        public static ResponseResult<TBody> Create<TBody>(TBody body)
+        {
+            return new ResponseResult<TBody>(body);
+        }
+        /// <summary>
         /// 
         /// </summary>
-        public ResponseResult():this(StatusCode.Success)
+        public ResponseResult() : this(StatusCode.Success)
         {
         }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="body"></param>
-        public ResponseResult(object body):this()
+        public ResponseResult(object body) : this()
         {
             this.Body = body;
         }
@@ -28,7 +42,7 @@ namespace SAE.CommonLibrary
         /// 
         /// </summary>
         /// <param name="code"></param>
-        public ResponseResult(StatusCode code):this(code,string.Empty)
+        public ResponseResult(StatusCode code) : this(code, string.Empty)
         {
         }
         /// <summary>
@@ -36,16 +50,31 @@ namespace SAE.CommonLibrary
         /// </summary>
         /// <param name="code"></param>
         /// <param name="message"></param>
-        public ResponseResult(StatusCode code,string message)
+        public ResponseResult(StatusCode code, string message)
         {
             this.StatusCode = code;
             this.message = message;
         }
+        public ResponseResult(Exception exception) : this(StatusCode.Unknown, exception)
+        {
+
+        }
+
+        public ResponseResult(StatusCode code, Exception exception) : this(code, exception?.Message)
+        {
+        }
+
+        public ResponseResult(SaeException exception) : this(StatusCode.Custom, exception)
+        {
+
+        }
+
         /// <summary>
         /// 状态码
         /// </summary>
         public StatusCode StatusCode { get; set; }
         private string message;
+
         /// <summary>
         /// 消息
         /// </summary>
@@ -68,9 +97,9 @@ namespace SAE.CommonLibrary
     /// <summary>
     /// <seealso cref="ResponseResult"/>的泛型实现
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="TBody"></typeparam>
 
-    public class ResponseResult<T> : ResponseResult
+    public class ResponseResult<TBody> : ResponseResult
     {
         /// <summary>
         /// 
@@ -82,7 +111,7 @@ namespace SAE.CommonLibrary
         /// 
         /// </summary>
         /// <param name="body"></param>
-        public ResponseResult(T body) : base(body)
+        public ResponseResult(TBody body) : base(body)
         {
         }
         /// <summary>
@@ -103,9 +132,9 @@ namespace SAE.CommonLibrary
         /// <summary>
         /// 
         /// </summary>
-        public new T Body
+        public new TBody Body
         {
-            get => (T)base.Body;
+            get => (TBody)base.Body;
             set => base.Body = value;
         }
     }

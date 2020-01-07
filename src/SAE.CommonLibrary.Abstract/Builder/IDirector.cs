@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Abstract.Builder
 {
@@ -9,7 +10,7 @@ namespace SAE.CommonLibrary.Abstract.Builder
     /// </summary>
     public interface IDirector
     {
-        void Build<T>(T model) where T : class;
+        Task Build<T>(T model) where T : class;
     }
     /// <summary>
     /// 指挥者具体接口
@@ -17,7 +18,7 @@ namespace SAE.CommonLibrary.Abstract.Builder
     /// <typeparam name="T"></typeparam>
     public interface IDirector<T> where T : class
     {
-        void Build(T model);
+        Task Build(T model);
     }
     
 }

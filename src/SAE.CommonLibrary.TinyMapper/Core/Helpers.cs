@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection.Emit;
+using System.Reflection;
 
 namespace SAE.CommonLibrary.ObjectMapper.Core
 {
@@ -27,7 +28,7 @@ namespace SAE.CommonLibrary.ObjectMapper.Core
 
         internal static Type CreateType(TypeBuilder typeBuilder)
         {
-            return typeBuilder.CreateType();
+            return typeBuilder.CreateTypeInfo();
         }
 
         internal static Type BaseType(Type type)

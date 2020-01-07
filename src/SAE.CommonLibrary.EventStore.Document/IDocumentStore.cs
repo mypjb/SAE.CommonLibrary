@@ -10,13 +10,6 @@ namespace SAE.CommonLibrary.EventStore.Document
     /// </summary>
     public interface IDocumentStore
     {
-        /// <summary>
-        /// 从文档中获得文档对象
-        /// </summary>
-        /// <typeparam name="TDocument"></typeparam>
-        /// <param name="identity"></param>
-        /// <returns></returns>
-        Task<TDocument> FindAsync<TDocument>(IIdentity identity) where TDocument : IDocument, new();
 
         /// <summary>
         /// 获取特定版本的文档对象
@@ -31,13 +24,13 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// 保存文件操作事件
         /// </summary>
         /// <param name="document"></param>
-        Task SaveAsync<TDocument>(TDocument document) where TDocument : IDocument;
+        Task SaveAsync<TDocument>(TDocument document) where TDocument : IDocument, new();
 
         /// <summary>
         /// 使用<seealso cref="IIdentity"/>移除文档对象
         /// </summary>
         /// <param name="identity"></param>
         /// <returns></returns>
-        Task RemoveAsync<TDocument>(IIdentity identity) where TDocument : IDocument;
+        Task RemoveAsync<TDocument>(IIdentity identity) where TDocument : IDocument, new();
     }
 }

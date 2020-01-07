@@ -16,7 +16,7 @@ namespace SAE.CommonLibrary.EventStore.Document
 
         IEnumerable<IEvent> IDocument.ChangeEvents => this._status;
 
-        int  IDocument.Version { get; set; }
+        int IDocument.Version { get; set; }
 
         void IDocument.Mutate(IEvent @event)
         {
@@ -30,6 +30,16 @@ namespace SAE.CommonLibrary.EventStore.Document
             ((IDocument)this).Mutate(@event);
         }
 
-        protected abstract string GetIdentity();
+        protected virtual void Apply<TEvent>(object command, Action<TEvent> action = null) where TEvent : IEvent
+        {
+            var @event = command.To<TEvent>();
+            action?.Invoke(@event);
+            this.Apply(@event);
+        }
+        protected virtual string GetIdentity()
+        {
+            dynamic @dynamic = this;
+            return @dynamic.Id.ToString();
+        }
     }
 }

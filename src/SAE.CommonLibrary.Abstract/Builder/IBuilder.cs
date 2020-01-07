@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Abstract.Builder
 {
@@ -14,6 +15,6 @@ namespace SAE.CommonLibrary.Abstract.Builder
         /// 构建
         /// </summary>
         /// <param name="model"></param>
-        void Build(T model);
+        Task Build(T model);
     }
 }

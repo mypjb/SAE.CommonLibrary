@@ -1,14 +1,15 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using System.Threading;
 using SAE.CommonLibrary.ObjectMapper.Bindings;
 using SAE.CommonLibrary.ObjectMapper.Core;
 using SAE.CommonLibrary.ObjectMapper.Core.DataStructures;
 using SAE.CommonLibrary.ObjectMapper.Core.Extensions;
 using SAE.CommonLibrary.ObjectMapper.Mappers;
 using SAE.CommonLibrary.ObjectMapper.Reflection;
-[assembly:System.Runtime.CompilerServices.InternalsVisibleTo("SAE.CommonLibrary.TinyMapper.Test")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("SAE.CommonLibrary.TinyMapper.Test")]
 namespace SAE.CommonLibrary.ObjectMapper
 {
     /// <summary>
@@ -17,9 +18,10 @@ namespace SAE.CommonLibrary.ObjectMapper
     /// </summary>
     public static class TinyMapper
     {
-        private static readonly ConcurrentDictionary<TypePair, Mapper> _mappers = new ConcurrentDictionary<TypePair, Mapper>();
+        private static readonly Dictionary<TypePair, Mapper> _mappers = new Dictionary<TypePair, Mapper>();
         private static readonly TargetMapperBuilder _targetMapperBuilder;
         private static readonly TinyMapperConfig _config;
+        private static readonly object _mappersLock = new object();
 
         static TinyMapper()
         {
@@ -56,10 +58,16 @@ namespace SAE.CommonLibrary.ObjectMapper
                 throw new ArgumentNullException(nameof(targetType));
             }
             TypePair typePair = TypePair.Create(sourceType, targetType);
-
-            var mapper = _targetMapperBuilder.Build(typePair);
-
-            _mappers.AddOrUpdate(typePair, mapper, (a, b) => mapper);
+            if (!_mappers.ContainsKey(typePair))
+            {
+                lock (_mappersLock)
+                {
+                    if (!_mappers.ContainsKey(typePair))
+                    {
+                        _mappers[typePair] = _targetMapperBuilder.Build(typePair);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -72,14 +80,12 @@ namespace SAE.CommonLibrary.ObjectMapper
         public static void Bind<TSource, TTarget>(Action<IBindingConfig<TSource, TTarget>> config)
         {
             TypePair typePair = TypePair.Create<TSource, TTarget>();
-
             var bindingConfig = new BindingConfigOf<TSource, TTarget>();
-
             config(bindingConfig);
-
-            var mapper = _targetMapperBuilder.Build(typePair, bindingConfig);
-
-            _mappers.AddOrUpdate(typePair, mapper, (a, b) => mapper);
+            lock (_mappersLock)
+            {
+                _mappers[typePair] = _targetMapperBuilder.Build(typePair, bindingConfig);
+            }
         }
 
         /// <summary>
@@ -92,7 +98,10 @@ namespace SAE.CommonLibrary.ObjectMapper
         public static bool BindingExists<TSource, TTarget>()
         {
             TypePair typePair = TypePair.Create<TSource, TTarget>();
-            return _mappers.ContainsKey(typePair);
+            lock (_mappersLock)
+            {
+                return _mappers.ContainsKey(typePair);
+            }
         }
 
         /// <summary>
@@ -106,12 +115,7 @@ namespace SAE.CommonLibrary.ObjectMapper
         /// <returns>Mapped object.</returns>
         public static TTarget Map<TSource, TTarget>(TSource source, TTarget target = default(TTarget))
         {
-            TypePair typePair = TypePair.Create<TSource, TTarget>();
-
-            Mapper mapper = GetMapper(typePair);
-            var result = (TTarget)mapper.Map(source, target);
-
-            return result;
+            return (TTarget)Map(typeof(TSource), typeof(TTarget), source, target);
         }
 
         /// <summary>
@@ -126,7 +130,10 @@ namespace SAE.CommonLibrary.ObjectMapper
         public static object Map(Type sourceType, Type targetType, object source, object target = null)
         {
             TypePair typePair = TypePair.Create(sourceType, targetType);
-
+            //if (!_mappers.ContainsKey(typePair))
+            //{
+            //    Bind(sourceType, targetType);
+            //}
             Mapper mapper = GetMapper(typePair);
             var result = mapper.Map(source, target);
 
@@ -156,42 +163,79 @@ namespace SAE.CommonLibrary.ObjectMapper
                 throw Error.ArgumentNull("Source cannot be null. Use TinyMapper.Map<TSource, TTarget> method instead.");
             }
 
-            TypePair typePair = TypePair.Create(source.GetType(), typeof(TTarget));
-
-            Mapper mapper = GetMapper(typePair);
-            var result = (TTarget)mapper.Map(source);
-
-            return result;
+            return (TTarget)Map(source.GetType(), typeof(TTarget), source);
         }
 
         [SuppressMessage("ReSharper", "All")]
         private static Mapper GetMapper(TypePair typePair)
         {
-            return _mappers.GetOrAdd(typePair, _targetMapperBuilder.Build);
-            
+            Mapper mapper;
+
+            if (_mappers.TryGetValue(typePair, out mapper) == false)
+            {
+                //throw new TinyMapperException($"No binding found for '{typePair.Source.Name}' to '{typePair.Target.Name}'. " +
+                //                              $"Call TinyMapper.Bind<{typePair.Source.Name}, {typePair.Target.Name}>()");
+                Bind(typePair.Source, typePair.Target);
+                return _mappers[typePair];
+            }
+
+            //            _mappersLock.EnterUpgradeableReadLock();
+            //            try
+            //            {
+            //                if (_mappers.TryGetValue(typePair, out mapper) == false)
+            //                {
+            //                    if (_config.EnablePolymorphicMapping && (mapper = GetPolymorphicMapping(typePair)) != null)
+            //                    {
+            //                        return mapper;
+            //                    }
+            //                    else if (_config.EnableAutoBinding)
+            //                    {
+            //                        mapper = _targetMapperBuilder.Build(typePair);
+            //                        _mappersLock.EnterWriteLock();
+            //                        try
+            //                        {
+            //                            _mappers[typePair] = mapper;
+            //                        }
+            //                        finally
+            //                        {
+            //                            _mappersLock.ExitWriteLock();
+            //                        }
+            //                    }
+            //                    else
+            //                    {
+            //                        throw new TinyMapperException($"Unable to find a binding for type '{typePair.Source?.Name}' to '{typePair.Target?.Name}'.");
+            //                    }
+            //                }
+            //            }
+            //            finally
+            //            {
+            //                _mappersLock.ExitUpgradeableReadLock();
+            //            }
+
+            return mapper;
         }
 
         //Note: Lock should already be acquired for the mapper
-//        private static Mapper GetPolymorphicMapping(TypePair types)
-//        {
-//            // Walk the polymorphic heirarchy until we find a mapping match
-//            Type source = types.Source;
-//
-//            do
-//            {
-//                Mapper result;
-//                foreach (Type iface in source.GetInterfaces())
-//                {
-//                    if (_mappers.TryGetValue(TypePair.Create(iface, types.Target), out result))
-//                        return result;
-//                }
-//
-//                if (_mappers.TryGetValue(TypePair.Create(source, types.Target), out result))
-//                    return result;
-//            }
-//            while ((source = Helpers.BaseType(source)) != null);
-//
-//            return null;
-//        }
+        //        private static Mapper GetPolymorphicMapping(TypePair types)
+        //        {
+        //            // Walk the polymorphic heirarchy until we find a mapping match
+        //            Type source = types.Source;
+        //
+        //            do
+        //            {
+        //                Mapper result;
+        //                foreach (Type iface in source.GetInterfaces())
+        //                {
+        //                    if (_mappers.TryGetValue(TypePair.Create(iface, types.Target), out result))
+        //                        return result;
+        //                }
+        //
+        //                if (_mappers.TryGetValue(TypePair.Create(source, types.Target), out result))
+        //                    return result;
+        //            }
+        //            while ((source = Helpers.BaseType(source)) != null);
+        //
+        //            return null;
+        //        }
     }
 }

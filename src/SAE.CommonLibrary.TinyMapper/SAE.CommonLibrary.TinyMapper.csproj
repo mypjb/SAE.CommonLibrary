@@ -7,6 +7,8 @@
     <PackageTags>SAE</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageIcon>nuget.png</PackageIcon>
+    <Version>1.0.1</Version>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\..\nuget.png">

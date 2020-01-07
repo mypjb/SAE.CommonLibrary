@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Runtime.Serialization;
+
 
 namespace SAE.CommonLibrary.ObjectMapper
 {
@@ -19,5 +19,6 @@ namespace SAE.CommonLibrary.ObjectMapper
         public TinyMapperException(string message, Exception innerException) : base(message, innerException)
         {
         }
+
     }
 }

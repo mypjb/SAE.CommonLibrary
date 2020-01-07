@@ -17,7 +17,7 @@ namespace SAE.CommonLibrary
         /// 生成有序的Guid
         /// </summary>
         /// <returns></returns>
-        public static Guid GenerateId()
+        public static string GenerateId()
         {
             byte[] guidArray = Guid.NewGuid().ToByteArray();
 
@@ -35,7 +35,7 @@ namespace SAE.CommonLibrary
             Array.Copy(daysArray, daysArray.Length - 2, guidArray, guidArray.Length - 6, 2);
             Array.Copy(msecsArray, msecsArray.Length - 4, guidArray, guidArray.Length - 4, 4);
 
-            return new Guid(guidArray);
+            return new Guid(guidArray).ToString("N");
 
         }
 

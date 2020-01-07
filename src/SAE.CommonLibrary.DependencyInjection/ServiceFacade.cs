@@ -8,6 +8,10 @@ namespace SAE.CommonLibrary
 {
     public class ServiceFacade
     {
+        public ServiceFacade(IServiceProvider serviceProvider)
+        {
+            ServiceProvider = serviceProvider;
+        }
         public static ConcurrentDictionary<string, object> _storge = new ConcurrentDictionary<string, object>();
         public static IServiceProvider ServiceProvider { get; internal set; }
 

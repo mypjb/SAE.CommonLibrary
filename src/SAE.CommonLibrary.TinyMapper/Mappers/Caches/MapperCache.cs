@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using SAE.CommonLibrary.ObjectMapper.Core.DataStructures;
@@ -9,7 +8,7 @@ namespace SAE.CommonLibrary.ObjectMapper.Mappers.Caches
 {
     internal sealed class MapperCache
     {
-        private readonly ConcurrentDictionary<TypePair, MapperCacheItem> _cache = new ConcurrentDictionary<TypePair, MapperCacheItem>();
+        private readonly Dictionary<TypePair, MapperCacheItem> _cache = new Dictionary<TypePair, MapperCacheItem>();
 
         public bool IsEmpty => _cache.Count == 0;
 
@@ -27,21 +26,35 @@ namespace SAE.CommonLibrary.ObjectMapper.Mappers.Caches
 
         public MapperCacheItem AddStub(TypePair key)
         {
-            return _cache.GetOrAdd(key, k => new MapperCacheItem { Id = this.GetId() });
-            
+            if (_cache.ContainsKey(key))
+            {
+                return _cache[key];
+            }
+
+            var mapperCacheItem = new MapperCacheItem { Id = GetId() };
+            _cache[key] = mapperCacheItem;
+            return mapperCacheItem;
         }
 
         public void ReplaceStub(TypePair key, Mapper mapper)
         {
-            var mapperCache= this.AddStub(key);
-            mapperCache.Mapper = mapper;
+            _cache[key].Mapper = mapper;
         }
 
         public MapperCacheItem Add(TypePair key, Mapper mapper)
         {
-            var mapperCache = this.AddStub(key);
-            mapperCache.Mapper = mapper;
-            return mapperCache;
+            MapperCacheItem result;
+            if (_cache.TryGetValue(key, out result))
+            {
+                return result;
+            }
+            result = new MapperCacheItem
+            {
+                Id = GetId(),
+                Mapper = mapper
+            };
+            _cache[key] = result;
+            return result;
         }
 
         public Option<MapperCacheItem> Get(TypePair key)

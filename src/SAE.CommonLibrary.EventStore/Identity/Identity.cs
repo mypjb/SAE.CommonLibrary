@@ -12,7 +12,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public Identity():this(Utils.GenerateId().ToString("N"))
+        public Identity():this(Utils.GenerateId())
         {
         }
         /// <summary>
@@ -22,7 +22,7 @@
         public Identity(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
-                id = Utils.GenerateId().ToString("N");
+                id = Utils.GenerateId();
             this.Id = id;
         }
         /// <summary>

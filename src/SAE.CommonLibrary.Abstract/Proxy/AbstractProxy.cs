@@ -6,7 +6,7 @@ namespace SAE.CommonLibrary.Abstract.Proxy
 {
     public class AbstractProxy<TProxy>where TProxy:class
     {
-        private readonly TProxy _proxy;
+        protected readonly TProxy _proxy;
 
         public AbstractProxy(TProxy proxy)
         {

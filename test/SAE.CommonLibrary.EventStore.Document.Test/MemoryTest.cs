@@ -41,7 +41,7 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
             user.Create(this.GetRandom(), Password);
             _documentStore.Save(user);
             this.WriteLine(user);
-            var newUser = await this._persistenceService.FindAsync(user.Id.ToIdentity());
+            var newUser = await _documentStore.FindAsync<User>(user.Id.ToIdentity());
             Xunit.Assert.NotNull(newUser);
             Xunit.Assert.Equal(user.Id, newUser.Id);
             Xunit.Assert.Equal(user.LoginName, newUser.LoginName);
@@ -59,7 +59,7 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
             user = await _documentStore.FindAsync<User>(user.Id.ToIdentity());
             user.ChangePassword(Password, Password + "1");
             _documentStore.Save(user);
-            var newUser = await this._persistenceService.FindAsync(user.Id.ToIdentity());
+            var newUser = await _documentStore.FindAsync<User>(user.Id.ToIdentity());
             Xunit.Assert.NotNull(newUser);
             Xunit.Assert.Equal(user.Id, newUser.Id);
             Xunit.Assert.Equal(user.LoginName, newUser.LoginName);
@@ -78,7 +78,7 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
             user = await _documentStore.FindAsync<User>(user.Id.ToIdentity());
             user.SetProperty(this.GetRandom(), Math.Abs(user.Sex-1));
             _documentStore.Save(user);
-            var newUser = await this._persistenceService.FindAsync(user.Id.ToIdentity());
+            var newUser = await _documentStore.FindAsync<User>(user.Id.ToIdentity());
             Xunit.Assert.NotNull(newUser);
             Xunit.Assert.Equal(user.Id, newUser.Id);
             Xunit.Assert.Equal(user.LoginName, newUser.LoginName);
@@ -94,7 +94,7 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
         {
             var user = await this.Register();
             await this._documentStore.RemoveAsync(user);
-            Xunit.Assert.Null(await this._persistenceService.FindAsync(user.Id.ToIdentity()));
+            Xunit.Assert.Null(await _documentStore.FindAsync<User>(user.Id.ToIdentity()));
         }
 
     }

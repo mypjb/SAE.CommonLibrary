@@ -204,19 +204,43 @@ namespace SAE.CommonLibrary.Extension
 
             var json = await response.Content.ReadAsStringAsync();
 
-            var @object = json.ToObject<T>();
-
-            if (@object is ResponseResult)
-            {
-                var result = @object as ResponseResult;
-                if (result.StatusCode != StatusCode.Success)
-                {
-                    throw new SaeException(result.StatusCode, result.Message);
-                }
-            }
-
-            return @object;
+            return json.ToObject<T>();
         }
+        /// <summary>
+        /// 获得由<seealso cref="ResponseResult{T}"/>包装的响应结果，
+        /// 如果<seealso cref="ResponseResult.StatusCode"/>!=<seealso cref="StatusCode.Success"/>
+        /// 则触发<seealso cref="SaeException"/>异常
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        public static async Task<T> AsResult<T>(this HttpResponseMessage response)
+        {
+            var result = await response.AsAsync<ResponseResult<T>>();
+
+            if (result.StatusCode != StatusCode.Success)
+                throw new SaeException(result);
+
+            return result.Body;
+        }
+
+        /// <summary>
+        /// 获得由<seealso cref="ResponseResult"/>包装的响应结果，
+        /// 如果<seealso cref="ResponseResult.StatusCode"/>!=<seealso cref="StatusCode.Success"/>
+        /// 则触发<seealso cref="SaeException"/>异常
+        /// </summary>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        public static async Task<object> AsResult(this HttpResponseMessage response)
+        {
+            var result = await response.AsAsync<ResponseResult>();
+
+            if (result.StatusCode != StatusCode.Success)
+                throw new SaeException(result);
+
+            return result.Body;
+        }
+
 
         /// <summary>
         /// 添加Polly代理。当请求出现<paramref name="httpStatusCodes"/>或<seealso cref="HttpRequestException"/>异常时.
