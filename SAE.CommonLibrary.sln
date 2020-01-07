@@ -45,7 +45,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAE.CommonLibrary.TinyMappe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAE.CommonLibrary.AspNetCore", "src\SAE.CommonLibrary.AspNetCore\SAE.CommonLibrary.AspNetCore.csproj", "{EA613752-436B-40F6-B760-51ABBB986586}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.Abstract.Test", "test\SAE.CommonLibrary.Abstract.Test\SAE.CommonLibrary.Abstract.Test.csproj", "{BCB982B2-36E4-416B-9329-9CE47428BC1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAE.CommonLibrary.Abstract.Test", "test\SAE.CommonLibrary.Abstract.Test\SAE.CommonLibrary.Abstract.Test.csproj", "{BCB982B2-36E4-416B-9329-9CE47428BC1A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.Data", "src\SAE.CommonLibrary.Data\SAE.CommonLibrary.Data.csproj", "{D1E92B6A-9E34-45A0-9739-960F2A17A9B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.Data.MongoDB", "src\SAE.CommonLibrary.Data.MongoDB\SAE.CommonLibrary.Data.MongoDB.csproj", "{E44954BA-A51E-4321-A6EB-1A761F0C69DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -117,6 +121,14 @@ Global
 		{BCB982B2-36E4-416B-9329-9CE47428BC1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCB982B2-36E4-416B-9329-9CE47428BC1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCB982B2-36E4-416B-9329-9CE47428BC1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1E92B6A-9E34-45A0-9739-960F2A17A9B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1E92B6A-9E34-45A0-9739-960F2A17A9B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1E92B6A-9E34-45A0-9739-960F2A17A9B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1E92B6A-9E34-45A0-9739-960F2A17A9B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E44954BA-A51E-4321-A6EB-1A761F0C69DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E44954BA-A51E-4321-A6EB-1A761F0C69DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E44954BA-A51E-4321-A6EB-1A761F0C69DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E44954BA-A51E-4321-A6EB-1A761F0C69DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -138,6 +150,8 @@ Global
 		{90E0F332-F38F-49AD-BA9D-C1B04426690F} = {8AD43B5B-ED55-4712-B865-1E6E1D7B19FE}
 		{EA613752-436B-40F6-B760-51ABBB986586} = {78157883-8166-46DB-9754-E093FE2A3936}
 		{BCB982B2-36E4-416B-9329-9CE47428BC1A} = {8AD43B5B-ED55-4712-B865-1E6E1D7B19FE}
+		{D1E92B6A-9E34-45A0-9739-960F2A17A9B3} = {78157883-8166-46DB-9754-E093FE2A3936}
+		{E44954BA-A51E-4321-A6EB-1A761F0C69DC} = {78157883-8166-46DB-9754-E093FE2A3936}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2FF66E70-E062-4202-A1AD-A821991FEA65}

@@ -15,14 +15,12 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
     {
         private readonly IDocumentStore _documentStore;
         private readonly IMessageQueue _messageQueue;
-        private readonly IPersistenceService<User> _persistenceService;
         public const string Password = "111111";
         public MemoryTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
             this._documentStore = this._serviceProvider.GetService<IDocumentStore>();
 
             this._messageQueue = this._serviceProvider.GetService<IMessageQueue>();
-            _persistenceService = this._serviceProvider.GetService<IPersistenceService<User>>();
 
         }
         protected override void ConfigureServices(IServiceCollection services)
