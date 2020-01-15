@@ -19,7 +19,7 @@ namespace SAE.CommonLibrary.Data.MongoDB
         #region Private Member
         private readonly Type _stringType = typeof(string);
         private readonly IDictionary<Type, Delegate> _idDelegateStorage=new Dictionary<Type, Delegate>();
-        private readonly ILogging _log;
+        private readonly ILogging _logging;
         private readonly IMongoDatabase _database;
         #endregion
 
@@ -30,10 +30,10 @@ namespace SAE.CommonLibrary.Data.MongoDB
         /// <param name="config"></param>
         /// <param name="log"></param>
         public MongoDBStorage(MongoDBConfig config,
-                              ILogging<MongoDBStorage> log)
+                              ILogging<MongoDBStorage> logging)
         {
-            this._log = log;
-            this._log.Debug($"Connection={config.Connection},DB={config.DB}");
+            this._logging = logging;
+            this._logging.Debug($"Connection={config.Connection},DB={config.DB}");
             var client = new MongoClient(new MongoUrl(config.Connection));
             this._database = client.GetDatabase(config.DB);
         }
@@ -46,7 +46,7 @@ namespace SAE.CommonLibrary.Data.MongoDB
         public async Task AddAsync<T>(T model)
         {
             if (model == null) return;
-            this._log.Debug("Execute Add");
+            this._logging.Debug("Execute Add");
             await this.GetCollection<T>().InsertOneAsync(model);
         }
         /// <summary>
@@ -57,13 +57,15 @@ namespace SAE.CommonLibrary.Data.MongoDB
         public async Task UpdateAsync<T>(T model)
         {
             if (model == null) return;
-            this._log.Debug("Execute Update");
+
+            this._logging.Debug("Execute Update");
+
             var id = IdentityDelegate(model);
 
             var query = new QueryDocument("_id", BsonValue.Create(id));
-           
+
             await this.GetCollection<T>()
-                      .UpdateOneAsync(query, new UpdateDefinition());
+                      .ReplaceOneAsync(query, model, new ReplaceOptions { IsUpsert = true });
         }
         /// <summary>
         /// 
@@ -91,7 +93,7 @@ namespace SAE.CommonLibrary.Data.MongoDB
 
             await collection.DeleteOneAsync(query);
             
-            this._log.Info($"Remove {collection.CollectionNamespace}:{id}");
+            this._logging.Info($"Remove {collection.CollectionNamespace}:{id}");
         }
 
         /// <summary>
@@ -106,7 +108,7 @@ namespace SAE.CommonLibrary.Data.MongoDB
             Delegate @delegate;
             if (!_idDelegateStorage.TryGetValue(type, out @delegate))
             {
-                _log.Info("Identity Delegate:Get Id Property");
+                _logging.Info("Identity Delegate:Get Id Property");
                 var property = type.GetTypeInfo()
                                    .GetProperties()
                                    .Where(s => s.Name.ToLower() == "_id" || s.Name.ToLower() == "id")
@@ -114,7 +116,7 @@ namespace SAE.CommonLibrary.Data.MongoDB
 
                 if (property == null)
                 {
-                    _log.Error("MongoDB Document Class You have to have a primary key");
+                    _logging.Error("MongoDB Document Class You have to have a primary key");
                     throw new ArgumentNullException(nameof(model), $"{nameof(model)}中必须要有一个，唯一的键。默认为\"_id或\"\"id\"");
                 }
                 if (property.PropertyType.GetTypeInfo().IsValueType || property.PropertyType == _stringType)
@@ -132,7 +134,7 @@ namespace SAE.CommonLibrary.Data.MongoDB
 
         private IMongoCollection<T> GetCollection<T>()
         {
-           return this._database.GetCollection<T>(typeof(T).Name);
+           return this._database.GetCollection<T>(typeof(T).Name.ToLower());
         }
     }
 }

@@ -21,4 +21,16 @@
     <ProjectReference Include="..\..\src\SAE.CommonLibrary\SAE.CommonLibrary.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Config\logging.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Config\mongodb.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Config\redis.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

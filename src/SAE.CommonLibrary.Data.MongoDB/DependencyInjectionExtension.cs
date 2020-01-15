@@ -1,6 +1,4 @@
-﻿
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+﻿using Microsoft.Extensions.DependencyInjection.Extensions;
 using SAE.CommonLibrary.Data;
 using SAE.CommonLibrary.Data.MongoDB;
 
@@ -9,7 +7,7 @@ namespace Microsoft.Extensions.DependencyInjection
     /// <summary>
     /// 
     /// </summary>
-    public static class MongoDbExtensions
+    public static class DependencyInjectionExtension
     {
         /// <summary>
         /// 添加Storage
@@ -17,10 +15,11 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="serviceCollection"></param>
         /// <param name="config">mongodb配置</param>
         /// <returns></returns>
-        public static IServiceCollection AddStorage(this IServiceCollection serviceCollection)
+        public static IServiceCollection AddMongoDB(this IServiceCollection serviceCollection)
         {
             serviceCollection.TryAddSingleton<IStorage, MongoDBStorage>();
             serviceCollection.AddNlogLogger();
+            serviceCollection.AddSaeOptions<MongoDBConfig>("mongodb");
             return serviceCollection;
         }
 

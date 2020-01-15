@@ -1,0 +1,4 @@
+{
+  "connection": "redis.cache.com:6379,allowadmin=true,syncTimeout=5000",
+  "db": 1
+}

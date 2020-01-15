@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using SAE.CommonLibrary.Data;
 using SAE.CommonLibrary.Data.Memory;
 
@@ -17,7 +18,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddMemoryStorage(this IServiceCollection serviceCollection)
         {
             serviceCollection.TryAddSingleton<IStorage, MemoryStorage>();
-            serviceCollection.AddLogger();
+            serviceCollection.AddNlogLogger();
             return serviceCollection;
         }
         

@@ -46,6 +46,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             serviceDescriptors.TryAddSingleton<IOptionsSource, OptionsSource>();
             serviceDescriptors.TryAddSingleton(typeof(IOptionsMonitor<>), typeof(OptionsMonitor<>));
+            
             return serviceDescriptors;
         }
         /// <summary>
@@ -79,14 +80,14 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddSaeOptions<TOptions>(this IServiceCollection serviceDescriptors, string name) where TOptions : class, new()
         {
-            serviceDescriptors.AddDefaultConfiguration();
-            serviceDescriptors.TryAddSingleton(provider =>
-            {
-                var optionsSource = provider.GetService<IOptionsSource>();
-                var options = optionsSource.Get<TOptions>(name);
-                return options;
-            });
-
+            serviceDescriptors.AddDefaultConfiguration()
+                              .TryAddSingleton(provider =>
+                              {
+                                  var optionsSource = provider.GetService<IOptionsSource>();
+                                  var options = optionsSource.Get<TOptions>(name);
+                                  return options;
+                              });
+            
             return serviceDescriptors;
         }
     }

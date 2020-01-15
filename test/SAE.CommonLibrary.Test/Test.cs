@@ -51,5 +51,6 @@ namespace SAE.CommonLibrary.Test
             var config = json.ToObject<LoggingConfig>();
             this.WriteLine(config);
         }
+
     }
 }

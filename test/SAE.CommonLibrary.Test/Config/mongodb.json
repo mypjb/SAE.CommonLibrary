@@ -1,0 +1,4 @@
+{
+  "connection": "mongodb://admin:111111@mongodb.db.com:27017/",
+  "db": "test"
+}

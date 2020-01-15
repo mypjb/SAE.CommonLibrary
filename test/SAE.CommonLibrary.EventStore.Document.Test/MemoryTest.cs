@@ -1,14 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SAE.CommonLibrary.EventStore.Document;
 using SAE.CommonLibrary.EventStore.Document.Memory.Test.Domain;
-using SAE.CommonLibrary.EventStore.Document.Memory.Test.Event;
 using SAE.CommonLibrary.MessageQueue;
 using SAE.CommonLibrary.Test;
 using System;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
-using Assert = Xunit.Assert;
 namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
 {
     public class MemoryTest : BaseTest

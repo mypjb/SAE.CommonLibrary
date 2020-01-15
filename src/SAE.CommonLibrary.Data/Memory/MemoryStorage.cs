@@ -1,8 +1,8 @@
-﻿using SAE.CommonLibrary.Log;
+﻿using SAE.CommonLibrary.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Data.Memory
 {
@@ -13,19 +13,21 @@ namespace SAE.CommonLibrary.Data.Memory
     {
         private readonly static object _lock = new object();
         private static readonly Dictionary<Type, object> _storage = new Dictionary<Type, object>();
-        private readonly ILog _log;
-        public MemoryStorage(ILog<MemoryStorage> log)
+        private readonly ILogging _logging;
+        public MemoryStorage(ILogging<MemoryStorage> logging)
         {
-            this._log = log;
+            this._logging = logging;
         }
-        public void Add<T>(T model)
+        public Task AddAsync<T>(T model)
         {
             var id = ((dynamic)model).Id;
 
             this.GetStoreage<T>()
                 .Add(id, model);
 
-            this._log.Info("Add - {0}: {1}", model.GetType().Name, model);
+            this._logging.Info("Add - {0}: {1}", model.GetType().Name, model);
+
+            return Task.CompletedTask;
         }
 
         public IQueryable<T> AsQueryable<T>()
@@ -35,34 +37,24 @@ namespace SAE.CommonLibrary.Data.Memory
                        .AsQueryable();
         }
 
-        public T Find<T>(object id)
-        {
-            T value;
-            if (!this.GetStoreage<T>()
-                    .TryGetValue(id, out value))
-            {
-                this._log.Info("Find Id “{0}” Not Exist", id);
-            }
-
-            return value;
-        }
-
-        public void Remove<T>(T model)
+        
+        public Task RemoveAsync<T>(T model)
         {
             var storage = this.GetStoreage<T>();
 
             if (storage.ContainsValue(model))
             {
                 var kv = storage.First(s => s.Value.Equals(model));
-                this._log.Info("Remove Key “{0}” Model:{1}", kv.Key, kv.Value);
+                this._logging.Info("Remove Key “{0}” Model:{1}", kv.Key, kv.Value);
                 storage.Remove(kv.Key);
             }
+            return Task.CompletedTask;
 
         }
 
-        public void Update<T>(T model)
+        public Task UpdateAsync<T>(T model)
         {
-
+            return Task.CompletedTask;
         }
 
         private Dictionary<object, T> GetStoreage<T>()
