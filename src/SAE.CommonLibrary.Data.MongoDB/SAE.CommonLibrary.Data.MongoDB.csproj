@@ -2,6 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RepositoryUrl>https://github.com/mypjb/SAE.CommonLibrary</RepositoryUrl>
+    <RepositoryType>github</RepositoryType>
+    <PackageTags>SAE</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageIcon>nuget.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,5 +19,10 @@
     <ProjectReference Include="..\SAE.CommonLibrary.Data\SAE.CommonLibrary.Data.csproj" />
     <ProjectReference Include="..\SAE.CommonLibrary.Logging.NLog\SAE.CommonLibrary.Logging.NLog.csproj" />
   </ItemGroup>
-
+  <ItemGroup>
+    <None Include="..\..\nuget.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 </Project>

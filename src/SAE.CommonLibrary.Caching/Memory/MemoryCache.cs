@@ -93,9 +93,9 @@ namespace SAE.CommonLibrary.Caching.Memory
         public async Task<IEnumerable<bool>> RemoveAsync(IEnumerable<string> keys)
         {
             IList<bool> results = new List<bool>();
-            foreach (var key in keys)
+            while (this.keys.Count > 0)
             {
-                results.Add(await this.RemoveAsync(key));
+                results.Add(await this.RemoveAsync(this.keys[0]));
             }
             return results;
         }

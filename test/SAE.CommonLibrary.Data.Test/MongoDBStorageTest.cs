@@ -1,16 +1,12 @@
-using SAE.CommonLibrary.Data;
+using Microsoft.Extensions.DependencyInjection;
 using SAE.CommonLibrary.Test;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
-using Microsoft.Extensions.DependencyInjection;
-using Assert = Xunit.Assert;
-using System.Threading.Tasks;
-using System.Collections;
 
-namespace SAE.CommonLibrary.Storage.MongoDB.Test
+namespace SAE.CommonLibrary.Data.Test
 {
     public class MongoDBStorageTest : BaseTest
     {
@@ -70,14 +66,13 @@ namespace SAE.CommonLibrary.Storage.MongoDB.Test
                     @class.Students.First().Name == classGrade.Students.First().Name);
         }
 
-        [Theory]
-        [InlineData("¥Û”Ì")]
-        public async Task Query(string name)
+        [Fact]
+        public async Task Query()
         {
-            await this.Add();
+            var classGrade= await this.Add();
 
             var count = _storage.AsQueryable<ClassGrade>()
-                                .Where(s => s.Name == name)
+                                .Where(s => s.Name == classGrade.Name)
                                 .Count();
 
             Xunit.Assert.True(count > 0);

@@ -12,87 +12,17 @@ using Xunit.Abstractions;
 
 namespace SAE.CommonLibrary.Cache.Redis.Test
 {
-    public class RedisCacheTest : BaseTest
+    public  class RedisCacheTest : MemoryCacheTest
     {
-        private readonly IDistributedCache _distributedCache;
 
         public RedisCacheTest(ITestOutputHelper output) : base(output)
         {
-            this._distributedCache = this._serviceProvider.GetService<IDistributedCache>();
+           
         }
 
         protected override void ConfigureServices(IServiceCollection services)
         {
             services.AddRedisCache();
-            base.ConfigureServices(services);
-        }
-
-        [Fact]
-        public async Task<Student> Add()
-        {
-            var student = new Student();
-            Xunit.Assert.True(await _distributedCache.AddAsync(student.Name, student));
-            var value = await this._distributedCache.GetAsync<Student>(student.Name);
-            Xunit.Assert.NotNull(value);
-            Xunit.Assert.Equal(student.Age, value.Age);
-            Xunit.Assert.Equal(student.CreateTime, value.CreateTime);
-            Xunit.Assert.Equal(student.Name, value.Name);
-            Xunit.Assert.Equal(student.Sex, value.Sex);
-            return student;
-        }
-        [Fact]
-        public async Task<IEnumerable<string>> Adds()
-        {
-            Dictionary<string, Student> dic = new Dictionary<string, Student>();
-
-            Enumerable.Range(0, 10000)
-                      .ForEach(s =>
-                      {
-                          var student = new Student();
-                          dic.Add(student.Name, student);
-                      });
-
-            var results = await _distributedCache.AddAsync(dic, CacheTime.OneMinute);
-            Xunit.Assert.DoesNotContain(results, s => !s);
-            var values = await this._distributedCache.GetAsync<Student>(dic.Select(s => s.Key).ToArray());
-
-            Xunit.Assert.Equal(dic.Count(), values.Count());
-            foreach (var value in values)
-            {
-                var student = dic[value.Name];
-                Xunit.Assert.Equal(student.Age, value.Age);
-                Xunit.Assert.Equal(student.CreateTime, value.CreateTime);
-                Xunit.Assert.Equal(student.Name, value.Name);
-                Xunit.Assert.Equal(student.Sex, value.Sex);
-            }
-
-            return dic.Select(s => s.Key).ToArray();
-        }
-
-
-        [Fact]
-        public async Task Remove()
-        {
-            var student = await this.Add();
-            Xunit.Assert.True(_distributedCache.Remove(student.Name));
-            Xunit.Assert.Null(_distributedCache.Get<Student>(student.Name));
-        }
-        [Fact]
-        public async Task RemoveAll()
-        {
-            var keys = await this.Adds();
-            Xunit.Assert.True(keys.Count() > 0);
-            await this._distributedCache.RemoveAsync(keys);
-            var students = await this._distributedCache.GetAsync<Student>(keys);
-            Xunit.Assert.True(students.Count(s => s != null) == 0);
-        }
-        [Fact]
-        public async Task Clear()
-        {
-            await this.Adds();
-            await _distributedCache.ClearAsync();
-            var keys = await _distributedCache.GetKeysAsync();
-            Xunit.Assert.True(keys.Count() == 0);
         }
 
     }

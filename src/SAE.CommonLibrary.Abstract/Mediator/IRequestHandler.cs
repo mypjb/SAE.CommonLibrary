@@ -11,7 +11,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator
     /// </summary>
     /// <typeparam name="TCommand"></typeparam>
     /// <typeparam name="TResponse"></typeparam>
-    public interface IRequestHandler<TCommand, TResponse> : IMediatorHandler where TCommand : class
+    public interface IRequestHandler<TCommand,TResponse> : IMediatorHandler where TCommand : class
     {
         /// <summary>
         /// 处理<paramref name="command"/>命令并返回<typeparamref name="TResponse"/>

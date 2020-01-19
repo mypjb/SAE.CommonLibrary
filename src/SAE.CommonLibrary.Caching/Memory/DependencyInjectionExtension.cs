@@ -17,8 +17,9 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddSaeMemoryDistributedCache(this IServiceCollection serviceDescriptors)
         {
-            serviceDescriptors.AddSaeMemoryDistributedCache();
-            serviceDescriptors.TryAddSingleton<IDistributedCache, DistributedCache>();
+            serviceDescriptors.AddMemoryCache();
+            serviceDescriptors.TryAddSingleton<IDistributedCache, MemoryDistributedCache>();
+            serviceDescriptors.AddNlogLogger();
             return serviceDescriptors;
         }
     }

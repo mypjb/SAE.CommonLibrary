@@ -17,6 +17,7 @@ namespace SAE.CommonLibrary.Data.Memory
         public MemoryStorage(ILogging<MemoryStorage> logging)
         {
             this._logging = logging;
+            this._logging.Warn("您正在使用基于内存的持久化实现，请勿在非开发环境下使用它");
         }
         public Task AddAsync<T>(T model)
         {

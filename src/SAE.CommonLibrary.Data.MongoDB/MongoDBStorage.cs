@@ -18,7 +18,7 @@ namespace SAE.CommonLibrary.Data.MongoDB
     {
         #region Private Member
         private readonly Type _stringType = typeof(string);
-        private readonly IDictionary<Type, Delegate> _idDelegateStorage=new Dictionary<Type, Delegate>();
+        private readonly IDictionary<Type, Delegate> _idDelegateStorage = new Dictionary<Type, Delegate>();
         private readonly ILogging _logging;
         private readonly IMongoDatabase _database;
         #endregion
@@ -85,14 +85,14 @@ namespace SAE.CommonLibrary.Data.MongoDB
         {
             if (model == null) return;
 
-            var id=IdentityDelegate(model);
+            var id = IdentityDelegate(model);
 
-            var query = new QueryDocument("_id",BsonValue.Create(id));
-
-            var collection=this.GetCollection<T>();
+            var query = new QueryDocument("_id", BsonValue.Create(id));
+            
+            var collection = this.GetCollection<T>();
 
             await collection.DeleteOneAsync(query);
-            
+
             this._logging.Info($"Remove {collection.CollectionNamespace}:{id}");
         }
 
@@ -124,7 +124,7 @@ namespace SAE.CommonLibrary.Data.MongoDB
                     var p = Expression.Parameter(typeof(T));
                     var body = Expression.Property(p, property.Name);
                     var expression = Expression.Lambda(body, p);
-                    @delegate= expression.Compile();
+                    @delegate = expression.Compile();
                     _idDelegateStorage[type] = @delegate;
                 }
             }
@@ -134,7 +134,7 @@ namespace SAE.CommonLibrary.Data.MongoDB
 
         private IMongoCollection<T> GetCollection<T>()
         {
-           return this._database.GetCollection<T>(typeof(T).Name.ToLower());
+            return this._database.GetCollection<T>(typeof(T).Name.ToLower());
         }
     }
 }

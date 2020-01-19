@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using SAE.CommonLibrary.Extension;
 using SAE.CommonLibrary.MessageQueue;
 using System;
 using System.Collections.Generic;
@@ -110,6 +111,28 @@ namespace SAE.CommonLibrary.EventStore.Document
                          .GetResult();
         }
 
+        /// <summary>
+        /// 保存文档对象
+        /// </summary>
+        /// <param name="documentStore"></param>
+        /// <param name="documents"></param>
+        public static void Save<TDocument>(this IDocumentStore documentStore,IEnumerable<TDocument> documents) where TDocument : IDocument, new()
+        {
+            documentStore.SaveAsync(documents)
+                         .GetAwaiter()
+                         .GetResult();
+        }
+
+
+        /// <summary>
+        /// 保存文档对象
+        /// </summary>
+        /// <param name="documentStore"></param>
+        /// <param name="documents"></param>
+        public static Task SaveAsync<TDocument>(this IDocumentStore documentStore, IEnumerable<TDocument> documents) where TDocument : IDocument, new()
+        {
+            return documents.ForEachAsync(documentStore.SaveAsync);
+        }
 
         public static void Remove<TDocument>(this IDocumentStore documentStore, string identity) where TDocument : IDocument, new()
         {
@@ -157,6 +180,50 @@ namespace SAE.CommonLibrary.EventStore.Document
         public static Task RemoveAsync<TDocument>(this IDocumentStore documentStore, TDocument document) where TDocument : IDocument, new()
         {
             return documentStore.RemoveAsync<TDocument>(document.Identity);
+        }
+
+        /// <summary>
+        /// 从<seealso cref="IDocumentStore"/>中移除该对象
+        /// </summary>
+        /// <param name="documentStore"></param>
+        /// <param name="identitys"></param>
+        public static void Remove<TDocument>(this IDocumentStore documentStore, IEnumerable<string> identitys) where TDocument : IDocument, new()
+        {
+            documentStore.RemoveAsync<TDocument>(identitys)
+                         .GetAwaiter()
+                         .GetResult();
+        }
+
+        /// <summary>
+        /// 从<seealso cref="IDocumentStore"/>中移除该对象
+        /// </summary>
+        /// <param name="documentStore"></param>
+        /// <param name="identitys"></param>
+        public static Task RemoveAsync<TDocument>(this IDocumentStore documentStore, IEnumerable<string> identitys) where TDocument : IDocument, new()
+        {
+            return identitys.ForEachAsync(documentStore.RemoveAsync<TDocument>);
+        }
+
+        /// <summary>
+        /// 从<seealso cref="IDocumentStore"/>中移除该对象
+        /// </summary>
+        /// <param name="documentStore"></param>
+        /// <param name="identitys"></param>
+        public static void Remove<TDocument>(this IDocumentStore documentStore, IEnumerable<Identity> identitys) where TDocument : IDocument, new()
+        {
+            documentStore.RemoveAsync<TDocument>(identitys)
+                         .GetAwaiter()
+                         .GetResult();
+        }
+
+        /// <summary>
+        /// 从<seealso cref="IDocumentStore"/>中移除该对象
+        /// </summary>
+        /// <param name="documentStore"></param>
+        /// <param name="identitys"></param>
+        public static Task RemoveAsync<TDocument>(this IDocumentStore documentStore, IEnumerable<Identity> identitys) where TDocument : IDocument, new()
+        {
+            return identitys.ForEachAsync(documentStore.RemoveAsync<TDocument>);
         }
 
     }
