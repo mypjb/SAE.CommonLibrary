@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+using SAE.CommonLibrary.Data;
 using SAE.CommonLibrary.EventStore;
 using SAE.CommonLibrary.EventStore.Document;
-using SAE.CommonLibrary.EventStore.Document.Default;
 using SAE.CommonLibrary.EventStore.Document.Memory;
 using SAE.CommonLibrary.EventStore.Snapshot;
 
@@ -46,10 +46,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="serviceCollection"></param>
         /// <returns></returns>
-        public static IServiceCollection AddMemoryPersistenceService(this IServiceCollection serviceCollection)
+        public static StorageOptions AddDataPersistenceService(this IServiceCollection serviceCollection)
         {
-            serviceCollection.TryAddSingleton(typeof(IPersistenceService<>), typeof(MemoryPersistenceService<>));
-            return serviceCollection;
+            serviceCollection.TryAddSingleton(typeof(IPersistenceService<>), typeof(DataPersistenceServiceAdapter<>));
+            return serviceCollection.AddMemoryStorage();
         }
 
     }

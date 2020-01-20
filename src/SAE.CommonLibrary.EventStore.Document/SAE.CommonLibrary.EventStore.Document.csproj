@@ -13,6 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SAE.CommonLibrary.Data\SAE.CommonLibrary.Data.csproj" />
     <ProjectReference Include="..\SAE.CommonLibrary.EventStore\SAE.CommonLibrary.EventStore.csproj" />
     <ProjectReference Include="..\SAE.CommonLibrary.MessageQueue\SAE.CommonLibrary.MessageQueue.csproj" />
   </ItemGroup>

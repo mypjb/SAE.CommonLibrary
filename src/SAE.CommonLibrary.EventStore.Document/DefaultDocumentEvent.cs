@@ -37,10 +37,10 @@ namespace SAE.CommonLibrary.EventStore.Document
         private IPersistenceService<TDocument> GetService<TDocument>() where TDocument : IDocument
         {
             var key = typeof(TDocument);
-            return this._dictionary.GetOrAdd(key, s =>
+            return (IPersistenceService<TDocument>)this._dictionary.GetOrAdd(key, s =>
             {
                 return this._provider.GetService<IPersistenceService<TDocument>>();
-            }) as IPersistenceService<TDocument>;
+            });
         }
     }
 }

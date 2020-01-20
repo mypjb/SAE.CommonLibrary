@@ -18,26 +18,27 @@ namespace SAE.CommonLibrary.Data
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        IQueryable<T> AsQueryable<T>();
+        IQueryable<T> AsQueryable<T>() where T:class;
         
         /// <summary>
         /// 添加
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="model"></param>
-        Task AddAsync<T>(T model);
+        Task SaveAsync<T>(T model) where T : class;
         /// <summary>
         /// 移除
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="model"></param>
-        Task RemoveAsync<T>(T model);
+        Task RemoveAsync<T>(T model) where T : class;
         /// <summary>
-        /// 更新
+        /// 根据Id移除对象
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="model"></param>
-        Task UpdateAsync<T>(T model);
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task RemoveAsync<T>(object id) where T : class;
+
     }
 
 }

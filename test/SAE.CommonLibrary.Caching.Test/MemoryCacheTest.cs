@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace SAE.CommonLibrary.Cache.Redis.Test
+namespace SAE.CommonLibrary.Cache.Test
 {
     public  class MemoryCacheTest : BaseTest
     {

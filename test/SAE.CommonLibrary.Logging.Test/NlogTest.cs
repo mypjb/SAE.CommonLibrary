@@ -29,9 +29,7 @@ namespace SAE.CommonLibrary.Logging.Test
         [InlineData(Level.Trace)]
         public void Write(Level type)
         {
-            //LogHelper静态函数写入各种层次的信息
             _logging.Write($"测试“{type}”类型的消息", type);
-            //使用LogHelperTest类型的日志记录器写入信息
             this._logging.Write($"测试“{type}”类型的消息", type);
         }
         [Fact]
@@ -71,8 +69,6 @@ namespace SAE.CommonLibrary.Logging.Test
         public void Warn()
         {
             _logging.Warn("记录一条警告信息");
-            //this._logging.WarnFormat("呵呵达。");
-            //LogHelper.Warn<object>($"记录一条{nameof(Object)}类型的的警告信息");
         }
     }
 }

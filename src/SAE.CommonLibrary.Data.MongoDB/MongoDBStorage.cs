@@ -20,6 +20,7 @@ namespace SAE.CommonLibrary.Data.MongoDB
         private readonly Type _stringType = typeof(string);
         private readonly IDictionary<Type, Delegate> _idDelegateStorage = new Dictionary<Type, Delegate>();
         private readonly ILogging _logging;
+        private readonly IMetadataProvider _descriptionProvider;
         private readonly IMongoDatabase _database;
         #endregion
 
@@ -30,49 +31,23 @@ namespace SAE.CommonLibrary.Data.MongoDB
         /// <param name="config"></param>
         /// <param name="log"></param>
         public MongoDBStorage(MongoDBConfig config,
-                              ILogging<MongoDBStorage> logging)
+                              ILogging<MongoDBStorage> logging,
+                              IMetadataProvider descriptionProvider)
         {
             this._logging = logging;
+            this._descriptionProvider = descriptionProvider;
             this._logging.Debug($"Connection={config.Connection},DB={config.DB}");
             var client = new MongoClient(new MongoUrl(config.Connection));
             this._database = client.GetDatabase(config.DB);
         }
         #endregion
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="model"></param>
-        public async Task AddAsync<T>(T model)
-        {
-            if (model == null) return;
-            this._logging.Debug("Execute Add");
-            await this.GetCollection<T>().InsertOneAsync(model);
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="model"></param>
-        public async Task UpdateAsync<T>(T model)
-        {
-            if (model == null) return;
-
-            this._logging.Debug("Execute Update");
-
-            var id = IdentityDelegate(model);
-
-            var query = new QueryDocument("_id", BsonValue.Create(id));
-
-            await this.GetCollection<T>()
-                      .ReplaceOneAsync(query, model, new ReplaceOptions { IsUpsert = true });
-        }
+        
         /// <summary>
         /// 
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public IQueryable<T> AsQueryable<T>()
+        public IQueryable<T> AsQueryable<T>() where T : class
         {
             return this.GetCollection<T>().AsQueryable();
         }
@@ -81,11 +56,11 @@ namespace SAE.CommonLibrary.Data.MongoDB
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="model"></param>
-        public async Task RemoveAsync<T>(T model)
+        public async Task RemoveAsync<T>(T model) where T : class
         {
             if (model == null) return;
 
-            var id = IdentityDelegate(model);
+            var id = this._descriptionProvider.Get<T>().IdentiyFactory.Invoke(model);
 
             var query = new QueryDocument("_id", BsonValue.Create(id));
             
@@ -93,48 +68,72 @@ namespace SAE.CommonLibrary.Data.MongoDB
 
             await collection.DeleteOneAsync(query);
 
-            this._logging.Info($"Remove {collection.CollectionNamespace}:{id}");
+            this._logging.Debug($"Remove {collection.CollectionNamespace}:{id}");
         }
 
-        /// <summary>
-        /// 标识表达式
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        private object IdentityDelegate<T>(T model)
+        private IMongoCollection<T> GetCollection<T>() where T : class
         {
-            var type = typeof(T);
-            Delegate @delegate;
-            if (!_idDelegateStorage.TryGetValue(type, out @delegate))
-            {
-                _logging.Info("Identity Delegate:Get Id Property");
-                var property = type.GetTypeInfo()
-                                   .GetProperties()
-                                   .Where(s => s.Name.ToLower() == "_id" || s.Name.ToLower() == "id")
-                                   .FirstOrDefault();
-
-                if (property == null)
-                {
-                    _logging.Error("MongoDB Document Class You have to have a primary key");
-                    throw new ArgumentNullException(nameof(model), $"{nameof(model)}中必须要有一个，唯一的键。默认为\"_id或\"\"id\"");
-                }
-                if (property.PropertyType.GetTypeInfo().IsValueType || property.PropertyType == _stringType)
-                {
-                    var p = Expression.Parameter(typeof(T));
-                    var body = Expression.Property(p, property.Name);
-                    var expression = Expression.Lambda(body, p);
-                    @delegate = expression.Compile();
-                    _idDelegateStorage[type] = @delegate;
-                }
-            }
-
-            return @delegate.DynamicInvoke(model);
+            var description= this._descriptionProvider.Get<T>();
+            return this._database.GetCollection<T>(description.Name);
         }
 
-        private IMongoCollection<T> GetCollection<T>()
+        public async Task RemoveAsync<T>(object id) where T : class
         {
-            return this._database.GetCollection<T>(typeof(T).Name.ToLower());
+            if (id == null) return;
+
+            var query = new QueryDocument("_id", BsonValue.Create(id));
+
+            var collection = this.GetCollection<T>();
+
+            await collection.DeleteOneAsync(query);
+
+            this._logging.Debug($"Remove {collection.CollectionNamespace}:{id}");
         }
+
+        public async Task SaveAsync<T>(T model) where T : class
+        {
+            if (model == null) return;
+
+            this._logging.Debug("Execute Save");
+
+            var id = this._descriptionProvider.Get<T>().IdentiyFactory.Invoke(model);
+
+            var query = new QueryDocument("_id", BsonValue.Create(id));
+
+            await this.GetCollection<T>()
+                      .ReplaceOneAsync(query, model, new ReplaceOptions { IsUpsert = true });
+        }
+
+        #region Add And Update
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="model"></param>
+        //public async Task AddAsync<T>(T model) where T : class
+        //{
+        //    if (model == null) return;
+        //    this._logging.Debug("Execute Add");
+        //    await this.GetCollection<T>().InsertOneAsync(model);
+        //}
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="model"></param>
+        //public async Task UpdateAsync<T>(T model) where T : class
+        //{
+        //    if (model == null) return;
+
+        //    this._logging.Debug("Execute Update");
+
+        //    var id = this._descriptionProvider.Get<T>().IdentiyFactory.Invoke(model);
+
+        //    var query = new QueryDocument("_id", BsonValue.Create(id));
+
+        //    await this.GetCollection<T>()
+        //              .ReplaceOneAsync(query, model, new ReplaceOptions { IsUpsert = true });
+        //}
+        #endregion
     }
 }

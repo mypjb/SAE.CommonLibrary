@@ -3,14 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SAE.CommonLibrary.Data.MongoDB
+namespace SAE.CommonLibrary.Data
 {
-    public class MongoDBOptions
+    public class StorageOptions
     {
-        internal MongoDBOptions(IServiceCollection serviceCollection)
+        internal IServiceCollection ServiceCollection { get; }
+
+        public StorageOptions(IServiceCollection serviceCollection)
         {
             this.ServiceCollection = serviceCollection;
         }
-       internal IServiceCollection ServiceCollection { get; }
     }
 }

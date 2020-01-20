@@ -110,7 +110,7 @@ namespace SAE.CommonLibrary.Logging
         /// <param name="log">日志接口</param>
         /// <param name="exception">异常</param>
         public static ILogging Error(this ILogging log, Exception exception)
-            => log.Write(exception?.Message, Level.Error, exception: exception);
+            => log.Write(Level.Error, exception, null, exception?.Message);
 
         /// <summary>
         /// 记录<see cref="Level.Error"/>级别日志
@@ -127,7 +127,7 @@ namespace SAE.CommonLibrary.Logging
         /// <param name="exception"></param>
         /// <param name="message">格式化的字符串</param>
         public static ILogging Error(this ILogging log, Exception exception, string message)
-            => log.Write(message, Level.Error, exception: exception);
+            => log.Write(Level.Error, exception, null, message);
 
         /// <summary>
         /// 记录<see cref="Level.Error"/>级别日志
@@ -309,9 +309,8 @@ namespace SAE.CommonLibrary.Logging
         /// <param name="message"></param>
         /// <param name="level"></param>
         public static ILogging Write(this ILogging log, string message, Level level)
-            => log.Write(message: message, level: level, exception: null);
+            => log.Write(level, null,null, message);
         #endregion
-
 
         public static ILogging Create(this ILoggingFactory factory) => factory.Create("Default");
         public static ILogging Create<TCategory>(this ILoggingFactory factory) => factory.Create(typeof(TCategory).Name);

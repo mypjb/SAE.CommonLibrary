@@ -32,7 +32,7 @@ namespace SAE.CommonLibrary.Data.Test
             var classGrade = new ClassGrade();
             classGrade.Id = this.GetRandom();
             //此处设置了默认Id为10
-            await _storage.AddAsync(classGrade);
+            await _storage.SaveAsync(classGrade);
             var grade = this._storage.AsQueryable<ClassGrade>().FirstOrDefault(s => s.Id == classGrade.Id);
             Xunit.Assert.True(_storage.AsQueryable<ClassGrade>()
                                 .Count(s => s.Id == classGrade.Id) == 1);
@@ -57,7 +57,7 @@ namespace SAE.CommonLibrary.Data.Test
                      Sex=this.GetRandom().GetHashCode()%2==0? Sex.Nav: Sex.Man
                 }
             };
-            await _storage.UpdateAsync(classGrade);
+            await _storage.SaveAsync(classGrade);
 
             var @class = _storage.AsQueryable<ClassGrade>()
                                  .First(s => s.Id == classGrade.Id);
@@ -69,7 +69,7 @@ namespace SAE.CommonLibrary.Data.Test
         [Fact]
         public async Task Query()
         {
-            var classGrade= await this.Add();
+            var classGrade = await this.Add();
 
             var count = _storage.AsQueryable<ClassGrade>()
                                 .Where(s => s.Name == classGrade.Name)

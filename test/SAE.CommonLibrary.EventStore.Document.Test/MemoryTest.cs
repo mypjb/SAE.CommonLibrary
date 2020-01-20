@@ -1,8 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SAE.CommonLibrary.Data;
 using SAE.CommonLibrary.EventStore.Document.Memory.Test.Domain;
+using SAE.CommonLibrary.EventStore.Document.Test.Dtos;
 using SAE.CommonLibrary.MessageQueue;
 using SAE.CommonLibrary.Test;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -12,6 +15,7 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
     {
         private readonly IDocumentStore _documentStore;
         private readonly IMessageQueue _messageQueue;
+        private readonly IStorage _storage;
         public const string Password = "111111";
         public MemoryTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
@@ -19,11 +23,13 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
 
             this._messageQueue = this._serviceProvider.GetService<IMessageQueue>();
 
+            this._storage = this._serviceProvider.GetService<IStorage>();
         }
         protected override void ConfigureServices(IServiceCollection services)
         {
             services.AddDefaultConfiguration();
-            services.AddMemoryPersistenceService();
+            services.AddDataPersistenceService()
+                    .AddMapper<User,UserDto>();
             services.AddMemoryDocument();
             services.AddMemoryMessageQueue();
             base.ConfigureServices(services);
@@ -65,13 +71,13 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
             this.WriteLine(newUser);
         }
 
-       [Fact]
+        [Fact]
         public async Task ChangeProperty()
         {
             var user = await this.Register();
 
             user = await _documentStore.FindAsync<User>(user.Id.ToIdentity());
-            user.SetProperty(this.GetRandom(), Math.Abs(user.Sex-1));
+            user.SetProperty(this.GetRandom(), Math.Abs(user.Sex - 1));
             _documentStore.Save(user);
             var newUser = await _documentStore.FindAsync<User>(user.Id.ToIdentity());
             Xunit.Assert.NotNull(newUser);
@@ -90,6 +96,14 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
             var user = await this.Register();
             await this._documentStore.RemoveAsync(user);
             Xunit.Assert.Null(await _documentStore.FindAsync<User>(user.Id.ToIdentity()));
+        }
+        [Fact]
+        public async Task Query()
+        {
+            var user = await this.Register();
+            Xunit.Assert.True(this._storage.AsQueryable<UserDto>()
+                             .Where(s => s.Sex == user.Sex)
+                             .Count() > 0);
         }
 
     }
