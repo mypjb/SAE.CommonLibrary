@@ -25,7 +25,5 @@ namespace Microsoft.Extensions.DependencyInjection
             return new StorageOptions(serviceCollection);
         }
 
-
-       
     }
 }

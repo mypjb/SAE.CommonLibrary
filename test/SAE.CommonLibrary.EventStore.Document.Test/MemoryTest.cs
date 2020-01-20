@@ -29,7 +29,7 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
         {
             services.AddDefaultConfiguration();
             services.AddDataPersistenceService()
-                    .AddMapper<User,UserDto>();
+                    .AddMapper<UserDto>(nameof(User));
             services.AddMemoryDocument();
             services.AddMemoryMessageQueue();
             base.ConfigureServices(services);

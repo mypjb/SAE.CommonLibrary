@@ -10,7 +10,7 @@ namespace SAE.CommonLibrary.Data
 {
     public class Metadata<T> where T : class
     {
-        public Metadata()
+        public Metadata() : this(null, null)
         {
 
         }
@@ -25,6 +25,10 @@ namespace SAE.CommonLibrary.Data
             if (name.IsNullOrWhiteSpace())
             {
                 name = type.Name.ToLower();
+            }
+            else
+            {
+                name = name.ToLower();
             }
 
             if (identiyFactory == null)

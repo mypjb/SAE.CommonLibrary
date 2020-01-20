@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using SAE.CommonLibrary.Data;
 using SAE.CommonLibrary.Data.Memory;
+using System;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -26,10 +27,24 @@ namespace Microsoft.Extensions.DependencyInjection
         public static StorageOptions AddMapper<T, TDto>(this StorageOptions options) where T : class
                                                                                      where TDto : class
         {
-            var metadata= new Metadata<T>();
-            var dtoMetadata= new Metadata<TDto>(metadata.Name);
+            var metadata = new Metadata<T>();
+            var dtoMetadata = new Metadata<TDto>(metadata.Name);
             options.ServiceCollection.TryAddSingleton(metadata);
             options.ServiceCollection.TryAddSingleton(dtoMetadata);
+            return options;
+        }
+
+        public static StorageOptions AddMapper<T>(this StorageOptions options, string name) where T : class
+        {
+            var metadata = new Metadata<T>(name);
+            options.ServiceCollection.TryAddSingleton(metadata);
+            return options;
+        }
+
+        public static StorageOptions AddMapper<T>(this StorageOptions options, string name, Func<T, object> identityFactory) where T : class
+        {
+            var metadata = new Metadata<T>(name, identityFactory);
+            options.ServiceCollection.TryAddSingleton(metadata);
             return options;
         }
     }
