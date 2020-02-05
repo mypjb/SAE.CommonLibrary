@@ -13,11 +13,11 @@ namespace SAE.CommonLibrary.Abstract.Mediator
 
     internal class RequestHandlerWrapper<TCommand, TResponse> : RequestHandlerWrapper where TCommand : class
     {
-        private readonly IEnumerable<IRequestHandler<TCommand, TResponse>> _handlers;
+        private readonly IEnumerable<ICommandHandler<TCommand, TResponse>> _handlers;
 
         public RequestHandlerWrapper(IServiceProvider serviceProvider)
         {
-            this._handlers = serviceProvider.GetServices<IRequestHandler<TCommand, TResponse>>();
+            this._handlers = serviceProvider.GetServices<ICommandHandler<TCommand, TResponse>>();
         }
 
         public override async Task<object> Invoke(object command)

@@ -18,4 +18,20 @@ namespace SAE.CommonLibrary.Abstract.Mediator
         /// <returns></returns>
         Task Handle(TCommand command);
     }
+
+    /// <summary>
+    /// 通过<seealso cref="IMediator.Send{TResponse}(object)"/>
+    /// 调用命令并返回<typeparamref name="TResponse"/>
+    /// </summary>
+    /// <typeparam name="TCommand"></typeparam>
+    /// <typeparam name="TResponse"></typeparam>
+    public interface ICommandHandler<TCommand, TResponse> : IMediatorHandler where TCommand : class
+    {
+        /// <summary>
+        /// 处理<paramref name="command"/>命令并返回<typeparamref name="TResponse"/>
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        Task<TResponse> Handle(TCommand command);
+    }
 }

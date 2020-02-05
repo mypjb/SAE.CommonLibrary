@@ -4,6 +4,7 @@ using SAE.CommonLibrary.EventStore;
 using SAE.CommonLibrary.EventStore.Document;
 using SAE.CommonLibrary.EventStore.Document.Memory;
 using SAE.CommonLibrary.EventStore.Snapshot;
+using System;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -50,6 +51,12 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             serviceCollection.TryAddSingleton(typeof(IPersistenceService<>), typeof(DataPersistenceServiceAdapter<>));
             return serviceCollection.AddMemoryStorage();
+        }
+
+        public static IServiceCollection AddDataPersistenceService(this IServiceCollection serviceCollection,Action<StorageOptions> configure)
+        {
+            configure.Invoke(serviceCollection.AddDataPersistenceService());
+            return serviceCollection;
         }
 
     }

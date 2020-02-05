@@ -3,8 +3,10 @@ using SAE.CommonLibrary.Abstract.Mediator;
 using SAE.CommonLibrary.Test;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace SAE.CommonLibrary.Abstract.Test.Mediator
@@ -19,10 +21,11 @@ namespace SAE.CommonLibrary.Abstract.Test.Mediator
         }
         protected override void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(typeof(ICommandHandler<SaveCommand>), typeof(AddHandler));
-            services.AddSingleton(typeof(ICommandHandler<SaveCommand>), typeof(UpdateHandler));
+            services.AddMediator();
             base.ConfigureServices(services);
         }
+
+        [Fact]
         public async Task Send()
         {
             var command = new SaveCommand();
