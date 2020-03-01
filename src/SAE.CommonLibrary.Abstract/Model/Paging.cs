@@ -21,11 +21,11 @@ namespace SAE.CommonLibrary.Abstract.Model
         }
 
 
-        public int TotalCount
+        int IPaging.TotalCount
         {
             get; set;
         }
-        public int TotalPages
+        int IPaging.TotalPages
         {
             get; set;
         }
@@ -42,8 +42,8 @@ namespace SAE.CommonLibrary.Abstract.Model
             set => this.pageSize = value <= 0 ? this.DefaultSize : value;
         }
 
-        public int BegingRange => (this.PageIndex - 1) * this.PageSize + 1;
+        int IPaging.BegingRange => (this.PageIndex - 1) * this.PageSize + 1;
 
-        public int EndRange => this.PageIndex * this.PageSize;
+        int IPaging.EndRange => this.PageIndex * this.PageSize;
     }
 }
