@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using SAE.CommonLibrary.Data;
 using SAE.CommonLibrary.Data.Memory;
 using System;
+using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -45,6 +46,18 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var metadata = new Metadata<T>(name, identityFactory);
             options.ServiceCollection.TryAddSingleton(metadata);
+            return options;
+        }
+
+        public static StorageOptions AddMapper(this StorageOptions options, Type documentType, Type dtoType)
+        {
+            var metadataType = typeof(Metadata<>);
+            var matadataDocumentType = metadataType.MakeGenericType(documentType);
+
+            var matadataDtoType = metadataType.MakeGenericType(dtoType);
+
+            options.ServiceCollection.TryAddSingleton(matadataDocumentType, s => matadataDocumentType.GetConstructor(Type.EmptyTypes).Invoke(null));
+            options.ServiceCollection.TryAddSingleton(matadataDocumentType, s => matadataDtoType.GetConstructor(Type.EmptyTypes).Invoke(null));
             return options;
         }
     }
