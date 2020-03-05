@@ -53,11 +53,11 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var metadataType = typeof(Metadata<>);
             var matadataDocumentType = metadataType.MakeGenericType(documentType);
-
             var matadataDtoType = metadataType.MakeGenericType(dtoType);
-
-            options.ServiceCollection.TryAddSingleton(matadataDocumentType, s => matadataDocumentType.GetConstructor(Type.EmptyTypes).Invoke(null));
-            options.ServiceCollection.TryAddSingleton(matadataDocumentType, s => matadataDtoType.GetConstructor(Type.EmptyTypes).Invoke(null));
+            var doctument = matadataDocumentType.GetConstructor(Type.EmptyTypes).Invoke(null);
+            var dto = matadataDtoType.GetConstructor(new[] { typeof(string) }).Invoke(new[] { documentType.Name });
+            options.ServiceCollection.TryAddSingleton(matadataDocumentType, s => doctument);
+            options.ServiceCollection.TryAddSingleton(matadataDtoType, s => dto);
             return options;
         }
     }
