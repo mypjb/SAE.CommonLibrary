@@ -7,8 +7,14 @@ namespace SAE.CommonLibrary.EventStore.Document
     {
         public string Id { get; set; }
     }
+
+
     public class BatchRemoveCommand<TDocument> where TDocument : IDocument
     {
         public IEnumerable<string> Ids { get; set; }
+    }
+    public class ListCommand
+    {
+
     }
 }
