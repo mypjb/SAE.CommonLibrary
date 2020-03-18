@@ -7,12 +7,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class DependencyInjectionExtension
     {
+
         /// <summary>
         /// 添加插件管理(web)
         /// </summary>
@@ -20,14 +20,25 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddPluginManage(this IServiceCollection services)
         {
+            return services.AddPluginManage(null);
+        }
+
+        /// <summary>
+        /// 添加插件管理(web)
+        /// </summary>
+        /// <param name="serviceDescriptors"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddPluginManage(this IServiceCollection services, string path)
+        {
+            services.AddNlogLogger();
+
             if (!services.IsRegister<IPluginManage>())
             {
-                //services.AddSaeOptions<PluginOptions>("plugin");
+                IPluginManage pluginManage = new WebPluginManage(new PluginOptions
+                {
+                    Path = path
+                });
 
-                //services.TryAddSingleton<IPluginManage, WebPluginManage>();
-                IPluginManage pluginManage = new WebPluginManage(new PluginOptions { Path = "../../../../Plugins/dest" });
-                //var pluginManage = services.BuildServiceProvider()
-                //                           .GetService<IPluginManage>();
                 services.AddSingleton(s => pluginManage);
 
                 foreach (WebPlugin plugin in pluginManage.Plugins.Where(s => s.Status).OfType<WebPlugin>())
@@ -39,7 +50,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     });
                     plugin.PluginConfigureServices(services);
                 }
-                
+
             }
 
             return services;
