@@ -18,7 +18,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             if (!serviceCollection.IsRegister<ILoggingFactory>())
             {
-                serviceCollection.AddSaeOptions<LoggingConfig>("logging");
+                serviceCollection.AddSaeOptions<LoggingOptions>("logging");
                 serviceCollection.TryAddSingleton<ILoggingFactory, LoggingFactory>();
                 serviceCollection.TryAddSingleton(typeof(ILogging<>), typeof(Logging<>));
             }

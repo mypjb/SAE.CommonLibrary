@@ -23,7 +23,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             if (!serviceCollection.IsRegister<IDocumentStore>())
             {
-                serviceCollection.AddSaeOptions<DocumentConfig>();
+                serviceCollection.AddSaeOptions<DocumentOptions>();
                 serviceCollection.TryAddSingleton<IDocumentStore, DefaultDocumentStore>();
                 serviceCollection.TryAddSingleton<IDocumentEvent, DefaultDocumentEvent>();
                 serviceCollection.AddNlogLogger();

@@ -1,0 +1,7 @@
+{
+  "Name": "Test",
+  "Path": "SAE.CommonLibrary.Plugin.Test.dll",
+  "Description": "this is a test plugin",
+  "Version": "1.0.0.0",
+  "Status":true
+}

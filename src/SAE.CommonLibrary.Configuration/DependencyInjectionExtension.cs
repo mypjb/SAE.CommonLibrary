@@ -29,10 +29,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="serviceDescriptors"></param>
         /// <returns></returns>
-        public static IServiceCollection AddRemoteConfiguration(this IServiceCollection serviceDescriptors, RemoteConfig remoteConfig)
+        public static IServiceCollection AddRemoteConfiguration(this IServiceCollection serviceDescriptors, RemoteOptions options)
         {
-            remoteConfig.Check();
-            serviceDescriptors.AddSingleton(remoteConfig);
+            options.Check();
+            serviceDescriptors.AddSingleton(options);
             serviceDescriptors.AddOptionsProvider<RemoteOptionsProvider>();
             return serviceDescriptors;
         }

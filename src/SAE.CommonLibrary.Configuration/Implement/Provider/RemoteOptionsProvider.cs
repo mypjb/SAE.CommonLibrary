@@ -17,7 +17,7 @@ namespace SAE.CommonLibrary.Configuration.Implement
     /// </summary>
     public class RemoteOptionsProvider : IOptionsProvider
     {
-        private readonly RemoteConfig _remoteConfig;
+        private readonly RemoteOptions _options;
         private readonly Lazy<ILogging<RemoteOptionsProvider>> _logging;
         private readonly HttpClient _clinet;
         private readonly Timer _timer;
@@ -26,13 +26,13 @@ namespace SAE.CommonLibrary.Configuration.Implement
 
         protected RemoteOption Option { get; set; }
 
-        public RemoteOptionsProvider(RemoteConfig remoteConfig, Lazy<ILogging<RemoteOptionsProvider>> logging)
+        public RemoteOptionsProvider(RemoteOptions options, Lazy<ILogging<RemoteOptionsProvider>> logging)
         {
-            this._remoteConfig = remoteConfig;
+            this._options = options;
             this._logging = logging;
             this._clinet = new HttpClient().UsePolly();
             this.Pull(true);
-            this._timer = new Timer(this.Pull, null, TimeSpan.FromSeconds(this._remoteConfig.UpdateFrequency), Timeout.InfiniteTimeSpan);
+            this._timer = new Timer(this.Pull, null, TimeSpan.FromSeconds(this._options.UpdateFrequency), Timeout.InfiniteTimeSpan);
         }
         /// <summary>
         /// 从远程拉取配置
@@ -40,9 +40,9 @@ namespace SAE.CommonLibrary.Configuration.Implement
         /// <param name="arg"></param>
         protected void Pull(object arg)
         {
-            for (var i = 0; i < this._remoteConfig.Urls.Length; i++)
+            for (var i = 0; i < this._options.Urls.Length; i++)
             {
-                var url = this._remoteConfig.Urls[i];
+                var url = this._options.Urls[i];
                 try
                 {
                     var responseMessage = this._clinet.GetAsync(url)
@@ -85,7 +85,7 @@ namespace SAE.CommonLibrary.Configuration.Implement
                 }
                 catch (Exception ex)
                 {
-                    if (i + 1 == this._remoteConfig.Urls.Length)
+                    if (i + 1 == this._options.Urls.Length)
                     {
                         if (arg != null)
                         {
@@ -97,7 +97,7 @@ namespace SAE.CommonLibrary.Configuration.Implement
                         this._logging.Value.Error($"从远处'{url}'，拉取配置时，触发异常", ex);
                 }
             }
-            this._timer.Change(TimeSpan.FromSeconds(this._remoteConfig.UpdateFrequency), Timeout.InfiniteTimeSpan);
+            this._timer.Change(TimeSpan.FromSeconds(this._options.UpdateFrequency), Timeout.InfiniteTimeSpan);
         }
 
         public async Task HandleAsync(OptionsContext context)
@@ -115,11 +115,11 @@ namespace SAE.CommonLibrary.Configuration.Implement
         {
             var postData = new RemotePostData(name, options);
 
-            for (var i = 0; i < this._remoteConfig.Urls.Length; i++)
+            for (var i = 0; i < this._options.Urls.Length; i++)
             {
                 try
                 {
-                    var url = this._remoteConfig.Urls[i];
+                    var url = this._options.Urls[i];
                     var requestMessage = new HttpRequestMessage(HttpMethod.Post, url);
                     requestMessage.AddJsonContent(postData);
                     var responseMessage = await this._clinet.SendAsync(requestMessage);
@@ -148,9 +148,9 @@ namespace SAE.CommonLibrary.Configuration.Implement
     /// <summary>
     /// 远程配置
     /// </summary>
-    public class RemoteConfig
+    public class RemoteOptions
     {
-        public RemoteConfig()
+        public RemoteOptions()
         {
             this.UpdateFrequency = 10;
         }

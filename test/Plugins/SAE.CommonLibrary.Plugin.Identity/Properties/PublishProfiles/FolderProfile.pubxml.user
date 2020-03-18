@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+此文件由 Web 项目的发布/打包过程使用。可以通过编辑此 MSBuild 文件
+自定义此过程的行为。为了解与此相关的更多内容，请访问 https://go.microsoft.com/fwlink/?LinkID=208121。 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>E:\Program\GitHub\SAE\CommonLibrary\test\Plugins\SAE.CommonLibrary.Plugin.Identity\../dest/Identity</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="appsettings.Development.json">
+      <publishTime>03/16/2020 22:44:24</publishTime>
+    </File>
+    <File Include="appsettings.json">
+      <publishTime>03/16/2020 22:44:25</publishTime>
+    </File>
+    <File Include="Demo.Plugin.AspNetCore.dll">
+      <publishTime>03/17/2020 22:59:25</publishTime>
+    </File>
+    <File Include="Demo.Plugin.AspNetCore.pdb">
+      <publishTime>03/17/2020 22:59:25</publishTime>
+    </File>
+    <File Include="Demo.Plugin.dll">
+      <publishTime>03/17/2020 22:59:24</publishTime>
+    </File>
+    <File Include="Demo.Plugin.Identity.deps.json">
+      <publishTime>03/17/2020 21:50:43</publishTime>
+    </File>
+    <File Include="Demo.Plugin.Identity.dll">
+      <publishTime>03/17/2020 22:59:30</publishTime>
+    </File>
+    <File Include="Demo.Plugin.Identity.exe">
+      <publishTime>03/17/2020 22:59:30</publishTime>
+    </File>
+    <File Include="Demo.Plugin.Identity.pdb">
+      <publishTime>03/17/2020 22:59:30</publishTime>
+    </File>
+    <File Include="Demo.Plugin.Identity.runtimeconfig.json">
+      <publishTime>03/17/2020 21:01:28</publishTime>
+    </File>
+    <File Include="Demo.Plugin.pdb">
+      <publishTime>03/17/2020 22:59:24</publishTime>
+    </File>
+    <File Include="IdentityModel.dll">
+      <publishTime>11/24/2019 10:23:34</publishTime>
+    </File>
+    <File Include="IdentityServer4.dll">
+      <publishTime>02/20/2020 08:23:20</publishTime>
+    </File>
+    <File Include="IdentityServer4.Storage.dll">
+      <publishTime>02/20/2020 08:22:02</publishTime>
+    </File>
+    <File Include="Microsoft.AspNetCore.Authentication.OpenIdConnect.dll">
+      <publishTime>11/16/2019 11:24:22</publishTime>
+    </File>
+    <File Include="Microsoft.DotNet.PlatformAbstractions.dll">
+      <publishTime>05/15/2018 21:01:34</publishTime>
+    </File>
+    <File Include="Microsoft.Extensions.DependencyInjection.Abstractions.dll">
+      <publishTime>01/18/2020 03:31:16</publishTime>
+    </File>
+    <File Include="Microsoft.Extensions.DependencyModel.dll">
+      <publishTime>05/15/2018 21:01:34</publishTime>
+    </File>
+    <File Include="Microsoft.IdentityModel.JsonWebTokens.dll">
+      <publishTime>06/24/2019 19:50:38</publishTime>
+    </File>
+    <File Include="Microsoft.IdentityModel.Logging.dll">
+      <publishTime>06/24/2019 19:53:26</publishTime>
+    </File>
+    <File Include="Microsoft.IdentityModel.Protocols.dll">
+      <publishTime>06/24/2019 19:54:24</publishTime>
+    </File>
+    <File Include="Microsoft.IdentityModel.Protocols.OpenIdConnect.dll">
+      <publishTime>06/24/2019 19:59:32</publishTime>
+    </File>
+    <File Include="Microsoft.IdentityModel.Tokens.dll">
+      <publishTime>06/24/2019 19:56:06</publishTime>
+    </File>
+    <File Include="Newtonsoft.Json.dll">
+      <publishTime>11/09/2019 00:56:44</publishTime>
+    </File>
+    <File Include="System.IdentityModel.Tokens.Jwt.dll">
+      <publishTime>06/24/2019 19:49:50</publishTime>
+    </File>
+    <File Include="web.config">
+      <publishTime>03/17/2020 22:59:48</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

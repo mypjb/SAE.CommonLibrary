@@ -30,7 +30,7 @@ namespace SAE.CommonLibrary.Data.MongoDB
         /// </summary>
         /// <param name="config"></param>
         /// <param name="log"></param>
-        public MongoDBStorage(MongoDBConfig config,
+        public MongoDBStorage(MongoDBOptions config,
                               ILogging<MongoDBStorage> logging,
                               IMetadataProvider descriptionProvider)
         {

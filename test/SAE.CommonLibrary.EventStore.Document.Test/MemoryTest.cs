@@ -28,8 +28,7 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
         protected override void ConfigureServices(IServiceCollection services)
         {
             services.AddDefaultConfiguration();
-            services.AddDataPersistenceService()
-                    .AddMapper<UserDto>(nameof(User));
+            services.AddDataPersistenceService();
             services.AddMemoryDocument();
             services.AddMemoryMessageQueue();
             base.ConfigureServices(services);

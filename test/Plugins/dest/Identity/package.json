@@ -1,0 +1,7 @@
+{
+  "Name": "Identity",
+  "Path": "SAE.CommonLibrary.Plugin.Identity.dll",
+  "Description": "this is a Identity plugin",
+  "Version": "1.0.0.0",
+  "Status":true
+}

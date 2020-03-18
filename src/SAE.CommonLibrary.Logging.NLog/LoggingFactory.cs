@@ -9,20 +9,20 @@ namespace SAE.CommonLibrary.Logging.Nlog
     /// </summary>
     public class LoggingFactory : ILoggingFactory
     {
-        private readonly IOptionsMonitor<LoggingConfig> _monitor;
+        private readonly IOptionsMonitor<LoggingOptions> _monitor;
 
-        public LoggingFactory(IOptionsMonitor<LoggingConfig> monitor)
+        public LoggingFactory(IOptionsMonitor<LoggingOptions> monitor)
         {
             this.Config(monitor.Options);
             this._monitor = monitor;
             this._monitor.OnChange(this.Config);
         } 
 
-        private Task Config(LoggingConfig loggingConfig)
+        private Task Config(LoggingOptions options)
         {
-            if (loggingConfig.Document != null)
+            if (options.Document != null)
             {
-                var configuration = new XmlLoggingConfiguration(loggingConfig.Document.CreateReader());
+                var configuration = new XmlLoggingConfiguration(options.Document.CreateReader());
                 NLog.LogManager.Configuration = configuration;
             }
             return Task.FromResult(0);

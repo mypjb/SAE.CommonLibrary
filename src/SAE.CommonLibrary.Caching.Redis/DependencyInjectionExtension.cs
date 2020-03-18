@@ -12,7 +12,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddRedisCache(this IServiceCollection serviceDescriptors)
         {
-            serviceDescriptors.AddSaeOptions<RedisConfig>("redis");
+            serviceDescriptors.AddSaeOptions<RedisOptions>("redis");
             serviceDescriptors.AddNlogLogger();
             serviceDescriptors.AddSingleton<IDistributedCache, RedisDistributedCache>();
             return serviceDescriptors;

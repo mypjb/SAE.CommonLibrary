@@ -16,16 +16,16 @@ namespace SAE.CommonLibrary.Caching.Redis
 
         protected IConnectionMultiplexer ConnectionMultiplexer { get; private set; }
         protected IDatabase Database { get; private set; }
-        public RedisDistributedCache(IOptionsMonitor<RedisConfig> monitor, ILogging<RedisDistributedCache> logging)
+        public RedisDistributedCache(IOptionsMonitor<RedisOptions> monitor, ILogging<RedisDistributedCache> logging)
         {
             this._logging = logging;
             this.Configure(monitor.Options);
             monitor.OnChange(this.Configure);
         }
 
-        private Task Configure(RedisConfig redisConfig)
+        private Task Configure(RedisOptions options)
         {
-            var connectMessage = $"connect:'{redisConfig.Connection}',db:'{redisConfig.DB}'";
+            var connectMessage = $"connect:'{options.Connection}',db:'{options.DB}'";
             if (this.ConnectionMultiplexer == null)
             {
                 this._logging.Info($"初始化连接 {connectMessage}");
@@ -36,9 +36,9 @@ namespace SAE.CommonLibrary.Caching.Redis
             }
 
 
-            this.ConnectionMultiplexer = StackExchange.Redis.ConnectionMultiplexer.Connect(redisConfig.Connection);
+            this.ConnectionMultiplexer = StackExchange.Redis.ConnectionMultiplexer.Connect(options.Connection);
 
-            this.Database = this.ConnectionMultiplexer.GetDatabase(redisConfig.DB);
+            this.Database = this.ConnectionMultiplexer.GetDatabase(options.DB);
 
             return Task.CompletedTask;
         }

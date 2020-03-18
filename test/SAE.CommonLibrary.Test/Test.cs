@@ -37,7 +37,7 @@ namespace SAE.CommonLibrary.Test
     <logger name=""*"" minlevel=""Debug"" writeTo=""FileTarget"" />
   </rules>
 </nlog>");
-            var config = new LoggingConfig
+            var config = new LoggingOptions
             {
                 Document = document
             };
@@ -48,7 +48,7 @@ namespace SAE.CommonLibrary.Test
         public void XmlToJson()
         {
             var json = "{'Document':{'Root':{'Element1':'1','Element2':'2','Element3':'3','Element4':'4','Element5':'5'}}}";
-            var config = json.ToObject<LoggingConfig>();
+            var config = json.ToObject<LoggingOptions>();
             this.WriteLine(config);
         }
 

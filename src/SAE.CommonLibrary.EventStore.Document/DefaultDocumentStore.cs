@@ -18,7 +18,7 @@ namespace SAE.CommonLibrary.EventStore.Document
         private readonly ISerializer _serializer = SerializerProvider.Current;
         private readonly IEventStore _eventStore;
         private readonly IEnumerable<IDocumentEvent> _documentEvents;
-        private readonly DocumentConfig _config;
+        private readonly DocumentOptions _options;
 
         /// <summary>
         /// 
@@ -29,12 +29,12 @@ namespace SAE.CommonLibrary.EventStore.Document
         public DefaultDocumentStore(ISnapshotStore snapshot,
                                     IEventStore eventStore,
                                     IEnumerable<IDocumentEvent> documentEvents,
-                                    DocumentConfig config)
+                                    DocumentOptions options)
         {
             this._snapshot = snapshot;
             this._eventStore = eventStore;
             this._documentEvents = documentEvents;
-            this._config = config;
+            this._options = options;
         }
 
         /// <summary>
@@ -81,12 +81,12 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// <returns></returns>
         protected virtual async Task<Snapshot.Snapshot> FindSnapshotAsync(IIdentity identity, int version)
         {
-            if (version == this._config.VersionPeak)
+            if (version == this._options.VersionPeak)
             {
                 return await this._snapshot.FindAsync(identity);
             }
 
-            var snapshotInterval = this._config.SnapshotInterval;
+            var snapshotInterval = this._options.SnapshotInterval;
 
             if (version < snapshotInterval)
             {
@@ -126,7 +126,7 @@ namespace SAE.CommonLibrary.EventStore.Document
             await this._documentEvents.ForEachAsync(@event => @event.AppendAsync(document, eventStream));
             
             //如果版本号满足快照要求就将对象存储到快照中
-            if (version % this._config.SnapshotInterval != 0)
+            if (version % this._options.SnapshotInterval != 0)
             {
                 //不满足快照要求
                 return;
