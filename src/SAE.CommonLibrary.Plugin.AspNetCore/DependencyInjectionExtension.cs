@@ -34,10 +34,11 @@ namespace Microsoft.Extensions.DependencyInjection
 
             if (!services.IsRegister<IPluginManage>())
             {
-                IPluginManage pluginManage = new WebPluginManage(new PluginOptions
+                var options = new PluginOptions
                 {
                     Path = path
-                });
+                };
+                IPluginManage pluginManage = new WebPluginManage(options);
 
                 services.AddSingleton(s => pluginManage);
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Diagnostics;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -25,16 +26,19 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
 
         protected virtual void LoadPlugin()
         {
-            Directory.GetDirectories(this._pluginDir)
-                     .AsParallel()
-                     .ForAll(dir =>
-                     {
-                         var plugin = this.Read(dir);
-                         if (plugin != null)
+            if (Directory.Exists(this._pluginDir))
+            {
+                Directory.GetDirectories(this._pluginDir)
+                         .AsParallel()
+                         .ForAll(dir =>
                          {
-                             this._store[plugin.Name] = plugin;
-                         }
-                     });
+                             var plugin = this.Read(dir);
+                             if (plugin != null)
+                             {
+                                 this._store[plugin.Name] = plugin;
+                             }
+                         });
+            }
         }
 
         protected virtual IPlugin Read(string dir)
@@ -76,7 +80,7 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
             return Path.IsPathRooted(path);
         }
 
-        public IEnumerable<IPlugin> Plugins => 
+        public IEnumerable<IPlugin> Plugins =>
                this._store.Values.OfType<ProxyPlugin>().Select(s => s.plugin).ToArray();
 
         public Assembly Load(IPlugin plugin)

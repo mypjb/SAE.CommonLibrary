@@ -22,6 +22,7 @@ namespace SAE.CommonLibrary.Plugin
             get => path; set
             {
                 if (string.IsNullOrWhiteSpace(value)) return;
+                
                 this.path = value;
             }
         }

@@ -88,8 +88,6 @@ namespace Microsoft.Extensions.DependencyInjection
                     types.AddRange(s.GetTypes());
                 });
 
-
-
                 documentTypes.ForEach(s =>
                 {
                     var dtoType = types.FirstOrDefault(t => t.Name.Equals($"{s.Name}Dto", StringComparison.OrdinalIgnoreCase));
