@@ -26,7 +26,10 @@ namespace SAE.CommonLibrary
                 {
                     return string.Empty;
                 }
-                return JsonConvert.SerializeObject(@object);
+                return JsonConvert.SerializeObject(@object, new JsonSerializerSettings
+                {
+                    ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
+                });
             }
        
             /// <summary>

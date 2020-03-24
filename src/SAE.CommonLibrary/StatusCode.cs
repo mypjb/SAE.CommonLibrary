@@ -45,5 +45,6 @@ namespace SAE.CommonLibrary
         /// </summary>
         [Display(Name = "资源不存在")]
         ResourcesNotExist = 1004
+        
     }
 }

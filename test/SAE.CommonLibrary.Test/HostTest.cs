@@ -18,6 +18,7 @@ namespace SAE.CommonLibrary.Test
         protected readonly HttpMessageHandler _httpMessageHandler;
         public HostTest(ITestOutputHelper output, string baseAddress) : base(output)
         {
+            baseAddress = string.IsNullOrWhiteSpace(baseAddress) ? "http://localhost/" : baseAddress;
             var host = Host.CreateDefaultBuilder()
                                 .ConfigureWebHostDefaults(builder=>
                                 {
