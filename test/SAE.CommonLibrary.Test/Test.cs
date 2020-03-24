@@ -2,6 +2,7 @@
 using SAE.CommonLibrary.Logging.Nlog;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
@@ -52,5 +53,23 @@ namespace SAE.CommonLibrary.Test
             this.WriteLine(config);
         }
 
+
+        [Theory]
+        [InlineData("10.1.2.3", true)]
+        [InlineData("172.16.45.66", true)]
+        [InlineData("192.168.101.164", true)]
+        [InlineData("182.86.64.128", false)]
+        public void Ip(string address, bool hasLocal)
+        {
+            if (hasLocal)
+            {
+                Xunit.Assert.True(IPAddress.Parse(address).IsInnerIP());
+            }
+            else
+            {
+                Xunit.Assert.False(IPAddress.Parse(address).IsInnerIP());
+            }
+            
+        }
     }
 }

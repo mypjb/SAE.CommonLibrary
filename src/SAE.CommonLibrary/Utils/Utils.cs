@@ -38,6 +38,5 @@ namespace SAE.CommonLibrary
             return new Guid(guidArray).ToString("N");
 
         }
-
     }
 }
