@@ -64,7 +64,7 @@ namespace SAE.CommonLibrary
         {
         }
 
-        public ResponseResult(SaeException exception) : this(StatusCode.Custom, exception)
+        public ResponseResult(SaeException exception) : this(exception.Code, exception)
         {
 
         }
