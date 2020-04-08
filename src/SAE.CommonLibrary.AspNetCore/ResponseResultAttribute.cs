@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace SAE.CommonLibrary.AspNetCore
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-    public class ResponseResultAttribute : Attribute, IOrderedFilter, IActionFilter//,IAsyncAlwaysRunResultFilter
+    public class ResponseResultAttribute : Attribute, IOrderedFilter, IActionFilter
     {
         public ResponseResultAttribute()
         {
@@ -55,38 +55,6 @@ namespace SAE.CommonLibrary.AspNetCore
         {
 
         }
-
-        // public Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
-        // {
-        //     if (context.Result is ObjectResult objectResult)
-        //     {
-        //         this.Wrap(objectResult);
-        //     }
-        //     else if (context.Result is JsonResult jsonResult)
-        //     {
-        //         this.Wrap(jsonResult);
-        //     }
-        //     else if (context.Result == null)
-        //     {
-        //         var feature = context.HttpContext.Features.Get<IExceptionHandlerFeature>();
-        //         if (feature?.Error != null)
-        //         {
-        //             context.Result = new ObjectResult(new ResponseResult(StatusCode.Unknown));
-        //         }
-        //         else
-        //         {
-        //             if (feature.Error is SaeException exception)
-        //             {
-        //                 context.Result = new ObjectResult(new ResponseResult(exception));
-        //             }
-        //             else
-        //             {
-        //                 context.Result = new ObjectResult(new ResponseResult(feature.Error));
-        //             }
-        //         }
-        //     }
-        //     return next.Invoke();
-        // }
 
         private void Wrap(dynamic @dynamic)
         {
