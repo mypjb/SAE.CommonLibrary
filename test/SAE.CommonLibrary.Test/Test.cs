@@ -15,6 +15,7 @@ namespace SAE.CommonLibrary.Test
     {
         public Test(ITestOutputHelper output) : base(output)
         {
+
         }
 
         [Fact]

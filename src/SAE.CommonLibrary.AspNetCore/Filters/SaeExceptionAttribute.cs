@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace SAE.CommonLibrary.AspNetCore
+namespace SAE.CommonLibrary.AspNetCore.Filters
 {
     public class SaeExceptionAttribute : Attribute, IOrderedFilter, IAsyncExceptionFilter
     {

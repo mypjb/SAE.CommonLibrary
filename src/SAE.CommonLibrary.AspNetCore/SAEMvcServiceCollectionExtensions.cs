@@ -14,6 +14,10 @@ using Microsoft.AspNetCore.Http;
 using SAE.CommonLibrary.Extension;
 using SAE.CommonLibrary;
 using Constant = SAE.CommonLibrary.AspNetCore.Constant;
+using SAE.CommonLibrary.AspNetCore.Filters;
+using SAE.CommonLibrary.AspNetCore.Routing;
+using Microsoft.AspNetCore.Authorization;
+using SAE.CommonLibrary.AspNetCore.Authorization;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -50,12 +54,12 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="app"></param>
         /// <param name="pathString"></param>
         /// <returns></returns>
-        public static IApplicationBuilder UseRoutingScanning(this IApplicationBuilder app,PathString pathString)
+        public static IApplicationBuilder UseRoutingScanning(this IApplicationBuilder app, PathString pathString)
         {
             app.Map(pathString, build =>
              {
                  var provider = build.ApplicationServices.GetService<IPathDescriptorProvider>();
-                 build.Run(async context=>
+                 build.Run(async context =>
                  {
                      object body;
                      if (context.Request.Method.Equals(HttpMethods.Get, StringComparison.OrdinalIgnoreCase))
@@ -68,11 +72,38 @@ namespace Microsoft.Extensions.DependencyInjection
                      {
                          body = new ResponseResult(StatusCode.RequestInvalid);
                      }
-                     
+
                      await context.Response.WriteAsync(body.ToJsonString());
                  });
              });
             return app;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="policyName"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddBitmapAuthorization(this IServiceCollection services, string policyName = null)
+        {
+            services.AddSingleton<IAuthorizationHandler, BitmapAuthorizationHandler>();
+            services.AddAuthorization(options =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                                 .AddRequirements(new BitmapAuthorizationRequirement())
+                                 .Build();
+                if (!policyName.IsNullOrWhiteSpace())
+                {
+                    options.AddPolicy(policyName, policy);
+                }
+                else
+                {
+                    options.DefaultPolicy = policy;
+                }
+            });
+            return services;
+        }
+
     }
 }

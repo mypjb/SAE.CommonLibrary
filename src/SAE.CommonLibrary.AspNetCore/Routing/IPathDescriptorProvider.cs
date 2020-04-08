@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SAE.CommonLibrary.Extension;
-namespace SAE.CommonLibrary.AspNetCore
+
+
+namespace SAE.CommonLibrary.AspNetCore.Routing
 {
     /// <summary>
     /// path descriptor provider

@@ -21,7 +21,7 @@ namespace SAE.CommonLibrary.Plugin.Test
                     .AddJwtBearer("Bearer", options =>
                     {
                         options.Authority = PluginConstant.Host;
-                        options.BackchannelHttpHandler = PluginConstant.AsyncLocal.Value;
+                        options.BackchannelHttpHandler = PluginConstant.HttpMessageHandler;
                         options.RequireHttpsMetadata = false;
 
                         options.Audience = "api1";

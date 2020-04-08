@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using System.Threading.Tasks;
 
-namespace SAE.CommonLibrary.AspNetCore
+namespace SAE.CommonLibrary.AspNetCore.Filters
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public class ResponseResultAttribute : Attribute, IOrderedFilter, IActionFilter

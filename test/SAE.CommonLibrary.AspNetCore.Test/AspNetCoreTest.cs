@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using SAE.CommonLibrary.AspNetCore.Routing;
 using SAE.CommonLibrary.Extension;
 using SAE.CommonLibrary.Test;
 using System;
@@ -23,20 +24,29 @@ namespace SAE.CommonLibrary.AspNetCore.Test
             builder.UseStartup<AspNetCoreTest.Startup>();
         }
         [Fact]
-        public async Task RouterScanningTest()
+        public async Task<IEnumerable<IPathDescriptor>> RouterScanningTest()
         {
             var httpResponseMessage= await this._client.GetAsync(Constant.DefaultRoutesPath);
             var descriptors =await httpResponseMessage.AsAsync<IEnumerable<PathDescriptor>>();
             Xunit.Assert.True(descriptors.Any());
             this.WriteLine(descriptors);
+            return descriptors;
         }
-
+        [Fact]
+        public async Task BitmapAuthorizationTest()
+        {
+            //var descriptors=await this.RouterScanningTest();
+            //var descriptor = descriptors.First(s => s.Method.Equals("get", StringComparison.OrdinalIgnoreCase));
+            await this._client.GetAsync($"/api/student/display/{Guid.NewGuid()}");
+        }
         private class Startup
         {
             public void ConfigureServices(IServiceCollection services)
             {
+                services.AddHttpContextAccessor();
                 services.AddControllers();
-                services.AddRoutingScanning();
+                services.AddRoutingScanning()
+                        .AddBitmapAuthorization();
             }
 
             // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

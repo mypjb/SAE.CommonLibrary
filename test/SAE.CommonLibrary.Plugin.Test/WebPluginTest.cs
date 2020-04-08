@@ -1,17 +1,13 @@
 using IdentityModel.Client;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using SAE.CommonLibrary.Plugin.Constant;
 using SAE.CommonLibrary.Test;
-using System;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
-using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.Http;
 
 namespace SAE.CommonLibrary.Plugin.Test
 {
@@ -86,7 +82,7 @@ namespace SAE.CommonLibrary.Plugin.Test
             {
                 endpoints.MapDefaultControllerRoute();
             });
-
+            
         }
     }
 }

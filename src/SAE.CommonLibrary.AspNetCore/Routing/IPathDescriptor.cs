@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using SAE.CommonLibrary.Extension;
 
-namespace SAE.CommonLibrary.AspNetCore
+namespace SAE.CommonLibrary.AspNetCore.Routing
 {
     public interface IPathDescriptor
     {

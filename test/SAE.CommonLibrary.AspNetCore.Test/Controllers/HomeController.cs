@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace SAE.CommonLibrary.AspNetCore.Test.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/{controller}")]
     public class HomeController:Controller
