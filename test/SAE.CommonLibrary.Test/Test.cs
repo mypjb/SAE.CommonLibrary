@@ -1,6 +1,7 @@
 ﻿using SAE.CommonLibrary.Extension;
 using SAE.CommonLibrary.Logging.Nlog;
 using System;
+using System.Buffers.Text;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
@@ -70,7 +71,7 @@ namespace SAE.CommonLibrary.Test
             {
                 Xunit.Assert.False(IPAddress.Parse(address).IsInnerIP());
             }
-            
+
         }
     }
 }
