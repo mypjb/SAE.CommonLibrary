@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
+[assembly: InternalsVisibleTo("SAE.CommonLibrary.AspNetCore.Test")]
 
 namespace SAE.CommonLibrary.AspNetCore
 {
@@ -21,7 +23,7 @@ namespace SAE.CommonLibrary.AspNetCore
         /// <summary>
         /// 权限位最大次幂
         /// </summary>
-        public const byte PermissionBitsMaxPow = 7;
+        public const byte PermissionBitsMaxPow = 8;
    
     }
 }

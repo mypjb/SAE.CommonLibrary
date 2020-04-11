@@ -21,7 +21,7 @@ namespace SAE.CommonLibrary.AspNetCore.Test
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            builder.UseStartup<AspNetCoreTest.Startup>();
+            builder.UseStartup<Startup>();
         }
         [Fact]
         public async Task<IEnumerable<IPathDescriptor>> RouterScanningTest()

@@ -19,6 +19,8 @@ using SAE.CommonLibrary.AspNetCore.Routing;
 using Microsoft.AspNetCore.Authorization;
 using SAE.CommonLibrary.AspNetCore.Authorization;
 
+
+
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class SAEMvcServiceCollectionExtensions
@@ -88,6 +90,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddBitmapAuthorization(this IServiceCollection services, string policyName = null)
         {
             services.AddSingleton<IAuthorizationHandler, BitmapAuthorizationHandler>();
+            services.TryAddSingleton<IBitmapAuthorization, BitmapAuthorization>();
             services.AddAuthorization(options =>
             {
                 var policy = new AuthorizationPolicyBuilder()

@@ -14,11 +14,13 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IBitmapEndpointStorage _bitmapEndpointStorage;
+        private readonly IBitmapAuthorization _bitmapAuthorization;
 
-        public BitmapAuthorizationHandler(IHttpContextAccessor httpContextAccessor, IBitmapEndpointStorage bitmapEndpointStorage)
+        public BitmapAuthorizationHandler(IHttpContextAccessor httpContextAccessor, IBitmapEndpointStorage bitmapEndpointStorage, IBitmapAuthorization bitmapAuthorization)
         {
             this._httpContextAccessor = httpContextAccessor;
             this._bitmapEndpointStorage = bitmapEndpointStorage;
+            this._bitmapAuthorization = bitmapAuthorization;
         }
         /// <summary>
         /// 
@@ -33,23 +35,10 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
             if (index != -1)
             {
                 var claim = context.User.FindFirst(Constant.PermissionBits);
-                if (claim != null && claim.Value.IsNotNullOrWhiteSpace())
+                if (claim != null && claim.Value.IsNotNullOrWhiteSpace() && this._bitmapAuthorization.Authorizate(claim.Value, index))
                 {
-                    var bits = claim.Value;
+                    context.Succeed(requirement);
 
-                    var bitIndex = index / Constant.PermissionBitsMaxPow;
-
-                    if (bits.Count() >= bitIndex)
-                    {
-                        var bit = Encoding.ASCII.GetBytes(bits[bitIndex].ToString()).First();
-
-                        var bitPosition = 1 << (index % Constant.PermissionBitsMaxPow);//将1向前推进 index % Constant.PermissionBitsMaxPow 个位
-
-                        if ((bit | bitPosition) == bit)//bit位没有变化说明匹配权限位匹配正确
-                        {
-                            context.Succeed(requirement);
-                        }
-                    }
                 }
             }
             return Task.CompletedTask;
