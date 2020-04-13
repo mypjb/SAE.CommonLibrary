@@ -30,17 +30,26 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         /// <returns></returns>
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, BitmapAuthorizationRequirement requirement)
         {
-            var index = this._bitmapEndpointStorage.GetIndex(this._httpContextAccessor.HttpContext);
-
-            if (index != -1)
+            if (context.User.FindFirst(Constant.Administrator)?.Value.IsNotNullOrWhiteSpace()??false)//是否是超管
             {
-                var claim = context.User.FindFirst(Constant.PermissionBits);
-                if (claim != null && claim.Value.IsNotNullOrWhiteSpace() && this._bitmapAuthorization.Authorizate(claim.Value, index))
-                {
-                    context.Succeed(requirement);
+                context.Succeed(requirement);
+            }
+            else
+            {
+                var index = this._bitmapEndpointStorage.GetIndex(this._httpContextAccessor.HttpContext);
 
+                if (index > -1)
+                {
+                    var claim = context.User.FindFirst(Constant.PermissionBits);
+
+                    if (claim != null && claim.Value.IsNotNullOrWhiteSpace() && this._bitmapAuthorization.Authorizate(claim.Value, index))
+                    {
+                        context.Succeed(requirement);
+                    }
                 }
             }
+
+            
             return Task.CompletedTask;
         }
     }

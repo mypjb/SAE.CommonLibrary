@@ -32,13 +32,13 @@ namespace SAE.CommonLibrary.AspNetCore.Test
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             var max = 512;
-            var permissionBits = Enumerable.Range(0, 16)
-                                          .Select(s =>
+            var permissionBits = Enumerable.Range(0,23)
+                                           .Select(s =>
                                           {
                                               var bit = Math.Abs(this.GetRandom().GetHashCode() % max);
-                                              return bit > 0 ? bit : 1;
+                                              return bit;
                                           })
-                                          .ToArray();
+                                           .ToArray();
             
             var code = this._authorization.GeneratePermissionCode(permissionBits);
             

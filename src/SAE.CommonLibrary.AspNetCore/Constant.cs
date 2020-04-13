@@ -24,6 +24,10 @@ namespace SAE.CommonLibrary.AspNetCore
         /// 权限位最大次幂
         /// </summary>
         public const byte PermissionBitsMaxPow = 8;
-   
+        /// <summary>
+        /// 超级管理员
+        /// </summary>
+        public const string Administrator = "admin";
+        public const string OptionName = "authorize";
     }
 }

@@ -27,6 +27,8 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         /// </summary>
         /// <param name="endpoints"></param>
         void AddRange(IEnumerable<BitmapEndpoint> endpoints);
+
+        int Count();
     }
     /// <summary>
     /// 位图终点
@@ -41,6 +43,10 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         /// 路径
         /// </summary>
         public string Path { get; set; }
+        /// <summary>
+        /// 名称
+        /// </summary>
+        public string Name { get; set; }
     }
 
     public class BitmapEndpointStorage : IBitmapEndpointStorage
@@ -65,6 +71,11 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
             {
                 this.Add(endpoint);
             }
+        }
+
+        public int Count()
+        {
+            return this._store.Count;
         }
 
         public int GetIndex(string path)

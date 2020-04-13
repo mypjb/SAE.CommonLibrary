@@ -9,11 +9,9 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
     {
         public bool Authorizate(string code, int index)
         {
-            --index;
-
             var authorizate = false;
 
-            if (index >=0)
+            if (index >= 0)
             {
                 var bitIndex = index / Constant.PermissionBitsMaxPow;
 
@@ -40,7 +38,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
 
             var max = permissionBits.Max();
 
-            for (int i = 1; i <= max; i++)
+            for (int i = 0; i <= max; i++)
             {
                 sb.Append(permissionBits.Contains(i) ? '1' : '0');
             }

@@ -44,7 +44,8 @@ namespace SAE.CommonLibrary
         /// 资源不存在
         /// </summary>
         [Display(Name = "资源不存在")]
-        ResourcesNotExist = 1004
-        
+        ResourcesNotExist = 1004,
+        [Display(Name = "资源存在")]
+        ResourcesExist =1005
     }
 }
