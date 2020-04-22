@@ -5,12 +5,15 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Abstract.Mediator
 {
-    
+
     /// <summary>
     /// 
     /// </summary>
     public static class MediatorExtension
     {
-        
+        public static async Task<TResponse> Send<TResponse>(this Mediator mediator, object command)
+        {
+            return (TResponse)(await mediator.Send(command, typeof(TResponse)));
+        }
     }
 }

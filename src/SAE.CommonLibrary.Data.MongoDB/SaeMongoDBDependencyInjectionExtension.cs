@@ -8,7 +8,7 @@ namespace Microsoft.Extensions.DependencyInjection
     /// <summary>
     /// 
     /// </summary>
-    public static class DependencyInjectionExtension
+    public static class SaeMongoDBDependencyInjectionExtension
     {
         /// <summary>
         /// 添加Storage

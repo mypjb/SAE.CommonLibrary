@@ -6,15 +6,15 @@ using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class DependencyInjectionExtension
+    public static class SaeAbstractDependencyInjectionExtension
     {
-        
+
         /// <summary>
         /// 添加中介者
         /// </summary>
-        /// <param name="serviceDescriptors"></param>
+        /// <param name="services"></param>
         /// <returns></returns>
-        public static IServiceCollection AddMediator(this IServiceCollection serviceDescriptors, params Assembly[] assemblies)
+        public static IMediatorBuilder AddMediator(this IServiceCollection services, params Assembly[] assemblies)
         {
             if (assemblies == null || !assemblies.Any()) assemblies = new Assembly[] { Assembly.GetCallingAssembly() };
             var mediatorHandler = typeof(IMediatorHandler);
@@ -31,14 +31,21 @@ namespace Microsoft.Extensions.DependencyInjection
                     foreach (var interfaceType in type.GetInterfaces()
                                                       .Where(t => mediatorHandler.IsAssignableFrom(t) && t != mediatorHandler))
                     {
-                        serviceDescriptors.AddSingleton(interfaceType, type);
+                        if (!services.Any(s => s.ServiceType == interfaceType && s.ImplementationType == type))
+                        {
+                            services.AddSingleton(interfaceType, type);
+                            if (interfaceType.IsGenericType)
+                            {
+                                services.AddSingleton(new CommandHandlerDescriptor(interfaceType, interfaceType.GenericTypeArguments));
+                            }
+                        }
                     }
                 }
             }
 
-            serviceDescriptors.TryAddTransient<IMediator, Mediator>();
+            services.TryAddTransient<IMediator, Mediator>();
 
-            return serviceDescriptors;
+            return new MediatorBuilder(services);
         }
     }
 }

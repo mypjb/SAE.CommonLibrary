@@ -7,7 +7,7 @@ namespace Microsoft.Extensions.DependencyInjection
     /// <summary>
     /// 日志扩展
     /// </summary>
-    public static class DependencyInjectionExtension
+    public static class SaeNLogDependencyInjectionExtension
     {
         /// <summary>
         /// 添加Log默认实现

@@ -12,7 +12,7 @@ using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class DependencyInjectionExtension
+    public static class SaeEventStoreDocumentDependencyInjectionExtension
     {
         /// <summary>
         /// 添加EventStore.Docment默认实现

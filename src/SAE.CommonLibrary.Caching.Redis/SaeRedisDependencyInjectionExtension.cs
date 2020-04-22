@@ -3,7 +3,7 @@ using SAE.CommonLibrary.Caching.Redis;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class DependencyInjectionExtension
+    public static class SaeRedisDependencyInjectionExtension
     {
         /// <summary>
         /// 添加默认配置项

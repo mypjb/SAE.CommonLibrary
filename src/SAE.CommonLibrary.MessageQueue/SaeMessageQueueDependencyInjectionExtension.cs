@@ -7,7 +7,7 @@ namespace Microsoft.Extensions.DependencyInjection
     /// <summary>
     /// 
     /// </summary>
-    public static class DependencyInjectionExtension
+    public static class SaeMessageQueueDependencyInjectionExtension
     {
         /// <summary>
         /// 添加MQ内存实现

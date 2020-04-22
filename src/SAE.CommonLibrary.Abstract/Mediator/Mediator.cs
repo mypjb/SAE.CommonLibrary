@@ -35,22 +35,20 @@ namespace SAE.CommonLibrary.Abstract.Mediator
             await ((CommandHandlerWrapper)wrapper).Invoke(command);
         }
 
-        public async Task<TResponse> Send<TResponse>(object command)
+        public async Task<object> Send(object command, Type responseType)
         {
             var commandType = command.GetType();
-            var responseType = typeof(TResponse);
             var key = $"{commandType.GUID}_{responseType.GUID}";
 
             var wrapper = this._dic.GetOrAdd(key, k =>
             {
                 return Activator.CreateInstance(typeof(RequestHandlerWrapper<,>)
-                                .MakeGenericType(commandType, responseType), this._serviceProvider); 
+                                .MakeGenericType(commandType, responseType), this._serviceProvider);
             });
 
-            var response = await ((RequestHandlerWrapper)wrapper).Invoke(command);
+            var response = await((RequestHandlerWrapper)wrapper).Invoke(command);
 
-            return (TResponse)response;
+            return response;
         }
-        
     }
 }

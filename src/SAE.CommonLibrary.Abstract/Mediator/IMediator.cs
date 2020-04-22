@@ -11,6 +11,6 @@ namespace SAE.CommonLibrary.Abstract.Mediator
     public interface IMediator
     {
         Task Send(object command);
-        Task<TResponse> Send<TResponse>(object command);
+        Task<object> Send(object command,Type responseType);
     }
 }

@@ -10,7 +10,7 @@ using System.Text;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class DependencyInjectionExtension
+    public static class SaePluginAspNetCoreDependencyInjectionExtension
     {
 
         /// <summary>

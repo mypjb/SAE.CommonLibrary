@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,6 +19,13 @@ namespace SAE.CommonLibrary.Abstract.Mediator
         public RequestHandlerWrapper(IServiceProvider serviceProvider)
         {
             this._handlers = serviceProvider.GetServices<ICommandHandler<TCommand, TResponse>>();
+
+            var provider = serviceProvider.GetService<IProxyCommandHandlerProvider>();
+
+            if (provider != null && !this._handlers.Any())
+            {
+                this._handlers = new[] { provider.Get<TCommand, TResponse>() };
+            }
         }
 
         public override async Task<object> Invoke(object command)

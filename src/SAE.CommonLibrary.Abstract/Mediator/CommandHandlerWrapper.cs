@@ -3,6 +3,7 @@ using SAE.CommonLibrary.Abstract.Proxy;
 using SAE.CommonLibrary.Extension;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,6 +21,13 @@ namespace SAE.CommonLibrary.Abstract.Mediator
         public CommandHandlerWrapper(IServiceProvider serviceProvider)
         {
             this._handlers = serviceProvider.GetServices<ICommandHandler<TCommand>>();
+
+            var provider = serviceProvider.GetService<IProxyCommandHandlerProvider>();
+
+            if (provider != null && !this._handlers.Any())
+            {
+                this._handlers = new[] { provider.Get<TCommand>() };
+            }
         }
 
         public override async Task Invoke(object command)

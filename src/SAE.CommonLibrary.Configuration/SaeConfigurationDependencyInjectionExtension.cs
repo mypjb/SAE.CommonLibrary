@@ -5,7 +5,7 @@ using System;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class DependencyInjectionExtension
+    public static class SaeConfigurationDependencyInjectionExtension
     {
         /// <summary>
         /// 添加默认配置项

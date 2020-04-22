@@ -77,7 +77,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAE.CommonLibrary.Plugin.Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAE.CommonLibrary.Plugin.Constant", "test\Plugins\SAE.CommonLibrary.Plugin.Constant\SAE.CommonLibrary.Plugin.Constant.csproj", "{AF024EF9-D893-4115-AB81-3CFFB6D1C97F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.AspNetCore.Test", "test\SAE.CommonLibrary.AspNetCore.Test\SAE.CommonLibrary.AspNetCore.Test.csproj", "{A602A056-B852-4520-8E26-F79E0D88ECC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAE.CommonLibrary.AspNetCore.Test", "test\SAE.CommonLibrary.AspNetCore.Test\SAE.CommonLibrary.AspNetCore.Test.csproj", "{A602A056-B852-4520-8E26-F79E0D88ECC2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.Mediator.Orleans", "src\SAE.CommonLibrary.Mediator.Orleans\SAE.CommonLibrary.Mediator.Orleans.csproj", "{DAA65888-2C4C-4B1B-9B19-A9FFAC192017}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -209,6 +211,10 @@ Global
 		{A602A056-B852-4520-8E26-F79E0D88ECC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A602A056-B852-4520-8E26-F79E0D88ECC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A602A056-B852-4520-8E26-F79E0D88ECC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAA65888-2C4C-4B1B-9B19-A9FFAC192017}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAA65888-2C4C-4B1B-9B19-A9FFAC192017}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAA65888-2C4C-4B1B-9B19-A9FFAC192017}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAA65888-2C4C-4B1B-9B19-A9FFAC192017}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -246,6 +252,7 @@ Global
 		{99975B94-0382-4C94-96AB-73056C11E117} = {041569C8-77AD-490C-A700-61292F063778}
 		{AF024EF9-D893-4115-AB81-3CFFB6D1C97F} = {041569C8-77AD-490C-A700-61292F063778}
 		{A602A056-B852-4520-8E26-F79E0D88ECC2} = {8AD43B5B-ED55-4712-B865-1E6E1D7B19FE}
+		{DAA65888-2C4C-4B1B-9B19-A9FFAC192017} = {78157883-8166-46DB-9754-E093FE2A3936}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2FF66E70-E062-4202-A1AD-A821991FEA65}
