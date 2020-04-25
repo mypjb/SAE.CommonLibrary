@@ -84,10 +84,29 @@ namespace Microsoft.Extensions.DependencyInjection
                               .TryAddSingleton(provider =>
                               {
                                   var optionsSource = provider.GetService<IOptionsSource>();
+
                                   var options = optionsSource.Get<TOptions>(name);
+
+                                  var configures= provider.GetServices<IOptionsConfigure<TOptions>>();
+
+                                  foreach (var configure in configures)
+                                      configure.Configure(options);
+
                                   return options;
                               });
             
+            return serviceDescriptors;
+        }
+        /// <summary>
+        /// 配置
+        /// </summary>
+        /// <typeparam name="TOptions"></typeparam>
+        /// <param name="serviceDescriptors"></param>
+        /// <param name="configure"></param>
+        /// <returns></returns>
+        public static IServiceCollection SaeConfigure<TOptions>(this IServiceCollection serviceDescriptors,Action<TOptions> configure) where TOptions : class, new()
+        {
+            serviceDescriptors.AddSingleton<IOptionsConfigure<TOptions>>(new OptionsConfigure<TOptions>(configure));
             return serviceDescriptors;
         }
     }

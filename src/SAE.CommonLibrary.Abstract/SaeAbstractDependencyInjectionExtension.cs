@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
 using SAE.CommonLibrary.Abstract.Mediator;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -19,6 +20,8 @@ namespace Microsoft.Extensions.DependencyInjection
             if (assemblies == null || !assemblies.Any()) assemblies = new Assembly[] { Assembly.GetCallingAssembly() };
             var mediatorHandler = typeof(IMediatorHandler);
 
+            var descriptors = new List<CommandHandlerDescriptor>();
+
             foreach (var assembly in assemblies)
             {
                 foreach (var type in assembly.GetTypes()
@@ -36,7 +39,7 @@ namespace Microsoft.Extensions.DependencyInjection
                             services.AddSingleton(interfaceType, type);
                             if (interfaceType.IsGenericType)
                             {
-                                services.AddSingleton(new CommandHandlerDescriptor(interfaceType, interfaceType.GenericTypeArguments));
+                                descriptors.Add(new CommandHandlerDescriptor(interfaceType, interfaceType.GenericTypeArguments));
                             }
                         }
                     }
@@ -45,7 +48,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.TryAddTransient<IMediator, Mediator>();
 
-            return new MediatorBuilder(services);
+            return new MediatorBuilder(services,descriptors);
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class SaeDependencyInjectionExtension
+    public static class DIDependencyInjectionExtension
     {
         public static IServiceProvider BuildAutofacProvider(this IServiceCollection serviceDescriptors, Action<ContainerBuilder> @delegate = null)
         {
