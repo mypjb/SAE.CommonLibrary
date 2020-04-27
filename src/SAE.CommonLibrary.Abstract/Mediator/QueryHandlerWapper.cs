@@ -20,11 +20,13 @@ namespace SAE.CommonLibrary.Abstract.Mediator
         {
             this._handlers = serviceProvider.GetServices<ICommandHandler<TCommand, TResponse>>();
 
-            var provider = serviceProvider.GetService<IProxyCommandHandlerProvider>();
 
-            if (provider != null && !this._handlers.Any())
+
+            if (this._handlers == null || !this._handlers.Any())
             {
-                this._handlers = new[] { provider.Get<TCommand, TResponse>() };
+                var provider = serviceProvider.GetService<IProxyCommandHandlerProvider>();
+                if (provider != null)
+                    this._handlers = new[] { provider.Get<TCommand, TResponse>() };
             }
         }
 

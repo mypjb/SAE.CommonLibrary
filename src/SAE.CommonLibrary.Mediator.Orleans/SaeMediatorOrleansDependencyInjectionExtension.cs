@@ -1,4 +1,6 @@
-﻿using SAE.CommonLibrary.Abstract.Mediator;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using SAE.CommonLibrary.Abstract.Mediator;
 using SAE.CommonLibrary.Extension;
 using SAE.CommonLibrary.Mediator.Orleans;
 using System;
@@ -11,9 +13,37 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class SaeMediatorOrleansDependencyInjectionExtension
     {
-        public static IMediatorBuilder AddOrleansProxy(this IMediatorBuilder builder)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        private static IMediatorBuilder AddMediatorOrleans(this IMediatorBuilder builder)
         {
-            var identitys = new Dictionary<string,Assembly>();
+            builder.Services.AddNlogLogger()
+                            .AddSaeOptions<OrleansOptions>()
+                            .TryAddSingleton<IGrainCommandHandler, GrainCommandHandler>();
+            return builder;
+        }
+        /// <summary>
+        /// 添加对<seealso cref="IMediator"/>Proxy实现
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static IMediatorBuilder AddMediatorOrleansProxy(this IMediatorBuilder builder)
+        {
+            return builder.AddMediatorOrleansSilo()
+                          .AddMediatorOrleansClient();
+        }
+
+        /// <summary>
+        /// 添加Orleans Silo
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static IMediatorBuilder AddMediatorOrleansSilo(this IMediatorBuilder builder)
+        {
+            var identitys = new Dictionary<string, Assembly>();
 
             builder.Descriptors.ForEach(descriptor =>
             {
@@ -30,15 +60,43 @@ namespace Microsoft.Extensions.DependencyInjection
                                 foreach (var kv in identitys)
                                     options.GrainNames.TryAdd(kv.Key, kv.Value);
                             });
-            
+            builder.AddMediatorOrleans()
+                   .Services.TryAddSingleton<ISiloFactory, SiloFactory>();
             return builder;
         }
 
-        public static IServiceProvider UseMediatorProxy(this IServiceProvider provider)
+        /// <summary>
+        /// 添加Orleans Client
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static IMediatorBuilder AddMediatorOrleansClient(this IMediatorBuilder builder)
         {
-            //var descriptors = provider.GetService<IEnumerable<CommandHandlerDescriptor>>();
-            
+            builder.AddMediatorOrleans()
+                   .Services.TryAddSingleton<IProxyCommandHandlerProvider, ProxyCommandHandlerProvider>();
+            return builder;
+        }
+
+        /// <summary>
+        /// 使用基于Orleans<seealso cref="IMediator"/>代理
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns></returns>
+        public static IServiceProvider UseMediatorOrleansSilo(this IServiceProvider provider)
+        {
+            var factory = provider.GetService<ISiloFactory>();
             return provider;
+        }
+
+        /// <summary>
+        /// 使用基于Orleans<seealso cref="IMediator"/>代理
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static IApplicationBuilder UseMediatorOrleansSilo(this IApplicationBuilder builder)
+        {
+            builder.UseMediatorOrleansSilo();
+            return builder;
         }
     }
 }

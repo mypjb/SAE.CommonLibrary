@@ -79,7 +79,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAE.CommonLibrary.Plugin.Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAE.CommonLibrary.AspNetCore.Test", "test\SAE.CommonLibrary.AspNetCore.Test\SAE.CommonLibrary.AspNetCore.Test.csproj", "{A602A056-B852-4520-8E26-F79E0D88ECC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.Mediator.Orleans", "src\SAE.CommonLibrary.Mediator.Orleans\SAE.CommonLibrary.Mediator.Orleans.csproj", "{DAA65888-2C4C-4B1B-9B19-A9FFAC192017}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAE.CommonLibrary.Mediator.Orleans", "src\SAE.CommonLibrary.Mediator.Orleans\SAE.CommonLibrary.Mediator.Orleans.csproj", "{DAA65888-2C4C-4B1B-9B19-A9FFAC192017}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.Mediator.Orleans.Test", "test\SAE.CommonLibrary.Mediator.Orleans.Test\SAE.CommonLibrary.Mediator.Orleans.Test.csproj", "{D9767FD4-BBAE-4243-B25E-7D87AD49ADE2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.Mediator.Orleans.Product", "test\SAE.CommonLibrary.Mediator.Orleans.Product\SAE.CommonLibrary.Mediator.Orleans.Product.csproj", "{4E6E50DB-7F4F-4C5C-B366-91ABBB301836}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.Mediator.Orleans.Orders", "test\SAE.CommonLibrary.Mediator.Orleans.Orders\SAE.CommonLibrary.Mediator.Orleans.Orders.csproj", "{97261A6E-9C7B-4293-852B-DE4EE91E27C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -215,6 +221,18 @@ Global
 		{DAA65888-2C4C-4B1B-9B19-A9FFAC192017}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAA65888-2C4C-4B1B-9B19-A9FFAC192017}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DAA65888-2C4C-4B1B-9B19-A9FFAC192017}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9767FD4-BBAE-4243-B25E-7D87AD49ADE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9767FD4-BBAE-4243-B25E-7D87AD49ADE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9767FD4-BBAE-4243-B25E-7D87AD49ADE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9767FD4-BBAE-4243-B25E-7D87AD49ADE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E6E50DB-7F4F-4C5C-B366-91ABBB301836}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E6E50DB-7F4F-4C5C-B366-91ABBB301836}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E6E50DB-7F4F-4C5C-B366-91ABBB301836}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E6E50DB-7F4F-4C5C-B366-91ABBB301836}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97261A6E-9C7B-4293-852B-DE4EE91E27C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97261A6E-9C7B-4293-852B-DE4EE91E27C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97261A6E-9C7B-4293-852B-DE4EE91E27C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97261A6E-9C7B-4293-852B-DE4EE91E27C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -253,6 +271,9 @@ Global
 		{AF024EF9-D893-4115-AB81-3CFFB6D1C97F} = {041569C8-77AD-490C-A700-61292F063778}
 		{A602A056-B852-4520-8E26-F79E0D88ECC2} = {8AD43B5B-ED55-4712-B865-1E6E1D7B19FE}
 		{DAA65888-2C4C-4B1B-9B19-A9FFAC192017} = {78157883-8166-46DB-9754-E093FE2A3936}
+		{D9767FD4-BBAE-4243-B25E-7D87AD49ADE2} = {8AD43B5B-ED55-4712-B865-1E6E1D7B19FE}
+		{4E6E50DB-7F4F-4C5C-B366-91ABBB301836} = {8AD43B5B-ED55-4712-B865-1E6E1D7B19FE}
+		{97261A6E-9C7B-4293-852B-DE4EE91E27C7} = {8AD43B5B-ED55-4712-B865-1E6E1D7B19FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2FF66E70-E062-4202-A1AD-A821991FEA65}

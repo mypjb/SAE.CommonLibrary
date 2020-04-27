@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Orleans;
 using Orleans.Configuration;
 using Orleans.Hosting;
 using SAE.CommonLibrary.Abstract.Mediator;
+using System;
 using System.Collections.Concurrent;
 using System.Reflection;
 
@@ -12,10 +14,14 @@ namespace SAE.CommonLibrary.Mediator.Orleans
     {
         private readonly ConcurrentDictionary<string, IClusterClient> _dictionary;
         private readonly OrleansOptions _options;
-        private readonly Microsoft.Extensions.Hosting.IHostEnvironment _environment;
+        private readonly IHostEnvironment _environment;
+        private readonly IMediator _mediator;
 
-        public ProxyCommandHandlerProvider(OrleansOptions options, Microsoft.Extensions.Hosting.IHostEnvironment environment)
+        public ProxyCommandHandlerProvider(OrleansOptions options,
+                                           IHostEnvironment environment,
+                                           IMediator mediator)
         {
+            this._mediator = mediator;
             this._dictionary = new ConcurrentDictionary<string, IClusterClient>();
             this._options = options;
             this._environment = environment;
@@ -43,7 +49,14 @@ namespace SAE.CommonLibrary.Mediator.Orleans
                     options.ClusterId = this._options.ClusterId;
                     options.ServiceId = serviceId;
                 })
-                .ConfigureApplicationParts(part => part.AddApplicationPart(Assembly.GetExecutingAssembly()))
+                .ConfigureApplicationParts(part =>
+                {
+                    part.AddApplicationPart(Assembly.GetExecutingAssembly());
+                })
+                .ConfigureServices(service =>
+                {
+                    service.AddSingleton(this._mediator);
+                })
                 .Build();
 
             clusterClient.Connect().GetAwaiter().GetResult();

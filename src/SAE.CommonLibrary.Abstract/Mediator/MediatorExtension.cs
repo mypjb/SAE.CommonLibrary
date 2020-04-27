@@ -11,7 +11,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator
     /// </summary>
     public static class MediatorExtension
     {
-        public static async Task<TResponse> Send<TResponse>(this Mediator mediator, object command)
+        public static async Task<TResponse> Send<TResponse>(this IMediator mediator, object command)
         {
             return (TResponse)(await mediator.Send(command, typeof(TResponse)));
         }

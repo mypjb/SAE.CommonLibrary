@@ -11,6 +11,9 @@ using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using SAE.CommonLibrary.Abstract.Mediator;
+using System.Reflection;
 
 namespace SAE.CommonLibrary.Mediator.Orleans
 {
@@ -18,15 +21,17 @@ namespace SAE.CommonLibrary.Mediator.Orleans
     {
         private readonly ConcurrentDictionary<string, ISiloService> _dictionary;
         private readonly ILogging<SiloFactory> _logging;
+        private readonly IMediator _mediator;
 
         public SiloFactory(OrleansOptions options, 
                            ILogging<SiloFactory> logging,
-                           IHostEnvironment hostingEnvironment)
+                           IHostEnvironment hostingEnvironment,
+                           IMediator mediator)
         {
             this._dictionary = new ConcurrentDictionary<string, ISiloService>();
 
             this._logging = logging;
-
+            this._mediator = mediator;
             if (hostingEnvironment.EnvironmentName == Environments.Development)
             {
                 this.DevelopmentConfiguration(options).GetAwaiter().GetResult();
@@ -67,8 +72,16 @@ namespace SAE.CommonLibrary.Mediator.Orleans
                                         clusterOptions.ClusterId = options.ClusterId;
                                         clusterOptions.ServiceId = kv.Key;
                                     })
-                                    .ConfigureApplicationParts(parts => parts.AddApplicationPart(kv.Value).WithReferences())
+                                    .ConfigureApplicationParts(part =>
+                                    {
+                                        part.AddApplicationPart(Assembly.GetExecutingAssembly()).WithReferences();
+                                    })
+                                    .ConfigureServices(service =>
+                                    {
+                                        service.AddSingleton(this._mediator);
+                                    })
                                     .Build();
+
                         var siloService = new SiloService(silo);
 
                         await siloService.StartAsync();
@@ -103,7 +116,14 @@ namespace SAE.CommonLibrary.Mediator.Orleans
                                         clusterOptions.ClusterId = options.ClusterId;
                                         clusterOptions.ServiceId = kv.Key;
                                     })
-                                    .ConfigureApplicationParts(parts => parts.AddApplicationPart(kv.Value).WithReferences())
+                                    .ConfigureApplicationParts(part =>
+                                    {
+                                        part.AddApplicationPart(Assembly.GetExecutingAssembly()).WithReferences();
+                                    })
+                                    .ConfigureServices(service =>
+                                    {
+                                        service.AddSingleton(this._mediator);
+                                    })
                                     .Build();
                 var siloService = new SiloService(silo);
 

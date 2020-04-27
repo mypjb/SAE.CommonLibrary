@@ -9,7 +9,7 @@ namespace SAE.CommonLibrary.Mediator.Orleans
     {
         public static string GetIdentity(Type type)
         {
-            return type.Assembly.GetName().Name.ToMd5(true);
+            return type.Assembly.GetName().Name;
         }
     }
 }

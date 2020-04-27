@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Hosting.Internal;
 using SAE.CommonLibrary.Extension;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.IO;
 using Xunit.Abstractions;
 
 namespace SAE.CommonLibrary.Test
@@ -17,12 +17,21 @@ namespace SAE.CommonLibrary.Test
             _output = output;
             IServiceCollection services = new ServiceCollection();
             //services.AddServiceProvider();
+            this.ConfigureEnvironment(services);
             this.ConfigureServicesBefore(services);
             this.ConfigureServices(services);
             this._serviceProvider = services.BuildAutofacProvider();
             this.Configure(this._serviceProvider);
         }
 
+        protected virtual void ConfigureEnvironment(IServiceCollection services)
+        {
+            services.AddSingleton<IHostEnvironment>(new HostingEnvironment
+            {
+                ApplicationName = Path.GetFileNameWithoutExtension(AppDomain.CurrentDomain.FriendlyName),
+                EnvironmentName = Environments.Development
+            });
+        }
         protected virtual void ConfigureServices(IServiceCollection services)
         {
             
