@@ -88,7 +88,8 @@ namespace Microsoft.Extensions.DependencyInjection
                      }
                      else
                      {
-                         body = new ResponseResult(StatusCode.RequestInvalid);
+                         body = new ErrorOutput(SAE.CommonLibrary.StatusCodes.RequestInvalid);
+                         context.Response.StatusCode = 400;
                      }
 
                      await context.Response.WriteAsync(body.ToJsonString());

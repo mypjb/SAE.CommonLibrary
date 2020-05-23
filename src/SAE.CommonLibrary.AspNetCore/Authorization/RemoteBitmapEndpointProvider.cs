@@ -30,7 +30,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
 
             var responseMessage= await client.SendAsync(requestMessage);
 
-            return await responseMessage.AsResult<IEnumerable<BitmapEndpoint>>();
+            return await responseMessage.AsAsync<IEnumerable<BitmapEndpoint>>();
         }
     }
 }

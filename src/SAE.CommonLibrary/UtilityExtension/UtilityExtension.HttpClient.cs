@@ -193,7 +193,7 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 获取请求报文，如果请求失败则触发<seealso cref="System.Net.Http.HttpRequestException"/>。
         /// 若<typeparamref name="T"/>继承自<seealso cref="ResponseResult"/>时。
-        /// 当<seealso cref="ResponseResult.StatusCode"/>!=<seealso cref="StatusCode.Success"/>则触发<seealso cref="SaeException"/>异常
+        /// 当<seealso cref="ResponseResult.StatusCode"/>!=<seealso cref="StatusCodes.Success"/>则触发<seealso cref="SaeException"/>异常
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="response"></param>
@@ -206,40 +206,40 @@ namespace SAE.CommonLibrary.Extension
 
             return json.ToObject<T>();
         }
-        /// <summary>
-        /// 获得由<seealso cref="ResponseResult{T}"/>包装的响应结果，
-        /// 如果<seealso cref="ResponseResult.StatusCode"/>!=<seealso cref="StatusCode.Success"/>
-        /// 则触发<seealso cref="SaeException"/>异常
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="response"></param>
-        /// <returns></returns>
-        public static async Task<T> AsResult<T>(this HttpResponseMessage response)
-        {
-            var result = await response.AsAsync<ResponseResult<T>>();
+        ///// <summary>
+        ///// 获得由<seealso cref="ResponseResult{T}"/>包装的响应结果，
+        ///// 如果<seealso cref="ResponseResult.StatusCode"/>!=<seealso cref="StatusCodes.Success"/>
+        ///// 则触发<seealso cref="SaeException"/>异常
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="response"></param>
+        ///// <returns></returns>
+        //public static async Task<T> AsResult<T>(this HttpResponseMessage response)
+        //{
+        //    var result = await response.AsAsync<ResponseResult<T>>();
 
-            if (result.StatusCode != StatusCode.Success)
-                throw new SaeException(result);
+        //    if (result.StatusCode != StatusCodes.Success)
+        //        throw new SaeException(result);
 
-            return result.Body;
-        }
+        //    return result.Body;
+        //}
 
-        /// <summary>
-        /// 获得由<seealso cref="ResponseResult"/>包装的响应结果，
-        /// 如果<seealso cref="ResponseResult.StatusCode"/>!=<seealso cref="StatusCode.Success"/>
-        /// 则触发<seealso cref="SaeException"/>异常
-        /// </summary>
-        /// <param name="response"></param>
-        /// <returns></returns>
-        public static async Task<object> AsResult(this HttpResponseMessage response)
-        {
-            var result = await response.AsAsync<ResponseResult>();
+        ///// <summary>
+        ///// 获得由<seealso cref="ResponseResult"/>包装的响应结果，
+        ///// 如果<seealso cref="ResponseResult.StatusCode"/>!=<seealso cref="StatusCodes.Success"/>
+        ///// 则触发<seealso cref="SaeException"/>异常
+        ///// </summary>
+        ///// <param name="response"></param>
+        ///// <returns></returns>
+        //public static async Task<object> AsResult(this HttpResponseMessage response)
+        //{
+        //    var result = await response.AsAsync<ResponseResult>();
 
-            if (result.StatusCode != StatusCode.Success)
-                throw new SaeException(result);
+        //    if (result.StatusCode != StatusCodes.Success)
+        //        throw new SaeException(result);
 
-            return result.Body;
-        }
+        //    return result.Body;
+        //}
 
 
         /// <summary>

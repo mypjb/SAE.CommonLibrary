@@ -49,6 +49,7 @@ namespace SAE.CommonLibrary.Plugin.Test
         private async Task Request(string url)
         {
             var response = await this._client.GetAsync($"{PluginConstant.Host}{url}");
+            this.WriteLine(response);
 
             Xunit.Assert.True(response.IsSuccessStatusCode, ((int)response.StatusCode).ToString());
 
@@ -63,7 +64,7 @@ namespace SAE.CommonLibrary.Plugin.Test
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddNlogLogger();
-            services.AddPluginManage();
+            services.AddPluginManage("../../../../Plugins/dest");
             services.AddControllersWithViews();
         }
 

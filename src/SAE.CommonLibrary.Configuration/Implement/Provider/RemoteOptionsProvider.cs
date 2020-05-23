@@ -50,24 +50,20 @@ namespace SAE.CommonLibrary.Configuration.Implement
                                                  .GetResult();
                     responseMessage.EnsureSuccessStatusCode();
 
-                    var response = responseMessage.AsAsync<ResponseResult<RemoteOption>>()
+                    var remoteOption = responseMessage.AsAsync<RemoteOption>()
                                                   .GetAwaiter()
                                                   .GetResult();
 
-                    if (response.StatusCode != StatusCode.Success)
-                    {
-                        throw new SaeException(response);
-                    }
 
                     if (arg == null)
-                        this._logging.Value.Debug($"从'{url}'拉取配置成功，远程配置版本号'{response.Body.Version}'");
+                        this._logging.Value.Debug($"从'{url}'拉取配置成功，远程配置版本号'{remoteOption.Version}'");
 
-                    if (response.Body.Version > (this.Option?.Version ?? 0))
+                    if (remoteOption.Version > (this.Option?.Version ?? 0))
                     {
                         if (arg == null)
-                            this._logging.Value.Info($"远程版本'{response.Body.Version}'高于本地'{response.Body.Version}',将本地配置替换为本地");
+                            this._logging.Value.Info($"远程版本'{remoteOption.Version}'高于本地'{remoteOption.Version}',将本地配置替换为本地");
 
-                        this.Option = response.Body;
+                        this.Option = remoteOption;
 
                         if (this.Option.Data.Type == JTokenType.Object)
                         {
@@ -123,15 +119,15 @@ namespace SAE.CommonLibrary.Configuration.Implement
                     var requestMessage = new HttpRequestMessage(HttpMethod.Post, url);
                     requestMessage.AddJsonContent(postData);
                     var responseMessage = await this._clinet.SendAsync(requestMessage);
-                    responseMessage.EnsureSuccessStatusCode();
-                    var result = await responseMessage.AsAsync<ResponseResult>();
-                    if (result.StatusCode == StatusCode.Success)
+                    
+                    if (responseMessage.IsSuccessStatusCode)
                     {
                         this._logging.Value.Info($"数据提交至'{url}'");
                         break;
                     }
                     else
                     {
+                        var result = await responseMessage.AsAsync<ErrorOutput>();
                         throw new SaeException(result);
                     }
 

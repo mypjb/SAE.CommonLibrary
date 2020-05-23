@@ -39,17 +39,31 @@ namespace SAE.CommonLibrary.Extension
         => EnumTo<TEnum>(input);
 
         /// <summary>
-        /// 获得<paramref name="enum"/>Display“Name”
+        /// get <paramref name="enum"/> detail
         /// </summary>
         /// <param name="enum"></param>
         /// <returns></returns>
-        public static string Display(this Enum @enum)
+        public static string GetDetail(this Enum @enum)
         {
-            var name = @enum.ToString();
-            var field = @enum.GetType().GetField(name);
-            if (field == null) return name;
-            var attribute = field.GetCustomAttributes(false).OfType<DisplayAttribute>().FirstOrDefault();
-            return attribute == null ? field.Name : attribute.GetName();
+            var str = @enum.ToString();
+
+            var sb = new StringBuilder();
+
+            for (int i = 0; i < str.Length; i++)
+            {
+                if (i > 0 && str[i] >= 'A')
+                {
+                    sb.Append(' ');
+                }
+                sb.Append(str[i]);
+            }
+
+            return sb.ToString();
+            //var name = @enum.ToString();
+            //var field = @enum.GetType().GetField(name);
+            //if (field == null) return name;
+            //var attribute = field.GetCustomAttributes(false).OfType<DisplayAttribute>().FirstOrDefault();
+            //return attribute == null ? field.Name : attribute.GetName();
         }
 
         /// <summary>

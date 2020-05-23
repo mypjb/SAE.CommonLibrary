@@ -8,44 +8,43 @@ namespace SAE.CommonLibrary
     /// <summary>
     /// 状态码
     /// </summary>
-    public enum StatusCode
+    public enum StatusCodes
     {
         /// <summary>
         /// 成功
         /// </summary>
         [Display(Name = "成功")]
-        Success = 0,
+        Success = 200,
         /// <summary>
         /// 未知的异常
         /// </summary>
-        [Display(Name = "未知的异常")]
-        Unknown = -1,
-        /// <summary>
-        /// 自定义的异常
-        /// </summary>
-        [Display(Name = "自定义的异常")]
-        Custom = -2,
+        [Display(Name = "内部异常,请联系工程")]
+        Unknown = 500,
+        Custom=501,
         /// <summary>
         /// 账号或密码错误
         /// </summary>
-        [Display(Name = "账号或密码错误")]
-        AccountOrPassword = 10001,
+        [Display(Name = "用户或密码错误")]
+        AccountOrPassword = 401,
         /// <summary>
         /// 请求无效
         /// </summary>
         [Display(Name = "请求无效")]
-        RequestInvalid = 10002,
+        RequestInvalid = 4001,
         /// <summary>
         /// 参数无效
         /// </summary>
         [Display(Name = "参数无效")]
-        ParamesterInvalid = 10003,
+        ParamesterInvalid = 4002,
         /// <summary>
         /// 资源不存在
         /// </summary>
         [Display(Name = "资源不存在")]
-        ResourcesNotExist = 1004,
+        ResourcesNotExist = 404,
+        /// <summary>
+        /// 
+        /// </summary>
         [Display(Name = "资源存在")]
-        ResourcesExist =1005
+        ResourcesExist =4003
     }
 }

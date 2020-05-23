@@ -30,7 +30,7 @@ namespace SAE.CommonLibrary.EventStore.Document
             return this._documentStore.RemoveAsync<TDocument>(identity);
         }
 
-        protected virtual Task GetById(string identity)
+        protected virtual Task<TDocument> GetById(string identity)
         {
             return this._documentStore.FindAsync<TDocument>(identity);
         }

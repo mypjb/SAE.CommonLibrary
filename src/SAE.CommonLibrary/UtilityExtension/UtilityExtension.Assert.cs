@@ -27,7 +27,7 @@ namespace SAE.CommonLibrary.Extension
         {
             if (!string.IsNullOrWhiteSpace(assert.Current))
             {
-                throw new SaeException(StatusCode.ParamesterInvalid, message);
+                throw new SaeException(StatusCodes.ParamesterInvalid, message);
             }
             return assert;
         }
@@ -55,7 +55,7 @@ namespace SAE.CommonLibrary.Extension
         {
             if (string.IsNullOrWhiteSpace(assert.Current))
             {
-                throw new SaeException(StatusCode.ParamesterInvalid, message);
+                throw new SaeException(StatusCodes.ParamesterInvalid, message);
             }
             return assert;
         }
@@ -82,7 +82,7 @@ namespace SAE.CommonLibrary.Extension
         {
             if (!assert.Current)
             {
-                throw new SaeException(StatusCode.ParamesterInvalid, message);
+                throw new SaeException(StatusCodes.ParamesterInvalid, message);
             }
             return assert;
         }
@@ -106,7 +106,7 @@ namespace SAE.CommonLibrary.Extension
         {
             if (assert.Current)
             {
-                throw new SaeException(StatusCode.ParamesterInvalid, message);
+                throw new SaeException(StatusCodes.ParamesterInvalid, message);
             }
             return assert;
         }
@@ -133,7 +133,7 @@ namespace SAE.CommonLibrary.Extension
         {
             if (assert.Current != null)
             {
-                throw new SaeException(StatusCode.ParamesterInvalid,message);
+                throw new SaeException(StatusCodes.ParamesterInvalid,message);
             }
             return assert;
         }
@@ -162,7 +162,7 @@ namespace SAE.CommonLibrary.Extension
         {
             if (assert.Current == null)
             {
-                throw new SaeException(StatusCode.ResourcesNotExist, message);
+                throw new SaeException(StatusCodes.ResourcesNotExist, message);
             }
             return assert;
         }

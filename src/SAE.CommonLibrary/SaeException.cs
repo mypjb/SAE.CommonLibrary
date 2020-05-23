@@ -14,21 +14,19 @@ namespace SAE.CommonLibrary
         /// <summary>
         /// 错误码
         /// </summary>
-        public StatusCode Code { get; }
+        public int Code { get; }
         /// <summary>
         /// 
         /// </summary>
-        public SaeException()
+        public SaeException() : this(StatusCodes.Custom, StatusCodes.Custom.GetDetail())
         {
-            this.Code = StatusCode.Custom;
         }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="code"></param>
-        public SaeException(StatusCode code) : this(code.Display())
+        public SaeException(StatusCodes code) : this(code, code.GetDetail())
         {
-            this.Code = code;
         }
 
         /// <summary>
@@ -36,7 +34,11 @@ namespace SAE.CommonLibrary
         /// </summary>
         /// <param name="code"></param>
         /// <param name="message"></param>
-        public SaeException(StatusCode code, string message) : this(message)
+        public SaeException(StatusCodes code, string message) : this((int)code, message)
+        {
+        }
+
+        public SaeException(int code, string message) : base(message)
         {
             this.Code = code;
         }
@@ -44,47 +46,50 @@ namespace SAE.CommonLibrary
         /// 
         /// </summary>
         /// <param name="response"></param>
-        public SaeException(ResponseResult response) : this(response.StatusCode, response.Message)
+        public SaeException(ErrorOutput error) : this(error.StatusCode, error.Message)
         {
 
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="code"></param>
-        /// <param name="exception"></param>
-        public SaeException(StatusCode code, Exception exception) : this(code, code.Display(), exception)
-        {
-
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="code"></param>
-        /// <param name="message"></param>
-        /// <param name="exception"></param>
-        public SaeException(StatusCode code, string message, Exception exception) : this(message, exception)
-        {
-            this.Code = code;
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="message"></param>
-        public SaeException(string message) : base(message)
+        public SaeException(string message) : this(StatusCodes.Custom, message)
         {
-            this.Code = StatusCode.Custom;
         }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="message"></param>
         /// <param name="innerException"></param>
-        public SaeException(string message, Exception innerException) : base(message, innerException)
+        public SaeException(string message, Exception innerException) : this(StatusCodes.Custom, message, innerException)
         {
-            this.Code = StatusCode.Custom;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="exception"></param>
+        public SaeException(StatusCodes code, Exception exception) : this(code, code.GetDetail(), exception)
+        {
+
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="message"></param>
+        /// <param name="exception"></param>
+        public SaeException(StatusCodes code, string message, Exception exception) : this((int)code, message, exception)
+        {
+            this.Code = (int)code;
+        }
+
+        public SaeException(int code, string message, Exception exception) : base(message, exception)
+        {
+            this.Code = code;
         }
     }
 }

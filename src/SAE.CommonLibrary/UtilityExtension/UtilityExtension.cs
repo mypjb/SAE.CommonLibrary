@@ -2,6 +2,7 @@
 using SAE.CommonLibrary.ObjectMapper;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Extension
@@ -9,11 +10,11 @@ namespace SAE.CommonLibrary.Extension
     /// <summary>
     /// 通用函数扩展
     /// </summary>
-    public static partial class  UtilityExtension
+    public static partial class UtilityExtension
     {
         static UtilityExtension()
         {
-            
+
         }
 
 
@@ -37,7 +38,7 @@ namespace SAE.CommonLibrary.Extension
         }
 
 
-        public static async Task<IEnumerable<T>> ForEachAsync<T>(this IEnumerable<T> enumerable, Func<T,Task> @delegate)
+        public static async Task<IEnumerable<T>> ForEachAsync<T>(this IEnumerable<T> enumerable, Func<T, Task> @delegate)
         {
             if (enumerable != null)
             {
