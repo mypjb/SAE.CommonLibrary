@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.VisualBasic.CompilerServices;
+using Newtonsoft.Json;
 using SAE.CommonLibrary.Extension;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,14 @@ namespace SAE.CommonLibrary
         /// </summary>
         public class Serialize
         {
+
+            static Serialize()
+            {
+                JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+                {
+                    ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
+                };
+            }
             /// <summary>
             /// Json序列化
             /// </summary>
@@ -26,12 +35,9 @@ namespace SAE.CommonLibrary
                 {
                     return string.Empty;
                 }
-                return JsonConvert.SerializeObject(@object, new JsonSerializerSettings
-                {
-                    ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
-                });
+                return JsonConvert.SerializeObject(@object);
             }
-       
+
             /// <summary>
             /// 将<paramref name="object"/>序列化为<seealso cref="XDocument"/>
             /// </summary>
@@ -61,6 +67,16 @@ namespace SAE.CommonLibrary
         /// </summary>
         public class Deserialize
         {
+            private static readonly Type _stringType = typeof(string);
+            static Deserialize()
+            {
+                JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+                {
+                    ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
+                };
+            }
+
+
             /// <summary>
             /// Json反序列化
             /// </summary>
@@ -70,6 +86,9 @@ namespace SAE.CommonLibrary
             public static object Json(string json, Type type)
             {
                 if (json.IsNullOrWhiteSpace()) return null;
+
+                if (type == _stringType) return json;
+
                 return JsonConvert.DeserializeObject(json, type);
             }
 

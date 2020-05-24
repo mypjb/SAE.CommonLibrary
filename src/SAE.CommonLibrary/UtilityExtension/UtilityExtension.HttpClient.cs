@@ -5,9 +5,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Cache;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -200,46 +202,11 @@ namespace SAE.CommonLibrary.Extension
         /// <returns></returns>
         public static async Task<T> AsAsync<T>(this HttpResponseMessage response) where T : class
         {
-            response.EnsureSuccessStatusCode();
-
             var json = await response.Content.ReadAsStringAsync();
 
             return json.ToObject<T>();
         }
-        ///// <summary>
-        ///// 获得由<seealso cref="ResponseResult{T}"/>包装的响应结果，
-        ///// 如果<seealso cref="ResponseResult.StatusCode"/>!=<seealso cref="StatusCodes.Success"/>
-        ///// 则触发<seealso cref="SaeException"/>异常
-        ///// </summary>
-        ///// <typeparam name="T"></typeparam>
-        ///// <param name="response"></param>
-        ///// <returns></returns>
-        //public static async Task<T> AsResult<T>(this HttpResponseMessage response)
-        //{
-        //    var result = await response.AsAsync<ResponseResult<T>>();
 
-        //    if (result.StatusCode != StatusCodes.Success)
-        //        throw new SaeException(result);
-
-        //    return result.Body;
-        //}
-
-        ///// <summary>
-        ///// 获得由<seealso cref="ResponseResult"/>包装的响应结果，
-        ///// 如果<seealso cref="ResponseResult.StatusCode"/>!=<seealso cref="StatusCodes.Success"/>
-        ///// 则触发<seealso cref="SaeException"/>异常
-        ///// </summary>
-        ///// <param name="response"></param>
-        ///// <returns></returns>
-        //public static async Task<object> AsResult(this HttpResponseMessage response)
-        //{
-        //    var result = await response.AsAsync<ResponseResult>();
-
-        //    if (result.StatusCode != StatusCodes.Success)
-        //        throw new SaeException(result);
-
-        //    return result.Body;
-        //}
 
 
         /// <summary>
@@ -270,7 +237,7 @@ namespace SAE.CommonLibrary.Extension
                                     r => httpStatusCodes.Contains(r.StatusCode))
                                .RetryAsync(10);
 
-            var handlerFieldInfo = Utils.Reflection.GetFieldInfo<HttpClient>("handler", BindingFlags.Instance | BindingFlags.NonPublic);
+            var handlerFieldInfo = Utils.Reflection.GetFieldInfo<HttpMessageInvoker>("_handler", BindingFlags.Instance | BindingFlags.NonPublic);
 
             var httpMessageHandler = (HttpMessageHandler)handlerFieldInfo.GetValue(httpClient);
 
@@ -279,6 +246,42 @@ namespace SAE.CommonLibrary.Extension
             return httpClient;
         }
 
+        public static HttpClient UseExceptionHandler(this HttpClient httpClient, Func<HttpResponseMessage,Task> handler)
+        {
+            
+            var handlerFieldInfo = Utils.Reflection.GetFieldInfo<HttpMessageInvoker>("_handler", BindingFlags.Instance | BindingFlags.NonPublic);
+
+            var httpMessageHandler = (HttpMessageHandler)handlerFieldInfo.GetValue(httpClient);
+
+            handlerFieldInfo.SetValue(httpClient, new ProxyHandler(async (proxy) =>
+            {
+                var responseMessage = await proxy.Invoke();
+
+                if (!responseMessage.IsSuccessStatusCode)
+                {
+                    await handler.Invoke(responseMessage);
+                }
+                
+                return responseMessage;
+            }, httpMessageHandler));
+
+            return httpClient;
+        }
+
+        public static HttpClient UseDefaultExceptionHandler(this HttpClient httpClient)
+        {
+            httpClient.UseExceptionHandler(async response =>
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                if (json.IsNullOrWhiteSpace())
+                {
+                    throw new SaeException((int)response.StatusCode, json);
+                }
+                var output = json.ToObject<ErrorOutput>();
+                throw new SaeException(output);
+            });
+            return httpClient;
+        }
         private class ProxyHandler : DelegatingHandler
         {
             private readonly Func<Func<Task<HttpResponseMessage>>, Task<HttpResponseMessage>> _proxy;

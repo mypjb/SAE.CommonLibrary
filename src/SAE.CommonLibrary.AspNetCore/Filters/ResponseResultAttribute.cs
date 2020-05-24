@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using System.Net;
 using System.Threading.Tasks;
+using SAE.CommonLibrary.Extension;
 
 namespace SAE.CommonLibrary.AspNetCore.Filters
 {
@@ -20,31 +21,63 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
             set;
         }
 
+        private bool HasAPIResult(ActionExecutedContext context)
+        {
+            return context.Result is JsonResult || context.Result is ObjectResult;
+        }
+
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            int statusCode = (int)HttpStatusCode.OK;
+            if (!this.HasAPIResult(context))
+            {
+                return;
+            }
+
+            ErrorOutput errorOutput = null;
             if (context.Exception != null)
             {
-                if(context.Exception is SaeException)
+                if (context.Exception is SaeException saeException)
                 {
-                    statusCode = (int)((SaeException)context.Exception).Code;
-                    
+                    errorOutput = new ErrorOutput(saeException);
                 }
                 else
                 {
-                    statusCode= (int)HttpStatusCode.InternalServerError; 
+                    errorOutput = new ErrorOutput(context.Exception);
                 }
             }
             else
             {
                 if (context.Result is ObjectResult objectResult)
                 {
-                    
+                    if (objectResult.Value != null &&
+                        objectResult.Value is ErrorOutput)
+                    {
+                        errorOutput = (ErrorOutput)objectResult.Value;
+                    }
+                    else if(objectResult.Value==null)
+                    {
+                        errorOutput = new ErrorOutput(StatusCodes.ResourcesNotExist);
+                    }  
                 }
-                else if (context.Result is JsonResult jsonResult)
+                else
                 {
-                    
+                    var jsonResult = context.Result as JsonResult;
+                    if (jsonResult.Value != null &&
+                        jsonResult.Value is ErrorOutput)
+                    {
+                        errorOutput = (ErrorOutput)jsonResult.Value;
+                    }
+                    else
+                    {
+                        errorOutput = new ErrorOutput(StatusCodes.ResourcesNotExist);
+                    }
                 }
+            }
+
+            if (errorOutput != null)
+            {
+                context.Result = new JsonResult(errorOutput);
+                context.HttpContext.Response.StatusCode = errorOutput.ToHttpStatusCode();
             }
 
             //if (context.Result is ObjectResult objectResult)

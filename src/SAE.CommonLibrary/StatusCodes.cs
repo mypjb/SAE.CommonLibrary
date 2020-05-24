@@ -37,14 +37,15 @@ namespace SAE.CommonLibrary
         [Display(Name = "参数无效")]
         ParamesterInvalid = 4002,
         /// <summary>
+        /// 
+        /// </summary>
+        [Display(Name = "资源存在")]
+        ResourcesExist = 4003,
+        /// <summary>
         /// 资源不存在
         /// </summary>
         [Display(Name = "资源不存在")]
         ResourcesNotExist = 404,
-        /// <summary>
-        /// 
-        /// </summary>
-        [Display(Name = "资源存在")]
-        ResourcesExist =4003
+        
     }
 }

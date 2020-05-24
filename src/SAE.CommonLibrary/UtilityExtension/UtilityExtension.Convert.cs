@@ -51,7 +51,7 @@ namespace SAE.CommonLibrary.Extension
 
             for (int i = 0; i < str.Length; i++)
             {
-                if (i > 0 && str[i] >= 'A')
+                if (i > 0 && str[i] >= 'A' && str[i] < 'a')
                 {
                     sb.Append(' ');
                 }
@@ -75,7 +75,7 @@ namespace SAE.CommonLibrary.Extension
         public static TModel To<TModel>(this object o)
         {
             if (o == null) return default(TModel);
-            
+
             return TinyMapper.Map<TModel>(o);
         }
 

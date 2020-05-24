@@ -10,6 +10,7 @@ namespace SAE.CommonLibrary
     /// </summary>
     public class ErrorOutput
     {
+        [Obsolete("Use other constructs instead", false)]
         public ErrorOutput()
         {
 
@@ -70,8 +71,6 @@ namespace SAE.CommonLibrary
         public ErrorOutput(int code, Exception exception) : this(code, exception?.Message)
         {
         }
-
-       
 
         /// <summary>
         /// error status code 

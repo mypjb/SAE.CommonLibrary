@@ -17,6 +17,11 @@ namespace SAE.CommonLibrary.Extension
 
         }
 
+        public static int ToHttpStatusCode(this ErrorOutput errorOutput)
+        {
+            var code = errorOutput.StatusCode.ToString().Substring(0, 3);
+            return int.Parse(code);
+        }
 
         /// <summary>
         /// 循环<paramref name="enumerable"/>集合,并挨个执行<paramref name="action"/>函数
