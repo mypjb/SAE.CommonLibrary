@@ -13,7 +13,7 @@ namespace SAE.CommonLibrary.Mediator.Orleans
         public OrleansOptions()
         {
             this.GrainNames = new Dictionary<string, Assembly>();
-            
+            this.ClusterId = "dev";
         }
         public string ZooKeeperConnectionString { get; set; }
         public Dictionary<string,Assembly> GrainNames { get;}

@@ -95,7 +95,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IApplicationBuilder UseMediatorOrleansSilo(this IApplicationBuilder builder)
         {
-            builder.UseMediatorOrleansSilo();
+            builder.ApplicationServices.UseMediatorOrleansSilo();
             return builder;
         }
     }
