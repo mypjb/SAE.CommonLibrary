@@ -15,16 +15,19 @@ namespace SAE.CommonLibrary.Mediator.Orleans
         private readonly ConcurrentDictionary<string, IClusterClient> _dictionary;
         private readonly OrleansOptions _options;
         private readonly IHostEnvironment _environment;
+        private readonly IServiceProvider _serviceProvider;
         private readonly IMediator _mediator;
 
         public ProxyCommandHandlerProvider(OrleansOptions options,
                                            IHostEnvironment environment,
+                                           IServiceProvider serviceProvider,
                                            IMediator mediator)
         {
             this._mediator = mediator;
             this._dictionary = new ConcurrentDictionary<string, IClusterClient>();
             this._options = options;
             this._environment = environment;
+            this._serviceProvider = serviceProvider;
         }
 
         private IClusterClient ConfigurationClusterClient(string serviceId)
@@ -67,16 +70,24 @@ namespace SAE.CommonLibrary.Mediator.Orleans
 
         public ICommandHandler<TCommand> Get<TCommand>() where TCommand : class
         {
-            var key = Utility.GetIdentity(typeof(TCommand));
+            var provider = this.GetProvider<TCommand>();
+            var key = provider.Get();
             var clusterClient = _dictionary.GetOrAdd(key, this.ConfigurationClusterClient);
             return new ProxyCommandHandler<TCommand>(clusterClient);
         }
 
         public ICommandHandler<TCommand, TResponse> Get<TCommand, TResponse>() where TCommand : class
         {
-            var key = Utility.GetIdentity(typeof(TCommand));
+            var provider = this.GetProvider<TCommand>();
+            var key = provider.Get();
             var clusterClient = _dictionary.GetOrAdd(key, this.ConfigurationClusterClient);
             return new ProxyCommandHandler<TCommand, TResponse>(clusterClient);
+        }
+
+        private IOrleansKeyProvider<TCommand> GetProvider<TCommand>()
+        {
+            var provider = this._serviceProvider.GetService<IOrleansKeyProvider<TCommand>>();
+            return provider ?? new DefaultOrleansKeyProvider<TCommand>();
         }
     }
 }

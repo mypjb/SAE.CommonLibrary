@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\SAE.CommonLibrary.Abstract\SAE.CommonLibrary.Abstract.csproj" />
+    <ProjectReference Include="..\..\src\SAE.CommonLibrary.EventStore.Document\SAE.CommonLibrary.EventStore.Document.csproj" />
   </ItemGroup>
 
 </Project>

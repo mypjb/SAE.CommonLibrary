@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SAE.CommonLibrary.Abstract.Mediator;
+using SAE.CommonLibrary.EventStore.Document;
 using SAE.CommonLibrary.Mediator.Orleans.Orders;
 using SAE.CommonLibrary.Mediator.Orleans.Product;
 using SAE.CommonLibrary.Test;
@@ -62,6 +63,18 @@ namespace SAE.CommonLibrary.Mediator.Orleans.Test
             var command = new OrderCommand();
             var id=await this._mediator.Send<string>(command);
             Xunit.Assert.Equal(id,command.Id);
+        }
+
+        [Fact]
+        public async Task SendFindCommand()
+        {
+            var command = new Command.Delete<Order>
+            {
+                Id = Guid.NewGuid().ToString("N")
+            };
+            var result= await this._mediator.Send<bool>(command);
+
+            Xunit.Assert.True(result);
         }
     }
 }

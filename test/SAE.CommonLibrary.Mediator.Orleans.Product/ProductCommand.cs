@@ -12,4 +12,5 @@ namespace SAE.CommonLibrary.Mediator.Orleans.Product
         }
         public string Id { get; set; }
     }
+    
 }
