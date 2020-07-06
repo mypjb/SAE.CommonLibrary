@@ -28,7 +28,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
 
             requestMessage.AddJsonContent(descriptors);
 
-            var responseMessage= await client.SendAsync(requestMessage);
+            var responseMessage = await client.SendAsync(requestMessage);
 
             return await responseMessage.AsAsync<IEnumerable<BitmapEndpoint>>();
         }

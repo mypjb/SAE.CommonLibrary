@@ -190,7 +190,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="app"></param>
         /// <returns></returns>
-        public static IApplicationBuilder UseBitmapAuthorization(IApplicationBuilder app)
+        public static IApplicationBuilder UseBitmapAuthorization(this IApplicationBuilder app)
         {
             var storage = app.ApplicationServices.GetService<IBitmapEndpointStorage>();
 

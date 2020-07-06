@@ -20,24 +20,9 @@ namespace SAE.CommonLibrary.Abstract.Mediator
             this._dic = new ConcurrentDictionary<string, object>();
         }
 
-        public async Task Send(object command)
+
+        public async Task<object> Send(object command, Type commandType, Type responseType)
         {
-            var commandType = command.GetType();
-
-            var key = commandType.GUID.ToString();
-
-            var wrapper = this._dic.GetOrAdd(key, k =>
-            {
-                return Activator.CreateInstance(typeof(CommandHandlerWrapper<>)
-                                .MakeGenericType(commandType), this._serviceProvider);
-            });
-
-            await ((CommandHandlerWrapper)wrapper).Invoke(command);
-        }
-
-        public async Task<object> Send(object command, Type responseType)
-        {
-            var commandType = command.GetType();
             var key = $"{commandType.GUID}_{responseType.GUID}";
 
             var wrapper = this._dic.GetOrAdd(key, k =>
@@ -49,6 +34,19 @@ namespace SAE.CommonLibrary.Abstract.Mediator
             var response = await((RequestHandlerWrapper)wrapper).Invoke(command);
 
             return response;
+        }
+
+        public async Task Send(object command, Type commandType)
+        {
+            var key = commandType.GUID.ToString();
+
+            var wrapper = this._dic.GetOrAdd(key, k =>
+            {
+                return Activator.CreateInstance(typeof(CommandHandlerWrapper<>)
+                                .MakeGenericType(commandType), this._serviceProvider);
+            });
+
+            await((CommandHandlerWrapper)wrapper).Invoke(command);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace SAE.CommonLibrary.Mediator.Orleans
 {
     public interface IGrainCommandHandler:IGrainWithStringKey
     {
-        Task Send(object @object);
-        Task<object> Send(object @object,Type responseType);
+        Task Send(object @object,Type commandType);
+        Task<object> Send(object @object, Type commandType, Type responseType);
     }
 }

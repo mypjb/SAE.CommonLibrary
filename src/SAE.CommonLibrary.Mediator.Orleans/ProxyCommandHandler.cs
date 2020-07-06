@@ -34,11 +34,9 @@ namespace SAE.CommonLibrary.Mediator.Orleans
         {
             var grain = this._client.GetGrain<IGrainCommandHandler>(command.GetType().GUID.ToString());
 
-            var responseType = typeof(TResponse);
+            var response = await grain.Send<TCommand,TResponse>(command);
 
-            var @object = await grain.Send(command, responseType);
-
-            return (TResponse)@object;
+            return response;
         }
     }
 }

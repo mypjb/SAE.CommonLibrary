@@ -22,32 +22,35 @@ namespace SAE.CommonLibrary.Abstract.Builder
         {
             if (model.IsNull()) return;
             //只有注册了具体的建筑对象才实例化它
-            IDirector<T> director;
-            if (this._serviceProvider.TryGetService(out director))
+            IEnumerable<IBuilder<T>> builders;
+            if (this._serviceProvider.TryGetService(out builders))
             {
-                await director.Build(model);
+                await builders.ForEachAsync(async builder =>
+                {
+                    await builder.Build(model);
+                });
             }
         }
     }
 
-    /// <summary>
-    /// 指挥者具体实现
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class Director<T> : IDirector<T> where T : class
-    {
-        protected IEnumerable<IBuilder<T>> _builders;
+    ///// <summary>
+    ///// 指挥者具体实现
+    ///// </summary>
+    ///// <typeparam name="T"></typeparam>
+    //public class Director<T> : IDirector<T> where T : class
+    //{
+    //    protected IEnumerable<IBuilder<T>> _builders;
 
-        public Director(IEnumerable<IBuilder<T>> builders)
-        {
-            this._builders = builders;
-        }
+    //    public Director(IEnumerable<IBuilder<T>> builders)
+    //    {
+    //        this._builders = builders;
+    //    }
 
-        public virtual async Task Build(T model)
-        {
-            if (model == null) return;
-            foreach (var builder in this._builders)
-                await builder.Build(model);
-        }
-    }
+    //    public virtual async Task Build(T model)
+    //    {
+    //        if (model == null) return;
+    //        foreach (var builder in this._builders)
+    //            await builder.Build(model);
+    //    }
+    //}
 }

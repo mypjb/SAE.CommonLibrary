@@ -16,14 +16,15 @@ namespace SAE.CommonLibrary.Mediator.Orleans
             this._mediator = mediator;
         }
 
-        public Task Send(object @object)
+
+        public Task<object> Send(object @object, Type commandType, Type responseType)
         {
-            return this._mediator.Send(@object);
+            return this._mediator.Send(@object, commandType, responseType);
         }
 
-        public Task<object> Send(object @object, Type responseType)
+        public Task Send(object @object, Type commandType)
         {
-            return this._mediator.Send(@object, responseType);
+            return this._mediator.Send(@object, commandType);
         }
     }
 }

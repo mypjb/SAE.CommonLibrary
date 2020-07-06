@@ -10,7 +10,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator
     /// </summary>
     public interface IMediator
     {
-        Task Send(object command);
-        Task<object> Send(object command,Type responseType);
+        Task Send(object command,Type commandType);
+        Task<object> Send(object command,Type commandType,Type responseType);
     }
 }

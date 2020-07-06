@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+using SAE.CommonLibrary.Abstract.Builder;
+using SAE.CommonLibrary.Abstract.Decorator;
 using SAE.CommonLibrary.Abstract.Mediator;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -48,7 +49,39 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.TryAddTransient<IMediator, Mediator>();
 
-            return new MediatorBuilder(services,descriptors);
+            return new MediatorBuilder(services, descriptors);
+        }
+
+        public static IServiceCollection AddDecorator(this IServiceCollection services, params Assembly[] assemblies)
+        {
+            if (assemblies == null || !assemblies.Any()) assemblies = new Assembly[] { Assembly.GetCallingAssembly() };
+
+            services.TryAddSingleton<IDirector, Director>();
+
+            var builderType = typeof(IBuilder);
+
+
+            foreach (var assembly in assemblies)
+            {
+                foreach (var type in assembly.GetTypes()
+                                             .Where(t => t.IsClass &&
+                                                    !t.IsAbstract &&
+                                                    !t.IsInterface &&
+                                                    builderType.IsAssignableFrom(t)))
+                {
+
+                    foreach (var interfaceType in type.GetInterfaces()
+                                                      .Where(t => builderType.IsAssignableFrom(t) && t != builderType))
+                    {
+                        if (!services.Any(s => s.ServiceType == interfaceType && s.ImplementationType == type))
+                        {
+                            services.AddSingleton(interfaceType, type);
+                        }
+                    }
+                }
+            }
+
+            return services;
         }
     }
 }
