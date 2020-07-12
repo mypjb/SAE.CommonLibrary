@@ -52,7 +52,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return new MediatorBuilder(services, descriptors);
         }
 
-        public static IServiceCollection AddDecorator(this IServiceCollection services, params Assembly[] assemblies)
+        public static IServiceCollection AddBuilder(this IServiceCollection services, params Assembly[] assemblies)
         {
             if (assemblies == null || !assemblies.Any()) assemblies = new Assembly[] { Assembly.GetCallingAssembly() };
 

@@ -26,18 +26,35 @@ namespace SAE.CommonLibrary.Abstract.Mediator
             {
                 var provider = serviceProvider.GetService<IProxyCommandHandlerProvider>();
                 if (provider != null)
-                    this._handlers = new[] { provider.Get<TCommand, TResponse>() };
+                    this._handlers = new[] { new DelegateCommandHandlerWrapper<TCommand,TResponse>(provider) };
             }
         }
 
         public override async Task<object> Invoke(object command)
         {
+            object result = null;
             TCommand arg = (TCommand)command;
             foreach (var handler in this._handlers)
             {
-                return await handler.Handle(arg);
+                result = await handler.Handle(arg);
             }
-            return null;
+            return result;
+        }
+
+        private class DelegateCommandHandlerWrapper<TDelegateCommand, TDelegateResponse> : ICommandHandler<TDelegateCommand, TDelegateResponse> where TDelegateCommand : class
+        {
+            private readonly IProxyCommandHandlerProvider provider;
+
+            public DelegateCommandHandlerWrapper(IProxyCommandHandlerProvider provider)
+            {
+                this.provider = provider;
+            }
+
+            public async Task<TDelegateResponse> Handle(TDelegateCommand command)
+            {
+                var handler = await this.provider.Get<TDelegateCommand, TDelegateResponse>();
+                return await handler.Handle(command);
+            }
         }
     }
 }

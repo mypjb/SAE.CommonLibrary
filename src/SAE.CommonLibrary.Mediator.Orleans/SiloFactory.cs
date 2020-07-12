@@ -23,7 +23,7 @@ namespace SAE.CommonLibrary.Mediator.Orleans
         private readonly ILogging<SiloFactory> _logging;
         private readonly IMediator _mediator;
 
-        public SiloFactory(OrleansOptions options, 
+        public SiloFactory(OrleansOptions options,
                            ILogging<SiloFactory> logging,
                            IHostEnvironment hostingEnvironment,
                            IMediator mediator)
@@ -63,6 +63,7 @@ namespace SAE.CommonLibrary.Mediator.Orleans
                 {
                     try
                     {
+                        
                         var silo = new SiloHostBuilder()
                                     .UseLocalhostClustering(Constants.MasterSiloPort + index,
                                                             Constants.MasterGatewayPort + index,
@@ -83,18 +84,20 @@ namespace SAE.CommonLibrary.Mediator.Orleans
                                     .Build();
 
                         var siloService = new SiloService(silo);
-
+                        
                         await siloService.StartAsync();
 
                         this._logging.Info($"筒仓'{options.ClusterId}'-'{kv.Key}'已启动");
 
                         this._dictionary.TryAdd(kv.Key, siloService);
+                        break;
                     }
                     catch (Exception ex)
                     {
                         _logging.Error($"端口{Constants.MasterSiloPort + index}已被监听重新选择端口'{ex.Message}'", ex);
+                        index++;
                     }
-                    break;
+
                 }
             });
         }

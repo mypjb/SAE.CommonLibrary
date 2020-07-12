@@ -22,13 +22,11 @@ namespace SAE.CommonLibrary.Abstract.Mediator
         {
             this._handlers = serviceProvider.GetServices<ICommandHandler<TCommand>>();
 
-
-
             if (this._handlers == null || !this._handlers.Any())
             {
-                var provider = serviceProvider.GetService<IProxyCommandHandlerProvider>();
+                var provider= serviceProvider.GetService<IProxyCommandHandlerProvider>();
                 if (provider != null)
-                    this._handlers = new[] { provider.Get<TCommand>() };
+                    this._handlers = new[] { new DelegateCommandHandlerWrapper<TCommand>(provider) };
             }
         }
 
@@ -37,5 +35,23 @@ namespace SAE.CommonLibrary.Abstract.Mediator
             TCommand arg = (TCommand)command;
             await _handlers.ForEachAsync(async handler => await handler.Handle(arg));
         }
+
+        private class DelegateCommandHandlerWrapper<TDelegateCommand> : ICommandHandler<TDelegateCommand> where TDelegateCommand : class
+        {
+            private readonly IProxyCommandHandlerProvider provider;
+
+            public DelegateCommandHandlerWrapper(IProxyCommandHandlerProvider provider)
+            {
+                this.provider = provider;
+            }
+
+            public async Task Handle(TDelegateCommand command)
+            {
+                var handler = await this.provider.Get<TDelegateCommand>();
+                await handler.Handle(command);
+            }
+        }
     }
+
+    
 }

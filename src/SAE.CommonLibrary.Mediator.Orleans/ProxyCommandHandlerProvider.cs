@@ -7,12 +7,15 @@ using SAE.CommonLibrary.Abstract.Mediator;
 using System;
 using System.Collections.Concurrent;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
+using org.apache.zookeeper;
 
 namespace SAE.CommonLibrary.Mediator.Orleans
 {
     public class ProxyCommandHandlerProvider : IProxyCommandHandlerProvider
     {
-        private readonly ConcurrentDictionary<string, IClusterClient> _dictionary;
+        private readonly ConcurrentDictionary<string, Task<IClusterClient>> _dictionary;
         private readonly OrleansOptions _options;
         private readonly IHostEnvironment _environment;
         private readonly IServiceProvider _serviceProvider;
@@ -24,13 +27,13 @@ namespace SAE.CommonLibrary.Mediator.Orleans
                                            IMediator mediator)
         {
             this._mediator = mediator;
-            this._dictionary = new ConcurrentDictionary<string, IClusterClient>();
+            this._dictionary = new ConcurrentDictionary<string, Task<IClusterClient>>();
             this._options = options;
             this._environment = environment;
             this._serviceProvider = serviceProvider;
         }
 
-        private IClusterClient ConfigurationClusterClient(string serviceId)
+        private async Task<IClusterClient> ConfigurationClusterClient(string serviceId)
         {
 
             var clientBuilder = new ClientBuilder();
@@ -62,26 +65,29 @@ namespace SAE.CommonLibrary.Mediator.Orleans
                 })
                 .Build();
 
-            clusterClient.Connect().GetAwaiter().GetResult();
+            await clusterClient.Connect(ex =>
+            {
+                return Task.FromResult(true);
+            });
 
             return clusterClient;
         }
 
 
-        public ICommandHandler<TCommand> Get<TCommand>() where TCommand : class
+        public async Task<ICommandHandler<TCommand>> Get<TCommand>() where TCommand : class
         {
             var provider = this.GetProvider<TCommand>();
             var key = provider.Get();
             var clusterClient = _dictionary.GetOrAdd(key, this.ConfigurationClusterClient);
-            return new ProxyCommandHandler<TCommand>(clusterClient);
+            return new ProxyCommandHandler<TCommand>(await clusterClient);
         }
 
-        public ICommandHandler<TCommand, TResponse> Get<TCommand, TResponse>() where TCommand : class
+        public async Task<ICommandHandler<TCommand, TResponse>> Get<TCommand, TResponse>() where TCommand : class
         {
             var provider = this.GetProvider<TCommand>();
             var key = provider.Get();
             var clusterClient = _dictionary.GetOrAdd(key, this.ConfigurationClusterClient);
-            return new ProxyCommandHandler<TCommand, TResponse>(clusterClient);
+            return new ProxyCommandHandler<TCommand, TResponse>(await clusterClient);
         }
 
         private IOrleansKeyProvider<TCommand> GetProvider<TCommand>()

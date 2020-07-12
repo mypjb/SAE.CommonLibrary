@@ -14,7 +14,7 @@ namespace SAE.CommonLibrary.Abstract.Builder
     /// 构建者
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IBuilder<T> where T : class
+    public interface IBuilder<T> : IBuilder where T : class
     {
         /// <summary>
         /// 构建
