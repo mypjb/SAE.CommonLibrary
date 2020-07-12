@@ -27,7 +27,7 @@ namespace SAE.CommonLibrary.EventStore.Document
 
         protected virtual Task Remove(string identity)
         {
-            return this._documentStore.RemoveAsync<TDocument>(identity);
+            return this._documentStore.DeleteAsync<TDocument>(identity);
         }
 
         protected virtual Task<TDocument> GetById(string identity)
@@ -60,7 +60,7 @@ namespace SAE.CommonLibrary.EventStore.Document
 
         protected virtual Task Remove<TDocument>(string identity) where TDocument : IDocument, new()
         {
-            return this._documentStore.RemoveAsync<TDocument>(identity);
+            return this._documentStore.DeleteAsync<TDocument>(identity);
         }
 
         protected virtual Task GetById<TDocument>(string identity) where TDocument : IDocument, new()

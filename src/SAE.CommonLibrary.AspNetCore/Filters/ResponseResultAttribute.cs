@@ -28,10 +28,7 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            if (!this.HasAPIResult(context))
-            {
-                return;
-            }
+            
 
             ErrorOutput errorOutput = null;
             if (context.Exception != null)
@@ -45,32 +42,35 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
                     errorOutput = new ErrorOutput(context.Exception);
                 }
             }
+
+            if (!this.HasAPIResult(context))
+            {
+                return;
+            }
+
+            if (context.Result is ObjectResult objectResult)
+            {
+                if (objectResult.Value != null &&
+                    objectResult.Value is ErrorOutput)
+                {
+                    errorOutput = (ErrorOutput)objectResult.Value;
+                }
+                else if (objectResult.Value == null)
+                {
+                    errorOutput = new ErrorOutput(StatusCodes.ResourcesNotExist);
+                }
+            }
             else
             {
-                if (context.Result is ObjectResult objectResult)
+                var jsonResult = context.Result as JsonResult;
+                if (jsonResult.Value != null &&
+                    jsonResult.Value is ErrorOutput)
                 {
-                    if (objectResult.Value != null &&
-                        objectResult.Value is ErrorOutput)
-                    {
-                        errorOutput = (ErrorOutput)objectResult.Value;
-                    }
-                    else if(objectResult.Value==null)
-                    {
-                        errorOutput = new ErrorOutput(StatusCodes.ResourcesNotExist);
-                    }  
+                    errorOutput = (ErrorOutput)jsonResult.Value;
                 }
                 else
                 {
-                    var jsonResult = context.Result as JsonResult;
-                    if (jsonResult.Value != null &&
-                        jsonResult.Value is ErrorOutput)
-                    {
-                        errorOutput = (ErrorOutput)jsonResult.Value;
-                    }
-                    else
-                    {
-                        errorOutput = new ErrorOutput(StatusCodes.ResourcesNotExist);
-                    }
+                    errorOutput = new ErrorOutput(StatusCodes.ResourcesNotExist);
                 }
             }
 
@@ -78,6 +78,7 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
             {
                 context.Result = new JsonResult(errorOutput);
                 context.HttpContext.Response.StatusCode = errorOutput.ToHttpStatusCode();
+                context.ExceptionHandled = true;
             }
 
             //if (context.Result is ObjectResult objectResult)

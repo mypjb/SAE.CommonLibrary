@@ -31,13 +31,13 @@ namespace SAE.CommonLibrary.Data
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="model"></param>
-        Task RemoveAsync<T>(T model) where T : class;
+        Task DeleteAsync<T>(T model) where T : class;
         /// <summary>
         /// 根据Id移除对象
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task RemoveAsync<T>(object id) where T : class;
+        Task DeleteAsync<T>(object id) where T : class;
 
     }
 

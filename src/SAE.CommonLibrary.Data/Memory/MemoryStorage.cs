@@ -36,13 +36,13 @@ namespace SAE.CommonLibrary.Data.Memory
         }
 
 
-        public Task RemoveAsync<T>(T model) where T : class
+        public Task DeleteAsync<T>(T model) where T : class
         {
             var metadata = this._metadataProvider.Get<T>();
-            return this.RemoveAsync<T>(metadata.IdentiyFactory(model));
+            return this.DeleteAsync<T>(metadata.IdentiyFactory(model));
         }
 
-        public Task RemoveAsync<T>(object id) where T : class
+        public Task DeleteAsync<T>(object id) where T : class
         {
             this.GetSource<T>().Remove(id);
 

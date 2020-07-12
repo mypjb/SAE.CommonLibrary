@@ -56,7 +56,7 @@ namespace SAE.CommonLibrary.Data.MongoDB
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="model"></param>
-        public async Task RemoveAsync<T>(T model) where T : class
+        public async Task DeleteAsync<T>(T model) where T : class
         {
             if (model == null) return;
 
@@ -77,7 +77,7 @@ namespace SAE.CommonLibrary.Data.MongoDB
             return this._database.GetCollection<T>(description.Name);
         }
 
-        public async Task RemoveAsync<T>(object id) where T : class
+        public async Task DeleteAsync<T>(object id) where T : class
         {
             if (id == null) return;
 

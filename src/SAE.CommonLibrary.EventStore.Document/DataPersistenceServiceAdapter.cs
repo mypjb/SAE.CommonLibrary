@@ -17,7 +17,7 @@ namespace SAE.CommonLibrary.EventStore.Document
         }
         public Task RemoveAsync(IIdentity identity)
         {
-            return this._storage.RemoveAsync<TDocument>(identity.ToString());
+            return this._storage.DeleteAsync<TDocument>(identity.ToString());
         }
 
         public Task SaveAsync(TDocument document)

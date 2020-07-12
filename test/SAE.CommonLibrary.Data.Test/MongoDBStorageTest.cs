@@ -24,14 +24,14 @@ namespace SAE.CommonLibrary.Data.Test
         }
 
         /// <summary>
-        /// Ìí¼ÓÊý¾ÝÖÁMongodbÖÐ
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Mongodbï¿½ï¿½
         /// </summary>
         [Fact]
         public async Task<ClassGrade> Add()
         {
             var classGrade = new ClassGrade();
             classGrade.Id = this.GetRandom();
-            //´Ë´¦ÉèÖÃÁËÄ¬ÈÏIdÎª10
+            //ï¿½Ë´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¬ï¿½ï¿½IdÎª10
             await _storage.SaveAsync(classGrade);
             var grade = this._storage.AsQueryable<ClassGrade>().FirstOrDefault(s => s.Id == classGrade.Id);
             Xunit.Assert.True(_storage.AsQueryable<ClassGrade>()
@@ -41,13 +41,13 @@ namespace SAE.CommonLibrary.Data.Test
         }
 
         /// <summary>
-        /// ¸üÐÂ
+        /// ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         [Fact]
         public async Task Update()
         {
             var classGrade = await this.Add();
-            //´Ë´¦ÉèÖÃÁËÄ¬ÈÏIdÎª10
+            //ï¿½Ë´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¬ï¿½ï¿½IdÎª10
             classGrade.Students = new List<Student>
             {
                 new Student
@@ -84,8 +84,8 @@ namespace SAE.CommonLibrary.Data.Test
         public async Task Remove()
         {
             var classGrade = await this.Add();
-            //ÒÆ³ý   ×¢£ºÔÝ²»Ö§³ÖClear
-            await _storage.RemoveAsync(classGrade);
+            //ï¿½Æ³ï¿½   ×¢ï¿½ï¿½ï¿½Ý²ï¿½Ö§ï¿½ï¿½Clear
+            await _storage.DeleteAsync(classGrade);
             Xunit.Assert.True(_storage.AsQueryable<ClassGrade>()
                                 .Count(s => s.Id == classGrade.Id) == 0);
         }

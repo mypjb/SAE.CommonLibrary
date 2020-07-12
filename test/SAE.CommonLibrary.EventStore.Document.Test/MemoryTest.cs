@@ -93,7 +93,7 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
         public async Task Remove()
         {
             var user = await this.Register();
-            await this._documentStore.RemoveAsync(user);
+            await this._documentStore.DeleteAsync(user);
             Xunit.Assert.Null(await _documentStore.FindAsync<User>(user.Id.ToIdentity()));
         }
         [Fact]

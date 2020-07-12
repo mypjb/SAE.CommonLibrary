@@ -150,7 +150,7 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// </summary>
         /// <param name="identity"></param>
         /// <returns></returns>
-        public async Task RemoveAsync<TDocument>(IIdentity identity) where TDocument : IDocument, new()
+        public async Task DeleteAsync<TDocument>(IIdentity identity) where TDocument : IDocument, new()
         {
             await this._snapshot.RemoveAsync(identity);
             await this._eventStore.RemoveAsync(identity);

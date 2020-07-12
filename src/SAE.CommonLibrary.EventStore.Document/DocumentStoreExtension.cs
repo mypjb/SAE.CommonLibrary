@@ -134,9 +134,9 @@ namespace SAE.CommonLibrary.EventStore.Document
             return documents.ForEachAsync(documentStore.SaveAsync);
         }
 
-        public static void Remove<TDocument>(this IDocumentStore documentStore, string identity) where TDocument : IDocument, new()
+        public static void Delete<TDocument>(this IDocumentStore documentStore, string identity) where TDocument : IDocument, new()
         {
-            documentStore.Remove<TDocument>(identity.ToIdentity());
+            documentStore.Delete<TDocument>(identity.ToIdentity());
         }
 
         /// <summary>
@@ -144,9 +144,9 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// </summary>
         /// <param name="documentStore"></param>
         /// <param name="identity"></param>
-        public static void Remove<TDocument>(this IDocumentStore documentStore, IIdentity identity) where TDocument : IDocument,new()
+        public static void Delete<TDocument>(this IDocumentStore documentStore, IIdentity identity) where TDocument : IDocument,new()
         {
-            documentStore.RemoveAsync<TDocument>(identity)
+            documentStore.DeleteAsync<TDocument>(identity)
                          .GetAwaiter()
                          .GetResult();
         }
@@ -156,9 +156,9 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// </summary>
         /// <param name="documentStore"></param>
         /// <param name="document"></param>
-        public static void Remove<TDocument>(this IDocumentStore documentStore, TDocument document) where TDocument : IDocument, new()
+        public static void Delete<TDocument>(this IDocumentStore documentStore, TDocument document) where TDocument : IDocument, new()
         {
-            documentStore.RemoveAsync(document)
+            documentStore.DeleteAsync(document)
                          .GetAwaiter()
                          .GetResult();
         }
@@ -167,9 +167,9 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// </summary>
         /// <param name="documentStore"></param>
         /// <param name="document"></param>
-        public static Task RemoveAsync<TDocument>(this IDocumentStore documentStore, string identity) where TDocument : IDocument, new()
+        public static Task DeleteAsync<TDocument>(this IDocumentStore documentStore, string identity) where TDocument : IDocument, new()
         {
-            return documentStore.RemoveAsync<TDocument>(identity.ToIdentity());
+            return documentStore.DeleteAsync<TDocument>(identity.ToIdentity());
         }
 
         /// <summary>
@@ -177,9 +177,9 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// </summary>
         /// <param name="documentStore"></param>
         /// <param name="document"></param>
-        public static Task RemoveAsync<TDocument>(this IDocumentStore documentStore, TDocument document) where TDocument : IDocument, new()
+        public static Task DeleteAsync<TDocument>(this IDocumentStore documentStore, TDocument document) where TDocument : IDocument, new()
         {
-            return documentStore.RemoveAsync<TDocument>(document.Identity);
+            return documentStore.DeleteAsync<TDocument>(document.Identity);
         }
 
         /// <summary>
@@ -187,9 +187,9 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// </summary>
         /// <param name="documentStore"></param>
         /// <param name="identitys"></param>
-        public static void Remove<TDocument>(this IDocumentStore documentStore, IEnumerable<string> identitys) where TDocument : IDocument, new()
+        public static void Delete<TDocument>(this IDocumentStore documentStore, IEnumerable<string> identitys) where TDocument : IDocument, new()
         {
-            documentStore.RemoveAsync<TDocument>(identitys)
+            documentStore.DeleteAsync<TDocument>(identitys)
                          .GetAwaiter()
                          .GetResult();
         }
@@ -199,9 +199,9 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// </summary>
         /// <param name="documentStore"></param>
         /// <param name="identitys"></param>
-        public static Task RemoveAsync<TDocument>(this IDocumentStore documentStore, IEnumerable<string> identitys) where TDocument : IDocument, new()
+        public static Task DeleteAsync<TDocument>(this IDocumentStore documentStore, IEnumerable<string> identitys) where TDocument : IDocument, new()
         {
-            return identitys.ForEachAsync(documentStore.RemoveAsync<TDocument>);
+            return identitys.ForEachAsync(documentStore.DeleteAsync<TDocument>);
         }
 
         /// <summary>
@@ -209,9 +209,9 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// </summary>
         /// <param name="documentStore"></param>
         /// <param name="identitys"></param>
-        public static void Remove<TDocument>(this IDocumentStore documentStore, IEnumerable<Identity> identitys) where TDocument : IDocument, new()
+        public static void Delete<TDocument>(this IDocumentStore documentStore, IEnumerable<Identity> identitys) where TDocument : IDocument, new()
         {
-            documentStore.RemoveAsync<TDocument>(identitys)
+            documentStore.DeleteAsync<TDocument>(identitys)
                          .GetAwaiter()
                          .GetResult();
         }
@@ -221,9 +221,9 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// </summary>
         /// <param name="documentStore"></param>
         /// <param name="identitys"></param>
-        public static Task RemoveAsync<TDocument>(this IDocumentStore documentStore, IEnumerable<Identity> identitys) where TDocument : IDocument, new()
+        public static Task DeleteAsync<TDocument>(this IDocumentStore documentStore, IEnumerable<Identity> identitys) where TDocument : IDocument, new()
         {
-            return identitys.ForEachAsync(documentStore.RemoveAsync<TDocument>);
+            return identitys.ForEachAsync(documentStore.DeleteAsync<TDocument>);
         }
 
     }
