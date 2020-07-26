@@ -29,20 +29,20 @@ namespace SAE.CommonLibrary.Logging.Test
         [InlineData(Level.Trace)]
         public void Write(Level type)
         {
-            _logging.Write($"²âÊÔ¡°{type}¡±ÀàÐÍµÄÏûÏ¢", type);
-            this._logging.Write($"²âÊÔ¡°{type}¡±ÀàÐÍµÄÏûÏ¢", type);
+            _logging.Write($"ï¿½ï¿½ï¿½Ô¡ï¿½{type}ï¿½ï¿½ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½Ï¢", type);
+            this._logging.Write($"ï¿½ï¿½ï¿½Ô¡ï¿½{type}ï¿½ï¿½ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½Ï¢", type);
         }
         [Fact]
         public void Info()
         {
-            _logging.Info("¼ÇÂ¼Ò»ÌõÏêÏ¸ÐÅÏ¢");
-            this._logging.Info("ÄãºÃ{0},ÎÒÊÇ{1},ÎÒ½ñÄê{2}ËêÁË,-----{3}", "pjb", "cwj", 24, "...");
+            _logging.Info("ï¿½ï¿½Â¼Ò»ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½Ï¢");
+            this._logging.Info("ï¿½ï¿½ï¿½{0},ï¿½ï¿½ï¿½ï¿½{1},ï¿½Ò½ï¿½ï¿½ï¿½{2}ï¿½ï¿½ï¿½ï¿½,-----{3}", "pjb", "cwj", 24, "...");
         }
         [Fact]
         public void Debug()
         {
-            _logging.Debug("¼ÇÂ¼Ò»Ìõµ÷ÊÔÐÅÏ¢");
-            this._logging.Debug("¼ÇÂ¼Ò»Ìõ{0}ÐÅÏ¢{1}", "µ÷ÊÔ", "---");
+            _logging.Debug("ï¿½ï¿½Â¼Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢");
+            this._logging.Debug("ï¿½ï¿½Â¼Ò»ï¿½ï¿½{0}ï¿½ï¿½Ï¢{1}", "ï¿½ï¿½ï¿½ï¿½", "---");
         }
         [Fact]
         public void Error()
@@ -54,21 +54,21 @@ namespace SAE.CommonLibrary.Logging.Test
             }
             catch (Exception error)
             {
-                _logging.Error(error, "¼ÇÂ¼Ò»ÌõÒì³£ÐÅÏ¢");
+                _logging.Error(error, "ï¿½ï¿½Â¼Ò»ï¿½ï¿½ï¿½ì³£ï¿½ï¿½Ï¢");
             }
 
         }
         [Fact]
         public void Fatal()
         {
-            this._logging.Error(new Exception("ÕâÊÇÒ»¸ö×Ô¶¨ÒåµÄÒì³£¼ÇÂ¼"));
-            this._logging.Error("ÕâÊÇ×Ö·ûÆ´½Ó");
-            _logging.Fatal("¼ÇÂ¼Ò»ÌõÖÂÃü´íÎóÐÅÏ¢");
+            this._logging.Error(new Exception("ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ì³£ï¿½ï¿½Â¼"));
+            this._logging.Error("ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½Æ´ï¿½ï¿½");
+            _logging.Fatal("ï¿½ï¿½Â¼Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢");
         }
         [Fact]
         public void Warn()
         {
-            _logging.Warn("¼ÇÂ¼Ò»Ìõ¾¯¸æÐÅÏ¢");
+            _logging.Warn("ï¿½ï¿½Â¼Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢");
         }
     }
 }

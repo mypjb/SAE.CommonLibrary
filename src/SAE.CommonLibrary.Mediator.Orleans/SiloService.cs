@@ -3,6 +3,7 @@ using Orleans.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Mediator.Orleans
@@ -15,9 +16,9 @@ namespace SAE.CommonLibrary.Mediator.Orleans
         {
             this._silo = silo;
         }
-        public Task StartAsync()
+        public async Task StartAsync()
         {
-            return this._silo.StartAsync();
+            await this._silo.StartAsync();
         }
 
         public Task StopAsync()

@@ -1,15 +1,22 @@
 ﻿using SAE.CommonLibrary.Abstract.Mediator;
 using SAE.CommonLibrary.EventStore.Document;
 using SAE.CommonLibrary.Mediator.Orleans.Orders;
+using SAE.CommonLibrary.Mediator.Orleans.Product;
 using System;
 using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Mediator.Orleans.Orders
 {
     public class OrderHandler : ICommandHandler<OrderCommand>,
-                                ICommandHandler<OrderCommand, string>,
-                                ICommandHandler<Command.Delete<Order>,bool>
+                                ICommandHandler<OrderCommand, Order>,
+                                ICommandHandler<Command.Delete<Order>, bool>
     {
+        private readonly IMediator _mediator;
+
+        public OrderHandler(IMediator mediator)
+        {
+            this._mediator = mediator;
+        }
         public Task Handle(OrderCommand command)
         {
             return Task.CompletedTask;
@@ -21,11 +28,16 @@ namespace SAE.CommonLibrary.Mediator.Orleans.Orders
             return Task.FromResult(true);
         }
 
-        Task<string> ICommandHandler<OrderCommand, string>.Handle(OrderCommand command)
+        async Task<Order> ICommandHandler<OrderCommand, Order>.Handle(OrderCommand command)
         {
-            return Task.FromResult(command.Id);
+            var product = await this._mediator.Send<Product.Product>(new ProductCommand());
+            return new Order
+            {
+                Id = command.Id,
+                Products = new[] { product }
+            };
         }
 
-        
+
     }
 }

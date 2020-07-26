@@ -5,6 +5,8 @@ using SAE.CommonLibrary.Mediator.Orleans.Orders;
 using SAE.CommonLibrary.Mediator.Orleans.Product;
 using SAE.CommonLibrary.Test;
 using System;
+using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -21,12 +23,14 @@ namespace SAE.CommonLibrary.Mediator.Orleans.Test
 
         }
 
-        
+
         protected override void ConfigureServices(IServiceCollection services)
         {
-            this.Init();
+            this.Init(typeof(OrderCommand).Assembly);
+            this.Init(typeof(ProductCommand).Assembly);
 
-            services.AddMediator(typeof(ProductCommand).Assembly)
+            Thread.Sleep(1000 * 300);
+            services.AddMediator()
                     .AddMediatorOrleansClient();
             services.SaeConfigure<OrleansOptions>(options =>
             {
@@ -34,14 +38,14 @@ namespace SAE.CommonLibrary.Mediator.Orleans.Test
             });
             base.ConfigureServices(services);
         }
-        private void Init()
+        private void Init(params Assembly[] assemblies)
         {
             IServiceCollection services = new ServiceCollection();
 
             this.ConfigureEnvironment(services);
 
-            services.AddMediator(typeof(OrderCommand).Assembly)
-                    .AddMediatorOrleansSilo();
+            services.AddMediator(assemblies)
+                    .AddMediatorOrleansProxy();
 
             services.SaeConfigure<OrleansOptions>(options =>
             {
@@ -61,8 +65,15 @@ namespace SAE.CommonLibrary.Mediator.Orleans.Test
         public async Task Send()
         {
             var command = new OrderCommand();
-            var id=await this._mediator.Send<string>(command);
-            Xunit.Assert.Equal(id,command.Id);
+            var order = await this._mediator.Send<Order>(command);
+            this.WriteLine(order);
+        }
+        [Fact]
+        public async Task SendProduct()
+        {
+            var command = new ProductCommand();
+            var product = await this._mediator.Send<Product.Product>(command);
+            this.WriteLine(product);
         }
 
         [Fact]
@@ -72,7 +83,7 @@ namespace SAE.CommonLibrary.Mediator.Orleans.Test
             {
                 Id = Guid.NewGuid().ToString("N")
             };
-            var result= await this._mediator.Send<bool>(command);
+            var result = await this._mediator.Send<bool>(command);
 
             Xunit.Assert.True(result);
         }

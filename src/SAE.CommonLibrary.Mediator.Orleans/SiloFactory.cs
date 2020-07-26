@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using SAE.CommonLibrary.Abstract.Mediator;
 using System.Reflection;
+using Microsoft.Extensions.Logging;
+using org.apache.zookeeper;
 
 namespace SAE.CommonLibrary.Mediator.Orleans
 {
@@ -21,16 +23,19 @@ namespace SAE.CommonLibrary.Mediator.Orleans
     {
         private readonly ConcurrentDictionary<string, ISiloService> _dictionary;
         private readonly ILogging<SiloFactory> _logging;
+        private readonly ILoggingFactory _loggingFactory;
         private readonly IMediator _mediator;
 
         public SiloFactory(OrleansOptions options,
                            ILogging<SiloFactory> logging,
+                           ILoggingFactory loggingFactory,
                            IHostEnvironment hostingEnvironment,
                            IMediator mediator)
         {
             this._dictionary = new ConcurrentDictionary<string, ISiloService>();
 
             this._logging = logging;
+            this._loggingFactory = loggingFactory;
             this._mediator = mediator;
             if (hostingEnvironment.EnvironmentName == Environments.Development)
             {
@@ -63,28 +68,25 @@ namespace SAE.CommonLibrary.Mediator.Orleans
                 {
                     try
                     {
-                        
-                        var silo = new SiloHostBuilder()
-                                    .UseLocalhostClustering(Constants.MasterSiloPort + index,
-                                                            Constants.MasterGatewayPort + index,
-                                                            new IPEndPoint(IPAddress.Loopback, Constants.MasterSiloPort))
+                        var siloPort = Constants.MasterSiloPort + index;
+                        var gatewayPort = Constants.MasterGatewayPort + index;
+                        var iPEndPoint = gatewayPort == Constants.MasterGatewayPort ? null : new IPEndPoint(IPAddress.Loopback, Constants.MasterSiloPort);
+                        this._logging.Info($"筒仓端口'{siloPort}',网关端口:'{gatewayPort}'");
+
+                        var silo = this.DefaultConfiguration(options)
+                                    .UseLocalhostClustering(siloPort,
+                                                            gatewayPort,
+                                                            iPEndPoint)
                                     .Configure<ClusterOptions>(clusterOptions =>
                                     {
                                         clusterOptions.ClusterId = options.ClusterId;
-                                        clusterOptions.ServiceId = kv.Key;
+                                        clusterOptions.ServiceId = kv.Key.ToLower();
                                     })
-                                    .ConfigureApplicationParts(part =>
-                                    {
-                                        part.AddApplicationPart(Assembly.GetExecutingAssembly()).WithReferences();
-                                    })
-                                    .ConfigureServices(service =>
-                                    {
-                                        service.AddSingleton(this._mediator);
-                                    })
+                                    .ConfigureLogging(configure => configure.SetMinimumLevel(LogLevel.Debug))
                                     .Build();
 
                         var siloService = new SiloService(silo);
-                        
+
                         await siloService.StartAsync();
 
                         this._logging.Info($"筒仓'{options.ClusterId}'-'{kv.Key}'已启动");
@@ -109,25 +111,19 @@ namespace SAE.CommonLibrary.Mediator.Orleans
             await options.GrainNames.ForEachAsync(async kv =>
             {
                 this._logging.Info($"创建'{options.ClusterId}'-'{kv.Key}'筒仓服务");
-                var silo = new SiloHostBuilder()
-                                    .UseZooKeeperClustering(zooKeeperOptions =>
-                                    {
-                                        zooKeeperOptions.ConnectionString = options.ZooKeeperConnectionString;
-                                    })
-                                    .Configure<ClusterOptions>(clusterOptions =>
-                                    {
-                                        clusterOptions.ClusterId = options.ClusterId;
-                                        clusterOptions.ServiceId = kv.Key;
-                                    })
-                                    .ConfigureApplicationParts(part =>
-                                    {
-                                        part.AddApplicationPart(Assembly.GetExecutingAssembly()).WithReferences();
-                                    })
-                                    .ConfigureServices(service =>
-                                    {
-                                        service.AddSingleton(this._mediator);
-                                    })
-                                    .Build();
+                var silo = this.DefaultConfiguration(options)
+                               .UseZooKeeperClustering(zooKeeperOptions =>
+                               {
+                                   zooKeeperOptions.ConnectionString = options.ZooKeeperConnectionString;
+                               })
+                               .Configure<ClusterOptions>(clusterOptions =>
+                               {
+                                   clusterOptions.ClusterId = options.ClusterId;
+                                   clusterOptions.ServiceId = kv.Key.ToLower();
+                               })
+                               .ConfigureLogging(configure => configure.SetMinimumLevel(LogLevel.Information))
+                               .Build();
+
                 var siloService = new SiloService(silo);
 
                 await siloService.StartAsync();
@@ -136,6 +132,23 @@ namespace SAE.CommonLibrary.Mediator.Orleans
 
                 this._dictionary.TryAdd(kv.Key, siloService);
             });
+        }
+
+        private ISiloHostBuilder DefaultConfiguration(OrleansOptions options)
+        {
+            var silo = new SiloHostBuilder()
+                             .ConfigureApplicationParts(part =>
+                             {
+                                 part.AddApplicationPart(Assembly.GetExecutingAssembly()).WithReferences();
+                             })
+                             .ConfigureServices(service =>
+                             {
+                                 service.AddLogger(this._loggingFactory)
+                                        .AddMicrosoftLogging()
+                                        .AddSingleton(this._mediator);
+                             });
+
+            return silo;
         }
         public IEnumerable<ISiloService> AsEnumerable()
         {

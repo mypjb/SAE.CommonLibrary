@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace SAE.CommonLibrary.Mediator.Orleans.Product
 {
     public class ProductHandler : ICommandHandler<ProductCommand>,
-                                  ICommandHandler<ProductCommand,string>
+                                  ICommandHandler<ProductCommand, Product>
     {
         public Task Handle(ProductCommand command)
         {
@@ -13,9 +13,12 @@ namespace SAE.CommonLibrary.Mediator.Orleans.Product
 
         
 
-        Task<string> ICommandHandler<ProductCommand, string>.Handle(ProductCommand command)
+        Task<Product> ICommandHandler<ProductCommand, Product>.Handle(ProductCommand command)
         {
-            return Task.FromResult(command.Id);
+            return Task.FromResult(new Product
+            {
+                OrderId=command.Id
+            });
         }
     }
 }

@@ -21,6 +21,7 @@ namespace Microsoft.Extensions.DependencyInjection
         private static IMediatorBuilder AddMediatorOrleans(this IMediatorBuilder builder)
         {
             builder.Services.AddNlogLogger()
+                            .AddMicrosoftLogging()
                             .AddSaeOptions<OrleansOptions>()
                             .TryAddSingleton<IGrainCommandHandler, GrainCommandHandler>();
             return builder;

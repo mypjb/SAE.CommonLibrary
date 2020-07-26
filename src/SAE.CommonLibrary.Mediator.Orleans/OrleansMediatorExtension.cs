@@ -19,12 +19,14 @@ namespace SAE.CommonLibrary.Mediator.Orleans
         public static async Task<TResponse> Send<TCommand, TResponse>(this IGrainCommandHandler commandHandler, TCommand command)
         {
             var commandType = typeof(TCommand);
-            return (TResponse)(await commandHandler.Send(command, commandType, typeof(TResponse)));
+            var response = await commandHandler.Send(command, commandType, typeof(TResponse));
+            return (TResponse)response;
         }
         public static async Task<TResponse> Send<TResponse>(this IGrainCommandHandler commandHandler, object command)
         {
             var commandType = command.GetType();
-            return (TResponse)(await commandHandler.Send(command, commandType, typeof(TResponse)));
+            var response = await commandHandler.Send(command, commandType, typeof(TResponse));
+            return (TResponse)response;
         }
     }
 }
