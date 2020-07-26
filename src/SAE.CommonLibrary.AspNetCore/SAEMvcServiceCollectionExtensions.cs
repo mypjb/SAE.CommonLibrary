@@ -109,6 +109,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSingleton<IAuthorizationHandler, BitmapAuthorizationHandler>();
             services.TryAddSingleton<IBitmapAuthorization, BitmapAuthorization>();
             services.TryAddSingleton<IBitmapEndpointStorage, BitmapEndpointStorage>();
+        
             services.AddAuthorization(options =>
             {
                 var policy = new AuthorizationPolicyBuilder()
@@ -192,6 +193,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IApplicationBuilder UseBitmapAuthorization(this IApplicationBuilder app)
         {
+            app.UseAuthentication()
+               .UseAuthorization();
+
             var storage = app.ApplicationServices.GetService<IBitmapEndpointStorage>();
 
             if (storage.Count() == 0)

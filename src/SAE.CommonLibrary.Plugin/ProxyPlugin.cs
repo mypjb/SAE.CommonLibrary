@@ -97,8 +97,7 @@ namespace SAE.CommonLibrary.Plugin
             }
             if (File.Exists(assemblyPath))
             {
-                using (var stream = File.OpenRead(assemblyPath))
-                    assembly = this.LoadFromStream(stream);
+                assembly = this.LoadFromAssemblyPath(assemblyPath);
             }
 
             return assembly;
