@@ -114,14 +114,16 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 var policy = new AuthorizationPolicyBuilder()
                                  .AddRequirements(new BitmapAuthorizationRequirement())
+                                 .Combine(options.DefaultPolicy)
                                  .Build();
-                if (!policyName.IsNullOrWhiteSpace())
+                
+                if (policyName.IsNullOrWhiteSpace())
                 {
-                    options.AddPolicy(policyName, policy);
+                    options.DefaultPolicy = policy;
                 }
                 else
                 {
-                    options.DefaultPolicy = policy;
+                    options.AddPolicy(policyName, policy);
                 }
             });
             
