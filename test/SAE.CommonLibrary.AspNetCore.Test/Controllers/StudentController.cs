@@ -7,7 +7,6 @@ using System.Text;
 
 namespace SAE.CommonLibrary.AspNetCore.Test.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/{controller}")]
     public class StudentController : Controller
