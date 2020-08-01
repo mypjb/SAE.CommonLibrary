@@ -41,17 +41,30 @@ namespace SAE.CommonLibrary.ObjectMapper.Core.Extensions
 
         public static bool IsField(this MemberInfo value)
         {
+#if COREFX
+            return value is FieldInfo;
+#else
             return value.MemberType == MemberTypes.Field;
+#endif
         }
 
         public static bool IsProperty(this MemberInfo value)
         {
+#if COREFX
+            return value is PropertyInfo;
+#else
             return value.MemberType == MemberTypes.Property;
+#endif
         }
 
         private static bool IsMethod(this MemberInfo value)
         {
+#if COREFX
+            return value is MethodInfo;
+#else
             return value.MemberType == MemberTypes.Method;
+#endif
+
         }
     }
 }

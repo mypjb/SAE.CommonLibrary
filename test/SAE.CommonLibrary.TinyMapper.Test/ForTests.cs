@@ -12,7 +12,7 @@ namespace SAE.CommonLibrary.ObjectMapper.Test
         {
             var source = new TestStaticModel();
 
-//            TinyMapper.Bind<TestStaticModel, TestDto>();
+           //TinyMapper.Bind<TestStaticModel, TestDto>();
             var dto = Map<TestStaticModel, TestDto>(source);
             // OR
 

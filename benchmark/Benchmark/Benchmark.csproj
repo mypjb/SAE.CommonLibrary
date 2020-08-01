@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+	<TargetFrameworks>netcoreapp3.1</TargetFrameworks>
+    <Configurations>Debug;Release</Configurations>
+    <OutputType>exe</OutputType>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.0.0" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.12.1" />
+    <PackageReference Include="TinyMapper" Version="3.0.3" />
+  </ItemGroup>
+</Project>
