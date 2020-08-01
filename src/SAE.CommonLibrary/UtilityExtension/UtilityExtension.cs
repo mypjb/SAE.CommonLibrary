@@ -11,10 +11,6 @@ namespace SAE.CommonLibrary.Extension
     /// </summary>
     public static partial class UtilityExtension
     {
-        static UtilityExtension()
-        {
-
-        }
 
         public static int ToHttpStatusCode(this ErrorOutput errorOutput)
         {

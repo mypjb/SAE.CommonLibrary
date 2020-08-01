@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Cors;
 using Microsoft.Extensions.DependencyInjection;
 using SAE.CommonLibrary.AspNetCore.Routing;
 using SAE.CommonLibrary.Extension;
@@ -45,8 +46,13 @@ namespace SAE.CommonLibrary.AspNetCore.Test
             {
                 services.AddHttpContextAccessor();
                 services.AddControllers();
+                services.Configure<Microsoft.AspNetCore.Mvc.MvcOptions>(options =>
+                {
+                    options.Filters.Add<Microsoft.AspNetCore.Mvc.Authorization.AuthorizeFilter>();
+                });
                 services.AddRoutingScanning()
                         .AddBitmapAuthorization();
+                
             }
 
             // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,7 +62,6 @@ namespace SAE.CommonLibrary.AspNetCore.Test
 
                 app.UseRouting();
 
-                app.UseAuthorization();
 
                 app.UseEndpoints(endpoints =>
                 {
