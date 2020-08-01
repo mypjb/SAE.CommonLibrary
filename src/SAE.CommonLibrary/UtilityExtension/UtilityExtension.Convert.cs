@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SAE.CommonLibrary.ObjectMapper;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -75,7 +76,7 @@ namespace SAE.CommonLibrary.Extension
         {
             if (o == null) return default(TModel);
 
-            return Nelibur.ObjectMapper.TinyMapper.Map<TModel>(o);
+            return TinyMapper.Map<TModel>(o);
         }
 
         /// <summary>
@@ -90,7 +91,7 @@ namespace SAE.CommonLibrary.Extension
                   .NotNull();
             Assert.Build(attach)
                   .NotNull();
-            Nelibur.ObjectMapper.TinyMapper.Map(attach.GetType(), source.GetType(), attach, source);
+            TinyMapper.Map(attach.GetType(), source.GetType(), attach, source);
         }
 
         /// <summary>
