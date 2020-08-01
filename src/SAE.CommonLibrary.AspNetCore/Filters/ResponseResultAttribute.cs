@@ -28,8 +28,6 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            
-
             ErrorOutput errorOutput = null;
             if (context.Exception != null)
             {
@@ -41,11 +39,6 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
                 {
                     errorOutput = new ErrorOutput(context.Exception);
                 }
-            }
-
-            if (!this.HasAPIResult(context))
-            {
-                return;
             }
 
             if (context.Result is ObjectResult objectResult)
@@ -60,7 +53,7 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
                     errorOutput = new ErrorOutput(StatusCodes.ResourcesNotExist);
                 }
             }
-            else
+            else if(context.Result is JsonResult)
             {
                 var jsonResult = context.Result as JsonResult;
                 if (jsonResult.Value != null &&

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace SAE.CommonLibrary.AspNetCore
 {
-    internal class Constant
+    public class Constant
     {
         /// <summary>
         /// 默认路由路径
