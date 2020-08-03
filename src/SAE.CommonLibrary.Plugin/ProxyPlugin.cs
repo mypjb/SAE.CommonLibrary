@@ -16,7 +16,7 @@ namespace SAE.CommonLibrary.Plugin
         public ProxyPlugin(IPlugin plugin)
         {
             this.plugin = plugin;
-            if(this.plugin is ProxyPlugin)
+            if (this.plugin is ProxyPlugin)
             {
                 _loadContext = (this.plugin as ProxyPlugin)._loadContext;
             }
@@ -24,7 +24,7 @@ namespace SAE.CommonLibrary.Plugin
             {
                 _loadContext = new Lazy<PluginLoadContext>(InitContext);
             }
-            
+
         }
 
         private PluginLoadContext InitContext()
@@ -84,7 +84,9 @@ namespace SAE.CommonLibrary.Plugin
                                     .GetAssemblies()
                                     .FirstOrDefault(s => s.GetName().Name == assemblyName.Name);
 
-            if (assembly != null && assembly.GetName().Version >= assemblyName.Version)
+            if (assembly != null
+                && assembly.GetName().Version >= assemblyName.Version
+                )
             {
                 return assembly;
             }

@@ -19,7 +19,7 @@ namespace SAE.CommonLibrary.Data.Test
 
         protected override void ConfigureServices(IServiceCollection services)
         {
-            services.AddMongoDB();
+            services.AddMemoryStorage();
             base.ConfigureServices(services);
         }
 

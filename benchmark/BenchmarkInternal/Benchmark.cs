@@ -9,10 +9,11 @@ namespace BenchmarkInternal
         private const int Iterations = 10;
 
         private readonly SourceTest _sourceTest = CreateSource();
+        private readonly TinyMapper _tinyMapper;
 
         public Benchmark()
         {
-            //TinyMapper.Bind<SourceTest, TargetTest>();
+            _tinyMapper = new TinyMapper(new[] { new ObjectMapperBuilder(null) });
         }
 
         [Benchmark]
@@ -20,7 +21,7 @@ namespace BenchmarkInternal
         {
             for (int i = 0; i < Iterations; i++)
             {
-                TinyMapper.Map<SourceTest, TargetTest>(_sourceTest);
+                _tinyMapper.Map<SourceTest, TargetTest>(_sourceTest);
             }
         }
 

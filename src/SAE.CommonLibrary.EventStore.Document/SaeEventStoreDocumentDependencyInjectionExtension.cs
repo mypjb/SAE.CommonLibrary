@@ -95,6 +95,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     option.AddMapper(s, dtoType);
                 });
             });
+            serviceCollection.AddTinyMapper();
             return serviceCollection;
         }
 

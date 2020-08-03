@@ -1,8 +1,5 @@
-﻿using SAE.CommonLibrary.ObjectMapper;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Text;
 
 namespace SAE.CommonLibrary.Extension
@@ -10,8 +7,6 @@ namespace SAE.CommonLibrary.Extension
     public static partial class UtilityExtension
     {
         #region 转换
-
-
         /// <summary>
         /// 将对象<paramref name="input"/>转换成<typeparamref name="TEnum"/>
         /// </summary>
@@ -19,7 +14,7 @@ namespace SAE.CommonLibrary.Extension
         /// <param name="input"></param>
         /// <returns></returns>
         public static TEnum EnumTo<TEnum>(this string input) where TEnum : struct
-        => EnumTo<TEnum>(input);
+        => EnumTo<TEnum>(o: input);
 
 
         private static TEnum EnumTo<TEnum>(object o) where TEnum : struct
@@ -36,7 +31,7 @@ namespace SAE.CommonLibrary.Extension
         /// <param name="input"></param>
         /// <returns></returns>
         public static TEnum EnumTo<TEnum>(this int input) where TEnum : struct
-        => EnumTo<TEnum>(input);
+        => EnumTo<TEnum>(o: input);
 
         /// <summary>
         /// get <paramref name="enum"/> detail
@@ -66,33 +61,6 @@ namespace SAE.CommonLibrary.Extension
             //return attribute == null ? field.Name : attribute.GetName();
         }
 
-        /// <summary>
-        /// 映射对象
-        /// </summary>
-        /// <typeparam name="TModel"></typeparam>
-        /// <param name="o"></param>
-        /// <returns></returns>
-        public static TModel To<TModel>(this object o)
-        {
-            if (o == null) return default(TModel);
-
-            return TinyMapper.Map<TModel>(o);
-        }
-
-        /// <summary>
-        /// 将<paramref name="attach"/>附加到<paramref name="source"/>
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source">对象源</param>
-        /// <param name="attach">要附加的对象</param>
-        public static void Extend<T>(this T source, object attach) where T : class
-        {
-            Assert.Build(source)
-                  .NotNull();
-            Assert.Build(attach)
-                  .NotNull();
-            TinyMapper.Map(attach.GetType(), source.GetType(), attach, source);
-        }
 
         /// <summary>
         /// 将<paramref name="input"/>按照<paramref name="encoding"/>编码转换成<seealso cref="IEnumerable{byte}"/>

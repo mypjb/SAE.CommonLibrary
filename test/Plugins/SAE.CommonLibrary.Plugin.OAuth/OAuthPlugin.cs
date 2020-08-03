@@ -32,6 +32,7 @@ namespace SAE.CommonLibrary.Plugin.OAuth
                         options.RequireHttpsMetadata = false;
                         options.Audience = "api1";
                     });
+           
         }
     }
 }

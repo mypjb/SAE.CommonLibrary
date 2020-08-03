@@ -9,6 +9,5 @@ namespace SAE.CommonLibrary
 {
     public static class SaeDependencyInjectionExtension
     {
-        
     }
 }

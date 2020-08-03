@@ -22,8 +22,5 @@
       <PackagePath></PackagePath>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SAE.CommonLibrary.TinyMapper\SAE.CommonLibrary.TinyMapper.csproj" />
-  </ItemGroup>
 
 </Project>

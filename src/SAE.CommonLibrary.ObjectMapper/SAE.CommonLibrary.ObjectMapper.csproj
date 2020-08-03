@@ -7,16 +7,17 @@
     <PackageTags>SAE</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageIcon>nuget.png</PackageIcon>
+    <Version>1.0.1</Version>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\SAE.CommonLibrary.Logging.NLog\SAE.CommonLibrary.Logging.NLog.csproj" />
-    <ProjectReference Include="..\SAE.CommonLibrary.ObjectMapper.TinyMapper\SAE.CommonLibrary.ObjectMapper.TinyMapper.csproj" />
-  </ItemGroup>
   <ItemGroup>
     <None Include="..\..\nuget.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SAE.CommonLibrary.DependencyInjection\SAE.CommonLibrary.DependencyInjection.csproj" />
+    <ProjectReference Include="..\SAE.CommonLibrary\SAE.CommonLibrary.csproj" />
   </ItemGroup>
 </Project>

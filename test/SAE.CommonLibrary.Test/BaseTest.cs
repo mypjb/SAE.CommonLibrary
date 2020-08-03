@@ -16,11 +16,13 @@ namespace SAE.CommonLibrary.Test
         {
             _output = output;
             IServiceCollection services = new ServiceCollection();
+            services.AddServiceFacade();
             //services.AddServiceProvider();
             this.ConfigureEnvironment(services);
             this.ConfigureServicesBefore(services);
             this.ConfigureServices(services);
             this._serviceProvider = services.BuildAutofacProvider();
+            this._serviceProvider.UseServiceFacade();
             this.Configure(this._serviceProvider);
         }
 

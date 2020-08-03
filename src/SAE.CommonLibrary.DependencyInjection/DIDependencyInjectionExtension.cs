@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using SAE.CommonLibrary;
 using System;
@@ -29,11 +30,11 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// 注册服务提供程序<seealso cref="IServiceProvider"/>
+        /// 注册服务门面<seealso cref="ServiceFacade"/>
         /// </summary>
         /// <param name="serviceDescriptors"></param>
         /// <returns></returns>
-        public static IServiceCollection AddServiceProvider(this IServiceCollection serviceDescriptors)
+        public static IServiceCollection AddServiceFacade(this IServiceCollection serviceDescriptors)
         {
             serviceDescriptors.TryAddSingleton(provider =>
             {
@@ -42,7 +43,28 @@ namespace Microsoft.Extensions.DependencyInjection
             return serviceDescriptors;
         }
 
-       
+        /// <summary>
+        /// 初始化<seealso cref="ServiceFacade"/>
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        /// <returns></returns>
+        public static IServiceProvider UseServiceFacade(this IServiceProvider serviceProvider)
+        {
+            serviceProvider.GetService<ServiceFacade>();
+            return serviceProvider;
+        }
+
+        /// <summary>
+        /// 注册服务提供程序<seealso cref="ServiceFacade"/>
+        /// </summary>
+        /// <param name="applicationBuilder"></param>
+        /// <returns></returns>
+        public static IApplicationBuilder UseServiceFacade(this IApplicationBuilder applicationBuilder)
+        {
+            applicationBuilder.ApplicationServices.GetService<ServiceFacade>();
+            return applicationBuilder;
+        }
+
         /// <summary>
         /// 是否注册
         /// </summary>
