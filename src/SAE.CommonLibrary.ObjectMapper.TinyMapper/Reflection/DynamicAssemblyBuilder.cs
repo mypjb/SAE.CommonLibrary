@@ -27,7 +27,6 @@ namespace SAE.CommonLibrary.ObjectMapper.Reflection
                 AssemblyBuilder assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
                 _moduleBuilder = assemblyBuilder.DefineDynamicModule(assemblyName.Name);
 
-
             }
 
             public TypeBuilder DefineType(string typeName, Type parentType)

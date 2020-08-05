@@ -37,7 +37,7 @@ namespace SAE.CommonLibrary.ObjectMapper.Mappers.Classes
             MapperCacheItem rootMapperCacheItem = _mapperCache.AddStub(typePair);
             Option<MapperCache> mappers = EmitMapClass(typePair, typeBuilder);
 
-            var rootMapper = (Mapper)Activator.CreateInstance(Helpers.CreateType(typeBuilder));
+            var rootMapper = (Mapper)Activator.CreateInstance(Helpers.CreateType(typeBuilder)); 
 
             UpdateMappers(mappers, rootMapperCacheItem.Id, rootMapper);
 

@@ -13,10 +13,12 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
     public class PluginManage<TPlugin> : IPluginManage where TPlugin : IPlugin
     {
         private readonly string _pluginDir;
+        private readonly Type _plutinType;
         private ConcurrentDictionary<string, IPlugin> _store;
         public const string Package = "package.json";
         public PluginManage(PluginOptions pluginOptions)
         {
+            this._plutinType = typeof(TPlugin);
             this._store = new ConcurrentDictionary<string, IPlugin>();
             this._pluginDir = this.AbsolutePath(pluginOptions.Path) ?
                                     pluginOptions.Path :
@@ -29,8 +31,7 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
             if (Directory.Exists(this._pluginDir))
             {
                 Directory.GetDirectories(this._pluginDir)
-                         .AsParallel()
-                         .ForAll(dir =>
+                         .ForEach(dir =>
                          {
                              var plugin = this.Read(dir);
                              if (plugin != null)
@@ -59,10 +60,10 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
                 if (proxyPlugin.Status)
                 {
                     var assembly = this.Load(proxyPlugin);
-                    var type = typeof(TPlugin);
+                    
                     var pluginType = assembly.GetTypes()
                                              .FirstOrDefault(
-                                                s => type.IsAssignableFrom(s));
+                                                s => this._plutinType.IsAssignableFrom(s));
                     if (pluginType != null)
                     {
                         var tPlugin = (IPlugin)Activator.CreateInstance(pluginType);

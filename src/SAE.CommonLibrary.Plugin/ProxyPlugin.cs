@@ -84,8 +84,7 @@ namespace SAE.CommonLibrary.Plugin
                                     .GetAssemblies()
                                     .FirstOrDefault(s => s.GetName().Name == assemblyName.Name);
 
-            if (assembly != null
-                && assembly.GetName().Version >= assemblyName.Version
+            if (assembly != null && assembly.GetName().Version >= assemblyName.Version
                 )
             {
                 return assembly;
