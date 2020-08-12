@@ -109,14 +109,14 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSingleton<IAuthorizationHandler, BitmapAuthorizationHandler>();
             services.TryAddSingleton<IBitmapAuthorization, BitmapAuthorization>();
             services.TryAddSingleton<IBitmapEndpointStorage, BitmapEndpointStorage>();
-        
-            services.AddAuthorization(options =>
+
+            services.PostConfigure<AuthorizationOptions>(options =>
             {
                 var policy = new AuthorizationPolicyBuilder()
-                                 .AddRequirements(new BitmapAuthorizationRequirement())
-                                 .Combine(options.DefaultPolicy)
-                                 .Build();
-                
+                                    .AddRequirements(new BitmapAuthorizationRequirement())
+                                    .Combine(options.DefaultPolicy)
+                                    .Build();
+               
                 if (policyName.IsNullOrWhiteSpace())
                 {
                     options.DefaultPolicy = policy;
