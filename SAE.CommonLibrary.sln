@@ -99,6 +99,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAE.CommonLibrary.ObjectMap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAE.CommonLibrary.ObjectMapper.Test", "test\SAE.CommonLibrary.ObjectMapper.Test\SAE.CommonLibrary.ObjectMapper.Test.csproj", "{F2DDB937-56AC-44E9-9087-3BB99B90CA39}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.EventStore.Document.MySql", "src\SAE.CommonLibrary.EventStore.Document.MySql\SAE.CommonLibrary.EventStore.Document.MySql.csproj", "{A34A974A-A834-4F44-9AD2-7496F4637DA3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.Database", "src\SAE.CommonLibrary.Database\SAE.CommonLibrary.Database.csproj", "{0E65AC9C-3485-48D2-A896-8E29C2B8F0EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -265,6 +269,14 @@ Global
 		{F2DDB937-56AC-44E9-9087-3BB99B90CA39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2DDB937-56AC-44E9-9087-3BB99B90CA39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2DDB937-56AC-44E9-9087-3BB99B90CA39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A34A974A-A834-4F44-9AD2-7496F4637DA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A34A974A-A834-4F44-9AD2-7496F4637DA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A34A974A-A834-4F44-9AD2-7496F4637DA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A34A974A-A834-4F44-9AD2-7496F4637DA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E65AC9C-3485-48D2-A896-8E29C2B8F0EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E65AC9C-3485-48D2-A896-8E29C2B8F0EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E65AC9C-3485-48D2-A896-8E29C2B8F0EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E65AC9C-3485-48D2-A896-8E29C2B8F0EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -311,6 +323,8 @@ Global
 		{0CB23894-1CAC-44D2-B8C6-CC5B1DAC610D} = {78157883-8166-46DB-9754-E093FE2A3936}
 		{26009BB2-0EC4-4789-8F81-540D561087C4} = {78157883-8166-46DB-9754-E093FE2A3936}
 		{F2DDB937-56AC-44E9-9087-3BB99B90CA39} = {8AD43B5B-ED55-4712-B865-1E6E1D7B19FE}
+		{A34A974A-A834-4F44-9AD2-7496F4637DA3} = {78157883-8166-46DB-9754-E093FE2A3936}
+		{0E65AC9C-3485-48D2-A896-8E29C2B8F0EE} = {78157883-8166-46DB-9754-E093FE2A3936}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2FF66E70-E062-4202-A1AD-A821991FEA65}

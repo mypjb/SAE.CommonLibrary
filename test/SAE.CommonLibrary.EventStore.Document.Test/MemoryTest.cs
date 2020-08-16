@@ -25,17 +25,23 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
 
             this._storage = this._serviceProvider.GetService<IStorage>();
         }
+
+        protected override void ConfigureServicesBefore(IServiceCollection services)
+        {
+            services.AddDefaultConfiguration()
+                    .AddDataPersistenceService()
+                    .AddMemoryMessageQueue();
+            base.ConfigureServicesBefore(services);
+        }
         protected override void ConfigureServices(IServiceCollection services)
         {
-            services.AddDefaultConfiguration();
-            services.AddDataPersistenceService();
             services.AddMemoryDocument();
-            services.AddMemoryMessageQueue();
+            
             base.ConfigureServices(services);
         }
 
         [Fact]
-        public async Task<User> Register()
+        public virtual async Task<User> Register()
         {
             var user = new User();
             user.Create(this.GetRandom(), Password);
@@ -53,7 +59,7 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
         }
 
         [Fact]
-        public async Task ChangePassword()
+        public virtual async Task ChangePassword()
         {
             var user = await this.Register();
             user = await _documentStore.FindAsync<User>(user.Id.ToIdentity());
@@ -71,7 +77,7 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
         }
 
         [Fact]
-        public async Task ChangeProperty()
+        public virtual async Task ChangeProperty()
         {
             var user = await this.Register();
 
@@ -90,14 +96,14 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
         }
 
         [Fact]
-        public async Task Remove()
+        public virtual async Task Remove()
         {
             var user = await this.Register();
             await this._documentStore.DeleteAsync(user);
             Xunit.Assert.Null(await _documentStore.FindAsync<User>(user.Id.ToIdentity()));
         }
         [Fact]
-        public async Task Query()
+        public virtual async Task Query()
         {
             var user = await this.Register();
             Xunit.Assert.True(this._storage.AsQueryable<UserDto>()

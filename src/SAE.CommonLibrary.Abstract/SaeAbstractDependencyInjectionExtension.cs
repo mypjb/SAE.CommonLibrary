@@ -2,6 +2,7 @@
 using SAE.CommonLibrary.Abstract.Builder;
 using SAE.CommonLibrary.Abstract.Decorator;
 using SAE.CommonLibrary.Abstract.Mediator;
+using SAE.CommonLibrary.Abstract.Responsibility;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -12,7 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
 
         /// <summary>
-        /// 添加中介者
+        /// add <seealso cref="IMediator"/>
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
@@ -52,6 +53,12 @@ namespace Microsoft.Extensions.DependencyInjection
             return new MediatorBuilder(services, descriptors);
         }
 
+        /// <summary>
+        /// add <seealso cref="IBuilder"/>
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="assemblies"></param>
+        /// <returns></returns>
         public static IServiceCollection AddBuilder(this IServiceCollection services, params Assembly[] assemblies)
         {
             if (assemblies == null || !assemblies.Any()) assemblies = new Assembly[] { Assembly.GetCallingAssembly() };
@@ -81,6 +88,50 @@ namespace Microsoft.Extensions.DependencyInjection
                 }
             }
 
+            return services;
+        }
+        /// <summary>
+        /// add <seealso cref="IResponsibilityProvider{TResponsibilityContext}"/>
+        /// </summary>
+        /// <typeparam name="TContext"></typeparam>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddResponsibilityProvider<TContext>(this IServiceCollection services) where TContext : ResponsibilityContext
+        {
+            services.TryAddSingleton<IResponsibilityProvider<TContext>, ResponsibilityProvider<TContext>>();
+            return services;
+        }
+
+        /// <summary>
+        /// add <seealso cref="IResponsibility{TContext}"/>
+        /// </summary>
+        /// <typeparam name="TResponsibility"></typeparam>
+        /// <typeparam name="TContext"></typeparam>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddResponsibility<TContext,TResponsibility>(this IServiceCollection services)
+            where TResponsibility : class, IResponsibility<TContext>
+            where TContext : ResponsibilityContext
+        {
+            services.AddSingleton<IResponsibility<TContext>, TResponsibility>()
+                    .AddResponsibilityProvider<TContext>();
+            return services;
+        }
+
+        /// <summary>
+        /// add <seealso cref="IResponsibility{TContext}"/>
+        /// </summary>
+        /// <typeparam name="TContext"></typeparam>
+        /// <typeparam name="TResponsibility"></typeparam>
+        /// <param name="services"></param>
+        /// <param name="responsibility"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddResponsibility<TContext, TResponsibility>(this IServiceCollection services,TResponsibility responsibility)
+            where TResponsibility : class, IResponsibility<TContext>
+            where TContext : ResponsibilityContext
+        {
+            services.AddSingleton<IResponsibility<TContext>>(responsibility)
+                    .AddResponsibilityProvider<TContext>();
             return services;
         }
     }
