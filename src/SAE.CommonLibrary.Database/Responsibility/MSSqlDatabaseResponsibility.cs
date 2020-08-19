@@ -8,7 +8,7 @@ namespace SAE.CommonLibrary.Database.Responsibility
 {
     public class MSSqlDatabaseResponsibility : DatabaseResponsibility
     {
-        public MSSqlDatabaseResponsibility() : base("System.Data.SqlClient")
+        public MSSqlDatabaseResponsibility() : base("MSSql")
         {
             
         }

@@ -55,7 +55,7 @@ namespace SAE.CommonLibrary.EventStore.Document.MySql
         {
             using (var conn = this._factory.Get())
             {
-                await conn.ExecuteAsync($"delete {nameof(Snapshot)} where id=@id", new { id = identity.ToString() });
+                await conn.ExecuteAsync($"delete from  {nameof(Snapshot)} where id=@id", new { id = identity.ToString() });
             }
         }
 

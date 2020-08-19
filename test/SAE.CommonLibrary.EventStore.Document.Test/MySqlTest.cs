@@ -19,12 +19,7 @@ namespace SAE.CommonLibrary.EventStore.Document.Test
         }
         protected override void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(new DBConnectOptions
-            {
-                Provider = "MySql.Data.MySqlClient",
-                Name="Default",
-                ConnectionString= "Data Source=192.168.31.11;Database=SAE_DEV;User ID=root;Password=Aa123456;pooling=true;port=33306;sslmode=none;CharSet=utf8;"
-            });
+            services.AddSaeOptions<DBConnectOptions>("mysql");
             services.AddMySqlDocument();
         }
 

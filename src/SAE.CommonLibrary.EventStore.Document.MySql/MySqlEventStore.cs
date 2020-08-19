@@ -58,7 +58,7 @@ namespace SAE.CommonLibrary.EventStore.Document.MySql
                         eventStream.Append(new EventStream(identity,
                                            reader.GetInt32(reader.GetOrdinal("version")),
                                            reader.GetString(reader.GetOrdinal("data")),
-                                           DateTimeOffset.Parse(reader.GetString(reader.GetOrdinal("timestamp")))));
+                                           reader.GetDateTime(reader.GetOrdinal("timestamp"))));
                     }
                 }
             }
@@ -69,7 +69,7 @@ namespace SAE.CommonLibrary.EventStore.Document.MySql
         {
             using (var conn =await this._factory.GetAsync())
             {
-                await conn.ExecuteAsync("delete EventStream where id=@id", new { id = identity.ToString() });
+                await conn.ExecuteAsync("delete from  EventStream where id=@id", new { id = identity.ToString() });
             }
         }
     }

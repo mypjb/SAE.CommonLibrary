@@ -45,7 +45,7 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
         {
             var user = new User();
             user.Create(this.GetRandom(), Password);
-            _documentStore.Save(user);
+            await _documentStore.SaveAsync(user);
             this.WriteLine(user);
             var newUser = await _documentStore.FindAsync<User>(user.Id.ToIdentity());
             Xunit.Assert.NotNull(newUser);

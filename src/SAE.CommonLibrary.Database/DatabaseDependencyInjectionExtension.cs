@@ -39,9 +39,9 @@ namespace SAE.CommonLibrary.Database
 
         public static IServiceCollection AddMySqlDatabase(this IServiceCollection services)
         {
-            return services.AddDatabase("MySql.Data.MySqlClient", context =>
+            return services.AddDatabase("MySql", context =>
             {
-                return Task.FromResult<IDbConnection>(new MySql.Data.MySqlClient.MySqlConnection(context.Options.ConnectionString));
+                return Task.FromResult<IDbConnection>(new MySqlConnector.MySqlConnection(context.Options.ConnectionString));
             });
         }
     }

@@ -30,11 +30,11 @@ namespace SAE.CommonLibrary.Mediator.Orleans.Orders
 
         async Task<Order> ICommandHandler<OrderCommand, Order>.Handle(OrderCommand command)
         {
-            var product = await this._mediator.Send<Product.Product>(new ProductCommand());
+            //var product = await this._mediator.Send<Product.Product>(new ProductCommand());
             return new Order
             {
                 Id = command.Id,
-                Products = new[] { product }
+                //Products = new[] { product }
             };
         }
 

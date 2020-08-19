@@ -35,6 +35,9 @@
     <None Update="Config\mongodb.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Config\mysql.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Config\plugin.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

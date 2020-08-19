@@ -1,4 +1,4 @@
 {
-  "connection": "mongodb://admin:111111@mongodb.db.com:27017/",
+  "connection": "mongodb://root:Aa123456@mongo.db.lass.net:27017/",
   "db": "test"
 }

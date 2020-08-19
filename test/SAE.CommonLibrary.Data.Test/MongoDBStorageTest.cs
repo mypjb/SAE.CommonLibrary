@@ -19,19 +19,15 @@ namespace SAE.CommonLibrary.Data.Test
 
         protected override void ConfigureServices(IServiceCollection services)
         {
-            services.AddMemoryStorage();
+            services.AddMongoDB();
             base.ConfigureServices(services);
         }
 
-        /// <summary>
-        /// ���������Mongodb��
-        /// </summary>
         [Fact]
         public async Task<ClassGrade> Add()
         {
             var classGrade = new ClassGrade();
             classGrade.Id = this.GetRandom();
-            //�˴�������Ĭ��IdΪ10
             await _storage.SaveAsync(classGrade);
             var grade = this._storage.AsQueryable<ClassGrade>().FirstOrDefault(s => s.Id == classGrade.Id);
             Xunit.Assert.True(_storage.AsQueryable<ClassGrade>()
@@ -40,14 +36,10 @@ namespace SAE.CommonLibrary.Data.Test
             return grade;
         }
 
-        /// <summary>
-        /// ����
-        /// </summary>
         [Fact]
         public async Task Update()
         {
             var classGrade = await this.Add();
-            //�˴�������Ĭ��IdΪ10
             classGrade.Students = new List<Student>
             {
                 new Student
@@ -84,7 +76,6 @@ namespace SAE.CommonLibrary.Data.Test
         public async Task Remove()
         {
             var classGrade = await this.Add();
-            //�Ƴ�   ע���ݲ�֧��Clear
             await _storage.DeleteAsync(classGrade);
             Xunit.Assert.True(_storage.AsQueryable<ClassGrade>()
                                 .Count(s => s.Id == classGrade.Id) == 0);
