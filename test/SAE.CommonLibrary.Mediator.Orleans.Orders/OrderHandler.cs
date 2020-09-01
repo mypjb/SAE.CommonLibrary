@@ -1,7 +1,5 @@
 ﻿using SAE.CommonLibrary.Abstract.Mediator;
 using SAE.CommonLibrary.EventStore.Document;
-using SAE.CommonLibrary.Mediator.Orleans.Orders;
-using SAE.CommonLibrary.Mediator.Orleans.Product;
 using System;
 using System.Threading.Tasks;
 
@@ -11,12 +9,12 @@ namespace SAE.CommonLibrary.Mediator.Orleans.Orders
                                 ICommandHandler<OrderCommand, Order>,
                                 ICommandHandler<Command.Delete<Order>, bool>
     {
-        private readonly IMediator _mediator;
+        //private readonly IMediator _mediator;
 
-        public OrderHandler(IMediator mediator)
-        {
-            this._mediator = mediator;
-        }
+        //public OrderHandler(IMediator mediator)
+        //{
+        //    this._mediator = mediator;
+        //}
         public Task Handle(OrderCommand command)
         {
             return Task.CompletedTask;

@@ -10,9 +10,9 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh '''${DOTNET_NUGET}
-${DOTNET_BUILD}
-'''
+        sh '''dotnet nuget add source ${DOTNET_NUGET_SOURCE} -n azure.org
+
+dotnet build -c Release'''
       }
     }
 
@@ -24,14 +24,15 @@ ${DOTNET_BUILD}
 
     stage('Create Nuget Package') {
       steps {
-        sh '''rm -rf nupkgs
-${DOTNET_NUGET_BUILD}'''
+        sh '''rm -rf ${DOTNET_NUGET_DIR}
+dotnet pack -c Release --no-build --include-source --output ${DOTNET_NUGET_DIR}'''
       }
     }
 
     stage('Publish Nuget Server') {
       steps {
-        sh '$DOTNET_NUGET_PUBLISH'
+        sh '''cd ${DOTNET_NUGET_DIR}
+dotnet nuget push \'*.symbols.nupkg\' -k 111111 -s ${DOTNET_NUGET_PUBLISH_SOURCE}'''
       }
     }
 

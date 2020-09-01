@@ -27,9 +27,9 @@ namespace SAE.CommonLibrary.Mediator.Orleans.Test
         protected override void ConfigureServices(IServiceCollection services)
         {
             this.Init(typeof(OrderCommand).Assembly);
-            this.Init(typeof(ProductCommand).Assembly);
+            //this.Init(typeof(ProductCommand).Assembly);
 
-            Thread.Sleep(1000 * 300);
+            //Thread.Sleep(1000 * 300);
             services.AddMediator()
                     .AddMediatorOrleansClient();
             services.SaeConfigure<OrleansOptions>(options =>
@@ -68,13 +68,13 @@ namespace SAE.CommonLibrary.Mediator.Orleans.Test
             var order = await this._mediator.Send<Order>(command);
             this.WriteLine(order);
         }
-        [Fact]
-        public async Task SendProduct()
-        {
-            var command = new ProductCommand();
-            var product = await this._mediator.Send<Product.Product>(command);
-            this.WriteLine(product);
-        }
+        //[Fact]
+        //public async Task SendProduct()
+        //{
+        //    var command = new ProductCommand();
+        //    var product = await this._mediator.Send<Product.Product>(command);
+        //    this.WriteLine(product);
+        //}
 
         [Fact]
         public async Task SendFindCommand()

@@ -8,7 +8,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\SAE.CommonLibrary.Abstract\SAE.CommonLibrary.Abstract.csproj" />
     <ProjectReference Include="..\..\src\SAE.CommonLibrary.EventStore.Document\SAE.CommonLibrary.EventStore.Document.csproj" />
-    <ProjectReference Include="..\SAE.CommonLibrary.Mediator.Orleans.Product\SAE.CommonLibrary.Mediator.Orleans.Product.csproj" />
   </ItemGroup>
 
 </Project>

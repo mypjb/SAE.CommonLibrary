@@ -32,7 +32,7 @@ namespace SAE.CommonLibrary.AspNetCore.Test
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             var max = 512;
-            var permissionBits = Enumerable.Range(0,23)
+            var permissionBits = Enumerable.Range(0,10)
                                            .Select(s =>
                                           {
                                               var bit = Math.Abs(this.GetRandom().GetHashCode() % max);
