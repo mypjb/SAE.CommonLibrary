@@ -36,6 +36,7 @@ namespace SAE.CommonLibrary.Plugin.Test
                 Scope = "api1"
             });
 
+            this.WriteLine(tokenResponse);
             Xunit.Assert.False(tokenResponse.IsError, tokenResponse.Error);
 
             this.WriteLine(tokenResponse.Json);
