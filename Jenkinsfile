@@ -18,7 +18,7 @@ dotnet build -c Release'''
 
     stage('Test') {
       steps {
-        sh 'dotnet test'
+        sh 'dotnet test -v n'
       }
     }
 
