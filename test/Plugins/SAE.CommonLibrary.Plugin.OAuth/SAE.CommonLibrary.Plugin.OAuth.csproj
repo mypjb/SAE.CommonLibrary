@@ -20,8 +20,4 @@
     <ProjectReference Include="..\SAE.CommonLibrary.Plugin.Constant\SAE.CommonLibrary.Plugin.Constant.csproj" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy /y &quot;bin/Debug/netcoreapp3.1&quot; &quot;../dest/OAuth&quot;" />
-  </Target>
-
 </Project>
