@@ -44,7 +44,7 @@ namespace SAE.CommonLibrary.Cache.Test
         {
             Dictionary<string, Student> dic = new Dictionary<string, Student>();
 
-            Enumerable.Range(0, 10000)
+            Enumerable.Range(0, 10)
                       .ForEach(s =>
                       {
                           var student = new Student();
