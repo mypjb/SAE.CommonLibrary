@@ -29,8 +29,10 @@ namespace SAE.CommonLibrary.Plugin.Identity
         public override void PluginConfigureServices(IServiceCollection services)
         {
             var builder = services.AddIdentityServer()
-                                  .AddInMemoryApiResources(Config.Apis)
-                                  .AddInMemoryClients(Config.Clients);
+                 .AddInMemoryApiScopes(Config.ApiScopes)
+                 .AddInMemoryClients(Config.Clients)
+                 .AddJwtBearerClientAuthentication();
+
             builder.AddDeveloperSigningCredential();
         }
 

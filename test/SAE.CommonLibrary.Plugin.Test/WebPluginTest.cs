@@ -8,16 +8,21 @@ using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 using Microsoft.AspNetCore.Http;
+using System;
+using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Net.Http;
+using System.Threading;
 
 namespace SAE.CommonLibrary.Plugin.Test
 {
     public class WebPluginTest : HostTest
     {
+        public static Func<HttpMessageHandler> Handler;
         public WebPluginTest(ITestOutputHelper output) : base(output,PluginConstant.Host)
         {
-            PluginConstant.HttpMessageHandler = this._httpMessageHandler;
+            Handler = () => new ProxyMessageHandler(this._client);
         }
-
 
 
         [Fact]
@@ -36,7 +41,6 @@ namespace SAE.CommonLibrary.Plugin.Test
                 Scope = "api1"
             });
 
-            this.WriteLine(tokenResponse);
             Xunit.Assert.False(tokenResponse.IsError, tokenResponse.Error);
 
             this.WriteLine(tokenResponse.Json);
@@ -60,12 +64,44 @@ namespace SAE.CommonLibrary.Plugin.Test
         }
     }
 
+    public class ProxyMessageHandler : DelegatingHandler
+    {
+        private readonly HttpClient _httpClient;
+
+        public ProxyMessageHandler(HttpClient httpClient)
+        {
+            this._httpClient = httpClient;
+        }
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            return _httpClient.SendAsync(request, cancellationToken);
+        }
+    }
+
     public class Startup
     {
+        private readonly Func<HttpMessageHandler> _handler;
+
+        public Startup()
+        {
+            this._handler =()=>
+            {
+                return WebPluginTest.Handler.Invoke();
+            };
+            
+        }
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddNlogLogger();
             services.AddPluginManage("../../../../Plugins/dest");
+            services.PostConfigureAll<JwtBearerOptions>(options =>
+            {
+                if (this._handler.Invoke() == null)
+                {
+                    throw new Exception("Handler not exist");
+                }
+                options.BackchannelHttpHandler = this._handler.Invoke();
+            });
             services.AddControllersWithViews();
         }
 
@@ -75,8 +111,6 @@ namespace SAE.CommonLibrary.Plugin.Test
             app.UseDeveloperExceptionPage();
 
             app.UseRouting();
-
-            app.UseAuthorization();
 
             app.UsePluginManage();
 

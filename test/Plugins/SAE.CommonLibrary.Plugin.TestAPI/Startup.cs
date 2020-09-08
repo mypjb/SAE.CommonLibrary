@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SAE.CommonLibrary.Plugin.Constant;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace SAE.CommonLibrary.Plugin.TestAPI
 {
@@ -22,14 +24,15 @@ namespace SAE.CommonLibrary.Plugin.TestAPI
         {
             services.AddControllers();
 
-            services.AddAuthentication("Bearer")
-                    .AddJwtBearer("Bearer", options =>
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options =>
                     {
                         options.Authority = PluginConstant.Host;
-                        options.BackchannelHttpHandler = PluginConstant.HttpMessageHandler;
                         options.RequireHttpsMetadata = false;
-
-                        options.Audience = "api2";
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateAudience = false
+                        };
                     });
         }
 

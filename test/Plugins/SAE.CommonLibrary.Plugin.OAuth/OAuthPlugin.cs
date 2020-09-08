@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using SAE.CommonLibrary.Plugin.Constant;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace SAE.CommonLibrary.Plugin.OAuth
 {
@@ -24,13 +26,15 @@ namespace SAE.CommonLibrary.Plugin.OAuth
             {
                 options.Filters.Add(new AuthorizeFilter(new[] { new AuthorizeAttribute()}));
             });
-            services.AddAuthentication("Bearer")
-                    .AddJwtBearer("Bearer", options =>
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options =>
                     {
                         options.Authority = PluginConstant.Host;
-                        options.BackchannelHttpHandler = PluginConstant.HttpMessageHandler;
                         options.RequireHttpsMetadata = false;
-                        options.Audience = "api1";
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateAudience = false
+                        };
                     });
            
         }

@@ -8,11 +8,10 @@ namespace SAE.CommonLibrary.Plugin.Identity
 {
     public static class Config
     {
-        public static IEnumerable<ApiResource> Apis =>
-            new List<ApiResource>
+        public static IEnumerable<ApiScope> ApiScopes =>
+            new List<ApiScope>
             {
-                new ApiResource("api1", "My API"),
-                new ApiResource("api2", "My API2")
+                new ApiScope("api1", "My API")
             };
 
         public static IEnumerable<Client> Clients =>
@@ -32,7 +31,7 @@ namespace SAE.CommonLibrary.Plugin.Identity
                     },
 
                     // scopes that client has access to
-                    AllowedScopes = { "api1", "api2" }
+                    AllowedScopes = { "api1" }
                 }
             };
     }

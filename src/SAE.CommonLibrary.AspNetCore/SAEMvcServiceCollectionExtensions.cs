@@ -13,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Http;
 using SAE.CommonLibrary.Extension;
 using SAE.CommonLibrary;
-using Constant = SAE.CommonLibrary.AspNetCore.Constant;
+using Constants = SAE.CommonLibrary.AspNetCore.Constants;
 using SAE.CommonLibrary.AspNetCore.Filters;
 using SAE.CommonLibrary.AspNetCore.Routing;
 using Microsoft.AspNetCore.Authorization;
@@ -58,13 +58,13 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
         /// <summary>
-        /// 使用默认<seealso cref="Constant.DefaultRoutesPath"/>配置路由扫描中间件
+        /// 使用默认<seealso cref="Constants.DefaultRoutesPath"/>配置路由扫描中间件
         /// </summary>
         /// <param name="app"></param>
         /// <returns></returns>
         public static IApplicationBuilder UseRoutingScanning(this IApplicationBuilder app)
         {
-            return app.UseRoutingScanning(Constant.DefaultRoutesPath);
+            return app.UseRoutingScanning(Constants.DefaultRoutesPath);
         }
         /// <summary>
         /// 使用<paramref name="pathString"/>配置路由中间件
@@ -106,6 +106,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static BitmapAuthorizationBuilder AddBitmapAuthorization(this IServiceCollection services, string policyName = null)
         {
+            services.AddNlogLogger();
             services.AddSingleton<IAuthorizationHandler, BitmapAuthorizationHandler>();
             services.TryAddSingleton<IBitmapAuthorization, BitmapAuthorization>();
             services.TryAddSingleton<IBitmapEndpointStorage, BitmapEndpointStorage>();
@@ -183,7 +184,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static BitmapAuthorizationBuilder AddRemoteBitmapEndpointProvider(this BitmapAuthorizationBuilder builder)
         {
-            builder.Services.AddSaeOptions<RemoteBitmapEndpointOptions>(Constant.OptionName);
+            builder.Services.AddSaeOptions<RemoteBitmapEndpointOptions>(Constants.OptionName);
             builder.Services.TryAddSingleton<IBitmapEndpointProvider, RemoteBitmapEndpointProvider>();
             return builder;
         }

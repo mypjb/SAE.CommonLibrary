@@ -25,41 +25,62 @@ namespace SAE.CommonLibrary.AspNetCore.Test
             services.AddBitmapAuthorization();
             base.ConfigureServices(services);
         }
+        [Fact]
+        public void Auth()
+        {
+            Enumerable.Range(0, 1000)
+                      .AsParallel()
+                      .ForEach(s =>
+                      {
+                          this.GeneratePermissionCode();
+                      });
+        }
 
         [Fact]
         public void GeneratePermissionCode()
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            var max = 512;
-            var permissionBits = Enumerable.Range(0,10)
+            var max = 4096;
+            var permissionBits = Enumerable.Range(0, 100)
                                            .Select(s =>
                                           {
                                               var bit = Math.Abs(this.GetRandom().GetHashCode() % max);
-                                              return bit;
-                                          })
-                                           .ToArray();
-            
+                                              return bit == 0 ? 1 : bit;
+                                          }).Distinct()
+                                          .OrderBy(s => s)
+                                          .ToArray();
+
             var code = this._authorization.GeneratePermissionCode(permissionBits);
-            
+
             this.WriteLine(code);
             this.WriteLine(code.Length);
             this.WriteLine(permissionBits);
             permissionBits.ForEach(bit =>
             {
-                Xunit.Assert.True(this._authorization.Authorizate(code, bit));
+                var result = this._authorization.Authorizate(code, bit);
+                if (!result)
+                {
+                    this.WriteLine($"授权失败:{bit}");
+                }
+                Xunit.Assert.True(result);
             });
             stopwatch.Stop();
             this.WriteLine(stopwatch.Elapsed.TotalMilliseconds);
             while (true)
             {
-                var bit = Math.Abs(this.GetRandom().GetHashCode() % max);
+                var bit = Math.Abs(this.GetRandom().GetHashCode() % permissionBits.Max());
+                bit = bit == 0 ? 1 : bit;
                 if (permissionBits.Contains(bit)) continue;
 
-                Xunit.Assert.False(this._authorization.Authorizate(code, bit));
+                var result = this._authorization.Authorizate(code, bit);
+
+                this.WriteLine(bit);
+
+                Xunit.Assert.False(result);
                 break;
             }
-            
+
         }
     }
 }

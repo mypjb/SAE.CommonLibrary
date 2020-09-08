@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SAE.CommonLibrary.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,23 +8,34 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
 {
     public class BitmapAuthorization : IBitmapAuthorization
     {
+        private readonly ILogging<BitmapAuthorization> _logging;
+
+        public BitmapAuthorization(ILogging<BitmapAuthorization> logging)
+        {
+            this._logging = logging;
+        }
         public bool Authorizate(string code, int index)
         {
             var authorizate = false;
 
             if (index >= 0)
             {
-                var bitIndex = index / Constant.PermissionBitsMaxPow;
+                var bitIndex = (int)Math.Ceiling(index * 1.0 / Constants.PermissionBitsMaxPow) - 1;
 
-                if (code.Count() >= bitIndex)
+                if (code.Count() > bitIndex)
                 {
-                    var bit = Encoding.UTF8.GetBytes(code[bitIndex].ToString()).First();
+                    var bit = Convert.ToUInt16(code[bitIndex]);
+                    //将00000001向前推进 index % Constant.PermissionBitsMaxPow 个位
+                    var bitPosition = index % Constants.PermissionBitsMaxPow;
 
-                    //将1向前推进 index % Constant.PermissionBitsMaxPow 个位
-                    var bitPosition = 1 << (index % Constant.PermissionBitsMaxPow);
+                    var permissionBit = 1 << ((bitPosition == 0 ? Constants.PermissionBitsMaxPow : bitPosition) - 1);
 
                     //bit位没有变化说明匹配权限位匹配正确
-                    authorizate = (bit | bitPosition) == bit;
+                    authorizate = (bit | permissionBit) == bit;
+                }
+                else
+                {
+                    this._logging.Warn($"invalid permission bit '{code}':'{index}'");
                 }
             }
 
@@ -38,30 +50,33 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
 
             var max = permissionBits.Max();
 
-            for (int i = 0; i <= max; i++)
+            for (int i = 1; i <= max; i++)
             {
                 sb.Append(permissionBits.Contains(i) ? '1' : '0');
             }
 
             var binaryDigit = sb.ToString();
 
-            var bytes = new List<byte>();
+            var codeStringBuilder = new StringBuilder();
             do
             {
-                var index = binaryDigit.Length > Constant.PermissionBitsMaxPow ?
-                                                 Constant.PermissionBitsMaxPow :
+                var index = binaryDigit.Length > Constants.PermissionBitsMaxPow ?
+                                                 Constants.PermissionBitsMaxPow :
                                                  binaryDigit.Length;
+                
+                var bit = Convert.ToUInt16(new string(binaryDigit.Substring(0, index)
+                                                 .Reverse()
+                                                 .ToArray()), 2);
 
-                bytes.Add(Convert.ToByte(new string(binaryDigit.Substring(0, index)
-                                             .Reverse()
-                                             .ToArray()),
-                                             2));
+                var pbit = Convert.ToChar(bit);
+
+                codeStringBuilder.Append(pbit);
 
                 binaryDigit = binaryDigit.Remove(0, index);
 
             } while (binaryDigit.Length > 0);
 
-            return Encoding.UTF8.GetString(bytes.ToArray());
+            return codeStringBuilder.ToString();
         }
     }
 }

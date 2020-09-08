@@ -27,7 +27,7 @@ namespace SAE.CommonLibrary.AspNetCore.Test
         [Fact]
         public async Task<IEnumerable<IPathDescriptor>> RouterScanningTest()
         {
-            var httpResponseMessage= await this._client.GetAsync(Constant.DefaultRoutesPath);
+            var httpResponseMessage= await this._client.GetAsync(Constants.DefaultRoutesPath);
             var descriptors =await httpResponseMessage.AsAsync<IEnumerable<PathDescriptor>>();
             Xunit.Assert.True(descriptors.Any());
             this.WriteLine(descriptors);
