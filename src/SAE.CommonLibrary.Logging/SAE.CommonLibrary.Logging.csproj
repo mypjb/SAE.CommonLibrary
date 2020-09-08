@@ -6,7 +6,7 @@
     <PackageIconUrl></PackageIconUrl>
     <RepositoryType>github</RepositoryType>
     <PackageTags>SAE</PackageTags>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <FileVersion>1.0.0.0</FileVersion>
     <PackageIcon>nuget.png</PackageIcon>
   </PropertyGroup>
