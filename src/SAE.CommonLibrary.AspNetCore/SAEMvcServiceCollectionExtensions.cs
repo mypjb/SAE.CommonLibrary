@@ -42,7 +42,7 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.AddMvcOptions(options =>
             {
                 options.Filters.Add<ResponseResultAttribute>(FilterScope.First);
-            });
+            }).AddNewtonsoftJson();
             return builder;
         }
         /// <summary>
@@ -106,7 +106,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static BitmapAuthorizationBuilder AddBitmapAuthorization(this IServiceCollection services, string policyName = null)
         {
-            services.AddNlogLogger();
+            services.AddNlogLogger()
+                    .AddHttpContextAccessor();
+
             services.AddSingleton<IAuthorizationHandler, BitmapAuthorizationHandler>();
             services.TryAddSingleton<IBitmapAuthorization, BitmapAuthorization>();
             services.TryAddSingleton<IBitmapEndpointStorage, BitmapEndpointStorage>();
