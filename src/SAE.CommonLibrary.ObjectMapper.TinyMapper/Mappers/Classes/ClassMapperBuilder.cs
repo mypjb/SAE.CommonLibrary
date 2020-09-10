@@ -55,7 +55,7 @@ namespace SAE.CommonLibrary.ObjectMapper.Mappers.Classes
                 var result = new List<Mapper>();
                 foreach (var item in mappers.Value.MapperCacheItems)
                 {
-                    if (item?.Id!= rootMapperId)
+                    if (item.Id!= rootMapperId)
                     {
                         result.Add(item.Mapper);
                     }

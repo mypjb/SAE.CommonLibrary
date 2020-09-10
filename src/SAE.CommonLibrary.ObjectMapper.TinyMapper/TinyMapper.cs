@@ -18,13 +18,15 @@ namespace SAE.CommonLibrary.ObjectMapper
     /// </summary>
     public class TinyMapper : IObjectMapper
     {
-        private readonly ConcurrentDictionary<TypePair, Mapper> _mappers;
+        private readonly Dictionary<TypePair, Mapper> _mappers;
         private readonly TargetMapperBuilder _targetMapperBuilder;
         private readonly TinyMapperConfig _config;
+        private readonly object _lock;
 
         public TinyMapper(IEnumerable<IObjectMapperBuilder> builders)
         {
-            _mappers = new ConcurrentDictionary<TypePair, Mapper>();
+            this._lock = new object();
+            _mappers = new Dictionary<TypePair, Mapper>();
             IDynamicAssembly assembly = DynamicAssemblyBuilder.Get();
             _targetMapperBuilder = new TargetMapperBuilder(assembly);
             _config = new TinyMapperConfig(_targetMapperBuilder);
@@ -76,7 +78,7 @@ namespace SAE.CommonLibrary.ObjectMapper
 
         private void Bind(TypePair typePair, Mapper mapper)
         {
-            _mappers.AddOrUpdate(typePair, mapper, (key, oldMapper) => mapper);
+            this._mappers[typePair] = mapper;//_mappers.AddOrUpdate(typePair, mapper, (key, oldMapper) => mapper);
         }
 
         /// <summary>
@@ -150,8 +152,14 @@ namespace SAE.CommonLibrary.ObjectMapper
 
             if (_mappers.TryGetValue(typePair, out mapper) == false)
             {
-                Bind(typePair.Source, typePair.Target);
-                mapper = GetMapper(typePair);
+                lock (this._lock)
+                {
+                    if (_mappers.TryGetValue(typePair, out mapper) == false)
+                    {
+                        Bind(typePair.Source, typePair.Target);
+                        mapper = GetMapper(typePair);
+                    }
+                }
             }
             return mapper;
         }
