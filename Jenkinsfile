@@ -2,17 +2,14 @@ pipeline {
   agent {
     docker {
       image 'mypjb/dotnet-core-sdk:3.1'
-      args '''-v /home/mypjb/.nuget/packages:/root/.nuget/packages
--v /etc/resolv.conf:/etc/resolv.conf'''
+      args '''-v /home/mypjb/.nuget:/root/.nuget'''
     }
 
   }
   stages {
     stage('Build') {
       steps {
-        sh '''dotnet nuget add source ${DOTNET_NUGET_SOURCE} -n azure.org
-
-dotnet build -c Release'''
+        sh '''dotnet build -c Release'''
       }
     }
 
