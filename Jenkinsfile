@@ -2,36 +2,15 @@ pipeline {
   agent {
     docker {
       image 'mypjb/dotnet-core-sdk:3.1'
-      args '''-v /home/mypjb/.nuget:/root/.nuget'''
+      args '-v nuget:/root/.nuget -v release:/root/release'
     }
 
   }
   stages {
     stage('Build') {
       steps {
-        sh '''dotnet build -c Release'''
+        sh 'bash ./build.sh $NUGET_APPKEY $NUGET_SOURCE $RELEASE_DIR/Nuget'
       }
     }
-
-    stage('Test') {
-      steps {
-        sh 'dotnet test -v n'
-      }
-    }
-
-    stage('Create Nuget Package') {
-      steps {
-        sh '''rm -rf ${DOTNET_NUGET_DIR}
-dotnet pack -c Release --no-build --include-source --output ${DOTNET_NUGET_DIR}'''
-      }
-    }
-
-    stage('Publish Nuget Server') {
-      steps {
-        sh '''cd ${DOTNET_NUGET_DIR}
-dotnet nuget push \'*.symbols.nupkg\' -k 111111 -s ${DOTNET_NUGET_PUBLISH_SOURCE}'''
-      }
-    }
-
   }
 }
