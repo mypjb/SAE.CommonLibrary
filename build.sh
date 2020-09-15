@@ -19,4 +19,4 @@ cd $release_dir
 
 dotnet nuget push '*.symbols.nupkg' -k ${app_key} -s ${nuget_source}
 
-done
+echo "build end"
