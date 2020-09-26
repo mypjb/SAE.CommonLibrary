@@ -23,11 +23,6 @@ namespace SAE.CommonLibrary.EventStore.Document.Test
             services.AddMySqlDocument();
         }
 
-        [Fact]
-        public override Task<User> Register()
-        {
-            return base.Register();
-        }
 
     }
 }

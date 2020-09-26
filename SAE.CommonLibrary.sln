@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C5C42E96-17D9-480C-B5DF-B3C2F7080D42}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		build.sh = build.sh
 		EventStore.sql = EventStore.sql
 		global.json = global.json
 		Jenkinsfile = Jenkinsfile

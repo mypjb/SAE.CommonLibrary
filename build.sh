@@ -8,12 +8,12 @@ nuget_source=$2
 
 release_dir=$3
 
-dotnet build -c Release
+dotnet build
 
 dotnet test -v n
 
 
-dotnet pack -c Release --no-build --include-source --output $release_dir
+dotnet pack --no-build --include-source --output $release_dir
 
 cd $release_dir
 
