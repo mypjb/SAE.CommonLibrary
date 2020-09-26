@@ -1,13 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+using SAE.CommonLibrary.Database;
 using SAE.CommonLibrary.Database.Responsibility;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace SAE.CommonLibrary.Database
+namespace Microsoft.Extensions.DependencyInjection
 {
     public static class DatabaseDependencyInjectionExtension
     {
