@@ -1,12 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+﻿using Microsoft.Extensions.DependencyInjection.Extensions;
 using SAE.CommonLibrary.Database;
+using SAE.CommonLibrary.EventStore;
+using SAE.CommonLibrary.EventStore.Document.MySql;
 using SAE.CommonLibrary.EventStore.Snapshot;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace SAE.CommonLibrary.EventStore.Document.MySql
+namespace Microsoft.Extensions.DependencyInjection
 {
     public static class MySqlEventStoreDocumentDependencyInjectionExtension
     {
