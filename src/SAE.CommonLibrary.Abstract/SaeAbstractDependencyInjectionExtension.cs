@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
 using SAE.CommonLibrary.Abstract.Builder;
-using SAE.CommonLibrary.Abstract.Decorator;
 using SAE.CommonLibrary.Abstract.Mediator;
 using SAE.CommonLibrary.Abstract.Responsibility;
+using SAE.CommonLibrary.Extension;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -26,11 +26,10 @@ namespace Microsoft.Extensions.DependencyInjection
 
             foreach (var assembly in assemblies)
             {
-                foreach (var type in assembly.GetTypes()
+                foreach (var type in assembly.GetAssignableFrom(mediatorHandler)
                                              .Where(t => t.IsClass &&
                                                     !t.IsAbstract &&
-                                                    !t.IsInterface &&
-                                                    mediatorHandler.IsAssignableFrom(t)))
+                                                    !t.IsInterface))
                 {
 
                     foreach (var interfaceType in type.GetInterfaces()

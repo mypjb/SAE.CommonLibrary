@@ -11,6 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         private static IServiceCollection AddDBConnectionFactory(this IServiceCollection services)
         {
+            services.AddSaeOptions<DBConnectOptions>("database");
             services.TryAddSingleton<IDBConnectionFactory, DBConnectionFactory>();
             return services;
         }

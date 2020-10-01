@@ -3,6 +3,8 @@ using SAE.CommonLibrary.Database;
 using SAE.CommonLibrary.EventStore;
 using SAE.CommonLibrary.EventStore.Document.MySql;
 using SAE.CommonLibrary.EventStore.Snapshot;
+using System.Linq;
+using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -13,9 +15,14 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="serviceCollection"></param>
         /// <returns></returns>
-        public static IServiceCollection AddMySqlDocument(this IServiceCollection serviceCollection)
+        public static IServiceCollection AddMySqlDocument(this IServiceCollection serviceCollection, params Assembly[] assemblies)
         {
-            serviceCollection.AddDocument()
+            if (assemblies == null || !assemblies.Any())
+            {
+                assemblies = new[] { Assembly.GetCallingAssembly() };
+            }
+
+            serviceCollection.AddDocument(assemblies)
                              .AddMySqlDatabase();
             serviceCollection.TryAddSingleton<ISnapshotStore, MySqlSnapshotStore>();
             serviceCollection.TryAddSingleton<IEventStore, MySqlEventStore>();

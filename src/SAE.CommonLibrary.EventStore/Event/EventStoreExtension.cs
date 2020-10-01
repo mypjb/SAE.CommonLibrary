@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SAE.CommonLibrary.Extension;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -57,6 +58,17 @@ namespace SAE.CommonLibrary.EventStore
             return store.GetVersionAsync(identity)
                         .GetAwaiter()
                         .GetResult();
+        }
+
+        /// <summary>
+        /// get event key
+        /// </summary>
+        /// <param name="event"></param>
+        /// <returns></returns>
+        internal static string GetKey(this IEvent @event)
+        {
+            var type = @event.GetType();
+            return type.GetIdentity();
         }
     }
 }

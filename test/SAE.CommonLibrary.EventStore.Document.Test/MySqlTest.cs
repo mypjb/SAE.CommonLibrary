@@ -19,7 +19,6 @@ namespace SAE.CommonLibrary.EventStore.Document.Test
         }
         protected override void ConfigureServices(IServiceCollection services)
         {
-            services.AddSaeOptions<DBConnectOptions>("mysql");
             services.AddMySqlDocument();
         }
 

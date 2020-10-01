@@ -17,19 +17,45 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// 添加EventStore.Docment默认实现
         /// </summary>
-        /// <param name="serviceCollection"></param>
+        /// <param name="services"></param>
         /// <returns></returns>
-        public static IServiceCollection AddDocument(this IServiceCollection serviceCollection)
+        public static IServiceCollection AddDocument(this IServiceCollection services, params Assembly[] assemblies)
         {
-            if (!serviceCollection.IsRegister<IDocumentStore>())
+            if (assemblies == null || assemblies.Count() == 0)
             {
-                serviceCollection.AddSaeOptions<DocumentOptions>();
-                serviceCollection.TryAddSingleton<IDocumentStore, DefaultDocumentStore>();
-                serviceCollection.TryAddSingleton<IDocumentEvent, DefaultDocumentEvent>();
-                serviceCollection.AddNlogLogger();
+                assemblies = new[] { Assembly.GetCallingAssembly() };
             }
 
-            return serviceCollection;
+            var types = new List<Type>();
+
+            foreach (var assembly in assemblies)
+            {
+                var eventInterface = typeof(IEvent);
+                foreach (var type in assembly.GetAssignableFrom(eventInterface)
+                                             .Where(t => !t.IsInterface &&
+                                                         !t.IsAbstract &&
+                                                         t.IsClass))
+                {
+                    types.Add(type);
+                }
+            }
+
+
+            var provider = new EventMappingProvider(types);
+
+            services.AddSingleton(provider);
+
+            services.TryAddSingleton<IEventMapping, DefaultEventMapping>();
+
+            if (!services.IsRegister<IDocumentStore>())
+            {
+                services.AddSaeOptions<DocumentOptions>();
+                services.TryAddSingleton<IDocumentStore, DefaultDocumentStore>();
+                services.TryAddSingleton<IDocumentEvent, DefaultDocumentEvent>();
+                services.AddNlogLogger();
+            }
+
+            return services;
         }
 
         /// <summary>
@@ -37,9 +63,13 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="serviceCollection"></param>
         /// <returns></returns>
-        public static IServiceCollection AddMemoryDocument(this IServiceCollection serviceCollection)
+        public static IServiceCollection AddMemoryDocument(this IServiceCollection serviceCollection, params Assembly[] assemblies)
         {
-            serviceCollection.AddDocument();
+            if (assemblies == null || assemblies.Count() == 0)
+            {
+                assemblies = new[] { Assembly.GetCallingAssembly() };
+            }
+            serviceCollection.AddDocument(assemblies);
             serviceCollection.TryAddSingleton<ISnapshotStore, MemorySnapshotStore>();
             serviceCollection.TryAddSingleton<IEventStore, MemoryEventStore>();
             return serviceCollection;
@@ -91,7 +121,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 documentTypes.ForEach(s =>
                 {
                     var dtoType = types.FirstOrDefault(t => t.Name.Equals($"{s.Name}Dto", StringComparison.OrdinalIgnoreCase));
-                    if(dtoType==null)return;
+                    if (dtoType == null) return;
                     option.AddMapper(s, dtoType);
                 });
             });

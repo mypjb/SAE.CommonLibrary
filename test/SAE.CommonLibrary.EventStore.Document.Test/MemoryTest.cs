@@ -11,17 +11,14 @@ using Xunit;
 using Xunit.Abstractions;
 namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
 {
-    public abstract class MemoryTest : BaseTest
+    public class MemoryTest : BaseTest
     {
         private readonly IDocumentStore _documentStore;
-        private readonly IMessageQueue _messageQueue;
         private readonly IStorage _storage;
         public const string Password = "111111";
         public MemoryTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
             this._documentStore = this._serviceProvider.GetService<IDocumentStore>();
-
-            this._messageQueue = this._serviceProvider.GetService<IMessageQueue>();
 
             this._storage = this._serviceProvider.GetService<IStorage>();
         }

@@ -63,7 +63,7 @@ namespace SAE.CommonLibrary.Test
         /// <returns></returns>
         protected string GetRandom()
         {
-            return Utils.GenerateId().ToMd5(true);
+            return Utils.GenerateId().ToMd5(true).ToLower();
         }
     }
 }
