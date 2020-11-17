@@ -14,7 +14,7 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
     {
         private readonly string _pluginDir;
         private readonly Type _plutinType;
-        private ConcurrentDictionary<string, IPlugin> _store;
+        private readonly ConcurrentDictionary<string, IPlugin> _store;
         public const string Package = "package.json";
         public PluginManage(PluginOptions pluginOptions)
         {
@@ -30,15 +30,21 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
         {
             if (Directory.Exists(this._pluginDir))
             {
+                Dictionary<string, IPlugin> pairs = new Dictionary<string, IPlugin>();
                 Directory.GetDirectories(this._pluginDir)
                          .ForEach(dir =>
                          {
                              var plugin = this.Read(dir);
                              if (plugin != null)
                              {
-                                 this._store[plugin.Name] = plugin;
+                                 pairs[plugin.Name] = plugin;
                              }
                          });
+
+                foreach (var kv in pairs.OrderByDescending(kv => kv.Value.Order))
+                {
+                    this._store[kv.Key] = kv.Value;
+                }
             }
         }
 
@@ -60,7 +66,7 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
                 if (proxyPlugin.Status)
                 {
                     var assembly = this.Load(proxyPlugin);
-                    
+
                     var pluginType = assembly.GetTypes()
                                              .FirstOrDefault(
                                                 s => this._plutinType.IsAssignableFrom(s));

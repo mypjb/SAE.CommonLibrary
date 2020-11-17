@@ -30,6 +30,12 @@ namespace SAE.CommonLibrary.Extension
         };
         private static int DefaultTimeout { get; } = 1000 * 30;
 
+        /// <summary>
+        /// 使用记录器
+        /// </summary>
+        /// <param name="httpClient"></param>
+        /// <param name="record"></param>
+        /// <returns></returns>
         public static HttpClient UseRecord(this HttpClient httpClient,Action<string> record)
         {
             InfoRecord = record;
@@ -277,19 +283,38 @@ namespace SAE.CommonLibrary.Extension
 
             return httpClient;
         }
+
         /// <summary>
-        /// 使用<paramref name="proxy"/>作为中间件
+        /// 使用<paramref name="handler"/>作为中间件
         /// </summary>
         /// <param name="httpClient"></param>
-        /// <param name="proxy"></param>
+        /// <param name="handler"></param>
         /// <returns></returns>
-        public static HttpClient Use(this HttpClient httpClient, Func<Func<Task<HttpResponseMessage>>, Task<HttpResponseMessage>> proxy)
+        public static HttpClient Use(this HttpClient httpClient, Action<HttpRequestMessage> requestProxy)
         {
             var handlerFieldInfo = Utils.Reflection.GetFieldInfo<HttpMessageInvoker>("_handler", BindingFlags.Instance | BindingFlags.NonPublic);
 
             var httpMessageHandler = (HttpMessageHandler)handlerFieldInfo.GetValue(httpClient);
 
-            handlerFieldInfo.SetValue(httpClient, new ProxyHandler(proxy, httpMessageHandler));
+            handlerFieldInfo.SetValue(httpClient, new ProxyHandler(requestProxy, httpMessageHandler));
+
+            return httpClient;
+        }
+
+
+        /// <summary>
+        /// 使用<paramref name="proxy"/>作为响应中间件
+        /// </summary>
+        /// <param name="httpClient"></param>
+        /// <param name="proxy"></param>
+        /// <returns></returns>
+        public static HttpClient Use(this HttpClient httpClient, Func<Func<Task<HttpResponseMessage>>, Task<HttpResponseMessage>> responseProxy)
+        {
+            var handlerFieldInfo = Utils.Reflection.GetFieldInfo<HttpMessageInvoker>("_handler", BindingFlags.Instance | BindingFlags.NonPublic);
+
+            var httpMessageHandler = (HttpMessageHandler)handlerFieldInfo.GetValue(httpClient);
+
+            handlerFieldInfo.SetValue(httpClient, new ProxyHandler(responseProxy, httpMessageHandler));
 
             return httpClient;
         }
@@ -421,26 +446,36 @@ namespace SAE.CommonLibrary.Extension
 
         private class ProxyHandler : DelegatingHandler
         {
-            private readonly Func<Func<Task<HttpResponseMessage>>, Task<HttpResponseMessage>> _proxy;
-
+            private readonly Func<Func<Task<HttpResponseMessage>>, Task<HttpResponseMessage>> _responseProxy;
+            private readonly Action<HttpRequestMessage> _requestProxy;
             public ProxyHandler(HttpMessageHandler innerHandler) : base(innerHandler)
             {
             }
 
+            public ProxyHandler(Action<HttpRequestMessage> requestProxy, HttpMessageHandler innerHandler) : this(innerHandler)
+            {
+                this._requestProxy = requestProxy;
+            }
+
             public ProxyHandler(Func<Func<Task<HttpResponseMessage>>, Task<HttpResponseMessage>> proxy, HttpMessageHandler innerHandler) : this(innerHandler)
             {
-                this._proxy = proxy;
+                this._responseProxy = proxy;
             }
 
             protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
             {
-                if (this._proxy == null)
+                if (this._requestProxy != null)
+                {
+                    this._requestProxy.Invoke(request);
+                }
+
+                if (this._responseProxy == null)
                 {
                     return base.SendAsync(request, cancellationToken);
                 }
                 else
                 {
-                    return this._proxy.Invoke(() => base.SendAsync(request, cancellationToken));
+                    return this._responseProxy.Invoke(() => base.SendAsync(request, cancellationToken));
                 }
             }
         }

@@ -37,6 +37,7 @@ namespace SAE.CommonLibrary.Plugin
         public string Version { get => plugin.Version; set => plugin.Version = value; }
         public string Path { get => plugin.Path; set => plugin.Path = value; }
         public bool Status { get => plugin.Status; set => plugin.Status = value; }
+        public int Order { get => plugin.Order; set => plugin.Order = value; }
 
         internal Assembly Register()
         {
@@ -63,6 +64,7 @@ namespace SAE.CommonLibrary.Plugin
             plugin.Description = this.Version;
             plugin.Status = this.Status;
             plugin.Path = this.Path;
+            plugin.Order = this.Order;
             this.plugin = plugin;
         }
     }

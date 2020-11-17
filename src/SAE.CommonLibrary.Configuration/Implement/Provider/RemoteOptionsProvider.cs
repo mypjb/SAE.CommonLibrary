@@ -43,6 +43,7 @@ namespace SAE.CommonLibrary.Configuration.Implement
             for (var i = 0; i < this._options.Urls.Length; i++)
             {
                 var url = this._options.Urls[i];
+                url = $"{url}{(url.IndexOf('?') == -1 ? "?" : "&")}{this._options.VersionParameter}={this.Option?.Version}";
                 try
                 {
                     var responseMessage = this._clinet.GetAsync(url)
@@ -51,8 +52,8 @@ namespace SAE.CommonLibrary.Configuration.Implement
                     responseMessage.EnsureSuccessStatusCode();
 
                     var remoteOption = responseMessage.AsAsync<RemoteOption>()
-                                                  .GetAwaiter()
-                                                  .GetResult();
+                                                      .GetAwaiter()
+                                                      .GetResult();
 
 
                     if (arg == null)
@@ -104,6 +105,7 @@ namespace SAE.CommonLibrary.Configuration.Implement
             {
                 var json = jProperty.ToString();
                 context.SetOption(json.ToObject(context.Type));
+                context.Provider = this;
             }
         }
 
@@ -149,6 +151,7 @@ namespace SAE.CommonLibrary.Configuration.Implement
         public RemoteOptions()
         {
             this.UpdateFrequency = 10;
+            this.client = new HttpClient();
         }
         private int updateFrequency;
 
@@ -180,6 +183,31 @@ namespace SAE.CommonLibrary.Configuration.Implement
                   .Then(s => s.Any(), nameof(Urls))
                   .True();
         }
+
+        public string VersionParameter { get; set; } = "version";
+
+        private HttpClient client;
+
+        /// <summary>
+        /// 请求端
+        /// </summary>
+        public HttpClient Client
+        {
+            get => this.client;
+            set
+            {
+                if (value == null) return;
+
+                this.client = value;
+
+                this.OnChangeClient(this.client);
+            }
+        }
+
+        protected virtual void OnChangeClient(HttpClient httpClient)
+        {
+
+        }
     }
     public class RemotePostData
     {
@@ -193,6 +221,7 @@ namespace SAE.CommonLibrary.Configuration.Implement
     }
     public class RemoteOption
     {
+       
         /// <summary>
         /// 版本号
         /// </summary>

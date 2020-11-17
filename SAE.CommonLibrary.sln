@@ -105,6 +105,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAE.CommonLibrary.Database"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAE.CommonLibrary.Mediator.Orleans.Product", "test\SAE.CommonLibrary.Mediator.Orleans.Product\SAE.CommonLibrary.Mediator.Orleans.Product.csproj", "{CF33EF98-28A7-4458-8F7E-E4361DC6B0EB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.Configuration.Microsoft", "src\SAE.CommonLibrary.Configuration.Microsoft\SAE.CommonLibrary.Configuration.Microsoft.csproj", "{E9D3FB5A-5599-4364-9F40-E021EF41657A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -275,6 +277,10 @@ Global
 		{CF33EF98-28A7-4458-8F7E-E4361DC6B0EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF33EF98-28A7-4458-8F7E-E4361DC6B0EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF33EF98-28A7-4458-8F7E-E4361DC6B0EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9D3FB5A-5599-4364-9F40-E021EF41657A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9D3FB5A-5599-4364-9F40-E021EF41657A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9D3FB5A-5599-4364-9F40-E021EF41657A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9D3FB5A-5599-4364-9F40-E021EF41657A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -322,6 +328,7 @@ Global
 		{A34A974A-A834-4F44-9AD2-7496F4637DA3} = {78157883-8166-46DB-9754-E093FE2A3936}
 		{0E65AC9C-3485-48D2-A896-8E29C2B8F0EE} = {78157883-8166-46DB-9754-E093FE2A3936}
 		{CF33EF98-28A7-4458-8F7E-E4361DC6B0EB} = {8AD43B5B-ED55-4712-B865-1E6E1D7B19FE}
+		{E9D3FB5A-5599-4364-9F40-E021EF41657A} = {78157883-8166-46DB-9754-E093FE2A3936}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2FF66E70-E062-4202-A1AD-A821991FEA65}

@@ -14,7 +14,7 @@ namespace SAE.CommonLibrary.Plugin
         public string Description { get; set; }
         public string Version { get; set; }
         public string Path { get; set; }
-
+        public int Order { get; set; }
         public bool Status { get; set; }
     }
 
@@ -30,6 +30,6 @@ namespace SAE.CommonLibrary.Plugin
         public string Version { get; set; }
         public string Path { get; set; }
         public bool Status { get; set; }
-
+        public int Order { get; set; }
     }
 }

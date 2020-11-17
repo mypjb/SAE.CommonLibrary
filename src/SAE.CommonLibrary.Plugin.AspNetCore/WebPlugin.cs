@@ -14,6 +14,7 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
         string IPlugin.Version { get; set; }
         string IPlugin.Path { get; set; }
         bool IPlugin.Status { get; set; }
+        int IPlugin.Order { get; set; }
 
         public abstract void PluginConfigureServices(IServiceCollection services);
 
