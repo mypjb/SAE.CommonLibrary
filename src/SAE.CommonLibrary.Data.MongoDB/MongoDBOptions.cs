@@ -6,6 +6,7 @@ namespace SAE.CommonLibrary.Data.MongoDB
 {
     public class MongoDBOptions
     {
+        public const string Option = "mongodb";
         public MongoDBOptions()
         {
 

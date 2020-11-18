@@ -10,6 +10,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
 {
     public class RemoteBitmapEndpointOptions
     {
+        public const string Option = "authorize";
         public string Url { get; set; }
     }
     public class RemoteBitmapEndpointProvider : IBitmapEndpointProvider

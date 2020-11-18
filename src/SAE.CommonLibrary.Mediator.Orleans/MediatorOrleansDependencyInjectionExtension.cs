@@ -11,7 +11,7 @@ using System.Text;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class SaeMediatorOrleansDependencyInjectionExtension
+    public static class MediatorOrleansDependencyInjectionExtension
     {
         /// <summary>
         /// 
@@ -22,7 +22,9 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             builder.Services.AddNlogLogger()
                             .AddMicrosoftLogging()
-                            .AddSaeOptions<OrleansOptions>()
+                            .AddOptions<OrleansOptions>(OrleansOptions.Option)
+                            .Bind()
+                            .Services
                             .TryAddSingleton<IGrainCommandHandler, GrainCommandHandler>();
             return builder;
         }
@@ -55,8 +57,9 @@ namespace Microsoft.Extensions.DependencyInjection
                 }
             });
 
-            builder.Services.AddSaeOptions<OrleansOptions>()
-                            .SaeConfigure<OrleansOptions>(options =>
+            builder.Services.AddOptions<OrleansOptions>(OrleansOptions.Option)
+                            .Bind()
+                            .PostConfigure(options =>
                             {
                                 foreach (var kv in identitys)
                                     options.GrainNames.TryAdd(kv.Key, kv.Value);

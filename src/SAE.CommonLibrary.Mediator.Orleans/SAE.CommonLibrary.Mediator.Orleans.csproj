@@ -31,7 +31,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SAE.CommonLibrary.Abstract\SAE.CommonLibrary.Abstract.csproj" />
-    <ProjectReference Include="..\SAE.CommonLibrary.Configuration\SAE.CommonLibrary.Configuration.csproj" />
+    <ProjectReference Include="..\SAE.CommonLibrary.Configuration.Microsoft\SAE.CommonLibrary.Configuration.Microsoft.csproj" />
     <ProjectReference Include="..\SAE.CommonLibrary.Logging.Microsoft\SAE.CommonLibrary.Logging.Microsoft.csproj" />
     <ProjectReference Include="..\SAE.CommonLibrary.Logging.NLog\SAE.CommonLibrary.Logging.NLog.csproj" />
   </ItemGroup>

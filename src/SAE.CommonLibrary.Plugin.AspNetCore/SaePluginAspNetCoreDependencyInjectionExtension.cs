@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -20,7 +21,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddPluginManage(this IServiceCollection services)
         {
-            return services.AddPluginManage(null);
+            return services.AddPluginManage(new PluginOptions());
         }
 
         /// <summary>
@@ -28,17 +29,23 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="serviceDescriptors"></param>
         /// <returns></returns>
-        public static IServiceCollection AddPluginManage(this IServiceCollection services, string path)
+        public static IServiceCollection AddPluginManage(this IServiceCollection services, IConfiguration configuration)
+        {
+            return services.AddPluginManage(configuration.GetValue<PluginOptions>(PluginOptions.Option));
+        }
+
+        /// <summary>
+        /// 添加插件管理(web)
+        /// </summary>
+        /// <param name="serviceDescriptors"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddPluginManage(this IServiceCollection services, PluginOptions options)
         {
             services.AddNlogLogger();
 
             if (!services.IsRegister<IPluginManage>())
             {
-                var options = new PluginOptions
-                {
-                    Path = path
-                };
-                IPluginManage pluginManage = new WebPluginManage(options);
+                IPluginManage pluginManage = new WebPluginManage(options ??new PluginOptions());
 
                 services.AddSingleton(s => pluginManage);
 

@@ -1,11 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Primitives;
 using SAE.CommonLibrary.Extension;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,7 +26,7 @@ namespace SAE.CommonLibrary.Configuration
 
     public class SAEConfigurationProvider : ConfigurationProvider
     {
-        public const string VersionHeader = "Config-Version";
+        public const string ConfigUrl = "Config-Url";
         private readonly HttpClient _client;
         private readonly CancellationTokenSource _cancellationToken;
         private readonly TimeSpan? _pollInterval;
@@ -61,7 +59,7 @@ namespace SAE.CommonLibrary.Configuration
 
             IEnumerable<string> values;
 
-            if (rep.Headers.TryGetValues(VersionHeader, out values))
+            if (rep.Headers.TryGetValues(ConfigUrl, out values))
             {
                 this.url = values.First();
             }

@@ -10,6 +10,7 @@ namespace SAE.CommonLibrary.Mediator.Orleans
 {
     public class OrleansOptions
     {
+        public const string Option = "Orleans";
         public OrleansOptions()
         {
             this.GrainNames = new Dictionary<string, Assembly>();

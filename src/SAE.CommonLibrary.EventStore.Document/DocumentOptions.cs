@@ -6,6 +6,7 @@ namespace SAE.CommonLibrary.EventStore.Document
 {
     public class DocumentOptions
     {
+        public const string Option = "document";
         public DocumentOptions()
         {
             this.SnapshotInterval = 5;

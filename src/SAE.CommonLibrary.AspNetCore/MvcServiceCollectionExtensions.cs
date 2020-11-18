@@ -30,7 +30,7 @@ namespace Microsoft.Extensions.DependencyInjection
             this.Services = services;
         }
     }
-    public static class SAEMvcServiceCollectionExtensions
+    public static class MvcServiceCollectionExtensions
     {
         /// <summary>
         /// 拦截响应将其重置为<seealso cref="ResponseResult"/>
@@ -186,7 +186,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static BitmapAuthorizationBuilder AddRemoteBitmapEndpointProvider(this BitmapAuthorizationBuilder builder)
         {
-            builder.Services.AddSaeOptions<RemoteBitmapEndpointOptions>(Constants.OptionName);
+            builder.Services.AddOptions<RemoteBitmapEndpointOptions>(RemoteBitmapEndpointOptions.Option)
+                            .Bind();
+
             builder.Services.TryAddSingleton<IBitmapEndpointProvider, RemoteBitmapEndpointProvider>();
             return builder;
         }

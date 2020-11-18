@@ -26,7 +26,6 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.8" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SAE.CommonLibrary.Configuration\SAE.CommonLibrary.Configuration.csproj" />
     <ProjectReference Include="..\SAE.CommonLibrary.Logging.NLog\SAE.CommonLibrary.Logging.NLog.csproj" />
     <ProjectReference Include="..\SAE.CommonLibrary.Logging\SAE.CommonLibrary.Logging.csproj" />
     <ProjectReference Include="..\SAE.CommonLibrary\SAE.CommonLibrary.csproj" />

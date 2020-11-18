@@ -30,7 +30,6 @@ namespace SAE.CommonLibrary.AspNetCore
         /// 超级管理员
         /// </summary>
         public const string Administrator = "admin";
-        public const string OptionName = "authorize";
         /// <summary>
         /// 字符编码
         /// </summary>

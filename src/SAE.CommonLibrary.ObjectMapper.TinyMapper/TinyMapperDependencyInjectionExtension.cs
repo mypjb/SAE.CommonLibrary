@@ -5,7 +5,7 @@ using System;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class SAETinyMapperDependencyInjectionExtension
+    public static class TinyMapperDependencyInjectionExtension
     {
         /// <summary>
         /// register tiny implement 

@@ -8,6 +8,7 @@ namespace SAE.CommonLibrary.Logging.Nlog
 {
     public class LoggingOptions
     {
+        public const string Option = "logging";
         public LoggingOptions()
         {
             this.Document= XDocument.Parse(@"<?xml version=""1.0"" encoding=""utf-8"" ?>

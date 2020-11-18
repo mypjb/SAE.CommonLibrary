@@ -93,7 +93,10 @@ namespace SAE.CommonLibrary.Plugin.Test
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddNlogLogger();
-            services.AddPluginManage("../../../../Plugins/dest");
+            services.AddPluginManage(new PluginOptions
+            {
+                Path= "../../../../Plugins/dest"
+            });
             services.PostConfigureAll<JwtBearerOptions>(options =>
             {
                 if (this._handler.Invoke() == null)

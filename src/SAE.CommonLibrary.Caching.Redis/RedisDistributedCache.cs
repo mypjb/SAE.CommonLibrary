@@ -1,4 +1,5 @@
-﻿using SAE.CommonLibrary.Configuration;
+﻿using Microsoft.Extensions.Options;
+using SAE.CommonLibrary.Configuration;
 using SAE.CommonLibrary.Extension;
 using SAE.CommonLibrary.Logging;
 using StackExchange.Redis;
@@ -19,11 +20,11 @@ namespace SAE.CommonLibrary.Caching.Redis
         public RedisDistributedCache(IOptionsMonitor<RedisOptions> monitor, ILogging<RedisDistributedCache> logging)
         {
             this._logging = logging;
-            this.Configure(monitor.Options);
+            this.Configure(monitor.CurrentValue);
             monitor.OnChange(this.Configure);
         }
 
-        private Task Configure(RedisOptions options)
+        private void Configure(RedisOptions options)
         {
             var connectMessage = $"connect:'{options.Connection}',db:'{options.DB}'";
             if (this.ConnectionMultiplexer == null)
@@ -40,7 +41,6 @@ namespace SAE.CommonLibrary.Caching.Redis
 
             this.Database = this.ConnectionMultiplexer.GetDatabase(options.DB);
 
-            return Task.CompletedTask;
         }
 
         private async Task DatabaseOperation(Func<IDatabase, Task> databaseOperation, [CallerMemberName] string methodNmae = null)

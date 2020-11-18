@@ -7,7 +7,7 @@ namespace Microsoft.Extensions.DependencyInjection
     /// <summary>
     /// 日志扩展
     /// </summary>
-    public static class SaeNLogDependencyInjectionExtension
+    public static class NLogDependencyInjectionExtension
     {
         /// <summary>
         /// 添加Log默认实现
@@ -18,7 +18,8 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             if (!serviceCollection.IsRegister<ILoggingFactory>())
             {
-                serviceCollection.AddSaeOptions<LoggingOptions>("logging");
+                serviceCollection.AddOptions<LoggingOptions>(LoggingOptions.Option)
+                                 .Bind();
                 serviceCollection.TryAddSingleton<ILoggingFactory, LoggingFactory>();
                 serviceCollection.TryAddSingleton(typeof(ILogging<>), typeof(Logging<>));
             }

@@ -9,9 +9,12 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class DatabaseDependencyInjectionExtension
     {
+        internal const string MYSQL = "mysql";
         private static IServiceCollection AddDBConnectionFactory(this IServiceCollection services)
         {
-            services.AddSaeOptions<DBConnectOptions>("database");
+            services.AddOptions<DBConnectOptions>(DBConnectOptions.Option)
+                    .Bind();
+
             services.TryAddSingleton<IDBConnectionFactory, DBConnectionFactory>();
             return services;
         }
@@ -38,7 +41,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddMySqlDatabase(this IServiceCollection services)
         {
-            return services.AddDatabase("MySql", context =>
+            return services.AddDatabase(MYSQL, context =>
             {
                 return Task.FromResult<IDbConnection>(new MySqlConnector.MySqlConnection(context.Options.ConnectionString));
             });

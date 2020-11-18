@@ -6,7 +6,7 @@ namespace Microsoft.Extensions.DependencyInjection
     /// <summary>
     /// 日志扩展
     /// </summary>
-    public static class SaeMicrosoftLogggingDependencyInjectionExtension
+    public static class MicrosoftLogggingDependencyInjectionExtension
     {
         /// <summary>
         /// 添加对<seealso cref=" Microsoft.Extensions.Logging"/>的代理实现

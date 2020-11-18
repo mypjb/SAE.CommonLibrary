@@ -25,8 +25,7 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
 
         protected override void ConfigureServicesBefore(IServiceCollection services)
         {
-            services.AddDefaultConfiguration()
-                    .AddDataPersistenceService()
+            services.AddDataPersistenceService()
                     .AddMemoryMessageQueue();
             base.ConfigureServicesBefore(services);
         }

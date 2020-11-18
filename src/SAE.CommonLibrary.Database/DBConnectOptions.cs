@@ -6,6 +6,7 @@ namespace SAE.CommonLibrary.Database
 {
     public class DBConnectOptions
     {
+        public const string Option = "database";
         /// <summary>
         /// connection name
         /// </summary>

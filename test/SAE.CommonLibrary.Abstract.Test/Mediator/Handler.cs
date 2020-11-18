@@ -1,7 +1,4 @@
 ﻿using SAE.CommonLibrary.Abstract.Mediator;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Abstract.Test.Mediator

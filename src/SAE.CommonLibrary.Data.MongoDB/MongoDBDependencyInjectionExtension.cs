@@ -8,7 +8,7 @@ namespace Microsoft.Extensions.DependencyInjection
     /// <summary>
     /// 
     /// </summary>
-    public static class SaeMongoDBDependencyInjectionExtension
+    public static class MongoDBDependencyInjectionExtension
     {
         /// <summary>
         /// 添加Storage
@@ -21,7 +21,8 @@ namespace Microsoft.Extensions.DependencyInjection
             serviceCollection.TryAddSingleton<IMetadataProvider, MetadataProvider>();
             serviceCollection.TryAddSingleton<IStorage, MongoDBStorage>();
             serviceCollection.AddNlogLogger();
-            serviceCollection.AddSaeOptions<MongoDBOptions>("mongodb");
+            serviceCollection.AddOptions<MongoDBOptions>(MongoDBOptions.Option)
+                             .Bind();
             return new StorageOptions(serviceCollection);
         }
 

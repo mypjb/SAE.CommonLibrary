@@ -3,7 +3,7 @@ using SAE.CommonLibrary.Caching.Redis;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class SaeRedisDependencyInjectionExtension
+    public static class RedisDependencyInjectionExtension
     {
         /// <summary>
         /// 添加默认配置项
@@ -12,7 +12,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddRedisCache(this IServiceCollection serviceDescriptors)
         {
-            serviceDescriptors.AddSaeOptions<RedisOptions>("redis");
+            serviceDescriptors.AddOptions<RedisOptions>(RedisOptions.Option)
+                              .Bind();
             serviceDescriptors.AddNlogLogger();
             serviceDescriptors.AddSingleton<IDistributedCache, RedisDistributedCache>();
             

@@ -23,7 +23,8 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\SAE.CommonLibrary.Configuration\SAE.CommonLibrary.Configuration.csproj" />
+    <ProjectReference Include="..\SAE.CommonLibrary.Configuration.Microsoft\SAE.CommonLibrary.Configuration.Microsoft.csproj" />
+    <ProjectReference Include="..\SAE.CommonLibrary.DependencyInjection\SAE.CommonLibrary.DependencyInjection.csproj" />
     <ProjectReference Include="..\SAE.CommonLibrary.Logging\SAE.CommonLibrary.Logging.csproj" />
   </ItemGroup>
 </Project>

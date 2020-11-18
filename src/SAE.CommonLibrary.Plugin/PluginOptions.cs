@@ -7,6 +7,7 @@ namespace SAE.CommonLibrary.Plugin
     public class PluginOptions
     {
         public const string DefaultPath = "plugins";
+        public const string Option = "plugin";
         public PluginOptions()
         {
             this.path = DefaultPath;

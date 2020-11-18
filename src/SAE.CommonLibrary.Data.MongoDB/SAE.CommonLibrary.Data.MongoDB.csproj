@@ -24,7 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SAE.CommonLibrary.Configuration\SAE.CommonLibrary.Configuration.csproj" />
     <ProjectReference Include="..\SAE.CommonLibrary.Data\SAE.CommonLibrary.Data.csproj" />
     <ProjectReference Include="..\SAE.CommonLibrary.Logging.NLog\SAE.CommonLibrary.Logging.NLog.csproj" />
   </ItemGroup>

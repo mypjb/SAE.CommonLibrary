@@ -49,7 +49,9 @@ namespace Microsoft.Extensions.DependencyInjection
 
             if (!services.IsRegister<IDocumentStore>())
             {
-                services.AddSaeOptions<DocumentOptions>();
+                services.AddOptions<DocumentOptions>(DocumentOptions.Option)
+                        .Bind();
+
                 services.TryAddSingleton<IDocumentStore, DefaultDocumentStore>();
                 services.TryAddSingleton<IDocumentEvent, DefaultDocumentEvent>();
                 services.AddNlogLogger();

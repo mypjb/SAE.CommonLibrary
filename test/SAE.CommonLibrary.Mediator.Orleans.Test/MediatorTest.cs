@@ -32,7 +32,7 @@ namespace SAE.CommonLibrary.Mediator.Orleans.Test
             //Thread.Sleep(1000 * 300);
             services.AddMediator()
                     .AddMediatorOrleansClient();
-            services.SaeConfigure<OrleansOptions>(options =>
+            services.PostConfigure<OrleansOptions>(options =>
             {
                 options.ClusterId = "dev";
             });
@@ -47,7 +47,7 @@ namespace SAE.CommonLibrary.Mediator.Orleans.Test
             services.AddMediator(assemblies)
                     .AddMediatorOrleansProxy();
 
-            services.SaeConfigure<OrleansOptions>(options =>
+            services.PostConfigure<OrleansOptions>(options =>
             {
                 options.ClusterId = "dev";
             }); ;
