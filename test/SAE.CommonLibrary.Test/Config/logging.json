@@ -1,25 +1,21 @@
 ﻿{
-  "Document": {
-    "nlog": {
-      "autoReload": "true",
-      "internalLogLevel": "Warn",
-      "internalLogFile": "logs/internal-nlog.log",
-      "targets": {
-        "target": {
-          "type": "File",
-          "name": "FileTarget",
-          "fileName": "logs/${shortdate}.log",
-          "layout": "${level}: ${logger}[${threadid}] ${longdate}${newline}        ${message} ${exception:message,stacktrace}",
-          "MaxArchiveFiles": "10"
-        }
-      },
-      "rules": {
-        "logger": {
-          "name": "*",
-          "minlevel": "Trace",
-          "writeTo": "FileTarget"
-        }
+  "Nlog": {
+    "autoReload": "true",
+    "internalLogLevel": "Warn",
+    "internalLogFile": "logs/internal-nlog.log",
+    "targets": {
+      "FileTarget": {
+        "type": "File",
+        "fileName": "logs/${shortdate}.log",
+        "layout": "${level}: ${logger}[${threadid}] ${longdate}${newline}        ${message} ${exception:message,stacktrace}",
+        "MaxArchiveFiles": "10"
       }
-    }
+    },
+    "rules": [{
+        "logger": "*",
+        "minlevel": "Trace",
+        "writeTo": "FileTarget"
+      }
+    ]
   }
 }

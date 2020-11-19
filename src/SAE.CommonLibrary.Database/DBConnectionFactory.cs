@@ -1,4 +1,5 @@
-﻿using SAE.CommonLibrary.Abstract.Responsibility;
+﻿using Microsoft.Extensions.Options;
+using SAE.CommonLibrary.Abstract.Responsibility;
 using SAE.CommonLibrary.Database.Responsibility;
 using SAE.CommonLibrary.Extension;
 using System;
@@ -11,14 +12,15 @@ namespace SAE.CommonLibrary.Database
 {
     public class DBConnectionFactory : IDBConnectionFactory
     {
-        private readonly IEnumerable<DBConnectOptions> _options;
+        private IEnumerable<DBConnectOptions> _options;
 
         private readonly IResponsibility<DatabaseResponsibilityContext> _responsibility;
 
-        public DBConnectionFactory(IEnumerable<DBConnectOptions> options,
+        public DBConnectionFactory(IOptionsMonitor<List<DBConnectOptions>> optionsMonitor,
                IResponsibilityProvider<DatabaseResponsibilityContext> provider)
         {
-            this._options = options;
+            this._options = optionsMonitor.CurrentValue;
+            optionsMonitor.OnChange(_ => this._options = _);
             this._responsibility = provider.Root;
         }
 

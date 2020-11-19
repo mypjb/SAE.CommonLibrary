@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using NLog.Config;
+using NLog.Extensions.Logging;
 using SAE.CommonLibrary.Configuration;
 using System.Threading.Tasks;
 
@@ -10,22 +12,14 @@ namespace SAE.CommonLibrary.Logging.Nlog
     /// </summary>
     public class LoggingFactory : ILoggingFactory
     {
-        private readonly IOptionsMonitor<LoggingOptions> _monitor;
-
-        public LoggingFactory(IOptionsMonitor<LoggingOptions> monitor)
+        public LoggingFactory(IConfiguration configuration)
         {
-            this.Config(monitor.CurrentValue);
-            this._monitor = monitor;
-            this._monitor.OnChange(this.Config);
+            this.Config(configuration.GetSection(LoggingOptions.Option));
         } 
 
-        private void Config(LoggingOptions options)
+        private void Config(IConfigurationSection section)
         {
-            if (options.Document != null)
-            {
-                var configuration = new XmlLoggingConfiguration(options.Document.CreateReader());
-                NLog.LogManager.Configuration = configuration;
-            }
+            NLog.LogManager.Configuration = new NLogLoggingConfiguration(section);
         }
 
         /// <summary>

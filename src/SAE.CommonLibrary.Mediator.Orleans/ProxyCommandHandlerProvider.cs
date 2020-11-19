@@ -13,6 +13,7 @@ using org.apache.zookeeper;
 using Microsoft.Extensions.Logging;
 using SAE.CommonLibrary.Logging;
 using SAE.CommonLibrary.Extension;
+using Microsoft.Extensions.Options;
 
 namespace SAE.CommonLibrary.Mediator.Orleans
 {
@@ -28,7 +29,7 @@ namespace SAE.CommonLibrary.Mediator.Orleans
 
         private readonly ILogging _logging;
 
-        public ProxyCommandHandlerProvider(OrleansOptions options,
+        public ProxyCommandHandlerProvider(IOptions<OrleansOptions> options,
                                            ILogging<ProxyCommandHandlerProvider> logging,
                                            IHostEnvironment environment,
                                            IServiceProvider serviceProvider,
@@ -37,7 +38,7 @@ namespace SAE.CommonLibrary.Mediator.Orleans
         {
             this._mediator = mediator;
             this._dictionary = new ConcurrentDictionary<string, IClusterClient>();
-            this._options = options;
+            this._options = options.Value;
             this._logging = logging;
             this._environment = environment;
             this._serviceProvider = serviceProvider;

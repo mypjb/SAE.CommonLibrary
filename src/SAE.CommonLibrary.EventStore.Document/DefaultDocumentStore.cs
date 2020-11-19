@@ -1,4 +1,5 @@
-﻿using SAE.CommonLibrary.EventStore.Serialize;
+﻿using Microsoft.Extensions.Options;
+using SAE.CommonLibrary.EventStore.Serialize;
 using SAE.CommonLibrary.EventStore.Snapshot;
 using SAE.CommonLibrary.Extension;
 using System;
@@ -29,12 +30,12 @@ namespace SAE.CommonLibrary.EventStore.Document
         public DefaultDocumentStore(ISnapshotStore snapshot,
                                     IEventStore eventStore,
                                     IEnumerable<IDocumentEvent> documentEvents,
-                                    DocumentOptions options)
+                                    IOptions<DocumentOptions> options)
         {
             this._snapshot = snapshot;
             this._eventStore = eventStore;
             this._documentEvents = documentEvents;
-            this._options = options;
+            this._options = options.Value;
         }
 
         /// <summary>

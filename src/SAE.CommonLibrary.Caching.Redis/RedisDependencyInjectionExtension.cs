@@ -1,5 +1,6 @@
 ﻿using SAE.CommonLibrary.Caching;
 using SAE.CommonLibrary.Caching.Redis;
+using System.Collections.Generic;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

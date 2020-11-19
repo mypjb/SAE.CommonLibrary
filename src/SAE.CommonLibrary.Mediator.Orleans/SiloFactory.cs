@@ -16,6 +16,7 @@ using SAE.CommonLibrary.Abstract.Mediator;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
 using org.apache.zookeeper;
+using Microsoft.Extensions.Options;
 
 namespace SAE.CommonLibrary.Mediator.Orleans
 {
@@ -26,7 +27,7 @@ namespace SAE.CommonLibrary.Mediator.Orleans
         private readonly ILoggingFactory _loggingFactory;
         private readonly IMediator _mediator;
 
-        public SiloFactory(OrleansOptions options,
+        public SiloFactory(IOptions<OrleansOptions> options,
                            ILogging<SiloFactory> logging,
                            ILoggingFactory loggingFactory,
                            IHostEnvironment hostingEnvironment,
@@ -39,11 +40,11 @@ namespace SAE.CommonLibrary.Mediator.Orleans
             this._mediator = mediator;
             if (hostingEnvironment.EnvironmentName == Environments.Development)
             {
-                this.DevelopmentConfiguration(options).GetAwaiter().GetResult();
+                this.DevelopmentConfiguration(options.Value).GetAwaiter().GetResult();
             }
             else
             {
-                this.ProductionConfiguration(options).GetAwaiter().GetResult();
+                this.ProductionConfiguration(options.Value).GetAwaiter().GetResult();
             }
 
         }

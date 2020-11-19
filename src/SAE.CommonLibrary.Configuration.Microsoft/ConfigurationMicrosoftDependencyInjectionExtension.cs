@@ -21,13 +21,13 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSingleton<IOptionsChangeTokenSource<TOptions>>(provider =>
             {
                 var configuration = provider.GetService<IConfiguration>();
-                return new ConfigurationChangeTokenSource<TOptions>(optionsBuilder.Name, configuration.GetSection(optionsBuilder.Name));
+                return new ConfigurationChangeTokenSource<TOptions>(Options.Options.DefaultName, configuration.GetSection(optionsBuilder.Name));
             });
 
             services.AddSingleton<IConfigureOptions<TOptions>>(provider =>
             {
                 var configuration = provider.GetService<IConfiguration>();
-                return new NamedConfigureFromConfigurationOptions<TOptions>(optionsBuilder.Name, configuration.GetSection(optionsBuilder.Name), _ => { });
+                return new NamedConfigureFromConfigurationOptions<TOptions>(Options.Options.DefaultName, configuration.GetSection(optionsBuilder.Name), _ => { });
             });
             return optionsBuilder;
         }

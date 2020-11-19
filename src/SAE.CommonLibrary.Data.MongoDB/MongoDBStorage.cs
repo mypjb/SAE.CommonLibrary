@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using SAE.CommonLibrary.Logging;
@@ -30,15 +31,15 @@ namespace SAE.CommonLibrary.Data.MongoDB
         /// </summary>
         /// <param name="config"></param>
         /// <param name="log"></param>
-        public MongoDBStorage(MongoDBOptions config,
+        public MongoDBStorage(IOptions<MongoDBOptions> options,
                               ILogging<MongoDBStorage> logging,
                               IMetadataProvider descriptionProvider)
         {
             this._logging = logging;
             this._descriptionProvider = descriptionProvider;
-            this._logging.Debug($"Connection={config.Connection},DB={config.DB}");
-            var client = new MongoClient(new MongoUrl(config.Connection));
-            this._database = client.GetDatabase(config.DB);
+            this._logging.Debug($"Connection={options.Value.Connection},DB={options.Value.DB}");
+            var client = new MongoClient(new MongoUrl(options.Value.Connection));
+            this._database = client.GetDatabase(options.Value.DB);
         }
         #endregion
         

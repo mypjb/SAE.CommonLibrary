@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using SAE.CommonLibrary.Abstract.Mediator;
 using SAE.CommonLibrary.EventStore.Document;
 using SAE.CommonLibrary.Mediator.Orleans.Orders;
@@ -20,7 +21,6 @@ namespace SAE.CommonLibrary.Mediator.Orleans.Test
         public MediatorTest(ITestOutputHelper output) : base(output)
         {
             _mediator = this._serviceProvider.GetService<IMediator>();
-
         }
 
 
@@ -41,9 +41,7 @@ namespace SAE.CommonLibrary.Mediator.Orleans.Test
         private void Init(params Assembly[] assemblies)
         {
             IServiceCollection services = new ServiceCollection();
-
-            this.ConfigureEnvironment(services);
-
+            
             services.AddMediator(assemblies)
                     .AddMediatorOrleansProxy();
 
@@ -52,8 +50,7 @@ namespace SAE.CommonLibrary.Mediator.Orleans.Test
                 options.ClusterId = "dev";
             }); ;
 
-            var serviceProvider = services.BuildAutofacProvider()
-                                          .UseMediatorOrleansSilo();
+            var serviceProvider = this.Build(services).UseMediatorOrleansSilo();
         }
 
         protected override void Configure(IServiceProvider provider)
@@ -61,7 +58,7 @@ namespace SAE.CommonLibrary.Mediator.Orleans.Test
             base.Configure(provider);
         }
 
-        [Fact]
+        //[Fact]
         public async Task Send()
         {
             var command = new OrderCommand();
@@ -76,7 +73,7 @@ namespace SAE.CommonLibrary.Mediator.Orleans.Test
         //    this.WriteLine(product);
         //}
 
-        [Fact]
+        //[Fact]
         public async Task SendFindCommand()
         {
             var command = new Command.Delete<Order>

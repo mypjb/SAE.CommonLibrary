@@ -4,7 +4,7 @@ using SAE.CommonLibrary.Database.Responsibility;
 using System;
 using System.Data;
 using System.Threading.Tasks;
-
+using System.Collections.Generic;
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class DatabaseDependencyInjectionExtension
@@ -12,7 +12,7 @@ namespace Microsoft.Extensions.DependencyInjection
         internal const string MYSQL = "mysql";
         private static IServiceCollection AddDBConnectionFactory(this IServiceCollection services)
         {
-            services.AddOptions<DBConnectOptions>(DBConnectOptions.Option)
+            services.AddOptions<List<DBConnectOptions>>(DBConnectOptions.Option)
                     .Bind();
 
             services.TryAddSingleton<IDBConnectionFactory, DBConnectionFactory>();

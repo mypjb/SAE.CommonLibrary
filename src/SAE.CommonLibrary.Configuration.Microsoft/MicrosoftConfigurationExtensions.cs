@@ -16,40 +16,40 @@ namespace Microsoft.Extensions.Configuration
         internal const string FileSeparator = ".";
         internal const string JsonSuffix = ".json";
         /// <summary>
-        /// Add SAE configuration source
+        /// Add remote configuration source
         /// </summary>
         /// <param name="configurationBuilder"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static IConfigurationBuilder AddSAEConfiguration(this IConfigurationBuilder configurationBuilder, SAEOptions options)
+        public static IConfigurationBuilder AddRemoteSource(this IConfigurationBuilder configurationBuilder, SAEOptions options)
         {
             configurationBuilder.Add(new SAEConfigurationSource(options));
 
             return configurationBuilder;
         }
         /// <summary>
-        /// Add SAE configuration source
+        /// Add remote configuration source
         /// </summary>
         /// <param name="configurationBuilder"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static IConfigurationBuilder AddSAEConfiguration(this IConfigurationBuilder configurationBuilder, Action<SAEOptions> action)
+        public static IConfigurationBuilder AddRemoteSource(this IConfigurationBuilder configurationBuilder, Action<SAEOptions> action)
         {
             var option = new SAEOptions();
 
             action.Invoke(option);
 
-            return configurationBuilder.AddSAEConfiguration(option);
+            return configurationBuilder.AddRemoteSource(option);
         }
         /// <summary>
-        /// Add SAE configuration source
+        /// Add remote configuration source
         /// </summary>
         /// <param name="configurationBuilder"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static IConfigurationBuilder AddSAEConfiguration(this IConfigurationBuilder configurationBuilder, string url)
+        public static IConfigurationBuilder AddRemoteSource(this IConfigurationBuilder configurationBuilder, string url)
         {
-            return configurationBuilder.AddSAEConfiguration(option =>
+            return configurationBuilder.AddRemoteSource(option =>
             {
                 option.Url = url;
             });

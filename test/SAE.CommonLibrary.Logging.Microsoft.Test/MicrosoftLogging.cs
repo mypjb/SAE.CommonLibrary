@@ -50,15 +50,15 @@ namespace SAE.CommonLibrary.Logging.Test
         [Fact]
         public void Info()
         {
-            this._logger.LogInformation("��¼һ����ϸ��Ϣ");
-            this._logger.LogInformation("���{0},����{1},�ҽ���{2}����,-----{3}", "pjb", "cwj", 24, "...");
+            this._logger.LogInformation("this is info output");
+            this._logger.LogInformation("1.{0},2.{1},3.{2},-----4.{3}", "pjb", "cwj", 24, "...");
             this.Check();
         }
         [Fact]
         public void Debug()
         {
-            _logger.LogDebug("��¼һ��������Ϣ");
-            this._logger.LogDebug("��¼һ��{0}��Ϣ{1}", "����", "---");
+            _logger.LogDebug("this is debug output");
+            this._logger.LogDebug("1.{0}2.{1}", "pjb", "---");
             this.Check();
         }
         [Fact]
@@ -71,22 +71,22 @@ namespace SAE.CommonLibrary.Logging.Test
             }
             catch (Exception error)
             {
-                _logger.LogError(error, "��¼һ���쳣��Ϣ");
+                _logger.LogError(error, "this is error output");
             }
             this.Check();
         }
         [Fact]
         public void Critical()
         {
-            this._logger.LogError(new Exception("����һ���Զ�����쳣��¼"), "错误异常");
-            this._logger.LogError("�����ַ�ƴ��");
-            _logger.LogCritical("��¼һ������������Ϣ");
+            this._logger.LogError(new Exception("this is custom error"), "错误异常");
+            this._logger.LogError("this is error output");
+            _logger.LogCritical("this is Critical output");
             this.Check();
         }
         [Fact]
         public void Warn()
         {
-            _logger.LogError("��¼һ��������Ϣ");
+            _logger.LogError("this is Warn output");
             this.Check();
         }
     }

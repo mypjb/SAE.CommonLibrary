@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using SAE.CommonLibrary.Logging;
+using SAE.CommonLibrary.Logging.Nlog;
 using SAE.CommonLibrary.Test;
 using System;
 using Xunit;
@@ -29,20 +30,19 @@ namespace SAE.CommonLibrary.Logging.Test
         [InlineData(Level.Trace)]
         public void Write(Level type)
         {
-            _logging.Write($"���ԡ�{type}�����͵���Ϣ", type);
-            this._logging.Write($"���ԡ�{type}�����͵���Ϣ", type);
+            _logging.Write($"this level is {type}", type);
         }
         [Fact]
         public void Info()
         {
-            _logging.Info("��¼һ����ϸ��Ϣ");
-            this._logging.Info("���{0},����{1},�ҽ���{2}����,-----{3}", "pjb", "cwj", 24, "...");
+            this._logging.Info("this is info output");
+            this._logging.Info("1.{0},2.{1},3.{2},-----4.{3}", "pjb", "cwj", 24, "...");
         }
         [Fact]
         public void Debug()
         {
-            _logging.Debug("��¼һ��������Ϣ");
-            this._logging.Debug("��¼һ��{0}��Ϣ{1}", "����", "---");
+            _logging.Debug("this is debug output");
+            this._logging.Debug("1.{0}2.{1}", "pjb", "---");
         }
         [Fact]
         public void Error()
@@ -54,21 +54,21 @@ namespace SAE.CommonLibrary.Logging.Test
             }
             catch (Exception error)
             {
-                _logging.Error(error, "��¼һ���쳣��Ϣ");
+                _logging.Error(error, "this is error output");
             }
 
         }
         [Fact]
         public void Fatal()
         {
-            this._logging.Error(new Exception("����һ���Զ�����쳣��¼"));
-            this._logging.Error("�����ַ�ƴ��");
-            _logging.Fatal("��¼һ������������Ϣ");
+            this._logging.Error(new Exception("this is custom error"),"custom error");
+            this._logging.Error("this is error output");
+            this._logging.Fatal("this is Fatal output");
         }
         [Fact]
         public void Warn()
         {
-            _logging.Warn("��¼һ��������Ϣ");
+            this._logging.Warn("this is Warn output");
         }
     }
 }

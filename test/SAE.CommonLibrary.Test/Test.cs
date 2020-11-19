@@ -41,12 +41,8 @@ namespace SAE.CommonLibrary.Test
     <logger name=""*"" minlevel=""Debug"" writeTo=""FileTarget"" />
   </rules>
 </nlog>");
-            var config = new LoggingOptions
-            {
-                Document = document
-            };
-
-            this.WriteLine(config);
+            
+            this.WriteLine(document);
         }
         [Fact]
         public void XmlToJson()
