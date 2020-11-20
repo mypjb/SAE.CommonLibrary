@@ -71,7 +71,7 @@ namespace Microsoft.Extensions.Configuration
         {
             var configuration = configurationBuilder.Build();
 
-            var env = configuration.GetValue<string>(HostDefaults.EnvironmentKey);
+            var env = configuration.GetSection(HostDefaults.EnvironmentKey).Get<string>() ?? string.Empty;
 
             path = path.IsNotNullOrWhiteSpace() ? DefaultConfigDirectory : path;
 

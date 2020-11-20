@@ -13,7 +13,7 @@ using SAE.CommonLibrary.Extension;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class SaePluginAspNetCoreDependencyInjectionExtension
+    public static class PluginAspNetCoreDependencyInjectionExtension
     {
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddPluginManage(this IServiceCollection services, IConfiguration configuration)
         {
-            return services.AddPluginManage(configuration.GetValue<PluginOptions>(PluginOptions.Option));
+            return services.AddPluginManage(configuration.GetSection(PluginOptions.Option).Get<PluginOptions>());
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             if (!services.IsRegister<IPluginManage>())
             {
-                IPluginManage pluginManage = new WebPluginManage(options ??new PluginOptions());
+                IPluginManage pluginManage = new WebPluginManage(options ?? new PluginOptions());
 
                 services.AddSingleton(s => pluginManage);
 
@@ -76,23 +76,35 @@ namespace Microsoft.Extensions.DependencyInjection
 
             var pluginManage = builder.ApplicationServices.GetService<IPluginManage>();
 
+            if (pluginManage.Plugins.Any())
+            {
+                logging.Info($"plugins count:{pluginManage.Plugins.Count()}");
+                logging.Info($"plugins list:{pluginManage.Plugins.Select(s => s.Name).Aggregate((a, b) => $"{a},{b}")}");
+            }
+            else
+            {
+                logging.Warn("Not loading any plugins");
+            }
+            
+
             foreach (WebPlugin webPlugin in pluginManage.Plugins.Where(s => s.Status).OfType<WebPlugin>())
             {
                 IPlugin plugin = webPlugin;
 
-                logging.Info($"start load '{plugin.Name}' : {plugin.ToJsonString()}");
+                logging.Info($"start plugin load '{plugin.Name}' : {plugin.ToJsonString()}");
 
                 try
                 {
                     webPlugin.PluginConfigure(builder);
 
-                    logging.Info($"end load '{plugin.Name}'");
-                }catch(Exception ex)
+                    logging.Info($"plugin '{plugin.Name}' load  complete");
+                }
+                catch (Exception ex)
                 {
                     logging.Error(ex, $"load '{plugin.Name}' failure");
                     throw ex;
                 }
-                
+
             }
             return builder;
         }

@@ -18,11 +18,11 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
                 { HostDefaults.EnvironmentKey,env }
             }).AddJsonFileDirectory().Build();
 
-            var applicationName= root.GetValue<string>(ApplicationiName);
+            var applicationName= root.GetSection(ApplicationiName).Get<string>();
             Xunit.Assert.Equal(applicationName, env);
             if (env.Equals("Development"))
             {
-                var custom = root.GetValue<string>("custom");
+                var custom = root.GetSection("Custom").Get<string>();
                 Xunit.Assert.Equal("MSSQL", custom);
             }
         }

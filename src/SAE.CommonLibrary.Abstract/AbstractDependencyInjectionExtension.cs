@@ -9,7 +9,7 @@ using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class SAEAbstractDependencyInjectionExtension
+    public static class AbstractDependencyInjectionExtension
     {
 
         /// <summary>
