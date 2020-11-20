@@ -15,22 +15,34 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static OptionsBuilder<TOptions> Bind<TOptions>(this OptionsBuilder<TOptions> optionsBuilder) where TOptions : class
         {
-            var name = optionsBuilder.Name;
+            return optionsBuilder.Bind(Options.Options.DefaultName);
+        }
+
+        /// <summary>
+        /// Use <paramref name="key"/> bind <see cref="IConfiguration"/>
+        /// </summary>
+        /// <typeparam name="TOptions"></typeparam>
+        /// <param name="optionsBuilder"></param>
+        /// <param name="key"><see cref="IConfiguration"/> section</param>
+        /// <returns></returns>
+        public static OptionsBuilder<TOptions> Bind<TOptions>(this OptionsBuilder<TOptions> optionsBuilder,string key) where TOptions : class
+        {
             var services = optionsBuilder.Services;
             services.AddOptions();
             services.AddSingleton<IOptionsChangeTokenSource<TOptions>>(provider =>
             {
                 var configuration = provider.GetService<IConfiguration>();
-                return new ConfigurationChangeTokenSource<TOptions>(Options.Options.DefaultName, configuration.GetSection(optionsBuilder.Name));
+                return new ConfigurationChangeTokenSource<TOptions>(optionsBuilder.Name, configuration.GetSection(key));
             });
 
             services.AddSingleton<IConfigureOptions<TOptions>>(provider =>
             {
                 var configuration = provider.GetService<IConfiguration>();
-                return new NamedConfigureFromConfigurationOptions<TOptions>(Options.Options.DefaultName, configuration.GetSection(optionsBuilder.Name), _ => { });
+                return new NamedConfigureFromConfigurationOptions<TOptions>(optionsBuilder.Name, configuration.GetSection(key), _ => { });
             });
             return optionsBuilder;
         }
-        
+
+
     }
 }

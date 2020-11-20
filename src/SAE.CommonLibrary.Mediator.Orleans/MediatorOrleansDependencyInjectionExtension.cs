@@ -22,8 +22,8 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             builder.Services.AddNlogLogger()
                             .AddMicrosoftLogging()
-                            .AddOptions<OrleansOptions>(OrleansOptions.Option)
-                            .Bind()
+                            .AddOptions<OrleansOptions>()
+                            .Bind(OrleansOptions.Option)
                             .Services
                             .TryAddSingleton<IGrainCommandHandler, GrainCommandHandler>();
             return builder;
@@ -57,8 +57,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 }
             });
 
-            builder.Services.AddOptions<OrleansOptions>(OrleansOptions.Option)
-                            .Bind()
+            builder.Services.AddOptions<OrleansOptions>()
+                            .Bind(OrleansOptions.Option)
                             .PostConfigure(options =>
                             {
                                 foreach (var kv in identitys)

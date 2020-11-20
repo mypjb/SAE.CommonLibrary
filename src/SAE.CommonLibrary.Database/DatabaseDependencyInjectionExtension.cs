@@ -12,8 +12,8 @@ namespace Microsoft.Extensions.DependencyInjection
         internal const string MYSQL = "mysql";
         private static IServiceCollection AddDBConnectionFactory(this IServiceCollection services)
         {
-            services.AddOptions<List<DBConnectOptions>>(DBConnectOptions.Option)
-                    .Bind();
+            services.AddOptions<List<DBConnectOptions>>()
+                    .Bind(DBConnectOptions.Option);
 
             services.TryAddSingleton<IDBConnectionFactory, DBConnectionFactory>();
             return services;

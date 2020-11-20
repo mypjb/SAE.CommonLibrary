@@ -18,8 +18,8 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             if (!serviceCollection.IsRegister<ILoggingFactory>())
             {
-                serviceCollection.AddOptions<LoggingOptions>(LoggingOptions.Option)
-                                 .Bind();
+                serviceCollection.AddOptions<LoggingOptions>()
+                                 .Bind(LoggingOptions.Option);
                 serviceCollection.TryAddSingleton<ILoggingFactory, LoggingFactory>();
                 serviceCollection.TryAddSingleton(typeof(ILogging<>), typeof(Logging<>));
             }

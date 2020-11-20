@@ -21,8 +21,8 @@ namespace Microsoft.Extensions.DependencyInjection
             serviceCollection.TryAddSingleton<IMetadataProvider, MetadataProvider>();
             serviceCollection.TryAddSingleton<IStorage, MongoDBStorage>();
             serviceCollection.AddNlogLogger();
-            serviceCollection.AddOptions<MongoDBOptions>(MongoDBOptions.Option)
-                             .Bind();
+            serviceCollection.AddOptions<MongoDBOptions>()
+                             .Bind(MongoDBOptions.Option);
             return new StorageOptions(serviceCollection);
         }
 

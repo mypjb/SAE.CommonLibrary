@@ -2,7 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Version>1.0.1.0</Version>
+    <Version>1.0.1.1</Version>
+    <PackageIcon>nuget.png</PackageIcon>
+    <AssemblyVersion>1.0.1.1</AssemblyVersion>
+    <FileVersion>1.0.1.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,6 +18,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SAE.CommonLibrary\SAE.CommonLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\nuget.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

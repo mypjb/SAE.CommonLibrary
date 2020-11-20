@@ -23,9 +23,7 @@ namespace Microsoft.Extensions.Configuration
         /// <returns></returns>
         public static IConfigurationBuilder AddRemoteSource(this IConfigurationBuilder configurationBuilder, SAEOptions options)
         {
-            configurationBuilder.Add(new SAEConfigurationSource(options));
-
-            return configurationBuilder;
+            return configurationBuilder.Add(new SAEConfigurationSource(options));
         }
         /// <summary>
         /// Add remote configuration source

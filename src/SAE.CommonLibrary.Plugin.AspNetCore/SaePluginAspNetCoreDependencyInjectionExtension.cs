@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Extensions.Configuration;
+using SAE.CommonLibrary.Logging;
+using SAE.CommonLibrary.Extension;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -70,10 +72,27 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IApplicationBuilder UsePluginManage(this IApplicationBuilder builder)
         {
+            var logging = builder.ApplicationServices.GetService<ILogging<WebPluginManage>>();
+
             var pluginManage = builder.ApplicationServices.GetService<IPluginManage>();
-            foreach (WebPlugin plugin in pluginManage.Plugins.Where(s => s.Status).OfType<WebPlugin>())
+
+            foreach (WebPlugin webPlugin in pluginManage.Plugins.Where(s => s.Status).OfType<WebPlugin>())
             {
-                plugin.PluginConfigure(builder);
+                IPlugin plugin = webPlugin;
+
+                logging.Info($"start load '{plugin.Name}' : {plugin.ToJsonString()}");
+
+                try
+                {
+                    webPlugin.PluginConfigure(builder);
+
+                    logging.Info($"end load '{plugin.Name}'");
+                }catch(Exception ex)
+                {
+                    logging.Error(ex, $"load '{plugin.Name}' failure");
+                    throw ex;
+                }
+                
             }
             return builder;
         }

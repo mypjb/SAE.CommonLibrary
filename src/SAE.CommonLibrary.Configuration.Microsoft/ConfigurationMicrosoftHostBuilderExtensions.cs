@@ -15,11 +15,10 @@ namespace Microsoft.Extensions.Hosting
         /// <returns></returns>
         public static IHostBuilder ConfigureRemoteSource(this IHostBuilder builder, Action<SAEOptions> action)
         {
-            builder.ConfigureHostConfiguration(conf =>
+            return builder.ConfigureHostConfiguration(conf =>
             {
                 conf.AddRemoteSource(action);
-            });
-            return builder;
+            }); ;
         }
         /// <summary>
         /// Add remote configuration source
@@ -29,11 +28,10 @@ namespace Microsoft.Extensions.Hosting
         /// <returns></returns>
         public static IHostBuilder ConfigureRemoteSource(this IHostBuilder builder, SAEOptions options)
         {
-            builder.ConfigureHostConfiguration(conf =>
+            return builder.ConfigureHostConfiguration(conf =>
             {
                 conf.AddRemoteSource(options);
             });
-            return builder;
         }
         /// <summary>
         /// Add remote configuration source
@@ -43,11 +41,10 @@ namespace Microsoft.Extensions.Hosting
         /// <returns></returns>
         public static IHostBuilder ConfigureRemoteSource(this IHostBuilder builder, string url)
         {
-            builder.ConfigureHostConfiguration(conf =>
+            return builder.ConfigureHostConfiguration(conf =>
             {
                 conf.AddRemoteSource(url);
             });
-            return builder;
         }
         /// <summary>
         /// Add <seealso cref="MicrosoftConfigurationExtensions.DefaultConfigDirectory"/>  directory As a configuration source
@@ -66,11 +63,10 @@ namespace Microsoft.Extensions.Hosting
         /// <returns></returns>
         public static IHostBuilder ConfigureJsonFileDirectorySource(this IHostBuilder builder,string path)
         {
-            builder.ConfigureHostConfiguration(conf =>
+            return builder.ConfigureHostConfiguration(conf =>
             {
                 conf.AddJsonFileDirectory(path);
             });
-            return builder;
         }
 
 

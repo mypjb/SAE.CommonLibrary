@@ -49,8 +49,8 @@ namespace Microsoft.Extensions.DependencyInjection
 
             if (!services.IsRegister<IDocumentStore>())
             {
-                services.AddOptions<DocumentOptions>(DocumentOptions.Option)
-                        .Bind();
+                services.AddOptions<DocumentOptions>()
+                        .Bind(DocumentOptions.Option);
 
                 services.TryAddSingleton<IDocumentStore, DefaultDocumentStore>();
                 services.TryAddSingleton<IDocumentEvent, DefaultDocumentEvent>();

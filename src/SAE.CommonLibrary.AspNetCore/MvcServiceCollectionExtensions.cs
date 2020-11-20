@@ -186,8 +186,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static BitmapAuthorizationBuilder AddRemoteBitmapEndpointProvider(this BitmapAuthorizationBuilder builder)
         {
-            builder.Services.AddOptions<RemoteBitmapEndpointOptions>(RemoteBitmapEndpointOptions.Option)
-                            .Bind();
+            builder.Services.AddOptions<RemoteBitmapEndpointOptions>()
+                            .Bind(RemoteBitmapEndpointOptions.Option);
 
             builder.Services.TryAddSingleton<IBitmapEndpointProvider, RemoteBitmapEndpointProvider>();
             return builder;
