@@ -91,7 +91,7 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 IPlugin plugin = webPlugin;
 
-                logging.Info($"start plugin load '{plugin.Name}' : {plugin.ToJsonString()}");
+                logging.Info($"start plugin load '{plugin.Name}':{webPlugin}");
 
                 try
                 {

@@ -19,5 +19,12 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
         public abstract void PluginConfigureServices(IServiceCollection services);
 
         public abstract void PluginConfigure(IApplicationBuilder app);
+
+        public override string ToString()
+        {
+            IPlugin plugin = this;
+
+            return $"{{\r\n\t{nameof(plugin.Name)}:{plugin.Name},\r\n\t{nameof(plugin.Version)}:{plugin.Version},\r\n\t{nameof(plugin.Status)}:{plugin.Status},\r\n\t{nameof(plugin.Order)}:{plugin.Order},\r\n\t{nameof(plugin.Description)}:{plugin.Description}}}";
+        }
     }
 }
