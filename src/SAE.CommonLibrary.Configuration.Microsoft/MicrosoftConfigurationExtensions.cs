@@ -97,6 +97,8 @@ namespace Microsoft.Extensions.Configuration
                 }
             }
 
+            configurationBuilder.AddInMemoryCollection(new Dictionary<string, string> { { Constants.ConfigDirectory, path } });
+
             return configurationBuilder;
         }
     }
