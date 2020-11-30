@@ -53,7 +53,7 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
                     errorOutput = new ErrorOutput(StatusCodes.ResourcesNotExist);
                 }
             }
-            else if(context.Result is JsonResult)
+            else if (context.Result is JsonResult)
             {
                 var jsonResult = context.Result as JsonResult;
                 if (jsonResult.Value != null &&
@@ -61,7 +61,7 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
                 {
                     errorOutput = (ErrorOutput)jsonResult.Value;
                 }
-                else
+                else if (jsonResult.Value == null)
                 {
                     errorOutput = new ErrorOutput(StatusCodes.ResourcesNotExist);
                 }
