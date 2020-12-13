@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.NewtonsoftJson;
 using SAE.CommonLibrary.Extension;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Configuration
 {
-    public class SAEConfigurationSource : IConfigurationSource
+    public class SAEConfigurationSource : NewtonsoftJsonStreamConfigurationSource
     {
         private readonly SAEOptions options;
 
@@ -17,36 +19,33 @@ namespace SAE.CommonLibrary.Configuration
         {
             this.options = options;
         }
-        public IConfigurationProvider Build(IConfigurationBuilder builder)
+        public override IConfigurationProvider Build(IConfigurationBuilder builder)
         {
-            return new SAEConfigurationProvider(options);
+            return new SAEConfigurationProvider(options, this);
         }
     }
 
-
-    public class SAEConfigurationProvider : ConfigurationProvider
+    public class SAEConfigurationProvider : NewtonsoftJsonStreamConfigurationProvider
     {
-        public const string ConfigUrl = "Config-Url";
+        public const string ConfigUrl = "Config-Next";
         private readonly HttpClient _client;
         private readonly CancellationTokenSource _cancellationToken;
         private readonly TimeSpan? _pollInterval;
         private string url;
         private Task pollTask;
+        private readonly bool _load;
 
-        public SAEConfigurationProvider(SAEOptions options)
+        public SAEConfigurationProvider(SAEOptions options, NewtonsoftJsonStreamConfigurationSource source) : base(source)
         {
             this._client = options.Client;
             this._cancellationToken = new CancellationTokenSource();
             this._pollInterval = options.PollInterval;
             this.url = options.Url;
+            this.LoadAsync().GetAwaiter().GetResult();
+            this._load = true;
         }
 
-        public override void Load()
-        {
-            this.LoadAsync().ConfigureAwait(false).GetAwaiter().GetResult();
-        }
-
-        public async Task LoadAsync()
+        protected async Task LoadAsync()
         {
             var rep = await this._client.GetAsync(this.url);
 
@@ -64,23 +63,18 @@ namespace SAE.CommonLibrary.Configuration
                 this.url = values.First();
             }
 
-            var data = await rep.AsAsync<Dictionary<string, string>>();
+            this.Source.Stream = await rep.Content.ReadAsStreamAsync();
 
-            this.SetData(data);
+            if (this._load)
+            {
+                this.Load(this.Source.Stream);
 
+                this.OnReload();
+            }
+            
             if (this.pollTask == null && this._pollInterval.HasValue)
             {
                 this.pollTask = this.PollForSecretChangesAsync();
-            }
-
-        }
-
-        private void SetData(Dictionary<string, string> data)
-        {
-            this.Data = data;
-            if (this.pollTask != null)
-            {
-                this.OnReload();
             }
         }
 
