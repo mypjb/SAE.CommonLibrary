@@ -16,16 +16,17 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
         }
         public int Order { get; set; }
 
-        public async Task OnExceptionAsync(ExceptionContext context)
+        public Task OnExceptionAsync(ExceptionContext context)
         {
             if (context.Exception == null || context.ExceptionHandled)
             {
-                return;
+                return Task.CompletedTask;
             }
 
             var logging= context.HttpContext.RequestServices.GetService<ILogging<SaeException>>();
             ///记录错误
             logging.Error(context.Exception, context.Exception.Message);
+            return Task.CompletedTask;
         }
     }
 }

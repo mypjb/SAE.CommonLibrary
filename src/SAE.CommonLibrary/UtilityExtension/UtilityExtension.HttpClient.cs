@@ -53,9 +53,9 @@ namespace SAE.CommonLibrary.Extension
             clone.Content = request.Content;
             clone.Version = request.Version;
 
-            foreach (KeyValuePair<string, object> prop in request.Properties)
+            foreach (KeyValuePair<string, object> prop in request.Options)
             {
-                clone.Properties.Add(prop);
+                clone.Options.TryAdd(prop.Key, prop.Value);
             }
 
             foreach (KeyValuePair<string, IEnumerable<string>> header in request.Headers)
@@ -234,7 +234,7 @@ namespace SAE.CommonLibrary.Extension
         public static HttpRequestMessage AddProperty(this HttpRequestMessage request, IDictionary<string, object> Properties)
         {
             foreach (var p in Properties)
-                request.Properties[p.Key] = p.Value;
+                request.Options.Append(p);
             return request;
         }
 

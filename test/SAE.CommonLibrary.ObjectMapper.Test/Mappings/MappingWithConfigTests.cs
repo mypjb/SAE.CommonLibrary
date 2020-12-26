@@ -98,8 +98,8 @@ namespace SAE.CommonLibrary.ObjectMapper.Test.Mappings
 
             var actual = _tinyMapper.Map<Target1>(source);
 
-            XAssert.Equal(false, actual.Bool);
-            XAssert.Equal(null, actual.MyString);
+            XAssert.False(actual.Bool);
+            XAssert.Null(actual.MyString);
             XAssert.Equal(source.Byte, actual.Byte);
             XAssert.Equal(0, actual.MyInt);
             XAssert.Null(actual.TargetItem);

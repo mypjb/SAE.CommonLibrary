@@ -35,7 +35,7 @@ namespace SAE.CommonLibrary.ObjectMapper.Test.Mappers.MappingMembers
             var mappingMemberBuilder = new MappingMemberBuilder(new MappingBuilderConfigStub(bindingConfig));
 
             List<MappingMemberPath> members = mappingMemberBuilder.Build(new TypePair(typeof(SourceWithRecursion), typeof(TargetWithRecursion)));
-            XAssert.Equal(1, members.Count);
+            XAssert.Single(members);
         }
 
 
