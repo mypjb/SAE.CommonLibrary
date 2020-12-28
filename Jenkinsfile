@@ -2,7 +2,7 @@ pipeline {
   agent {
     docker {
       image 'mypjb/dotnet-core-sdk:5.0'
-      args '-v nuget:/root/.nuget -v release:/root/release'
+      args '-v nuget:/root/.nuget -v release:/root/release --net=$DOCKER_NETWORK'
     }
 
   }
