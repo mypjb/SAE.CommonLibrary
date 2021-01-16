@@ -12,7 +12,7 @@ using Xunit.Abstractions;
 
 namespace SAE.CommonLibrary.Cache.Test
 {
-    public abstract  class MemoryCacheTest : BaseTest
+    public class MemoryCacheTest : BaseTest
     {
         private readonly IDistributedCache _distributedCache;
 
