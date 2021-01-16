@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 
 namespace SAE.CommonLibrary.Data.Test
 {
-    public abstract class MongoDBStorageTest : BaseTest
+    public class MongoDBStorageTest : BaseTest
     {
         private readonly IStorage _storage;
 

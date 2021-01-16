@@ -11,7 +11,7 @@ using Xunit;
 using Xunit.Abstractions;
 namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
 {
-    public abstract class MemoryTest : BaseTest
+    public class MemoryTest : BaseTest
     {
         private readonly IDocumentStore _documentStore;
         private readonly IStorage _storage;
