@@ -100,7 +100,7 @@ namespace SAE.CommonLibrary.EventStore
         ///  将内部事件还原为外部事件
         /// </summary>
         /// <returns></returns>
-        protected IEnumerator<WrapperEvent> Recover()
+        protected IEnumerator<IEvent> Recover()
         {
             //var logging = ServiceFacade.GetService<ILogging<EventStream>>();
 
@@ -115,8 +115,7 @@ namespace SAE.CommonLibrary.EventStore
             //    eventList.Add(@event);
             //});
 
-            return this._store.Select(s => s as WrapperEvent)
-                              .GetEnumerator();
+            return this._store.GetEnumerator();
         }
 
         /// <summary>
