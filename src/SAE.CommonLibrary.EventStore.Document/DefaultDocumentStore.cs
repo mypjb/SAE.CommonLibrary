@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Options;
+using SAE.CommonLibrary.EventStore.Event;
 using SAE.CommonLibrary.EventStore.Serialize;
 using SAE.CommonLibrary.EventStore.Snapshot;
 using SAE.CommonLibrary.Extension;
+using SAE.CommonLibrary.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +21,8 @@ namespace SAE.CommonLibrary.EventStore.Document
         private readonly ISerializer _serializer = SerializerProvider.Current;
         private readonly IEventStore _eventStore;
         private readonly IEnumerable<IDocumentEvent> _documentEvents;
+        private readonly IEventMapping _mapping;
+        private readonly ILogging<DefaultDocumentStore> _logging;
         private readonly DocumentOptions _options;
 
         /// <summary>
@@ -30,11 +34,15 @@ namespace SAE.CommonLibrary.EventStore.Document
         public DefaultDocumentStore(ISnapshotStore snapshot,
                                     IEventStore eventStore,
                                     IEnumerable<IDocumentEvent> documentEvents,
-                                    IOptions<DocumentOptions> options)
+                                    IOptions<DocumentOptions> options,
+                                    IEventMapping mapping,
+                                    ILogging<DefaultDocumentStore> logging)
         {
             this._snapshot = snapshot;
             this._eventStore = eventStore;
             this._documentEvents = documentEvents;
+            this._mapping = mapping;
+            this._logging = logging;
             this._options = options.Value;
         }
 
@@ -66,8 +74,11 @@ namespace SAE.CommonLibrary.EventStore.Document
                 document = this._serializer.Deserialize<TDocument>(snapshot.Data);
             }
             //重放事件
-            foreach (IEvent @event in eventStream)
+            foreach (WrapperEvent wrapperEvent in eventStream)
             {
+                var type = wrapperEvent.GetEventType();
+                this._logging.Debug($"Recover type:'{type}',:'{wrapperEvent.Event}',raw:'{wrapperEvent.ToJsonString()}'");
+                var @event = (IEvent)SerializerProvider.Current.Deserialize(wrapperEvent.Event, type);
                 document.Mutate(@event);
             }
             document.Version = eventStream.Version <= 0 ? snapshot.Version : eventStream.Version;

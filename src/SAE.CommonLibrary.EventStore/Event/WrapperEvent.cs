@@ -8,13 +8,13 @@ namespace SAE.CommonLibrary.EventStore.Event
     /// <summary>
     /// 内部事件包装对象
     /// </summary>
-    internal class InternalEvent:IEvent
+    public class WrapperEvent:IEvent
     {
-        public InternalEvent()
+        public WrapperEvent()
         {
 
         }
-        public InternalEvent(IEvent @event)
+        public WrapperEvent(IEvent @event)
         {
             Event = SerializerProvider.Current
                                       .Serialize(@event);

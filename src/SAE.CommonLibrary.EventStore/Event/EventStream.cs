@@ -25,7 +25,7 @@ namespace SAE.CommonLibrary.EventStore
         {
             var serializer = SerializerProvider.Current;
 
-            this._store = serializer.Deserialize<List<InternalEvent>>(eventJsons)
+            this._store = serializer.Deserialize<List<WrapperEvent>>(eventJsons)
                                     .Cast<IEvent>()
                                     .ToList();
         }
@@ -56,7 +56,7 @@ namespace SAE.CommonLibrary.EventStore
             {
                 foreach (var @event in events)
                 {
-                    this._store.Add(new InternalEvent(@event));
+                    this._store.Add(new WrapperEvent(@event));
                 }
             }
 
@@ -100,22 +100,23 @@ namespace SAE.CommonLibrary.EventStore
         ///  将内部事件还原为外部事件
         /// </summary>
         /// <returns></returns>
-        protected IEnumerator<IEvent> Recover()
+        protected IEnumerator<WrapperEvent> Recover()
         {
-            var logging = ServiceFacade.GetService<ILogging<EventStream>>();
+            //var logging = ServiceFacade.GetService<ILogging<EventStream>>();
 
-            List<IEvent> eventList = new List<IEvent>();
+            //List<IEvent> eventList = new List<IEvent>();
 
-            this._store.ForEach(e =>
-            {
-                var internalEvent = e as InternalEvent;
-                var type = internalEvent.GetEventType();
-                logging.Debug($"Recover type:'{type}',:'{internalEvent.Event}',raw:'{internalEvent.ToJsonString()}'");
-                var @event = (IEvent)SerializerProvider.Current.Deserialize(internalEvent.Event, type);
-                eventList.Add(@event);
-            });
+            //this._store.ForEach(e =>
+            //{
+            //    var internalEvent = e as WrapperEvent;
+            //    var type = internalEvent.GetEventType();
+            //    logging.Debug($"Recover type:'{type}',:'{internalEvent.Event}',raw:'{internalEvent.ToJsonString()}'");
+            //    var @event = (IEvent)SerializerProvider.Current.Deserialize(internalEvent.Event, type);
+            //    eventList.Add(@event);
+            //});
 
-            return eventList.GetEnumerator();
+            return this._store.Select(s => s as WrapperEvent)
+                              .GetEnumerator();
         }
 
         /// <summary>
