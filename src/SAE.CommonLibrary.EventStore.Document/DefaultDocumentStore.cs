@@ -76,7 +76,7 @@ namespace SAE.CommonLibrary.EventStore.Document
             //重放事件
             foreach (WrapperEvent wrapperEvent in eventStream)
             {
-                var type = wrapperEvent.GetEventType();
+                var type = this._mapping.Get(wrapperEvent.Key);
                 this._logging.Debug($"Recover type:'{type}',:'{wrapperEvent.Event}',raw:'{wrapperEvent.ToJsonString()}'");
                 var @event = (IEvent)SerializerProvider.Current.Deserialize(wrapperEvent.Event, type);
                 document.Mutate(@event);
