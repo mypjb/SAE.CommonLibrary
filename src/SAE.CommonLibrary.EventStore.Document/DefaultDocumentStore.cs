@@ -74,12 +74,21 @@ namespace SAE.CommonLibrary.EventStore.Document
                 document = this._serializer.Deserialize<TDocument>(snapshot.Data);
             }
             //重放事件
-            foreach (WrapperEvent wrapperEvent in eventStream)
+            foreach (IEvent e in eventStream)
             {
-                var type = this._mapping.Get(wrapperEvent.Key);
-                this._logging.Debug($"Recover type:'{type}',:'{wrapperEvent.Event}',raw:'{wrapperEvent.ToJsonString()}'");
-                var @event = (IEvent)SerializerProvider.Current.Deserialize(wrapperEvent.Event, type);
-                document.Mutate(@event);
+                var wrapperEvent = e as WrapperEvent;
+                if (wrapperEvent==null)
+                {
+                    this._logging.Warn($"event to {nameof(WrapperEvent)} fail. event:{this._serializer.Serialize(e)}");
+                    document.Mutate(e);
+                }
+                else
+                {
+                    var type = this._mapping.Get(wrapperEvent.Key);
+                    this._logging.Debug($"Recover type:'{type}',:'{wrapperEvent.Event}',raw:'{wrapperEvent.ToJsonString()}'");
+                    var @event = (IEvent)SerializerProvider.Current.Deserialize(wrapperEvent.Event, type);
+                    document.Mutate(@event);
+                }
             }
             document.Version = eventStream.Version <= 0 ? snapshot.Version : eventStream.Version;
             return document;
