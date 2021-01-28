@@ -241,7 +241,7 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 获取请求报文，如果请求失败则触发<seealso cref="System.Net.Http.HttpRequestException"/>。
         /// 若<typeparamref name="T"/>继承自<seealso cref="ResponseResult"/>时。
-        /// 当<seealso cref="ResponseResult.StatusCode"/>!=<seealso cref="StatusCodes.Success"/>则触发<seealso cref="SaeException"/>异常
+        /// 当<seealso cref="ResponseResult.StatusCode"/>!=<seealso cref="StatusCodes.Success"/>则触发<seealso cref="SAEException"/>异常
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="response"></param>
@@ -371,10 +371,10 @@ namespace SAE.CommonLibrary.Extension
                 var json = await response.Content.ReadAsStringAsync();
                 if (json.IsNullOrWhiteSpace())
                 {
-                    throw new SaeException((int)response.StatusCode, json);
+                    throw new SAEException((int)response.StatusCode, json);
                 }
                 var output = json.ToObject<ErrorOutput>();
-                throw new SaeException(output);
+                throw new SAEException(output);
             });
             return httpClient;
         }

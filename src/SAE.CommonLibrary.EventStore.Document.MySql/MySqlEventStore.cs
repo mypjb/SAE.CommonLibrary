@@ -28,7 +28,7 @@ namespace SAE.CommonLibrary.EventStore.Document.MySql
                     Data = eventStream.ToString()
                 }) != 1)
                 {
-                    throw new SaeException(StatusCodes.Custom,"EventStream Append Fail");
+                    throw new SAEException(StatusCodes.Custom,"EventStream Append Fail");
                 }
             }
         }

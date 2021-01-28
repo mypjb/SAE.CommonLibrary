@@ -23,7 +23,7 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
                 return Task.CompletedTask;
             }
 
-            var logging= context.HttpContext.RequestServices.GetService<ILogging<SaeException>>();
+            var logging= context.HttpContext.RequestServices.GetService<ILogging<SAEException>>();
             ///记录错误
             logging.Error(context.Exception, context.Exception.Message);
             return Task.CompletedTask;

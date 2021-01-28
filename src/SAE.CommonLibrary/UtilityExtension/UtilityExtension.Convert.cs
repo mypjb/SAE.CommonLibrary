@@ -72,6 +72,33 @@ namespace SAE.CommonLibrary.Extension
         {
             return input.IsNullOrWhiteSpace() ? new byte[0] : (encoding ?? Constant.Encoding).GetBytes(input);
         }
+
+        /// <summary>
+        /// We append <paramref name="object"/> to <paramref name="target"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="target"></param>
+        /// <param name="object"></param>
+        public static void Extend<T>(this T target, T @object) where T : class
+        {
+            if (target == null || @object == null) return;
+
+            var type = typeof(T);
+            var objectEmply = new object[0];
+            foreach (var propertyInfo in type.GetProperties())
+            {
+                if (propertyInfo.SetMethod != null && propertyInfo.GetMethod != null)
+                {
+                    var value= propertyInfo.GetMethod.Invoke(@object, objectEmply);
+
+                    if (value != null)
+                    {
+                        propertyInfo.SetMethod.Invoke(target, new[] { value });
+                    }
+                }
+            }
+
+        }
         #endregion
     }
 }

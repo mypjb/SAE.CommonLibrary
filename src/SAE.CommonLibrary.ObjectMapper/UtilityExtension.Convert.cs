@@ -25,7 +25,7 @@ namespace SAE.CommonLibrary.Extension
         /// <typeparam name="T"></typeparam>
         /// <param name="source">对象源</param>
         /// <param name="attach">要附加的对象</param>
-        public static void Extend<TSource, TAttach>(this TSource source, TAttach attach) where TAttach : class
+        public static void To<TSource, TAttach>(this TSource source, TAttach attach) where TAttach : class
         {
             Assert.Build(source)
                   .NotNull();
@@ -33,7 +33,7 @@ namespace SAE.CommonLibrary.Extension
                   .NotNull();
             objectMapper.Value.Map(attach, source);
         }
-        public static void Extend(this object source,Type sourceType,Type attachType,object attach)
+        public static void To(this object source,Type sourceType,Type attachType,object attach)
         {
             Assert.Build(source)
                   .NotNull();

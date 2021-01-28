@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson.Serialization;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using System;
 
@@ -27,14 +28,21 @@ namespace SAE.CommonLibrary.Data.MongoDB
             set
             {
                 this.dateType = value;
-                if (this.dateType == 1)
+                try
                 {
-                    BsonSerializer.RegisterSerializer(typeof(DateTime), DateTimeSerializer.UtcInstance);
+                    if (this.dateType == 1)
+                    {
+                        BsonSerializer.RegisterSerializer(typeof(DateTime), DateTimeSerializer.UtcInstance);
+                    }
+                    else
+                    {
+                        BsonSerializer.RegisterSerializer(typeof(DateTime), DateTimeSerializer.LocalInstance);
+                    }
                 }
-                else
+                catch (BsonSerializationException ex)
                 {
-                    BsonSerializer.RegisterSerializer(typeof(DateTime), DateTimeSerializer.LocalInstance);
                 }
+
             }
         }
     }

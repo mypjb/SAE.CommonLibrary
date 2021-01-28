@@ -28,30 +28,37 @@ namespace SAE.CommonLibrary.Configuration
     public class SAEConfigurationProvider : NewtonsoftJsonStreamConfigurationProvider
     {
         public const string ConfigUrl = "Config-Next";
-        private readonly HttpClient _client;
         private readonly CancellationTokenSource _cancellationToken;
-        private readonly TimeSpan? _pollInterval;
-        private string url;
+        private readonly SAEOptions _options;
         private Task pollTask;
-        private readonly bool _load;
 
         public SAEConfigurationProvider(SAEOptions options, NewtonsoftJsonStreamConfigurationSource source) : base(source)
         {
-            this._client = options.Client;
             this._cancellationToken = new CancellationTokenSource();
-            this._pollInterval = options.PollInterval;
-            this.url = options.Url;
-            this.LoadAsync().GetAwaiter().GetResult();
-            this._load = true;
+            this._options = options;
+            this.Init();
         }
 
         protected async Task LoadAsync()
         {
-            var rep = await this._client.GetAsync(this.url);
+            if (await this.PullAsync())
+            {
+                this.Load(this.Source.Stream);
+                this.OnReload();
+            }
+        }
+
+        /// <summary>
+        /// Pull remote config
+        /// </summary>
+        /// <returns></returns>
+        protected async Task<bool> PullAsync()
+        {
+            var rep = await this._options.Client.GetAsync(this._options.Url);
 
             if (rep.StatusCode == System.Net.HttpStatusCode.NotModified)
             {
-                return;
+                return false;
             }
 
             rep.EnsureSuccessStatusCode();
@@ -60,29 +67,72 @@ namespace SAE.CommonLibrary.Configuration
 
             if (rep.Headers.TryGetValues(ConfigUrl, out values))
             {
-                this.url = values.First();
+                this._options.Url = values.First();
             }
 
             this.Source.Stream = await rep.Content.ReadAsStreamAsync();
 
-            if (this._load)
+            using (var fileStream = new FileStream(this._options.FileName, FileMode.Create, FileAccess.Write, FileShare.Read))
             {
-                this.Load(this.Source.Stream);
-
-                this.OnReload();
+                await this.Source.Stream.CopyToAsync(fileStream);
+                this.Source.Stream.Position = 0;
             }
-            
-            if (this.pollTask == null && this._pollInterval.HasValue)
+
+            return true;
+
+        }
+        /// <summary>
+        /// Load local config file
+        /// </summary>
+        /// <returns></returns>
+        protected async Task LoadFileAsync(Exception exception = null)
+        {
+            if (!File.Exists(this._options.FileName))
+            {
+                throw new FileNotFoundException($"Unable to '{this._options.Url}' pull file from remote,And local config file not exist '{this._options.FileName}'", exception);
+            }
+            var stream = new MemoryStream();
+            using (var fs = new FileStream(this._options.FileName, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                await fs.CopyToAsync(stream);
+                stream.Position = 0;
+            }
+
+            this.Source.Stream = stream;
+        }
+
+        /// <summary>
+        /// Initial Cofnig
+        /// </summary>
+        protected void Init()
+        {
+            try
+            {
+                this.PullAsync().GetAwaiter().GetResult();
+            }
+            catch (Exception ex)
+            {
+                this.LoadFileAsync(ex).GetAwaiter().GetResult();
+            }
+
+            if (this.pollTask == null && this._options.PollInterval.HasValue)
             {
                 this.pollTask = this.PollForSecretChangesAsync();
             }
         }
-
+        /// <summary>
+        /// Wait for reload
+        /// </summary>
+        /// <returns></returns>
         protected virtual async Task WaitForReload()
         {
-            await Task.Delay(this._pollInterval.Value, _cancellationToken.Token);
+            await Task.Delay(this._options.PollInterval.Value, _cancellationToken.Token);
         }
 
+        /// <summary>
+        /// Poll for secret changes
+        /// </summary>
+        /// <returns></returns>
         private async Task PollForSecretChangesAsync()
         {
             while (!this._cancellationToken.IsCancellationRequested)

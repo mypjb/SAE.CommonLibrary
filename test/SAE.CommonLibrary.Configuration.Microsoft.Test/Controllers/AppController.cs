@@ -12,14 +12,14 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test.Controllers
     [Route("{controller}/config")]
     public class AppController : Controller
     {
-        private readonly Options _options;
+        protected readonly Options _options;
 
         public AppController(Options options)
         {
             this._options = options;
         }
         [HttpGet]
-        public object Config(int version)
+        public virtual object Config(int version)
         {
             if (this._options.Version == version)
             {
@@ -31,7 +31,7 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test.Controllers
             return this.Content(this._options.Data, "application/json");
         }
         [HttpPost]
-        public async Task<IActionResult> Change()
+        public virtual async Task<IActionResult> Change()
         {
             using (var memoryStream = new System.IO.MemoryStream())
             {

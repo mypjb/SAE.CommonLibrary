@@ -59,7 +59,7 @@ namespace SAE.CommonLibrary.EventStore
             {
                 var message = $"not exist '{key}' the mapping";
                 this._logging.Error(message);
-                throw new SaeException(StatusCodes.ResourcesExist, message);
+                throw new SAEException(StatusCodes.ResourcesExist, message);
             }
 
             return type;

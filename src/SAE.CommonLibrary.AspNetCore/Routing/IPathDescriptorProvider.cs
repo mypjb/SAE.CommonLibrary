@@ -45,7 +45,7 @@ namespace SAE.CommonLibrary.AspNetCore.Routing
                 var name = group.ActionDescriptor.DisplayName;
                 if (groupName.IsNullOrWhiteSpace())
                 {
-                    if (name.IsNotNullOrWhiteSpace() &&
+                    if (!name.IsNullOrWhiteSpace() &&
                         name.EndsWith(')'))
                     {
                         groupName = name.TrimEnd(')');

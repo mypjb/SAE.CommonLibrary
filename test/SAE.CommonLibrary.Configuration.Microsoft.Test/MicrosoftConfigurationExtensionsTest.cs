@@ -10,30 +10,37 @@ using Xunit.Abstractions;
 using SAE.CommonLibrary.Extension;
 using System;
 using System.Threading;
+using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
+using Assert = Xunit.Assert;
 
 namespace SAE.CommonLibrary.Configuration.Microsoft.Test
 {
-    public class MicrosoftConfigurationExtensionsTest:HostTest
+    public class MicrosoftConfigurationExtensionsTest : HostTest
     {
-        public const string ApplicationiName = nameof(ApplicationiName);
         private const string ConfigPath = "/app/config";
+        private const string OfflineConfigPath = "/app/offlineconfig";
+        private const int PollInterval = 2;
         public MicrosoftConfigurationExtensionsTest(ITestOutputHelper output) : base(output)
         {
         }
 
+        protected override void ConfigureServices(IServiceCollection services)
+        {
+            services.AddTinyMapper();
+            base.ConfigureServices(services);
+        }
 
         [Theory]
         [InlineData("Development")]
         [InlineData("Production")]
         public void JsonFileDirectory(string env)
         {
-            var root = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string>()
-            {
-                { HostDefaults.EnvironmentKey,env }
-            }).AddJsonFileDirectory().Build();
+            var root = this.GetConfigurationBuilder(env).AddJsonFileDirectory().Build();
 
-            var applicationName = root.GetSection(ApplicationiName).Get<string>();
-            Xunit.Assert.Equal(applicationName, env);
+            Xunit.Assert.Equal(root.GetSection(HostDefaults.EnvironmentKey).Get<string>(), env);
+
             if (env.Equals("Development"))
             {
                 var custom = root.GetSection("Custom").Get<string>();
@@ -41,14 +48,16 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
             }
         }
 
-        [Fact]
-        public async Task Remote()
+        [Theory]
+        [InlineData("Development")]
+        [InlineData("Production")]
+        public async Task Remote(string env)
         {
             var databaseOption = new DBConnectOptions
             {
                 ConnectionString = this.GetRandom(),
                 Name = this.GetRandom(),
-                Provider= this.GetRandom(),
+                Provider = this.GetRandom(),
             };
 
             var dic = new Dictionary<string, object>
@@ -56,20 +65,19 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
                 {DBConnectOptions.Option,databaseOption }
             };
 
-            await this.SetConfigAsync(dic);
+            await this.SetConfigAsync(ConfigPath, dic);
 
             var remoteOptions = new SAEOptions
             {
                 Url = ConfigPath,
                 Client = this._client,
-                PollInterval = TimeSpan.FromSeconds(5)
+                PollInterval = TimeSpan.FromSeconds(PollInterval)
             };
 
-            
-            var root = new ConfigurationBuilder().AddRemoteSource(remoteOptions)
-                                                 .Build();
-            var configurationSection= root.GetSection(DBConnectOptions.Option);
-            
+            var root = this.GetConfigurationBuilder(env).AddRemoteSource(remoteOptions).Build();
+
+            var configurationSection = root.GetSection(DBConnectOptions.Option);
+
             var options = configurationSection.Get<DBConnectOptions>();
 
             this.Eq(databaseOption, options);
@@ -78,7 +86,53 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
             databaseOption.Provider = this.GetRandom();
             databaseOption.ConnectionString = this.GetRandom();
 
-            await this.SetConfigAsync(dic);
+            await this.SetConfigAsync(ConfigPath, dic);
+
+            Thread.Sleep(remoteOptions.PollInterval.Value * 1.2);
+
+            options = configurationSection.Get<DBConnectOptions>();
+
+            this.Eq(databaseOption, options);
+
+        }
+
+        [Theory]
+        [InlineData("Development")]
+        [InlineData("Production")]
+        public async Task Offline(string env)
+        {
+            await this.Remote(env);
+
+            var remoteOptions = new SAEOptions
+            {
+                Url = OfflineConfigPath,
+                Client = this._client,
+                PollInterval = TimeSpan.FromSeconds(PollInterval)
+            };
+
+            var root = this.GetConfigurationBuilder(env).AddRemoteSource(remoteOptions).Build();
+
+            var configurationSection = root.GetSection(DBConnectOptions.Option);
+
+            Assert.True(configurationSection.Exists());
+
+            var options = configurationSection.Get<DBConnectOptions>();
+
+            this.WriteLine(options);
+
+            var databaseOption = new DBConnectOptions
+            {
+                ConnectionString = this.GetRandom(),
+                Name = this.GetRandom(),
+                Provider = this.GetRandom(),
+            };
+
+            var dic = new Dictionary<string, object>
+            {
+                {DBConnectOptions.Option,databaseOption }
+            };
+
+            await this.SetConfigAsync(OfflineConfigPath, dic);
 
             Thread.Sleep(remoteOptions.PollInterval.Value * 1.2);
 
@@ -87,21 +141,48 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
             this.Eq(databaseOption, options);
         }
 
-        private async Task SetConfigAsync(object data)
+
+        private async Task SetConfigAsync(string url, object data)
         {
-            var message = new HttpRequestMessage(HttpMethod.Post, ConfigPath);
+            var message = new HttpRequestMessage(HttpMethod.Post, url);
 
             message.AddJsonContent(data);
 
-            await this._client.SendAsync(message);
+            var httpResponse = await this._client.SendAsync(message);
+            httpResponse.EnsureSuccessStatusCode();
         }
-        private void Eq(DBConnectOptions left,DBConnectOptions right)
+        private void Eq(DBConnectOptions left, DBConnectOptions right)
         {
             Xunit.Assert.Equal(left.ConnectionString, right.ConnectionString);
             Xunit.Assert.Equal(left.Name, right.Name);
             Xunit.Assert.Equal(left.Provider, right.Provider);
         }
 
+
+        private IConfigurationBuilder GetConfigurationBuilder(string env)
+        {
+            var dic = new Dictionary<string, string>()
+            {
+                {
+                    HostDefaults.EnvironmentKey,
+                    env
+                },
+                {
+                    HostDefaults.ApplicationKey,
+                    Assembly.GetExecutingAssembly().GetName().Name
+                }
+            };
+
+            //if (pairs != null && pairs.Any())
+            //{
+            //    foreach (var kv in pairs)
+            //    {
+            //        dic[kv.Key] = kv.Value;
+            //    }
+            //}
+
+            return new ConfigurationBuilder().AddInMemoryCollection(dic);
+        }
     }
 
     public class DBConnectOptions

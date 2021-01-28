@@ -29,7 +29,7 @@ namespace SAE.CommonLibrary.Abstract.Responsibility
         {
             if (!this.Responsibilities.Any())
             {
-                throw new SaeException($" not register '{typeof(TResponsibilityContext).Name}' class IResponsibility");
+                throw new SAEException($" not register '{typeof(TResponsibilityContext).Name}' class IResponsibility");
             }
 
             var first = this.Responsibilities.First();

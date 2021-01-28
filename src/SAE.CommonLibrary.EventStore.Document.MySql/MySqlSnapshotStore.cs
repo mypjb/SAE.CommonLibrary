@@ -65,7 +65,7 @@ namespace SAE.CommonLibrary.EventStore.Document.MySql
             {
                 if (await conn.ExecuteAsync($"insert into {nameof(Snapshot)}(id,type,version,data) values(@id,@type,@version,@data)", snapshot) != 1)
                 {
-                    throw new SaeException($"{nameof(snapshot)} add fail");
+                    throw new SAEException($"{nameof(snapshot)} add fail");
                 }
             }
         }

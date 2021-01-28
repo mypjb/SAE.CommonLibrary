@@ -18,15 +18,15 @@ namespace SAE.CommonLibrary.Extension
             return string.IsNullOrWhiteSpace(str);
         }
 
-        /// <summary>
-        /// 如果<paramref name="str"/>为not null或空字符串或一连串空的字符串则返回<seealso cref="bool.TrueString"/>
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static bool IsNotNullOrWhiteSpace(this string str)
-        {
-            return !str.IsNullOrWhiteSpace();
-        }
+        ///// <summary>
+        ///// 如果<paramref name="str"/>为not null或空字符串或一连串空的字符串则返回<seealso cref="bool.TrueString"/>
+        ///// </summary>
+        ///// <param name="str"></param>
+        ///// <returns></returns>
+        //public static bool IsNotNullOrWhiteSpace(this string str)
+        //{
+        //    return !str.IsNullOrWhiteSpace();
+        //}
 
         /// <summary>
         /// 判断<paramref name="object"/>是否为Null

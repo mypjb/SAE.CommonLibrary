@@ -18,7 +18,7 @@ namespace Microsoft.Extensions.Hosting
             return builder.ConfigureHostConfiguration(conf =>
             {
                 conf.AddRemoteSource(action);
-            }); ;
+            });
         }
         /// <summary>
         /// Add remote configuration source
@@ -53,7 +53,7 @@ namespace Microsoft.Extensions.Hosting
         /// <returns></returns>
         public static IHostBuilder ConfigureJsonFileDirectorySource(this IHostBuilder builder)
         {
-            return builder.ConfigureJsonFileDirectorySource(MicrosoftConfigurationExtensions.DefaultConfigDirectory);
+            return builder.ConfigureJsonFileDirectorySource(null);
         }
         /// <summary>
         /// Add <paramref name="path"/>  directory As a configuration source

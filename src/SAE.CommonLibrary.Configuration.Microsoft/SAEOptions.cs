@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using SAE.CommonLibrary.Extension;
 
 namespace SAE.CommonLibrary.Configuration
 {
@@ -9,6 +10,8 @@ namespace SAE.CommonLibrary.Configuration
         {
             this.Client = new HttpClient();
         }
+
+        public string FileName { get; set; }
         public string Url { get; set; }
         public TimeSpan? PollInterval { get; set; }
         private HttpClient client;

@@ -30,6 +30,7 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
                 services.AddHttpContextAccessor();
                 services.AddControllers();
                 services.AddSingleton<Options>();
+                services.AddSingleton<OfflineOptions>();
             }
 
             // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -9,7 +9,7 @@ namespace SAE.CommonLibrary
     /// <summary>
     /// 
     /// </summary>
-    public class SaeException : Exception
+    public class SAEException : Exception
     {
         /// <summary>
         /// 错误码
@@ -18,14 +18,14 @@ namespace SAE.CommonLibrary
         /// <summary>
         /// 
         /// </summary>
-        public SaeException() : this(StatusCodes.Custom, StatusCodes.Custom.GetDetail())
+        public SAEException() : this(StatusCodes.Custom, StatusCodes.Custom.GetDetail())
         {
         }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="code"></param>
-        public SaeException(StatusCodes code) : this(code, code.GetDetail())
+        public SAEException(StatusCodes code) : this(code, code.GetDetail())
         {
         }
 
@@ -34,11 +34,11 @@ namespace SAE.CommonLibrary
         /// </summary>
         /// <param name="code"></param>
         /// <param name="message"></param>
-        public SaeException(StatusCodes code, string message) : this((int)code, message)
+        public SAEException(StatusCodes code, string message) : this((int)code, message)
         {
         }
 
-        public SaeException(int code, string message) : base(message)
+        public SAEException(int code, string message) : base(message)
         {
             this.Code = code;
         }
@@ -46,7 +46,7 @@ namespace SAE.CommonLibrary
         /// 
         /// </summary>
         /// <param name="response"></param>
-        public SaeException(ErrorOutput error) : this(error.StatusCode, error.Message)
+        public SAEException(ErrorOutput error) : this(error.StatusCode, error.Message)
         {
 
         }
@@ -55,7 +55,7 @@ namespace SAE.CommonLibrary
         /// 
         /// </summary>
         /// <param name="message"></param>
-        public SaeException(string message) : this(StatusCodes.Custom, message)
+        public SAEException(string message) : this(StatusCodes.Custom, message)
         {
         }
         /// <summary>
@@ -63,7 +63,7 @@ namespace SAE.CommonLibrary
         /// </summary>
         /// <param name="message"></param>
         /// <param name="innerException"></param>
-        public SaeException(string message, Exception innerException) : this(StatusCodes.Custom, message, innerException)
+        public SAEException(string message, Exception innerException) : this(StatusCodes.Custom, message, innerException)
         {
         }
 
@@ -72,7 +72,7 @@ namespace SAE.CommonLibrary
         /// </summary>
         /// <param name="code"></param>
         /// <param name="exception"></param>
-        public SaeException(StatusCodes code, Exception exception) : this(code, code.GetDetail(), exception)
+        public SAEException(StatusCodes code, Exception exception) : this(code, code.GetDetail(), exception)
         {
 
         }
@@ -82,12 +82,12 @@ namespace SAE.CommonLibrary
         /// <param name="code"></param>
         /// <param name="message"></param>
         /// <param name="exception"></param>
-        public SaeException(StatusCodes code, string message, Exception exception) : this((int)code, message, exception)
+        public SAEException(StatusCodes code, string message, Exception exception) : this((int)code, message, exception)
         {
             this.Code = (int)code;
         }
 
-        public SaeException(int code, string message, Exception exception) : base(message, exception)
+        public SAEException(int code, string message, Exception exception) : base(message, exception)
         {
             this.Code = code;
         }

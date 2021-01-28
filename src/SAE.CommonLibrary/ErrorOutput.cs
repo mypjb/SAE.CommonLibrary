@@ -54,7 +54,7 @@ namespace SAE.CommonLibrary
         /// 
         /// </summary>
         /// <param name="exception"></param>
-        public ErrorOutput(SaeException exception) : this(exception.Code, exception)
+        public ErrorOutput(SAEException exception) : this(exception.Code, exception)
         {
 
         }

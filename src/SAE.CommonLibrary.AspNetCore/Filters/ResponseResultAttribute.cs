@@ -31,7 +31,7 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
             ErrorOutput errorOutput = null;
             if (context.Exception != null)
             {
-                if (context.Exception is SaeException saeException)
+                if (context.Exception is SAEException saeException)
                 {
                     errorOutput = new ErrorOutput(saeException);
                 }
