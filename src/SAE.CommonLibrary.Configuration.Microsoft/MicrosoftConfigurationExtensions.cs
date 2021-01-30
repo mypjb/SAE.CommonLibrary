@@ -70,7 +70,7 @@ namespace Microsoft.Extensions.Configuration
             }
 
             action.Invoke(option);
-
+            option.Check();
             return configurationBuilder.Add(new SAEConfigurationSource(option));
         }
         /// <summary>

@@ -26,5 +26,11 @@ namespace SAE.CommonLibrary.Configuration
                 this.client = value;
             }
         }
+
+        internal void Check()
+        {
+            Assert.Build(this.Url)
+                  .NotNullOrWhiteSpace();
+        }
     }
 }
