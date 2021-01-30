@@ -115,7 +115,7 @@ namespace SAE.CommonLibrary.Configuration
                 this.LoadFileAsync(ex).GetAwaiter().GetResult();
             }
 
-            if (this.pollTask == null && this._options.PollInterval.HasValue)
+            if (this.pollTask == null && this._options.PollInterval > 0)
             {
                 this.pollTask = this.PollForSecretChangesAsync();
             }
@@ -126,7 +126,7 @@ namespace SAE.CommonLibrary.Configuration
         /// <returns></returns>
         protected virtual async Task WaitForReload()
         {
-            await Task.Delay(this._options.PollInterval.Value, _cancellationToken.Token);
+            await Task.Delay(this._options.PollInterval * 1000, _cancellationToken.Token);
         }
 
         /// <summary>

@@ -20,6 +20,15 @@ namespace Microsoft.Extensions.Hosting
                 conf.AddRemoteSource(action);
             });
         }
+
+        public static IHostBuilder ConfigureRemoteSource(this IHostBuilder builder)
+        {
+            return builder.ConfigureHostConfiguration(conf =>
+            {
+                conf.AddRemoteSource();
+            });
+        }
+
         /// <summary>
         /// Add remote configuration source
         /// </summary>

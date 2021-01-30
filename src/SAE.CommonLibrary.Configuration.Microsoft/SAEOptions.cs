@@ -9,11 +9,12 @@ namespace SAE.CommonLibrary.Configuration
         public SAEOptions()
         {
             this.Client = new HttpClient();
+            this.PollInterval = Constants.DefaultPollInterval;
         }
 
         public string FileName { get; set; }
         public string Url { get; set; }
-        public TimeSpan? PollInterval { get; set; }
+        public int PollInterval { get; set; }
         private HttpClient client;
         public HttpClient Client
         {

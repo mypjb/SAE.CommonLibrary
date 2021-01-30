@@ -21,7 +21,7 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
     {
         private const string ConfigPath = "/app/config";
         private const string OfflineConfigPath = "/app/offlineconfig";
-        private const int PollInterval = 2;
+        private const int PollInterval = 5;
         public MicrosoftConfigurationExtensionsTest(ITestOutputHelper output) : base(output)
         {
         }
@@ -71,7 +71,7 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
             {
                 Url = ConfigPath,
                 Client = this._client,
-                PollInterval = TimeSpan.FromSeconds(PollInterval)
+                PollInterval = PollInterval
             };
 
             var root = this.GetConfigurationBuilder(env).AddRemoteSource(remoteOptions).Build();
@@ -88,7 +88,7 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
 
             await this.SetConfigAsync(ConfigPath, dic);
 
-            Thread.Sleep(remoteOptions.PollInterval.Value * 1.2);
+            Thread.Sleep((int)(remoteOptions.PollInterval * 1200));
 
             options = configurationSection.Get<DBConnectOptions>();
 
@@ -107,7 +107,7 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
             {
                 Url = OfflineConfigPath,
                 Client = this._client,
-                PollInterval = TimeSpan.FromSeconds(PollInterval)
+                PollInterval = PollInterval
             };
 
             var root = this.GetConfigurationBuilder(env).AddRemoteSource(remoteOptions).Build();
@@ -134,7 +134,7 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
 
             await this.SetConfigAsync(OfflineConfigPath, dic);
 
-            Thread.Sleep(remoteOptions.PollInterval.Value * 1.2);
+            Thread.Sleep(remoteOptions.PollInterval * 1200);
 
             options = configurationSection.Get<DBConnectOptions>();
 

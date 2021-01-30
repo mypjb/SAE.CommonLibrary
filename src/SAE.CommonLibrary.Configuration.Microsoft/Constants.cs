@@ -22,5 +22,6 @@ namespace SAE.CommonLibrary.Configuration
         public const string FileSeparator = ".";
         public const char ConfigSeparator = ':';
         public const string JsonSuffix = ".json";
+        public const int DefaultPollInterval = 60;
     }
 }

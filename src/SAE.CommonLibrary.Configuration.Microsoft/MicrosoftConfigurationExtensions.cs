@@ -1,18 +1,26 @@
-﻿using SAE.CommonLibrary.Configuration;
+﻿using Microsoft.Extensions.Hosting;
+using SAE.CommonLibrary;
+using SAE.CommonLibrary.Configuration;
+using SAE.CommonLibrary.Extension;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using SAE.CommonLibrary.Extension;
 using System.IO;
 using System.Linq;
-using Microsoft.Extensions.Hosting;
-using SAE.CommonLibrary;
-using SAE.CommonLibrary.Extension;
 
 namespace Microsoft.Extensions.Configuration
 {
     public static class MicrosoftConfigurationExtensions
     {
+        /// <summary>
+        ///  Add remote configuration source
+        /// </summary>
+        /// <param name="configurationBuilder"></param>
+        /// <returns></returns>
+        public static IConfigurationBuilder AddRemoteSource(this IConfigurationBuilder configurationBuilder)
+        {
+            return configurationBuilder.AddRemoteSource(_ => { });
+        }
+
         /// <summary>
         /// Add remote configuration source
         /// </summary>
