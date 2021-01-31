@@ -15,7 +15,7 @@ namespace Microsoft.Extensions.Hosting
         /// <returns></returns>
         public static IHostBuilder ConfigureRemoteSource(this IHostBuilder builder, Action<SAEOptions> action)
         {
-            return builder.ConfigureHostConfiguration(conf =>
+            return builder.ConfigureAppConfiguration((ctx, conf) =>
             {
                 conf.AddRemoteSource(action);
             });
@@ -23,7 +23,7 @@ namespace Microsoft.Extensions.Hosting
 
         public static IHostBuilder ConfigureRemoteSource(this IHostBuilder builder)
         {
-            return builder.ConfigureHostConfiguration(conf =>
+            return builder.ConfigureAppConfiguration((ctx, conf) =>
             {
                 conf.AddRemoteSource();
             });
@@ -37,7 +37,7 @@ namespace Microsoft.Extensions.Hosting
         /// <returns></returns>
         public static IHostBuilder ConfigureRemoteSource(this IHostBuilder builder, SAEOptions options)
         {
-            return builder.ConfigureHostConfiguration(conf =>
+            return builder.ConfigureAppConfiguration((ctx, conf) =>
             {
                 conf.AddRemoteSource(options);
             });
@@ -50,7 +50,7 @@ namespace Microsoft.Extensions.Hosting
         /// <returns></returns>
         public static IHostBuilder ConfigureRemoteSource(this IHostBuilder builder, string url)
         {
-            return builder.ConfigureHostConfiguration(conf =>
+            return builder.ConfigureAppConfiguration((ctx, conf) =>
             {
                 conf.AddRemoteSource(url);
             });
@@ -72,7 +72,7 @@ namespace Microsoft.Extensions.Hosting
         /// <returns></returns>
         public static IHostBuilder ConfigureJsonFileDirectorySource(this IHostBuilder builder,string path)
         {
-            return builder.ConfigureHostConfiguration(conf =>
+            return builder.ConfigureAppConfiguration((ctx, conf) =>
             {
                 conf.AddJsonFileDirectory(path);
             });
