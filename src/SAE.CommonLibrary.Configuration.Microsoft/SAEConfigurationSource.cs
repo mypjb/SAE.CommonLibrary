@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.NewtonsoftJson;
 using SAE.CommonLibrary.Extension;
+using SAE.CommonLibrary.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -31,6 +32,7 @@ namespace SAE.CommonLibrary.Configuration
         private readonly CancellationTokenSource _cancellationToken;
         private readonly SAEOptions _options;
         private Task pollTask;
+        private ILogging _logging;
 
         public SAEConfigurationProvider(SAEOptions options, NewtonsoftJsonStreamConfigurationSource source) : base(source)
         {
@@ -43,35 +45,46 @@ namespace SAE.CommonLibrary.Configuration
         {
             if (await this.PullAsync())
             {
+                var logging = this.GetLogging();
+                logging?.Info($"The latest configuration was successfully pulled from remote:'{this._options.Url}'");
                 this.Load(this.Source.Stream);
                 this.OnReload();
+                logging?.Info("Reload configuration ");
             }
         }
-
+        
         /// <summary>
         /// Pull remote config
         /// </summary>
         /// <returns></returns>
         protected async Task<bool> PullAsync()
         {
+            var logging= this.GetLogging();
+
+            logging?.Debug($"Pull '{this._options.Url}' configuration");
+
             var rep = await this._options.Client.GetAsync(this._options.Url);
 
             if (rep.StatusCode == System.Net.HttpStatusCode.NotModified)
             {
+                logging?.Debug("Configuration not modified ");
                 return false;
             }
 
             rep.EnsureSuccessStatusCode();
-
+            logging?.Info("Pull from remote to the latest");
             IEnumerable<string> values;
 
             if (rep.Headers.TryGetValues(ConfigUrl, out values))
             {
                 this._options.Url = values.First();
+                logging?.Info($"Set next version pull url '{this._options.Url}'");
             }
 
+            logging?.Info($"Set source stream");
             this.Source.Stream = await rep.Content.ReadAsStreamAsync();
 
+            logging?.Info($"Persistence to local '{this._options.FileName}'");
             using (var fileStream = new FileStream(this._options.FileName, FileMode.Create, FileAccess.Write, FileShare.Read))
             {
                 await this.Source.Stream.CopyToAsync(fileStream);
@@ -142,11 +155,21 @@ namespace SAE.CommonLibrary.Configuration
                 {
                     await LoadAsync();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    this.GetLogging()?.Error($"Load configuration error:{ex.Message}", ex);
                     // Ignore
                 }
             }
         }
+
+        private ILogging GetLogging()
+        {
+            if (this._logging == null)
+            {
+                this._logging = ServiceFacade.GetService<ILogging<SAEConfigurationProvider>>();
+            }
+            return this._logging;
+        } 
     }
 }
