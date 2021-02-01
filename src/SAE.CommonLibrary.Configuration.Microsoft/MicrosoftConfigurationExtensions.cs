@@ -71,6 +71,12 @@ namespace Microsoft.Extensions.Configuration
 
             action.Invoke(option);
             option.Check();
+
+            if (!configuration.GetSection(Constants.ConfigRootDirectoryKey).Exists())
+            {
+                configurationBuilder.AddInMemoryCollection(new Dictionary<string, string> { { Constants.ConfigRootDirectoryKey, Path.GetDirectoryName(option.FileName) } });
+            }
+
             return configurationBuilder.Add(new SAEConfigurationSource(option));
         }
         /// <summary>
