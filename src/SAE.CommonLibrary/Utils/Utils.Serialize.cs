@@ -35,6 +35,9 @@ namespace SAE.CommonLibrary
                 {
                     return string.Empty;
                 }
+
+                if (@object.GetType() == Utils.Deserialize.StringType) return @object.ToString();
+
                 return JsonConvert.SerializeObject(@object);
             }
 
@@ -67,7 +70,7 @@ namespace SAE.CommonLibrary
         /// </summary>
         public class Deserialize
         {
-            private static readonly Type _stringType = typeof(string);
+            internal static readonly Type StringType = typeof(string);
             static Deserialize()
             {
                 JsonConvert.DefaultSettings = () => new JsonSerializerSettings
@@ -87,7 +90,7 @@ namespace SAE.CommonLibrary
             {
                 if (json.IsNullOrWhiteSpace()) return null;
 
-                if (type == _stringType) return json;
+                if (type == StringType) return json;
 
                 return JsonConvert.DeserializeObject(json, type);
             }
