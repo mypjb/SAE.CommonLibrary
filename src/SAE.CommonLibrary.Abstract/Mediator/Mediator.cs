@@ -23,7 +23,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator
 
         public async Task<object> Send(object command, Type commandType, Type responseType)
         {
-            var key = $"{commandType.GUID}_{responseType.GUID}";
+            var key = $"{commandType}_{responseType}";
 
             var wrapper = this._dic.GetOrAdd(key, k =>
             {
@@ -38,7 +38,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator
 
         public async Task Send(object command, Type commandType)
         {
-            var key = commandType.GUID.ToString();
+            var key = commandType.ToString();
 
             var wrapper = this._dic.GetOrAdd(key, k =>
             {
