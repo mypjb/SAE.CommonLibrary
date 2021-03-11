@@ -41,7 +41,7 @@ namespace SAE.CommonLibrary.Plugin
 
         internal Assembly Register()
         {
-            return this._loadContext.Value.LoadFromAssemblyPath(this.Path);
+            return this._loadContext.Value.Load(this.Path);
         }
 
         internal void Delete()
@@ -78,13 +78,13 @@ namespace SAE.CommonLibrary.Plugin
         {
             this._root = Path.GetDirectoryName(plugin.Path);
             this._resolver = new AssemblyDependencyResolver(this._root);
+            AssemblyLoadContext.Default.Resolving += Default_Resolving;
         }
 
         protected override Assembly Load(AssemblyName assemblyName)
         {
-            var assembly = AppDomain.CurrentDomain
-                                    .GetAssemblies()
-                                    .FirstOrDefault(s => s.GetName().Name == assemblyName.Name);
+            var assembly = Default.Assemblies
+                                  .FirstOrDefault(s => s.GetName().Name == assemblyName.Name);
 
             if (assembly != null && assembly.GetName().Version >= assemblyName.Version
                 )
@@ -115,6 +115,41 @@ namespace SAE.CommonLibrary.Plugin
             }
 
             return IntPtr.Zero;
+        }
+
+        public Assembly Load(string assemblyPath)
+        {
+            Assembly assembly = null;
+            if (File.Exists(assemblyPath))
+            {
+                assembly = Default.LoadFromAssemblyPath(assemblyPath);
+            }
+            return assembly;
+        }
+
+        private Assembly Default_Resolving(AssemblyLoadContext context, AssemblyName assemblyName)
+        {
+            var assembly = Default.Assemblies
+                                  .FirstOrDefault(s => s.GetName().Name == assemblyName.Name);
+
+            if (assembly != null && assembly.GetName().Version >= assemblyName.Version
+                )
+            {
+                return assembly;
+            }
+
+            string assemblyPath = _resolver.ResolveAssemblyToPath(assemblyName);
+
+            if (assemblyPath == null)
+            {
+                assemblyPath = Path.Combine(this._root, $"{assemblyName.Name}.dll");
+            }
+            if (File.Exists(assemblyPath))
+            {
+                assembly = Default.LoadFromAssemblyPath(assemblyPath);
+            }
+
+            return assembly;
         }
     }
 }
