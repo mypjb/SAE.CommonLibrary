@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\SAE.CommonLibrary.Data.MongoDB\SAE.CommonLibrary.Data.MongoDB.csproj" />
     <ProjectReference Include="..\..\src\SAE.CommonLibrary.EventStore.Document.MySql\SAE.CommonLibrary.EventStore.Document.MySql.csproj" />
     <ProjectReference Include="..\SAE.CommonLibrary.Test\SAE.CommonLibrary.Test.csproj" />
   </ItemGroup>

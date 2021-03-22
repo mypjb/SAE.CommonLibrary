@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Bson.Serialization.Serializers;
 using System;
 
@@ -10,7 +11,7 @@ namespace SAE.CommonLibrary.Data.MongoDB
         public const string Option = "mongodb";
         public MongoDBOptions()
         {
-
+            
         }
         /// <summary>
         /// 库

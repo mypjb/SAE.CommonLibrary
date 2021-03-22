@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+using MongoDB.Bson.Serialization.Conventions;
 using SAE.CommonLibrary.Data;
 using SAE.CommonLibrary.Data.MongoDB;
 using System;
@@ -18,6 +19,16 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static StorageOptions AddMongoDB(this IServiceCollection serviceCollection)
         {
+            var conventions = new ConventionPack
+                        {
+                             new IgnoreExtraElementsConvention(true)
+                        };
+            var conventionName = "IgnoreExtraElements";
+
+            ConventionRegistry.Remove(conventionName);
+
+            ConventionRegistry.Register(conventionName, conventions, type => true);
+
             serviceCollection.TryAddSingleton<IMetadataProvider, MetadataProvider>();
             serviceCollection.TryAddSingleton<IStorage, MongoDBStorage>();
             serviceCollection.AddNlogLogger();

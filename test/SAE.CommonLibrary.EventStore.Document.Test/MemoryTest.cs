@@ -102,9 +102,11 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
         public virtual async Task Query()
         {
             var user = await this.Register();
-            Xunit.Assert.True(this._storage.AsQueryable<UserDto>()
-                             .Where(s => s.Sex == user.Sex)
-                             .Count() > 0);
+            var dto= this._storage.AsQueryable<UserDto>()
+                                  .Where(s => s.Sex == user.Sex)
+                                  .FirstOrDefault();
+
+            Xunit.Assert.NotNull(dto);
         }
 
     }
