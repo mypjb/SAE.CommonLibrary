@@ -8,11 +8,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace SAE.CommonLibrary.AspNetCore.Filters
 {
-    public class SaeExceptionAttribute : Attribute, IOrderedFilter, IAsyncExceptionFilter
+    public class SaeExceptionFilter : IOrderedFilter, IAsyncExceptionFilter
     {
-        public SaeExceptionAttribute()
+        private readonly ILogging<SAEException> _logging;
+
+        public SaeExceptionFilter(ILogging<SAEException> logging)
         {
             this.Order = FilterScope.First;
+            this._logging = logging;
         }
         public int Order { get; set; }
 
@@ -23,9 +26,8 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
                 return Task.CompletedTask;
             }
 
-            var logging= context.HttpContext.RequestServices.GetService<ILogging<SAEException>>();
             ///记录错误
-            logging.Error(context.Exception, context.Exception.Message);
+            this._logging.Error(context.Exception, context.Exception.Message);
             return Task.CompletedTask;
         }
     }

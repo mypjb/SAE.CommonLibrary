@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Unicode;
+using System.Threading.Tasks;
 
 [assembly: InternalsVisibleTo("SAE.CommonLibrary.AspNetCore.Test")]
 
@@ -10,6 +12,14 @@ namespace SAE.CommonLibrary.AspNetCore
 {
     public class Constants
     {
+        /// <summary>
+        /// Claim type
+        /// </summary>
+        public const string CorsClaim = "cors";
+        /// <summary>
+        /// Cors Claim 分隔符
+        /// </summary>
+        public const char CorsSeparator = ';';
         /// <summary>
         /// 默认路由路径
         /// </summary>
@@ -34,5 +44,6 @@ namespace SAE.CommonLibrary.AspNetCore
         /// 字符编码
         /// </summary>
         public static readonly Encoding Encoding = Encoding.Unicode;
+
     }
 }

@@ -14,9 +14,9 @@ using Xunit.Abstractions;
 
 namespace SAE.CommonLibrary.AspNetCore.Test
 {
-    public class AspNetCoreTest: HostTest
+    public class BitmapAuthTest: HostTest
     {
-        public AspNetCoreTest(ITestOutputHelper output) : base(output)
+        public BitmapAuthTest(ITestOutputHelper output) : base(output)
         {
         }
 

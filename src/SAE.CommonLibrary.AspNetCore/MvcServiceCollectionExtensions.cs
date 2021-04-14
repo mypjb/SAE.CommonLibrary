@@ -1,23 +1,17 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
-using SAE.CommonLibrary.AspNetCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using SAE.CommonLibrary;
+using SAE.CommonLibrary.AspNetCore.Authorization;
+using SAE.CommonLibrary.AspNetCore.Filters;
+using SAE.CommonLibrary.AspNetCore.Routing;
+using SAE.CommonLibrary.Extension;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Reflection;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.AspNetCore.Http;
-using SAE.CommonLibrary.Extension;
-using SAE.CommonLibrary;
 using Constants = SAE.CommonLibrary.AspNetCore.Constants;
-using SAE.CommonLibrary.AspNetCore.Filters;
-using SAE.CommonLibrary.AspNetCore.Routing;
-using Microsoft.AspNetCore.Authorization;
-using SAE.CommonLibrary.AspNetCore.Authorization;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -32,6 +26,41 @@ namespace Microsoft.Extensions.DependencyInjection
     }
     public static class MvcServiceCollectionExtensions
     {
+
+        /// <summary>
+        /// 添加Cors中间件依赖
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddSAECors(this IServiceCollection services,Action<CorsOptions> action)
+        {
+            services.AddOptions<CorsOptions>(CorsOptions.Options).Configure(action);
+            services.AddNlogLogger();
+            return services;
+        }
+
+        /// <summary>
+        /// 添加Cors中间件依赖
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddSAECors(this IServiceCollection services)
+        {
+            return services.AddSAECors(_ => { });
+        }
+
+        /// <summary>
+        /// 启用Cors中间件
+        /// </summary>
+        /// <param name="app"></param>
+        /// <returns></returns>
+        public static IApplicationBuilder UseSAECors(this IApplicationBuilder app)
+        {
+            app.UseMiddleware<CorsMiddleware>();
+            return app;
+        }
+
         /// <summary>
         /// 拦截响应将其重置为<seealso cref="ResponseResult"/>
         /// </summary>
@@ -41,7 +70,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             builder.AddMvcOptions(options =>
             {
-                options.Filters.Add<ResponseResultAttribute>(FilterScope.First);
+                options.Filters.Add<ResponseResultFilter>(FilterScope.First);
             }).AddNewtonsoftJson();
             return builder;
         }
@@ -222,6 +251,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return app;
         }
 
+        
      
     }
 }
