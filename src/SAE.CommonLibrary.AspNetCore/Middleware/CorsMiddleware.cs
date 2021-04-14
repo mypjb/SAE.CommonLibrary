@@ -30,7 +30,7 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
             this._next = next;
             this._options = options;
             this._logging = logging;
-            this._hostRegex = new Regex("https?://[\\w\\.]+");
+            this._hostRegex = new Regex("https?://[\\w\\.:]+");
         }
 
 
