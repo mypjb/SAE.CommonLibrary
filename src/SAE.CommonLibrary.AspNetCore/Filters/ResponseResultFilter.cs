@@ -12,7 +12,7 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
     {
         public ResponseResultFilter()
         {
-            this.Order = FilterScope.First;
+            this.Order = FilterScope.Global;
         }
         public int Order
         {
