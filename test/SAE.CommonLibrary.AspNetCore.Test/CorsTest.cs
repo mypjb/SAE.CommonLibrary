@@ -17,7 +17,7 @@ namespace SAE.CommonLibrary.AspNetCore.Test
 {
     public class CorsTest: HostTest
     {
-        private const string CorsHost = "https://api.sae.com";
+        private const string CorsHost = "https://localhost:9999";
         public CorsTest(ITestOutputHelper output) : base(output)
         {
         }

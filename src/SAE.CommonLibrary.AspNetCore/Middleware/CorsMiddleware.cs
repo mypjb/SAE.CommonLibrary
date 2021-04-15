@@ -46,6 +46,8 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
                 var options = this._options.Value;
                 if (match.Success)
                 {
+                    this._logging.Debug("Cors request");
+
                     if(await options.AllowRequestAsync(context, match.Value))
                     {
                         context.Response.Headers.TryAdd(HeaderNames.AccessControlAllowOrigin, match.Value);
@@ -63,6 +65,8 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
                             context.Response.Headers.TryAdd(HeaderNames.AccessControlAllowCredentials, options.AllowCredentials);
                         }
 
+                        this._logging.Debug($"Cors Header:\r\n{context.Response.Headers.ToJsonString()}");
+
                         if (request.Method.Equals(HttpMethod.Options.Method, StringComparison.OrdinalIgnoreCase))
                         {
                             context.Response.StatusCode = (int)HttpStatusCode.OK;
@@ -78,6 +82,10 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
                 {
                     this._logging.Error($"Reject cross-domain requests");
                 }
+            }
+            else
+            {
+                this._logging.Debug($"This not cors request {request.Path}");
             }
 
             await this._next.Invoke(context);
