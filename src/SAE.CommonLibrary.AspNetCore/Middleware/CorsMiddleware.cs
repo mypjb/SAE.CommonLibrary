@@ -37,45 +37,39 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
         public async Task Invoke(HttpContext context)
         {
             var request = context.Request;
-            StringValues referer;
-            if (request.IsAjaxRequest() &&
-                request.Headers.TryGetValue(HeaderNames.Referer, out referer) &&
-                !referer.FirstOrDefault().IsNullOrWhiteSpace())
+            StringValues origin;
+            if (request.Headers.TryGetValue(HeaderNames.Origin, out origin) &&
+                !origin.FirstOrDefault().IsNullOrWhiteSpace())
             {
-                var match = this._hostRegex.Match(referer.First());
+                var originHost = origin.First();
+
                 var options = this._options.Value;
-                if (match.Success)
+
+                this._logging.Debug($"Cors request origin:{origin}");
+
+                if (await options.AllowRequestAsync(context, originHost))
                 {
-                    this._logging.Debug("Cors request");
+                    context.Response.Headers.TryAdd(HeaderNames.AccessControlAllowOrigin, originHost);
 
-                    if(await options.AllowRequestAsync(context, match.Value))
+                    if (!options.AllowHeaders.IsNullOrWhiteSpace())
                     {
-                        context.Response.Headers.TryAdd(HeaderNames.AccessControlAllowOrigin, match.Value);
-
-                        if (!options.AllowHeaders.IsNullOrWhiteSpace())
-                        {
-                            context.Response.Headers.TryAdd(HeaderNames.AccessControlAllowHeaders, options.AllowHeaders);
-                        }
-                        if (!options.AllowMethods.IsNullOrWhiteSpace())
-                        {
-                            context.Response.Headers.TryAdd(HeaderNames.AccessControlAllowMethods, options.AllowMethods);
-                        }
-                        if (!options.AllowCredentials.IsNullOrWhiteSpace())
-                        {
-                            context.Response.Headers.TryAdd(HeaderNames.AccessControlAllowCredentials, options.AllowCredentials);
-                        }
-
-                        this._logging.Debug($"Cors Header:\r\n{context.Response.Headers.ToJsonString()}");
-
-                        if (request.Method.Equals(HttpMethod.Options.Method, StringComparison.OrdinalIgnoreCase))
-                        {
-                            context.Response.StatusCode = (int)HttpStatusCode.OK;
-                            return;
-                        }
+                        context.Response.Headers.TryAdd(HeaderNames.AccessControlAllowHeaders, options.AllowHeaders);
                     }
-                    else
+                    if (!options.AllowMethods.IsNullOrWhiteSpace())
                     {
-                        this._logging.Error($"Reject cross-domain requests from {match.Value}");
+                        context.Response.Headers.TryAdd(HeaderNames.AccessControlAllowMethods, options.AllowMethods);
+                    }
+                    if (!options.AllowCredentials.IsNullOrWhiteSpace())
+                    {
+                        context.Response.Headers.TryAdd(HeaderNames.AccessControlAllowCredentials, options.AllowCredentials);
+                    }
+
+                    this._logging.Debug($"Cors Header:\r\n{context.Response.Headers.ToJsonString()}");
+
+                    if (request.Method.Equals(HttpMethod.Options.Method, StringComparison.OrdinalIgnoreCase))
+                    {
+                        context.Response.StatusCode = (int)HttpStatusCode.OK;
+                        return;
                     }
                 }
                 else
