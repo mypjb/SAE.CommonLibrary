@@ -51,20 +51,26 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
                 {
                     context.Response.Headers.TryAdd(HeaderNames.AccessControlAllowOrigin, originHost);
 
-                    if (!options.AllowHeaders.IsNullOrWhiteSpace())
+                    if (request.Headers.ContainsKey(HeaderNames.AccessControlRequestHeaders))
+                    {
+                        context.Response.Headers.TryAdd(HeaderNames.AccessControlAllowHeaders, request.Headers[HeaderNames.AccessControlRequestHeaders]);
+                    }else if (!options.AllowHeaders.IsNullOrWhiteSpace())
                     {
                         context.Response.Headers.TryAdd(HeaderNames.AccessControlAllowHeaders, options.AllowHeaders);
                     }
-                    if (!options.AllowMethods.IsNullOrWhiteSpace())
+
+                    if (request.Headers.ContainsKey(HeaderNames.AccessControlRequestMethod))
+                    {
+                        context.Response.Headers.TryAdd(HeaderNames.AccessControlAllowMethods, request.Headers[HeaderNames.AccessControlRequestMethod]);
+                    }else if (!options.AllowMethods.IsNullOrWhiteSpace())
                     {
                         context.Response.Headers.TryAdd(HeaderNames.AccessControlAllowMethods, options.AllowMethods);
                     }
+
                     if (!options.AllowCredentials.IsNullOrWhiteSpace())
                     {
                         context.Response.Headers.TryAdd(HeaderNames.AccessControlAllowCredentials, options.AllowCredentials);
                     }
-
-                    this._logging.Debug($"Cors Header:\r\n{context.Response.Headers.ToJsonString()}");
 
                     if (request.Method.Equals(HttpMethod.Options.Method, StringComparison.OrdinalIgnoreCase))
                     {
