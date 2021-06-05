@@ -42,32 +42,32 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
                 context.HttpContext.Response.StatusCode = errorOutput.ToHttpStatusCode();
                 context.ExceptionHandled = true;
             }
+            else
+            {
+                ErrorOutput errorOutput = null;
+                if (context.Result is ObjectResult objectResult)
+                {
+                    if (objectResult.Value == null)
+                    {
+                        errorOutput = new ErrorOutput(StatusCodes.ResourcesNotExist);
+                    }
+                }else if (context.Result is JsonResult)
+                {
+                    var jsonResult = context.Result as JsonResult;
+                    if (jsonResult.Value == null)
+                    {
+                        errorOutput = new ErrorOutput(StatusCodes.ResourcesNotExist);
+                    }
+                }
 
-            //if (context.Result is ObjectResult objectResult)
-            //{
-            //    if (objectResult.Value != null &&
-            //        objectResult.Value is ErrorOutput)
-            //    {
-            //        errorOutput = (ErrorOutput)objectResult.Value;
-            //    }
-            //    else if (objectResult.Value == null)
-            //    {
-            //        errorOutput = new ErrorOutput(StatusCodes.ResourcesNotExist);
-            //    }
-            //}
-            //else if (context.Result is JsonResult)
-            //{
-            //    var jsonResult = context.Result as JsonResult;
-            //    if (jsonResult.Value != null &&
-            //        jsonResult.Value is ErrorOutput)
-            //    {
-            //        errorOutput = (ErrorOutput)jsonResult.Value;
-            //    }
-            //    else if (jsonResult.Value == null)
-            //    {
-            //        errorOutput = new ErrorOutput(StatusCodes.ResourcesNotExist);
-            //    }
-            //}
+                if (errorOutput != null)
+                {
+                    context.Result = new JsonResult(errorOutput);
+                    context.HttpContext.Response.StatusCode = errorOutput.ToHttpStatusCode();
+                }
+            }
+
+
         }
 
         public void OnActionExecuting(ActionExecutingContext context)
