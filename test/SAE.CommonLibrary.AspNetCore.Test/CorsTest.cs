@@ -32,13 +32,18 @@ namespace SAE.CommonLibrary.AspNetCore.Test
         {
             var optionsRequest = new HttpRequestMessage(HttpMethod.Options, "/api/home");
             optionsRequest.Headers.Add(HeaderNames.AccessControlRequestMethod, HttpMethod.Post.Method);
-            optionsRequest.Headers.Add(HeaderNames.Referer, $"{CorsHost}/{this.GetRandom()}/{this.GetRandom()}?{this.GetRandom()}={this.GetRandom()}");
+            optionsRequest.Headers.Add(HeaderNames.AccessControlRequestHeaders, "Authorization");
+            optionsRequest.Headers.Add(HeaderNames.Origin, CorsHost);
             optionsRequest.Headers.Add(HeaderNames.XRequestedWith, "XMLHttpRequest");
             var optionsResponseMessage = await this._client.SendAsync(optionsRequest);
             var origin= optionsResponseMessage.Headers
                                        .GetValues(HeaderNames.AccessControlAllowOrigin)?
                                        .FirstOrDefault();
             Assert.Equal(origin, CorsHost);
+            Assert.Equal(optionsRequest.Headers.GetValues(HeaderNames.AccessControlRequestHeaders).First(),
+                         optionsResponseMessage.Headers.GetValues(HeaderNames.AccessControlAllowHeaders).First());
+            Assert.Equal(optionsRequest.Headers.GetValues(HeaderNames.AccessControlRequestMethod).First(),
+                         optionsResponseMessage.Headers.GetValues(HeaderNames.AccessControlAllowMethods).First());
             var request = new HttpRequestMessage(HttpMethod.Post, "/api/home");
             var responseMessage =await this._client.SendAsync(request);
             var json= await responseMessage.Content.ReadAsStringAsync();
