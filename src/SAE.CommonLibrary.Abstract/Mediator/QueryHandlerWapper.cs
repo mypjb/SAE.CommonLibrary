@@ -9,7 +9,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator
 {
     internal abstract class RequestHandlerWrapper
     {
-        public abstract Task<object> Invoke(object command);
+        public abstract Task<object> InvokeAsync(object command);
     }
 
     internal class RequestHandlerWrapper<TCommand, TResponse> : RequestHandlerWrapper where TCommand : class
@@ -30,13 +30,13 @@ namespace SAE.CommonLibrary.Abstract.Mediator
             }
         }
 
-        public override async Task<object> Invoke(object command)
+        public override async Task<object> InvokeAsync(object command)
         {
             object result = null;
             TCommand arg = (TCommand)command;
             foreach (var handler in this._handlers)
             {
-                result = await handler.Handle(arg);
+                result = await handler.HandleAsync(arg);
             }
             return result;
         }
@@ -50,10 +50,10 @@ namespace SAE.CommonLibrary.Abstract.Mediator
                 this.provider = provider;
             }
 
-            public async Task<TDelegateResponse> Handle(TDelegateCommand command)
+            public async Task<TDelegateResponse> HandleAsync(TDelegateCommand command)
             {
                 var handler = await this.provider.Get<TDelegateCommand, TDelegateResponse>();
-                return await handler.Handle(command);
+                return await handler.HandleAsync(command);
             }
         }
     }

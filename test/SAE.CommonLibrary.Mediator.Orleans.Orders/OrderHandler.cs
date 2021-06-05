@@ -15,18 +15,18 @@ namespace SAE.CommonLibrary.Mediator.Orleans.Orders
         //{
         //    this._mediator = mediator;
         //}
-        public Task Handle(OrderCommand command)
+        public Task HandleAsync(OrderCommand command)
         {
             return Task.CompletedTask;
         }
 
-        public Task<bool> Handle(Command.Delete<Order> command)
+        public Task<bool> HandleAsync(Command.Delete<Order> command)
         {
             Console.WriteLine(command.Id);
             return Task.FromResult(true);
         }
 
-        async Task<Order> ICommandHandler<OrderCommand, Order>.Handle(OrderCommand command)
+        async Task<Order> ICommandHandler<OrderCommand, Order>.HandleAsync(OrderCommand command)
         {
             //var product = await this._mediator.Send<Product.Product>(new ProductCommand());
             return new Order

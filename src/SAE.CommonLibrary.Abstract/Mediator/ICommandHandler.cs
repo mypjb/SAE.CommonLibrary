@@ -16,7 +16,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        Task Handle(TCommand command);
+        Task HandleAsync(TCommand command);
     }
 
     /// <summary>
@@ -32,6 +32,6 @@ namespace SAE.CommonLibrary.Abstract.Mediator
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        Task<TResponse> Handle(TCommand command);
+        Task<TResponse> HandleAsync(TCommand command);
     }
 }

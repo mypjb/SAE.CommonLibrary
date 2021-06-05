@@ -62,7 +62,7 @@ namespace SAE.CommonLibrary.Mediator.Orleans.Test
         public async Task Send()
         {
             var command = new OrderCommand();
-            var order = await this._mediator.Send<Order>(command);
+            var order = await this._mediator.SendAsync<Order>(command);
             this.WriteLine(order);
         }
         //[Fact]
@@ -80,7 +80,7 @@ namespace SAE.CommonLibrary.Mediator.Orleans.Test
             {
                 Id = Guid.NewGuid().ToString("N")
             };
-            var result = await this._mediator.Send<bool>(command);
+            var result = await this._mediator.SendAsync<bool>(command);
 
             Xunit.Assert.True(result);
         }

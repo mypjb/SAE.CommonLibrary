@@ -11,7 +11,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator
 {
     internal abstract class CommandHandlerWrapper
     {
-        public abstract Task Invoke(object command);
+        public abstract Task InvokeAsync(object command);
     }
 
     internal class CommandHandlerWrapper<TCommand> : CommandHandlerWrapper where TCommand : class
@@ -30,10 +30,10 @@ namespace SAE.CommonLibrary.Abstract.Mediator
             }
         }
 
-        public override async Task Invoke(object command)
+        public override async Task InvokeAsync(object command)
         {
             TCommand arg = (TCommand)command;
-            await _handlers.ForEachAsync(async handler => await handler.Handle(arg));
+            await _handlers.ForEachAsync(async handler => await handler.HandleAsync(arg));
         }
 
         private class DelegateCommandHandlerWrapper<TDelegateCommand> : ICommandHandler<TDelegateCommand> where TDelegateCommand : class
@@ -45,10 +45,10 @@ namespace SAE.CommonLibrary.Abstract.Mediator
                 this.provider = provider;
             }
 
-            public async Task Handle(TDelegateCommand command)
+            public async Task HandleAsync(TDelegateCommand command)
             {
                 var handler = await this.provider.Get<TDelegateCommand>();
-                await handler.Handle(command);
+                await handler.HandleAsync(command);
             }
         }
     }

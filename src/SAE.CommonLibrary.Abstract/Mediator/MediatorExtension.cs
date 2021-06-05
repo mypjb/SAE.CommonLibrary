@@ -11,24 +11,24 @@ namespace SAE.CommonLibrary.Abstract.Mediator
     /// </summary>
     public static class MediatorExtension
     {
-        public static Task Send(this IMediator mediator,object command)
+        public static Task SendAsync(this IMediator mediator,object command)
         {
-            return mediator.Send(command, command.GetType());
+            return mediator.SendAsync(command, command.GetType());
         }
-        public static Task Send<TCommand>(this IMediator mediator,TCommand command)
-        {
-            var commandType = typeof(TCommand);
-            return mediator.Send(command, commandType);
-        }
-        public static async Task<TResponse> Send<TCommand,TResponse>(this IMediator mediator, TCommand command)
+        public static Task SendAsync<TCommand>(this IMediator mediator,TCommand command)
         {
             var commandType = typeof(TCommand);
-            return (TResponse)(await mediator.Send(command, commandType, typeof(TResponse)));
+            return mediator.SendAsync(command, commandType);
         }
-        public static async Task<TResponse> Send<TResponse>(this IMediator mediator, object command)
+        public static async Task<TResponse> SendAsync<TCommand,TResponse>(this IMediator mediator, TCommand command)
+        {
+            var commandType = typeof(TCommand);
+            return (TResponse)(await mediator.SendAsync(command, commandType, typeof(TResponse)));
+        }
+        public static async Task<TResponse> SendAsync<TResponse>(this IMediator mediator, object command)
         {
             var commandType = command.GetType();
-            return (TResponse)(await mediator.Send(command, commandType, typeof(TResponse)));
+            return (TResponse)(await mediator.SendAsync(command, commandType, typeof(TResponse)));
         }
     }
 }

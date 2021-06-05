@@ -19,7 +19,7 @@ namespace SAE.CommonLibrary.Mediator.Orleans
             this._client = client;
             this._logging = logging;
         }
-        public Task Handle(TCommand command)
+        public Task HandleAsync(TCommand command)
         {
             this._logging.Debug($"get grain {this._client.IsInitialized}");
             var grain = this._client.GetGrain<IGrainCommandHandler>("0");
@@ -39,7 +39,7 @@ namespace SAE.CommonLibrary.Mediator.Orleans
             this._logging = logging;
         }
 
-        public async Task<TResponse> Handle(TCommand command)
+        public async Task<TResponse> HandleAsync(TCommand command)
         {
             this._logging.Debug($"get grain {this._client.IsInitialized}");
             var grain = this._client.GetGrain<IGrainCommandHandler>("0");

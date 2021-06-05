@@ -29,7 +29,7 @@ namespace SAE.CommonLibrary.Abstract.Test.Mediator
         public async Task Send()
         {
             var command = new SaveCommand();
-            await this._mediator.Send(command);
+            await this._mediator.SendAsync(command);
         }
     }
 }

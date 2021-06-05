@@ -7,7 +7,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator
 {
     internal class ProxyCommandHandler<TCommand> : ICommandHandler<TCommand> where TCommand : class
     {
-        public Task Handle(TCommand command)
+        public Task HandleAsync(TCommand command)
         {
             throw new NotImplementedException();
         }
@@ -15,7 +15,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator
 
     internal class ProxyCommandHandler<TCommand, TResponse> : ICommandHandler<TCommand, TResponse> where TCommand : class
     {
-        Task<TResponse> ICommandHandler<TCommand, TResponse>.Handle(TCommand command)
+        Task<TResponse> ICommandHandler<TCommand, TResponse>.HandleAsync(TCommand command)
         {
             throw new NotImplementedException();
         }

@@ -5,7 +5,7 @@ namespace SAE.CommonLibrary.Abstract.Test.Mediator
 {
     public class AddHandler : ICommandHandler<SaveCommand>
     {
-        public Task Handle(SaveCommand command)
+        public Task HandleAsync(SaveCommand command)
         {
             return Task.CompletedTask;
         }
@@ -13,7 +13,7 @@ namespace SAE.CommonLibrary.Abstract.Test.Mediator
 
     public class UpdateHandler : ICommandHandler<SaveCommand>
     {
-        public Task Handle(SaveCommand command)
+        public Task HandleAsync(SaveCommand command)
         {
             return Task.FromResult(command);
         }

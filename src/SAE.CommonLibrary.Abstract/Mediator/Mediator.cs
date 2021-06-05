@@ -21,7 +21,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator
         }
 
 
-        public async Task<object> Send(object command, Type commandType, Type responseType)
+        public async Task<object> SendAsync(object command, Type commandType, Type responseType)
         {
             var key = $"{commandType}_{responseType}";
 
@@ -31,12 +31,12 @@ namespace SAE.CommonLibrary.Abstract.Mediator
                                 .MakeGenericType(commandType, responseType), this._serviceProvider);
             });
 
-            var response = await((RequestHandlerWrapper)wrapper).Invoke(command);
+            var response = await((RequestHandlerWrapper)wrapper).InvokeAsync(command);
 
             return response;
         }
 
-        public async Task Send(object command, Type commandType)
+        public async Task SendAsync(object command, Type commandType)
         {
             var key = commandType.ToString();
 
@@ -46,7 +46,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator
                                 .MakeGenericType(commandType), this._serviceProvider);
             });
 
-            await((CommandHandlerWrapper)wrapper).Invoke(command);
+            await((CommandHandlerWrapper)wrapper).InvokeAsync(command);
         }
     }
 }
