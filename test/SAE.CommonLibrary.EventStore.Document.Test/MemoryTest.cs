@@ -92,7 +92,7 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
         }
 
         [Fact]
-        public virtual async Task Remove()
+        public virtual async Task Delete()
         {
             var user = await this.Register();
             await this._documentStore.DeleteAsync(user);
