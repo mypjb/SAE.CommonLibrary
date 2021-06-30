@@ -21,6 +21,18 @@ namespace SAE.CommonLibrary.Test
         }
 
         [Fact]
+        public void ObjectToJson()
+        {
+            var dic = new Dictionary<string, string>
+            {
+                {this.GetRandom(),this.GetRandom() },
+                {this.GetRandom(),this.GetRandom() }
+            };
+
+            this.WriteLine(dic.ToJsonString());
+        }
+
+        [Fact]
         public void JsonToXml()
         {
             var xmlDocument = new XmlDocument();
@@ -41,7 +53,7 @@ namespace SAE.CommonLibrary.Test
     <logger name=""*"" minlevel=""Debug"" writeTo=""FileTarget"" />
   </rules>
 </nlog>");
-            
+
             this.WriteLine(document);
         }
         [Fact]
