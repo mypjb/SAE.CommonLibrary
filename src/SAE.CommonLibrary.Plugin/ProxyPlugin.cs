@@ -61,7 +61,7 @@ namespace SAE.CommonLibrary.Plugin
         {
             plugin.Name = this.Name;
             plugin.Version = this.Version;
-            plugin.Description = this.Version;
+            plugin.Description = this.Description;
             plugin.Status = this.Status;
             plugin.Path = this.Path;
             plugin.Order = this.Order;
