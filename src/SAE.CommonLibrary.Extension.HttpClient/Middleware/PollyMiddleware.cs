@@ -23,13 +23,22 @@ namespace SAE.CommonLibrary.Extension.Middleware
                HttpStatusCode.InternalServerError, // 500
                HttpStatusCode.BadGateway, // 502
                HttpStatusCode.ServiceUnavailable, // 503
-               HttpStatusCode.GatewayTimeout // 504
+               HttpStatusCode.GatewayTimeout, // 504
+               HttpStatusCode.Unauthorized//401
             };
             httpStatusCodes = httpStatusCodes ?? defaultStatusCodes;
 
             this._policy = Policy.Handle<HttpRequestException>()
                               .OrResult<HttpResponseMessage>(
-                                   r => httpStatusCodes.Contains(r.StatusCode))
+                                   r =>
+                                   {
+                                       if (r.StatusCode == HttpStatusCode.Unauthorized &&
+                                           r.RequestMessage.Headers.Authorization != null)
+                                       {
+                                           r.RequestMessage.Headers.Authorization = null;
+                                       }
+                                       return httpStatusCodes.Contains(r.StatusCode);
+                                   })
                               .RetryAsync(retryCount);
         }
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)

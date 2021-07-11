@@ -1,18 +1,19 @@
 using IdentityModel.Client;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using SAE.CommonLibrary.Extension;
+using SAE.CommonLibrary.Logging;
 using SAE.CommonLibrary.Plugin.Constant;
 using SAE.CommonLibrary.Test;
+using System;
+using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
-using Microsoft.AspNetCore.Http;
-using System;
-using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System.Net.Http;
-using System.Threading;
+using Assert = Xunit.Assert;
 
 namespace SAE.CommonLibrary.Plugin.Test
 {
@@ -21,6 +22,10 @@ namespace SAE.CommonLibrary.Plugin.Test
         public static Func<HttpMessageHandler> Handler;
         public WebPluginTest(ITestOutputHelper output) : base(output,PluginConstant.Host)
         {
+            this._client.UseLoggin(()=>
+            {
+                return this._serviceProvider.GetService<ILogging<WebPluginTest>>();
+            });
             Handler = () => new ProxyMessageHandler(this._client);
         }
 

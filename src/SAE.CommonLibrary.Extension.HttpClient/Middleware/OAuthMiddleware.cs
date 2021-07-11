@@ -39,7 +39,7 @@ namespace SAE.CommonLibrary.Extension.Middleware
             if (this.Token == null || !this.Token.Check())
             {
                 this._loggingRecord?.Invoke().Info("Token 不存在或已过期，重新发送申请请求");
-                var tokenClient = new HttpClient();
+                var tokenClient = this._options.Client;
 
                 var disco = await tokenClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
                 {
@@ -65,7 +65,7 @@ namespace SAE.CommonLibrary.Extension.Middleware
                         {
                             Address = disco.TokenEndpoint,
                             ClientId = this._options.AppId,
-                            ClientSecret = this._options.AppKey,
+                            ClientSecret = this._options.AppSecret,
                             Scope = this._options.Scope
                         }).GetAwaiter().GetResult();
 

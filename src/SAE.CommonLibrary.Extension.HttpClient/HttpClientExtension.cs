@@ -20,7 +20,6 @@ namespace SAE.CommonLibrary.Extension
     public static partial class HttpClientExtension
     {
         internal static Func<ILogging> LoggerRecord { get; set; }
-        private static int DefaultTimeout { get; } = 1000 * 30;
 
         /// <summary>
         /// 使用记录器
@@ -250,9 +249,9 @@ namespace SAE.CommonLibrary.Extension
         /// <returns></returns>
         public static HttpClient UseDefaultMiddleware(this HttpClient httpClient)
         {
-            httpClient.Timeout = TimeSpan.FromMilliseconds(DefaultTimeout);
-            return httpClient.UsePolly()
-                             .UseChunkHandler();
+            httpClient.Timeout = TimeSpan.FromMilliseconds(Constants.Timeout);
+            return httpClient.UseChunkHandler()
+                             .UsePolly();
         }
 
         /// <summary>

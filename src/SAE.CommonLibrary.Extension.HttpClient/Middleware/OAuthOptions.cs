@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
 
 namespace SAE.CommonLibrary.Extension.Middleware
@@ -10,6 +11,7 @@ namespace SAE.CommonLibrary.Extension.Middleware
         {
             this.Expires = Constants.Expires;
             this.Scope = Constants.Scope;
+            this.Client = new HttpClient();
         }
         public const string Option = "oauth";
         /// <summary>
@@ -25,9 +27,9 @@ namespace SAE.CommonLibrary.Extension.Middleware
         /// </summary>
         public string AppId { get; set; }
         /// <summary>
-        /// 应用key
+        /// 应用Secret
         /// </summary>
-        public string AppKey { get; set; }
+        public string AppSecret { get; set; }
         private int expires;
         /// <summary>
         /// 过期百分比默认超过70时间就重置
@@ -41,6 +43,15 @@ namespace SAE.CommonLibrary.Extension.Middleware
                 {
                     this.expires = value;
                 }
+            }
+        }
+        private HttpClient client;
+        public HttpClient Client
+        {
+            get => client; set
+            {
+                if (value == null) return;
+                client = value;
             }
         }
     }

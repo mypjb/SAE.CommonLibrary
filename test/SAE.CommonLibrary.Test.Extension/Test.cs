@@ -1,17 +1,13 @@
 ﻿using SAE.CommonLibrary.Extension;
 using SAE.CommonLibrary.Logging.Nlog;
-using System;
-using System.Buffers.Text;
 using System.Collections.Generic;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace SAE.CommonLibrary.Test
+namespace SAE.CommonLibrary.Test.Extension
 {
     public class Test : BaseTest
     {

@@ -13,7 +13,7 @@ namespace SAE.CommonLibrary.Test
     public abstract class BaseTest
     {
         protected readonly ITestOutputHelper _output;
-        protected readonly IServiceProvider _serviceProvider;
+        protected IServiceProvider _serviceProvider;
         protected IConfiguration _configuration;
         public BaseTest(ITestOutputHelper output)
         {

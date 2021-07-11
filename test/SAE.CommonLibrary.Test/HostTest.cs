@@ -29,6 +29,9 @@ namespace SAE.CommonLibrary.Test
                            .UseAutofacProviderFactory()
                            .Build();
             host.Start();
+
+            this._serviceProvider = host.Services;
+
             var testServer = host.GetTestServer();
 
             this._httpMessageHandler = testServer.CreateHandler();
