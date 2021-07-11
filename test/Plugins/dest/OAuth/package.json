@@ -1,7 +1,0 @@
-{
-  "Name": "OAuth",
-  "Path": "SAE.CommonLibrary.Plugin.OAuth.dll",
-  "Description": "this is a OAuth plugin",
-  "Version": "1.0.0.0",
-  "Status":false
-}

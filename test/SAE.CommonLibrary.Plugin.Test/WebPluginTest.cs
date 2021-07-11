@@ -30,7 +30,7 @@ namespace SAE.CommonLibrary.Plugin.Test
         {
             var disco = await this._client.GetDiscoveryDocumentAsync(PluginConstant.Host);
 
-            Xunit.Assert.False(disco.IsError, disco.Error);
+            Assert.False(disco.IsError, disco.Error);
 
             // request token
             var tokenResponse = await _client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
@@ -41,7 +41,7 @@ namespace SAE.CommonLibrary.Plugin.Test
                 Scope = "api1"
             });
 
-            Xunit.Assert.False(tokenResponse.IsError, tokenResponse.Error);
+            Assert.False(tokenResponse.IsError, tokenResponse.Error);
 
             this.WriteLine(tokenResponse.Json);
 
@@ -56,7 +56,7 @@ namespace SAE.CommonLibrary.Plugin.Test
             var response = await this._client.GetAsync($"{PluginConstant.Host}{url}");
             this.WriteLine(response);
 
-            Xunit.Assert.True(response.IsSuccessStatusCode, ((int)response.StatusCode).ToString());
+            Assert.True(response.IsSuccessStatusCode, ((int)response.StatusCode).ToString());
 
             var content = await response.Content.ReadAsStringAsync();
 

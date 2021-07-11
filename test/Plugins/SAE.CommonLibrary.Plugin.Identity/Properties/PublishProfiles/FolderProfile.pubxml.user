@@ -7,6 +7,7 @@
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
     <_PublishTargetUrl>E:\Program\GitHub\SAE\CommonLibrary\test\Plugins\SAE.CommonLibrary.Plugin.Identity\../dest/Identity</_PublishTargetUrl>
+    <History>True|2021-07-11T09:20:30.6151028Z;True|2021-07-11T16:50:55.8625914+08:00;True|2021-07-11T16:37:22.0959947+08:00;</History>
   </PropertyGroup>
   <ItemGroup>
     <File Include="appsettings.Development.json">
