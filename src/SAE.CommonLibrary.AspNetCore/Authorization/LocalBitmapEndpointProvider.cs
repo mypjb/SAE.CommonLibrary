@@ -27,8 +27,8 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
                 endpoints.Add(new BitmapEndpoint
                 {
                     Path = descriptor.Path,
-                    Index = index,
-                    Name=descriptor.Name
+                    Index = index + 1,
+                    Name = descriptor.Name
                 });
             }
 

@@ -4,15 +4,19 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Cors;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Net.Http.Headers;
 using SAE.CommonLibrary.AspNetCore.Routing;
 using SAE.CommonLibrary.Extension;
 using SAE.CommonLibrary.Test;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 using Xunit;
 using Xunit.Abstractions;
+using Assert = Xunit.Assert;
 
 namespace SAE.CommonLibrary.AspNetCore.Test
 {
@@ -38,12 +42,23 @@ namespace SAE.CommonLibrary.AspNetCore.Test
         [Fact]
         public async Task BitmapAuthorizationTest()
         {
-            //var descriptors=await this.RouterScanningTest();
-            //var descriptor = descriptors.First(s => s.Method.Equals("get", StringComparison.OrdinalIgnoreCase));
-            var responseMessage = await this._client.GetAsync($"/api/student/display/{Guid.NewGuid()}");
-            this.WriteLine(responseMessage.Headers);
-            this.WriteLine(await responseMessage.Content.ReadAsStringAsync());
-            responseMessage.EnsureSuccessStatusCode();
+            var pathDescriptors =await this.RouterScanningTest();
+
+            foreach (var descriptor in pathDescriptors)
+            {
+                var httpResponse = await this._client.GetAsync($"/account/login?path={HttpUtility.UrlEncode(descriptor.Path)}");
+
+                var cookies = httpResponse.Headers.GetValues(HeaderNames.SetCookie);
+
+                var req = new HttpRequestMessage(new HttpMethod(descriptor.Method), descriptor.Path);
+
+                req.Headers.Add(HeaderNames.Cookie, cookies.First());
+
+                var rep = await this._client.SendAsync(req);
+                this.WriteLine(descriptor);
+                Assert.Equal(System.Net.HttpStatusCode.OK, rep.StatusCode);
+            }
+
         }
         private class Startup
         {

@@ -47,7 +47,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
 
                     var code = this._bitmapAuthorization.FindPermissionCode(claims);
 
-                    if (!code.IsNullOrWhiteSpace())
+                    if (!string.IsNullOrEmpty(code))
                     {
                         this._bitmapAuthorization.Authorizate(code, index);
                         context.Succeed(requirement);
