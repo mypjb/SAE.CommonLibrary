@@ -1,20 +1,47 @@
-﻿using SAE.CommonLibrary.Logging;
+﻿using Microsoft.Extensions.Options;
+using SAE.CommonLibrary.Extension;
+using SAE.CommonLibrary.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 
 namespace SAE.CommonLibrary.AspNetCore.Authorization
 {
     public class BitmapAuthorization : IBitmapAuthorization
     {
-        private readonly ILogging<BitmapAuthorization> _logging;
-
-        public BitmapAuthorization(ILogging<BitmapAuthorization> logging)
+        protected readonly ILogging<BitmapAuthorization> _logging;
+        protected BitmapAuthorizationOptions Options
+        {
+            get;
+            private set;
+        }
+        public BitmapAuthorization(ILogging<BitmapAuthorization> logging,
+                                   IOptionsMonitor<BitmapAuthorizationOptions> optionsMonitor)
         {
             this._logging = logging;
+            this.SetOption(optionsMonitor.CurrentValue);
+            optionsMonitor.OnChange(SetOption);
         }
-        public bool Authorizate(string code, int index)
+
+        
+
+        private void SetOption(BitmapAuthorizationOptions bitmapAuthorizationOptions)
+        {
+            if (bitmapAuthorizationOptions.PermissionGroup.IsNullOrWhiteSpace())
+            {
+                this._logging.Warn($"PermissionGroup = null,Enable single application mode");
+            }
+            else
+            {
+                this._logging.Info($"PermissionGroup = {bitmapAuthorizationOptions.PermissionGroup},Enable multiple application mode");
+            }
+            
+            this.Options = bitmapAuthorizationOptions;
+        }
+
+        public virtual bool Authorizate(string code, int index)
         {
             var authorizate = false;
 
@@ -42,7 +69,25 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
             return authorizate;
         }
 
-        public string GeneratePermissionCode(IEnumerable<int> permissionBits)
+        public virtual string FindPermissionCode(IEnumerable<Claim> claims)
+        {
+            if (this.Options.PermissionGroup.IsNullOrWhiteSpace())
+                return claims.FirstOrDefault()?.Value;
+
+            var prefix = $"{this.Options.PermissionGroup}{Constants.PermissionGroupSeparator}";
+
+            foreach (var claim in claims)
+            {
+                if (claim.Value.StartsWith(prefix))
+                {
+                    return claim.Value.Substring(prefix.Length);
+                }
+            }
+
+            return string.Empty;
+        }
+
+        public virtual string GeneratePermissionCode(IEnumerable<int> permissionBits)
         {
             if (!permissionBits.Any()) return string.Empty;
 

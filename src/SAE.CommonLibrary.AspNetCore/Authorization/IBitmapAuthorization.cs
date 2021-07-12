@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Text;
 
 namespace SAE.CommonLibrary.AspNetCore.Authorization
@@ -20,5 +21,12 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         /// <param name="index">权限索引</param>
         /// <returns>返回<seealso cref="true"/>授权成功反之失败</returns>
         bool Authorizate(string code, int index);
+        /// <summary>
+        /// 查找权限码
+        /// </summary>
+        /// <param name="claims"></param>
+        /// <returns></returns>
+        string FindPermissionCode(IEnumerable<Claim> claims);
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
     public interface IBitmapEndpointStorage
     {
         /// <summary>
-        /// 根据<paramref name="context"/>获取当前终点
+        /// 根据<paramref name="context"/>获取当前终结点索引
         /// </summary>
         /// <param name="context">请求上下文</param>
         /// <returns>返回和终结点匹配的索引</returns>
@@ -47,11 +48,15 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         /// 名称
         /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// 请求方法
+        /// </summary>
+        public HttpMethod Method { get; set; }
     }
 
     public class BitmapEndpointStorage : IBitmapEndpointStorage
     {
-        private readonly ConcurrentDictionary<string,int> _store;
+        private readonly ConcurrentDictionary<string, int> _store;
         public BitmapEndpointStorage()
         {
             this._store = new ConcurrentDictionary<string, int>();
@@ -62,7 +67,8 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
             {
                 return;
             }
-            this._store.AddOrUpdate(endpoint.Path.ToLower(), endpoint.Index, (a, b) => endpoint.Index);
+            //this._store.AddOrUpdate($"{endpoint.Path}{Constants.PermissionBitsSeparator}{endpoint.Method}".ToLower(), endpoint.Index, (a, b) => endpoint.Index);
+            this._store.AddOrUpdate(endpoint.Path, endpoint.Index, (a, b) => endpoint.Index);
         }
 
         public void AddRange(IEnumerable<BitmapEndpoint> endpoints)
@@ -81,10 +87,10 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         public int GetIndex(string path)
         {
             int index;
-            
+
             path = path.ToLower();
 
-            if(!this._store.TryGetValue(path, out index))
+            if (!this._store.TryGetValue(path, out index))
             {
                 index = -1;
             }
@@ -95,7 +101,13 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
 
     public static class BitmapEndpointStorageExtension
     {
-        public static int GetIndex(this IBitmapEndpointStorage storage,HttpContext context)
+        /// <summary>
+        /// Query the index from <see cref="IBitmapEndpointStorage"/>
+        /// </summary>
+        /// <param name="storage"></param>
+        /// <param name="context">request context</param>
+        /// <returns></returns>
+        public static int GetIndex(this IBitmapEndpointStorage storage, HttpContext context)
         {
             if (context == null) return -1;
 

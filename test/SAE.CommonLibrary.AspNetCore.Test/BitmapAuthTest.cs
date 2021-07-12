@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Cors;
 using Microsoft.Extensions.DependencyInjection;
 using SAE.CommonLibrary.AspNetCore.Routing;
@@ -14,7 +16,7 @@ using Xunit.Abstractions;
 
 namespace SAE.CommonLibrary.AspNetCore.Test
 {
-    public class BitmapAuthTest: HostTest
+    public class BitmapAuthTest : HostTest
     {
         public BitmapAuthTest(ITestOutputHelper output) : base(output)
         {
@@ -27,8 +29,8 @@ namespace SAE.CommonLibrary.AspNetCore.Test
         [Fact]
         public async Task<IEnumerable<IPathDescriptor>> RouterScanningTest()
         {
-            var httpResponseMessage= await this._client.GetAsync(Constants.DefaultRoutesPath);
-            var descriptors =await httpResponseMessage.AsAsync<IEnumerable<PathDescriptor>>();
+            var httpResponseMessage = await this._client.GetAsync(Constants.DefaultRoutesPath);
+            var descriptors = await httpResponseMessage.AsAsync<IEnumerable<PathDescriptor>>();
             Xunit.Assert.True(descriptors.Any());
             this.WriteLine(descriptors);
             return descriptors;
@@ -38,21 +40,30 @@ namespace SAE.CommonLibrary.AspNetCore.Test
         {
             //var descriptors=await this.RouterScanningTest();
             //var descriptor = descriptors.First(s => s.Method.Equals("get", StringComparison.OrdinalIgnoreCase));
-            await this._client.GetAsync($"/api/student/display/{Guid.NewGuid()}");
+            var responseMessage = await this._client.GetAsync($"/api/student/display/{Guid.NewGuid()}");
+            this.WriteLine(responseMessage.Headers);
+            this.WriteLine(await responseMessage.Content.ReadAsStringAsync());
+            responseMessage.EnsureSuccessStatusCode();
         }
         private class Startup
         {
             public void ConfigureServices(IServiceCollection services)
             {
                 services.AddHttpContextAccessor();
-                services.AddControllers();
-                services.Configure<Microsoft.AspNetCore.Mvc.MvcOptions>(options =>
+                services.AddControllers(options =>
                 {
-                    options.Filters.Add<Microsoft.AspNetCore.Mvc.Authorization.AuthorizeFilter>();
+                    options.Filters.Add(new AuthorizeFilter());
                 });
+
+                services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                        .AddCookie();
+
+                services.AddAuthorization();
+
                 services.AddRoutingScanning()
-                        .AddBitmapAuthorization();
-                
+                        .AddBitmapAuthorization()
+                        .AddLocalBitmapEndpointProvider();
+
             }
 
             // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,6 +73,7 @@ namespace SAE.CommonLibrary.AspNetCore.Test
 
                 app.UseRouting();
 
+                app.UseBitmapAuthorization();
 
                 app.UseEndpoints(endpoints =>
                 {

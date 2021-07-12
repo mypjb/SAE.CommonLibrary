@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SAE.CommonLibrary.Extension;
 using System.Linq;
+using System.Security.Claims;
 
 namespace SAE.CommonLibrary.AspNetCore.Authorization
 {
@@ -16,7 +17,9 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         private readonly IBitmapEndpointStorage _bitmapEndpointStorage;
         private readonly IBitmapAuthorization _bitmapAuthorization;
 
-        public BitmapAuthorizationHandler(IHttpContextAccessor httpContextAccessor, IBitmapEndpointStorage bitmapEndpointStorage, IBitmapAuthorization bitmapAuthorization)
+        public BitmapAuthorizationHandler(IHttpContextAccessor httpContextAccessor,
+                                          IBitmapEndpointStorage bitmapEndpointStorage,
+                                          IBitmapAuthorization bitmapAuthorization)
         {
             this._httpContextAccessor = httpContextAccessor;
             this._bitmapEndpointStorage = bitmapEndpointStorage;
@@ -40,10 +43,13 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
 
                 if (index > -1)
                 {
-                    var claim = context.User.FindFirst(Constants.PermissionBits);
+                    var claims = context.User.FindAll(Constants.PermissionBits) ?? Enumerable.Empty<Claim>();
 
-                    if (claim != null && !claim.Value.IsNullOrWhiteSpace() && this._bitmapAuthorization.Authorizate(claim.Value, index))
+                    var code = this._bitmapAuthorization.FindPermissionCode(claims);
+
+                    if (!code.IsNullOrWhiteSpace())
                     {
+                        this._bitmapAuthorization.Authorizate(code, index);
                         context.Succeed(requirement);
                     }
                 }

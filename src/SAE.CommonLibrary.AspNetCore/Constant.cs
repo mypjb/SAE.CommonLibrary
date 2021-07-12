@@ -29,6 +29,10 @@ namespace SAE.CommonLibrary.AspNetCore
         /// </summary>
         public const string PermissionBits = "pbits";
         /// <summary>
+        /// 权限位，组分隔符
+        /// </summary>
+        public const string PermissionGroupSeparator = ":";
+        /// <summary>
         /// 权限位分隔符
         /// </summary>
         public const char PermissionBitsSeparator = '.';
