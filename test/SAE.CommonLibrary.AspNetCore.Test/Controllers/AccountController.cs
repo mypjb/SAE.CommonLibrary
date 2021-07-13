@@ -27,9 +27,9 @@ namespace SAE.CommonLibrary.AspNetCore.Test.Controllers
             this._bitmapAuthorization = bitmapAuthorization;
         }
         [AllowAnonymous]
-        public IActionResult Login(string path)
+        public IActionResult Login(string path,string method)
         {
-            var index = this._bitmapEndpointStorage.GetIndex(path);
+            var index = this._bitmapEndpointStorage.GetIndex(path, method);
 
             var code = this._bitmapAuthorization.GeneratePermissionCode(new[] { index });
 

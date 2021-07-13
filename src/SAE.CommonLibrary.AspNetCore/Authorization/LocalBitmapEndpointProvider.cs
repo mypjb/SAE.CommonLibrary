@@ -15,7 +15,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         {
             this._endpoints = endpoints;
         }
-        public Task<IEnumerable<BitmapEndpoint>> FindALLAsync(IEnumerable<IPathDescriptor> descriptors)
+        public Task<IEnumerable<BitmapEndpoint>> FindsAsync(IEnumerable<IPathDescriptor> descriptors)
         {
             var endpoints = new List<BitmapEndpoint>(descriptors.Count());
 
@@ -28,7 +28,8 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
                 {
                     Path = descriptor.Path,
                     Index = index + 1,
-                    Name = descriptor.Name
+                    Name = descriptor.Name,
+                    Method=descriptor.Method
                 });
             }
 

@@ -183,8 +183,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 {
                     endpoints.Add(new BitmapEndpoint
                     {
-                        Path = descriptors[i].Path,
-                        Index = i
+                        Path = descriptors[i].Path
                     });
                 }
 
@@ -242,7 +241,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
                 var paths = pathDescriptorProvider.GetDescriptors();
 
-                var endpoints = provider.FindALLAsync(paths)
+                var endpoints = provider.FindsAsync(paths)
                                               .GetAwaiter()
                                               .GetResult();
 
@@ -251,7 +250,5 @@ namespace Microsoft.Extensions.DependencyInjection
             return app;
         }
 
-        
-     
     }
 }

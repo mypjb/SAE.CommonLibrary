@@ -8,6 +8,6 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
 {
     public interface IBitmapEndpointProvider
     {
-        Task<IEnumerable<BitmapEndpoint>> FindALLAsync(IEnumerable<IPathDescriptor> paths);
+        Task<IEnumerable<BitmapEndpoint>> FindsAsync(IEnumerable<IPathDescriptor> paths);
     }
 }

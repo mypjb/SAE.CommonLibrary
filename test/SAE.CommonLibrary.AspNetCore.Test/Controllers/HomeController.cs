@@ -10,23 +10,23 @@ namespace SAE.CommonLibrary.AspNetCore.Test.Controllers
     [Route("api/{controller}")]
     public class HomeController:Controller
     {
-        [HttpGet("{action}")]
+        [HttpGet]
         public  object Index()
         {
             return new { value = $"{nameof(HomeController)}_{nameof(Index)}" };
         }
-        [HttpPost("{action}")]
+        [HttpPost]
         public object Add()
         {
             return new { value = $"{nameof(HomeController)}_{nameof(Add)}" };
         }
-        [HttpPut("{action}")]
+        [HttpPut]
         public object Edit()
         {
             return new { value = $"{nameof(HomeController)}_{nameof(Edit)}" };
         }
 
-        [HttpDelete("{action}")]
+        [HttpDelete]
         public object Delete()
         {
             return new { value = $"{nameof(HomeController)}_{nameof(Delete)}" };

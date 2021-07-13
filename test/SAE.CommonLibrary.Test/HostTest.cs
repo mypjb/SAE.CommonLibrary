@@ -20,8 +20,12 @@ namespace SAE.CommonLibrary.Test
         {
             baseAddress = string.IsNullOrWhiteSpace(baseAddress) ? "http://localhost/" : baseAddress;
             var host = Host.CreateDefaultBuilder()
+                           .ConfigureServices((ctx, s) =>
+                           {
+
+                           })
                            .ConfigureJsonFileDirectorySource()
-                           .ConfigureWebHostDefaults(builder=>
+                           .ConfigureWebHostDefaults(builder =>
                            {
                                builder.UseTestServer();
                                this.ConfigureWebHost(builder);

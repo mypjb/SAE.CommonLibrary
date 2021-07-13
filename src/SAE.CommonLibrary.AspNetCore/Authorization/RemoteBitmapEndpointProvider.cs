@@ -21,7 +21,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         {
             this._options = options;
         }
-        public async Task<IEnumerable<BitmapEndpoint>> FindALLAsync(IEnumerable<IPathDescriptor> descriptors)
+        public async Task<IEnumerable<BitmapEndpoint>> FindsAsync(IEnumerable<IPathDescriptor> descriptors)
         {
             var client = new HttpClient();
 

@@ -46,7 +46,7 @@ namespace SAE.CommonLibrary.AspNetCore.Test
 
             foreach (var descriptor in pathDescriptors)
             {
-                var httpResponse = await this._client.GetAsync($"/account/login?path={HttpUtility.UrlEncode(descriptor.Path)}");
+                var httpResponse = await this._client.GetAsync($"/account/login?path={HttpUtility.UrlEncode(descriptor.Path)}&method={descriptor.Method}");
 
                 var cookies = httpResponse.Headers.GetValues(HeaderNames.SetCookie);
 

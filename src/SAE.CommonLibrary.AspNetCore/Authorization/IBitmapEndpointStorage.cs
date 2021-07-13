@@ -13,11 +13,12 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
     public interface IBitmapEndpointStorage
     {
         /// <summary>
-        /// 根据<paramref name="context"/>获取当前终结点索引
+        /// 根据<paramref name="path"/>获取当前终结点索引
         /// </summary>
-        /// <param name="context">请求上下文</param>
+        /// <param name="path">请求上下文</param>
+        /// <param name="method">请求方式</param>
         /// <returns>返回和终结点匹配的索引</returns>
-        int GetIndex(string path);
+        int GetIndex(string path, string method);
         /// <summary>
         /// 添加位图终点
         /// </summary>
@@ -51,7 +52,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         /// <summary>
         /// 请求方法
         /// </summary>
-        public HttpMethod Method { get; set; }
+        public string Method { get; set; }
     }
 
     public class BitmapEndpointStorage : IBitmapEndpointStorage
@@ -67,8 +68,8 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
             {
                 return;
             }
-            //this._store.AddOrUpdate($"{endpoint.Path}{Constants.PermissionBitsSeparator}{endpoint.Method}".ToLower(), endpoint.Index, (a, b) => endpoint.Index);
-            this._store.AddOrUpdate(endpoint.Path, endpoint.Index, (a, b) => endpoint.Index);
+            this._store.AddOrUpdate($"{endpoint.Path}{Constants.PermissionBitsSeparator}{endpoint.Method}".ToLower(), endpoint.Index, (a, b) => endpoint.Index);
+            //this._store.AddOrUpdate(endpoint.Path, endpoint.Index, (a, b) => endpoint.Index);
         }
 
         public void AddRange(IEnumerable<BitmapEndpoint> endpoints)
@@ -84,13 +85,13 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
             return this._store.Count;
         }
 
-        public int GetIndex(string path)
+        public int GetIndex(string path, string method)
         {
             int index;
 
-            path = path.ToLower();
+            var key = $"{path}{Constants.PermissionBitsSeparator}{method}".ToLower();
 
-            if (!this._store.TryGetValue(path, out index))
+            if (!this._store.TryGetValue(key, out index))
             {
                 index = -1;
             }
@@ -128,7 +129,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
             {
                 path = endpoint.DisplayName;
             }
-            return storage.GetIndex(path);
+            return storage.GetIndex(path,context.Request.Method);
         }
     }
 }

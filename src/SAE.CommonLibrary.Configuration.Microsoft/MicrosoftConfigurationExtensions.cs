@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using Constants = SAE.CommonLibrary.Configuration.Constants;
 
 namespace Microsoft.Extensions.Configuration
 {
@@ -67,6 +69,11 @@ namespace Microsoft.Extensions.Configuration
                 root = root.IsNullOrWhiteSpace() ? Constants.DefaultConfigRootDirectory : root;
 
                 option.FileName = Path.Combine(root, $"{applicationName}.{env}{Constants.JsonSuffix}");
+            }
+            //setting oauth
+            if (option.OAuth != null && option.OAuth.Check())
+            {
+                option.Client = option.Client.UseOAuth(option.OAuth);
             }
 
             action.Invoke(option);

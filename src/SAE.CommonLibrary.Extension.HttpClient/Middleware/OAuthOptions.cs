@@ -54,5 +54,25 @@ namespace SAE.CommonLibrary.Extension.Middleware
                 client = value;
             }
         }
+
+        /// <summary>
+        /// check oauth whether effective
+        /// </summary>
+        /// <param name="error">true tagger error </param>
+        /// <returns></returns>
+        public bool Check(bool error = false)
+        {
+            if (error)
+            {
+                Assert.Build(this.AppId.IsNullOrWhiteSpace() ||
+                             this.AppSecret.IsNullOrWhiteSpace() ||
+                             this.Authority.IsNullOrWhiteSpace())
+                      .False("oauth must offer 'Authority' 'AppId' 'AppSecret'");
+            }
+
+            return !(this.AppId.IsNullOrWhiteSpace() ||
+               this.AppSecret.IsNullOrWhiteSpace() ||
+               this.Authority.IsNullOrWhiteSpace());
+        }
     }
 }

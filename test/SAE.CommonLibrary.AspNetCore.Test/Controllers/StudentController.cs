@@ -16,13 +16,13 @@ namespace SAE.CommonLibrary.AspNetCore.Test.Controllers
         {
             return new { value = $"{nameof(StudentController)}_{nameof(Display)}" };
         }
-        [HttpPost("{action}")]
+        [HttpPost]
         public object Add()
         {
             return new { value = $"{nameof(StudentController)}_{nameof(Add)}" };
         }
 
-        [HttpPost("{action}")]
+        [HttpPut]
         public object Edit()
         {
             return new { value = $"{nameof(StudentController)}_{nameof(Edit)}" };

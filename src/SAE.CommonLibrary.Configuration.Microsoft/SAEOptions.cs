@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using SAE.CommonLibrary.Extension;
+using SAE.CommonLibrary.Extension.Middleware;
 
 namespace SAE.CommonLibrary.Configuration
 {
@@ -15,6 +16,9 @@ namespace SAE.CommonLibrary.Configuration
         public string FileName { get; set; }
         public string Url { get; set; }
         public int PollInterval { get; set; }
+
+        public OAuthOptions OAuth { get; set; }
+
         private HttpClient client;
         public HttpClient Client
         {
