@@ -87,6 +87,7 @@ namespace SAE.CommonLibrary.Configuration
             logging?.Info($"Persistence to local '{this._options.FileName}'");
             using (var fileStream = new FileStream(this._options.FileName, FileMode.Create, FileAccess.Write, FileShare.Read))
             {
+                this.Source.Stream.Position = 0;
                 await this.Source.Stream.CopyToAsync(fileStream);
                 this.Source.Stream.Position = 0;
             }
