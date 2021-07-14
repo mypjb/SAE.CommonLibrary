@@ -52,8 +52,8 @@ namespace SAE.CommonLibrary.Extension.Middleware
 
                 if (disco.IsError)
                 {
-                    this._loggingRecord?.Invoke()?.Error($"获取DiscoveryDocument失败，{disco.Exception?.Message}", disco.Exception);
-                    throw disco.Exception;
+                    this._loggingRecord?.Invoke()?.Error($"获取DiscoveryDocument失败，{disco.Exception?.Message ?? disco.Error}", disco.Exception);
+                    throw disco.Exception ?? new SAEException(StatusCodes.RequestInvalid, disco.Raw); ;
                 }
 
                 lock (this._lock)
@@ -71,8 +71,8 @@ namespace SAE.CommonLibrary.Extension.Middleware
 
                         if (tokenResponse.IsError)
                         {
-                            this._loggingRecord?.Invoke()?.Error($"获取Token失败，{tokenResponse.Exception?.Message}", tokenResponse.Exception);
-                            throw tokenResponse.Exception;
+                            this._loggingRecord?.Invoke()?.Error($"获取Token失败，{tokenResponse.Exception?.Message ?? tokenResponse.Error}", tokenResponse.Exception);
+                            throw tokenResponse.Exception ?? new SAEException(StatusCodes.RequestInvalid, tokenResponse.Raw);
                         }
                         this._loggingRecord?.Invoke()?.Info($"Token获取成功,Token:{tokenResponse.AccessToken},ExpiresIn:{tokenResponse.ExpiresIn}");
                         this.Token = new RequestToken(tokenResponse.AccessToken, tokenResponse.ExpiresIn * (this._options.Expires / 100));

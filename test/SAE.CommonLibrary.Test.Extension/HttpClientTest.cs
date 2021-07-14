@@ -72,6 +72,25 @@ namespace SAE.CommonLibrary.Test.Extension
             this.WriteLine(await httpResponse.Content.ReadAsStringAsync());
             httpResponse.EnsureSuccessStatusCode();
         }
+        //[Fact]
+        //public async Task Test()
+        //{
+        //    var client = new HttpClient().UseOAuth(new CommonLibrary.Extension.Middleware.OAuthOptions
+        //    {
+        //        AppId = "localhost.test",
+        //        AppSecret = "localhost.test",
+        //        Authority = "http://oauth.sae.com"
+        //    });
+
+        //    //var client = new HttpClient().UseOAuth(new CommonLibrary.Extension.Middleware.OAuthOptions
+        //    //{
+        //    //    AppId = "localhost.dev",
+        //    //    AppSecret = "localhost.dev",
+        //    //    Authority = "http://127.0.0.1:8080"
+        //    //});
+        //    var httpResponse = await client.GetAsync("http://api.sae.com/app/config?id=69cfe444b2a341a5900fad6000c26130&env=Development");
+        //    this.WriteLine(await httpResponse.Content.ReadAsStringAsync());
+        //} 
 
         public class ProxyMessageHandler : DelegatingHandler
         {
