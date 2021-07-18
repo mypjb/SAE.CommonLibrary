@@ -128,10 +128,12 @@ namespace SAE.CommonLibrary.Configuration
             {
                 this.LoadFileAsync(ex).GetAwaiter().GetResult();
             }
-
-            if (this.pollTask == null && this._options.PollInterval > 0)
+            finally
             {
-                this.pollTask = this.PollForSecretChangesAsync();
+                if (this.pollTask == null && this._options.PollInterval > 0)
+                {
+                    this.pollTask = this.PollForSecretChangesAsync();
+                }
             }
         }
         /// <summary>
