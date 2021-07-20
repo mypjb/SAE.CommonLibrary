@@ -71,6 +71,9 @@ namespace SAE.CommonLibrary.Test.Extension
             var httpResponse = await client.GetAsync("/api");
             this.WriteLine(await httpResponse.Content.ReadAsStringAsync());
             httpResponse.EnsureSuccessStatusCode();
+            //var httpResponse2 = await client.GetAsync("/api");
+            //this.WriteLine(await httpResponse2.Content.ReadAsStringAsync());
+            //httpResponse.EnsureSuccessStatusCode();
         }
         //[Fact]
         //public async Task Test()

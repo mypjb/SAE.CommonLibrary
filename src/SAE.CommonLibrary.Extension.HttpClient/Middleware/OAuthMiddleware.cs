@@ -75,7 +75,7 @@ namespace SAE.CommonLibrary.Extension.Middleware
                             throw tokenResponse.Exception ?? new SAEException(StatusCodes.RequestInvalid, tokenResponse.Raw);
                         }
                         this._loggingRecord?.Invoke()?.Info($"Token获取成功,Token:{tokenResponse.AccessToken},ExpiresIn:{tokenResponse.ExpiresIn}");
-                        this.Token = new RequestToken(tokenResponse.AccessToken, tokenResponse.ExpiresIn * (this._options.Expires / 100));
+                        this.Token = new RequestToken(tokenResponse.AccessToken, (int)(tokenResponse.ExpiresIn * 1.0 * this._options.Expires / 100));
                     }
                 }
             }
