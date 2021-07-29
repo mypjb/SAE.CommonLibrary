@@ -23,5 +23,6 @@ namespace SAE.CommonLibrary.Configuration
         public const char ConfigSeparator = ':';
         public const string JsonSuffix = ".json";
         public const int DefaultPollInterval = 60;
+        public const int DefaultClientTimeout = 1000 * 3;
     }
 }

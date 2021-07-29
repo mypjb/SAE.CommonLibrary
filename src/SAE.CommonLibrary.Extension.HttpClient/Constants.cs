@@ -10,6 +10,8 @@ namespace SAE.CommonLibrary.Extension
     {
         public const int Expires = 70;
         public const int Timeout = 1000 * 30;
+        public const int OAuthTimeout = 1000 * 5;
+        public const bool OAuthManageTokenInvalid = true;
         public const string Scope = "api";
         public const string HttpMessageInvokerHandler = "_handler";
     }

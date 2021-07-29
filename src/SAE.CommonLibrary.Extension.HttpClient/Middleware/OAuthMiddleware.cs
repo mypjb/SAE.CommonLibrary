@@ -31,7 +31,19 @@ namespace SAE.CommonLibrary.Extension.Middleware
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             await RequestTokenAsync(request);
-            return await base.SendAsync(request, cancellationToken);
+
+            var responseMessage = await base.SendAsync(request, cancellationToken);
+
+            if (this._options.ManageTokenInvalid &&
+                responseMessage.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                this.Token = null;
+                await RequestTokenAsync(request);
+
+                responseMessage = await base.SendAsync(request, cancellationToken);
+            }
+
+            return responseMessage;
         }
 
         private async Task RequestTokenAsync(HttpRequestMessage request)
@@ -80,7 +92,7 @@ namespace SAE.CommonLibrary.Extension.Middleware
                 }
             }
 
-            request.SetBearerToken(this.Token.AccessToken);
+            request.SetBearerToken(this.Token?.AccessToken);
         }
         protected class RequestToken
         {

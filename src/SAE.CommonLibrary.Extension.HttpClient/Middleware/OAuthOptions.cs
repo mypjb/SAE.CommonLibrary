@@ -11,7 +11,9 @@ namespace SAE.CommonLibrary.Extension.Middleware
         {
             this.Expires = Constants.Expires;
             this.Scope = Constants.Scope;
+            this.ManageTokenInvalid = Constants.OAuthManageTokenInvalid;
             this.Client = new HttpClient();
+            this.Client.Timeout =  TimeSpan.FromMilliseconds(Constants.OAuthTimeout);
         }
         public const string Option = "oauth";
         /// <summary>
@@ -53,6 +55,11 @@ namespace SAE.CommonLibrary.Extension.Middleware
                 if (value == null) return;
                 client = value;
             }
+        }
+
+        public bool ManageTokenInvalid
+        {
+            get;set;
         }
 
         /// <summary>
