@@ -91,9 +91,13 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         {
             if (!permissionBits.Any()) return string.Empty;
 
-            var list= permissionBits.ToList();
+            var bits = permissionBits.ToList();
+            //delete invalid bit
+            bits.RemoveAll(s => s < Constants.BitmapAuthorize.InitialIndex);
+            //duplicate removal
+            permissionBits = bits.Distinct().ToArray();
 
-            list.RemoveAll(s => s < 1);
+            if (!permissionBits.Any()) return string.Empty;
 
             StringBuilder sb = new StringBuilder();
 
