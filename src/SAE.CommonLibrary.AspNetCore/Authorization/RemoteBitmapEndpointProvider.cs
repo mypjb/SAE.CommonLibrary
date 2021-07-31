@@ -11,7 +11,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
     public class RemoteBitmapEndpointOptions
     {
         public const string Option = "authorize";
-        public string Url { get; set; }
+        public string BitmapEndpoint { get; set; }
     }
     public class RemoteBitmapEndpointProvider : IBitmapEndpointProvider
     {
@@ -25,7 +25,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         {
             var client = new HttpClient();
 
-            var requestMessage = new HttpRequestMessage(HttpMethod.Get, this._options.Url);
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, this._options.BitmapEndpoint);
 
             requestMessage.AddJsonContent(descriptors);
 

@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SAE.CommonLibrary.Extension;
-
+using Microsoft.Extensions.Configuration;
+using SAE.CommonLibrary.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
 
 namespace SAE.CommonLibrary.AspNetCore.Routing
 {
@@ -25,8 +27,15 @@ namespace SAE.CommonLibrary.AspNetCore.Routing
     {
         private readonly IApiDescriptionGroupCollectionProvider _provider;
         private IList<IPathDescriptor> pathDescriptors;
-        public PathDescriptorProvider(IApiDescriptionGroupCollectionProvider provider)
+        private SystemOptions Options { get; set; }
+        public PathDescriptorProvider(IApiDescriptionGroupCollectionProvider provider,
+                                      IOptionsMonitor<SystemOptions> optionsMonitor)
         {
+            this.Options = optionsMonitor.CurrentValue;
+            optionsMonitor.OnChange(option =>
+            {
+                this.Options = option;
+            });
             this._provider = provider;
             this.Scan();
         }
@@ -41,23 +50,23 @@ namespace SAE.CommonLibrary.AspNetCore.Routing
                                                 .SelectMany(group => group.Items)
                                                 .Where(s => !s.GetType().IsDefined(typeof(ObsoleteAttribute), false)))
             {
-                var groupName = group.GroupName;
+                //var groupName = group.GroupName;
                 var name = group.ActionDescriptor.DisplayName;
-                if (groupName.IsNullOrWhiteSpace())
-                {
-                    if (!name.IsNullOrWhiteSpace() &&
-                        name.EndsWith(')'))
-                    {
-                        groupName = name.TrimEnd(')');
-                        var index = groupName.LastIndexOf("(");
-                        groupName = groupName.Substring(index + 1);
-                        name = name.Substring(0, index);
-                    }
-                    else
-                    {
-                        groupName = "default";
-                    }
-                }
+                //if (groupName.IsNullOrWhiteSpace())
+                //{
+                //    if (!name.IsNullOrWhiteSpace() &&
+                //        name.EndsWith(')'))
+                //    {
+                //        groupName = name.TrimEnd(')');
+                //        var index = groupName.LastIndexOf("(");
+                //        groupName = groupName.Substring(index + 1);
+                //        name = name.Substring(0, index);
+                //    }
+                //    else
+                //    {
+                //        groupName = "default";
+                //    }
+                //}
                 var url = group.RelativePath;
                 foreach (var kv in group.ActionDescriptor.RouteValues)
                 {
@@ -66,10 +75,10 @@ namespace SAE.CommonLibrary.AspNetCore.Routing
                 pathDescriptors.Add(new PathDescriptor(name,
                                                        group.HttpMethod,
                                                        url,
-                                                       groupName));
+                                                       this.Options.Id));
             }
-            this.pathDescriptors= this.pathDescriptors
-                                      .OrderBy(s => s.GroupName)
+            this.pathDescriptors = this.pathDescriptors
+                                      .OrderBy(s => s.Group)
                                       .ThenBy(s => s.Path)
                                       .ToList();
         }

@@ -14,12 +14,12 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
             options.AllowRequestAsync += async (HttpContext ctx, string host) =>
             {
                 var result = ctx.User?.Identity.IsAuthenticated ?? false;
-                if (ctx.User.HasClaim(s => s.Type.Equals(Constants.CorsClaim)))
+                if (ctx.User.HasClaim(s => s.Type.Equals(Constants.Cors.Claim)))
                 {
                     return ctx.User
-                              .FindFirst(Constants.CorsClaim)
+                              .FindFirst(Constants.Cors.Claim)
                               .Value
-                              .Split(Constants.CorsSeparator)
+                              .Split(Constants.Cors.Separator)
                               .Contains(host, StringComparer.OrdinalIgnoreCase);
                 }
                 return result;

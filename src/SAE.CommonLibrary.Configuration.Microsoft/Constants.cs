@@ -6,19 +6,28 @@ namespace SAE.CommonLibrary.Configuration
 {
     public class Constants
     {
-        /// <summary>
-        /// 配置根目录
-        /// </summary>
-        public const string ConfigRootDirectoryKey = "SAE:CONFIG:ROOT";
-        /// <summary>
-        /// 默认的根配置目录
-        /// </summary>
-        public const string DefaultConfigRootDirectory = "Config";
-        /// <summary>
-        /// 配置节点
-        /// </summary>
-        public const string ConfigNodeKey = "SAE:CONFIG";
+        public class Config
+        {
+            /// <summary>
+            /// root directory key
+            /// </summary>
+            public const string RootDirectoryKey = "SAE:CONFIG:ROOT";
+            /// <summary>
+            /// default root directory
+            /// </summary>
+            public const string DefaultRootDirectory = "Config";
+            /// <summary>
+            /// option key
+            /// </summary>
+            public const string OptionKey = "SAE:CONFIG";
 
+            /// <summary>
+            /// system key
+            /// </summary>
+            public const string SystemKey = "System:Id";
+        }
+
+       
         public const string FileSeparator = ".";
         public const char ConfigSeparator = ':';
         public const string JsonSuffix = ".json";

@@ -33,7 +33,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         /// <returns></returns>
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, BitmapAuthorizationRequirement requirement)
         {
-            if (!context.User.FindFirst(Constants.Administrator)?.Value.IsNullOrWhiteSpace() ?? false)//是否是超管
+            if (!context.User.FindFirst(Constants.BitmapAuthorize.Administrator)?.Value.IsNullOrWhiteSpace() ?? false)//是否是超管
             {
                 context.Succeed(requirement);
             }
@@ -43,7 +43,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
 
                 if (index > -1)
                 {
-                    var claims = context.User.FindAll(Constants.PermissionBits) ?? Enumerable.Empty<Claim>();
+                    var claims = context.User.FindAll(Constants.BitmapAuthorize.Claim) ?? Enumerable.Empty<Claim>();
 
                     var code = this._bitmapAuthorization.FindPermissionCode(claims);
 

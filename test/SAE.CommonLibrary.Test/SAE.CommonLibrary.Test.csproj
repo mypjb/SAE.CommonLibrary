@@ -44,8 +44,11 @@
     <None Update="Config\redis.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Config\system.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
-  <ProjectExtensions><VisualStudio><UserProperties config_4logging_1json__JsonSchema="https://nlog-project.org/schemas/appsettings.schema.json" /></VisualStudio></ProjectExtensions>
+  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 
 </Project>

@@ -12,33 +12,33 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
     public class BitmapAuthorization : IBitmapAuthorization
     {
         protected readonly ILogging<BitmapAuthorization> _logging;
-        protected BitmapAuthorizationOptions Options
+        protected SystemOptions Options
         {
             get;
             private set;
         }
         public BitmapAuthorization(ILogging<BitmapAuthorization> logging,
-                                   IOptionsMonitor<BitmapAuthorizationOptions> optionsMonitor)
+                                   IOptionsMonitor<SystemOptions> optionsMonitor)
         {
             this._logging = logging;
             this.SetOption(optionsMonitor.CurrentValue);
             optionsMonitor.OnChange(SetOption);
         }
 
-        
 
-        private void SetOption(BitmapAuthorizationOptions bitmapAuthorizationOptions)
+
+        private void SetOption(SystemOptions options)
         {
-            if (bitmapAuthorizationOptions.PermissionGroup.IsNullOrWhiteSpace())
+            if (options?.Id.IsNullOrWhiteSpace() ?? false)
             {
                 this._logging.Warn($"PermissionGroup = null,Enable single application mode");
             }
             else
             {
-                this._logging.Info($"PermissionGroup = {bitmapAuthorizationOptions.PermissionGroup},Enable multiple application mode");
+                this._logging.Info($"PermissionGroup = {options.Id},Enable multiple application mode");
             }
-            
-            this.Options = bitmapAuthorizationOptions;
+
+            this.Options = options;
         }
 
         public virtual bool Authorizate(string code, int index)
@@ -47,15 +47,15 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
 
             if (index >= 0)
             {
-                var bitIndex = (int)Math.Ceiling(index * 1.0 / Constants.PermissionBitsMaxPow) - 1;
+                var bitIndex = (int)Math.Ceiling(index * 1.0 / Constants.BitmapAuthorize.MaxPow) - 1;
 
                 if (code.Count() > bitIndex)
                 {
                     var bit = Convert.ToUInt16(code[bitIndex]);
-                    //将00000001向前推进 index % Constant.PermissionBitsMaxPow 个位
-                    var bitPosition = index % Constants.PermissionBitsMaxPow;
+                    //将00000001向前推进 index % Constant.BitmapAuthorize.MaxPow 个位
+                    var bitPosition = index % Constants.BitmapAuthorize.MaxPow;
 
-                    var permissionBit = 1 << ((bitPosition == 0 ? Constants.PermissionBitsMaxPow : bitPosition) - 1);
+                    var permissionBit = 1 << ((bitPosition == 0 ? Constants.BitmapAuthorize.MaxPow : bitPosition) - 1);
 
                     //bit位没有变化说明匹配权限位匹配正确
                     authorizate = (bit | permissionBit) == bit;
@@ -71,10 +71,10 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
 
         public virtual string FindPermissionCode(IEnumerable<Claim> claims)
         {
-            if (this.Options.PermissionGroup.IsNullOrWhiteSpace())
-                return claims.FirstOrDefault()?.Value;
+            //if (this.Options?.Id.IsNullOrWhiteSpace() ?? false)
+            //    return claims.FirstOrDefault()?.Value;
 
-            var prefix = $"{this.Options.PermissionGroup}{Constants.PermissionGroupSeparator}";
+            var prefix = $"{this.Options.Id}{Constants.BitmapAuthorize.GroupSeparator}";
 
             foreach (var claim in claims)
             {
@@ -91,6 +91,10 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         {
             if (!permissionBits.Any()) return string.Empty;
 
+            var list= permissionBits.ToList();
+
+            list.RemoveAll(s => s < 1);
+
             StringBuilder sb = new StringBuilder();
 
             var max = permissionBits.Max();
@@ -105,10 +109,10 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
             var codeStringBuilder = new StringBuilder();
             do
             {
-                var index = binaryDigit.Length > Constants.PermissionBitsMaxPow ?
-                                                 Constants.PermissionBitsMaxPow :
+                var index = binaryDigit.Length > Constants.BitmapAuthorize.MaxPow ?
+                                                 Constants.BitmapAuthorize.MaxPow :
                                                  binaryDigit.Length;
-                
+
                 var bit = Convert.ToUInt16(new string(binaryDigit.Substring(0, index)
                                                  .Reverse()
                                                  .ToArray()), 2);

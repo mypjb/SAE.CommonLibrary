@@ -38,7 +38,8 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
     public class BitmapEndpoint
     {
         /// <summary>
-        /// 索引
+        /// path Index 
+        /// Note: the index starts from 1 
         /// </summary>
         public int Index { get; set; }
         /// <summary>
@@ -68,7 +69,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
             {
                 return;
             }
-            this._store.AddOrUpdate($"{endpoint.Path}{Constants.PermissionBitsSeparator}{endpoint.Method}".ToLower(), endpoint.Index, (a, b) => endpoint.Index);
+            this._store.AddOrUpdate($"{endpoint.Path}{Constants.BitmapAuthorize.Separator}{endpoint.Method}".ToLower(), endpoint.Index, (a, b) => endpoint.Index);
             //this._store.AddOrUpdate(endpoint.Path, endpoint.Index, (a, b) => endpoint.Index);
         }
 
@@ -89,7 +90,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         {
             int index;
 
-            var key = $"{path}{Constants.PermissionBitsSeparator}{method}".ToLower();
+            var key = $"{path}{Constants.BitmapAuthorize.Separator}{method}".ToLower();
 
             if (!this._store.TryGetValue(key, out index))
             {

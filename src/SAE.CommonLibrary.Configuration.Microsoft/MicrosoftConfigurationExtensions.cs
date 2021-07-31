@@ -46,7 +46,7 @@ namespace Microsoft.Extensions.Configuration
         {
             var configuration = configurationBuilder.Build();
 
-            var section = configuration.GetSection(Constants.ConfigNodeKey);
+            var section = configuration.GetSection(Constants.Config.OptionKey);
 
             SAEOptions option;
 
@@ -64,9 +64,9 @@ namespace Microsoft.Extensions.Configuration
 
                 var env = configuration.GetSection(HostDefaults.EnvironmentKey).Value;
 
-                var root = configuration.GetSection(Constants.ConfigRootDirectoryKey)?.Value;
+                var root = configuration.GetSection(Constants.Config.RootDirectoryKey)?.Value;
 
-                root = root.IsNullOrWhiteSpace() ? Constants.DefaultConfigRootDirectory : root;
+                root = root.IsNullOrWhiteSpace() ? Constants.Config.DefaultRootDirectory : root;
 
                 option.FileName = Path.Combine(root, $"{applicationName}.{env}{Constants.JsonSuffix}");
             }
@@ -79,9 +79,9 @@ namespace Microsoft.Extensions.Configuration
             action.Invoke(option);
             option.Check();
 
-            if (!configuration.GetSection(Constants.ConfigRootDirectoryKey).Exists())
+            if (!configuration.GetSection(Constants.Config.RootDirectoryKey).Exists())
             {
-                configurationBuilder.AddInMemoryCollection(new Dictionary<string, string> { { Constants.ConfigRootDirectoryKey, Path.GetDirectoryName(option.FileName) } });
+                configurationBuilder.AddInMemoryCollection(new Dictionary<string, string> { { Constants.Config.RootDirectoryKey, Path.GetDirectoryName(option.FileName) } });
             }
 
             return configurationBuilder.Add(new SAEConfigurationSource(option));
@@ -125,10 +125,10 @@ namespace Microsoft.Extensions.Configuration
 
             if (path.IsNullOrWhiteSpace())
             {
-                var section = env.IsNullOrWhiteSpace() ? configuration.GetSection(Constants.ConfigRootDirectoryKey) :
-                                                         configuration.GetSection($"{env}{Constants.ConfigSeparator}{Constants.ConfigRootDirectoryKey}");
+                var section = env.IsNullOrWhiteSpace() ? configuration.GetSection(Constants.Config.RootDirectoryKey) :
+                                                         configuration.GetSection($"{env}{Constants.ConfigSeparator}{Constants.Config.RootDirectoryKey}");
 
-                path = section.Value.IsNullOrWhiteSpace() ? Constants.DefaultConfigRootDirectory : section.Value;
+                path = section.Value.IsNullOrWhiteSpace() ? Constants.Config.DefaultRootDirectory : section.Value;
             }
 
             var applicationDirectory = Path.Combine(path, applicationName);
@@ -167,7 +167,7 @@ namespace Microsoft.Extensions.Configuration
                 }
             }
 
-            configurationBuilder.AddInMemoryCollection(new Dictionary<string, string> { { Constants.ConfigRootDirectoryKey, path } });
+            configurationBuilder.AddInMemoryCollection(new Dictionary<string, string> { { Constants.Config.RootDirectoryKey, path } });
 
             return configurationBuilder;
         }

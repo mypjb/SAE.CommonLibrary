@@ -28,23 +28,34 @@ namespace SAE.CommonLibrary.AspNetCore.Test
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            builder.UseStartup<Startup>();
+            builder.UseStartup<Startup>()
+                   .ConfigureServices(service =>
+                   {
+                       this.AddProvider(service.AddBitmapAuthorization());
+                   });
         }
+
+        protected virtual void AddProvider(BitmapAuthorizationBuilder builder)
+        {
+            builder.AddLocalBitmapEndpointProvider();
+        }
+
         [Fact]
         public async Task<IEnumerable<IPathDescriptor>> RouterScanningTest()
         {
-            var httpResponseMessage = await this._client.GetAsync(Constants.DefaultRoutesPath);
+            var httpResponseMessage = await this._client.GetAsync(Constants.Route.DefaultPath);
             var descriptors = await httpResponseMessage.AsAsync<IEnumerable<PathDescriptor>>();
-            Xunit.Assert.True(descriptors.Any());
+            Assert.True(descriptors.Any());
+            //Assert.DoesNotContain(descriptors, s => s.Index == 0);
             this.WriteLine(descriptors);
             return descriptors;
         }
         [Fact]
         public async Task BitmapAuthorizationTest()
         {
-            var pathDescriptors =await this.RouterScanningTest();
+            var pathDescriptors = await this.RouterScanningTest();
 
-            foreach (var descriptor in pathDescriptors)
+            foreach (var descriptor in pathDescriptors.Where(s => s.Group == "test"))
             {
                 var httpResponse = await this._client.GetAsync($"/account/login?path={HttpUtility.UrlEncode(descriptor.Path)}&method={descriptor.Method}");
 
@@ -52,7 +63,22 @@ namespace SAE.CommonLibrary.AspNetCore.Test
 
                 var req = new HttpRequestMessage(new HttpMethod(descriptor.Method), descriptor.Path);
 
-                req.Headers.Add(HeaderNames.Cookie, cookies.First());
+                req.Headers.Add(HeaderNames.Cookie, cookies);
+
+                var rep = await this._client.SendAsync(req);
+                this.WriteLine(descriptor);
+                Assert.Equal(System.Net.HttpStatusCode.OK, rep.StatusCode);
+            }
+
+            foreach (var descriptor in pathDescriptors.Where(s => s.Group != "test"))
+            {
+                var httpResponse = await this._client.GetAsync($"/account/login?path={HttpUtility.UrlEncode(descriptor.Path)}&method={descriptor.Method}");
+
+                var cookies = httpResponse.Headers.GetValues(HeaderNames.SetCookie);
+
+                var req = new HttpRequestMessage(new HttpMethod(descriptor.Method), descriptor.Path);
+
+                req.Headers.Add(HeaderNames.Cookie, cookies);
 
                 var rep = await this._client.SendAsync(req);
                 this.WriteLine(descriptor);
@@ -75,10 +101,7 @@ namespace SAE.CommonLibrary.AspNetCore.Test
 
                 services.AddAuthorization();
 
-                services.AddRoutingScanning()
-                        .AddBitmapAuthorization()
-                        .AddLocalBitmapEndpointProvider();
-
+                services.AddRoutingScanning();
             }
 
             // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

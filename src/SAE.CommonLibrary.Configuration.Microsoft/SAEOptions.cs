@@ -12,8 +12,21 @@ namespace SAE.CommonLibrary.Configuration
             this.Client = new HttpClient();
             this.Client.Timeout = TimeSpan.FromMilliseconds(Constants.DefaultClientTimeout);
             this.PollInterval = Constants.DefaultPollInterval;
+            //this.SystemKey = Constants.Config.SystemKey;
         }
 
+        //private string systemKey;
+        //public string SystemKey
+        //{
+        //    get => this.systemKey;
+        //    set
+        //    {
+        //        if (!value.IsNullOrWhiteSpace())
+        //        {
+        //            this.systemKey = value;
+        //        }
+        //    }
+        //}
         public string FileName { get; set; }
         public string Url { get; set; }
         public int PollInterval { get; set; }

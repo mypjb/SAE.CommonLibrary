@@ -1,4 +1,5 @@
 ﻿using SAE.CommonLibrary.AspNetCore.Routing;
+using SAE.CommonLibrary.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,33 +8,20 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.AspNetCore.Authorization
 {
-    public class LocalBitmapEndpointProvider : IBitmapEndpointProvider
+    public class LocalBitmapEndpointProvider : AbstractBitmapEndpointProvider, IBitmapEndpointProvider
     {
-        private readonly IEnumerable<BitmapEndpoint> _endpoints;
 
-        public LocalBitmapEndpointProvider(IEnumerable<BitmapEndpoint> endpoints)
+        public LocalBitmapEndpointProvider(ILogging<AbstractBitmapEndpointProvider> logging, IPathDescriptorProvider provider) : base(logging)
         {
-            this._endpoints = endpoints;
-        }
-        public Task<IEnumerable<BitmapEndpoint>> FindsAsync(IEnumerable<IPathDescriptor> descriptors)
-        {
-            var endpoints = new List<BitmapEndpoint>(descriptors.Count());
-
-            var bitmapEndpoints = _endpoints.ToList();
-
-            foreach (var descriptor in descriptors)
+            this.PathDescriptors = provider.GetDescriptors();
+            var index = 0;
+            foreach (var item in this.PathDescriptors.OrderBy(s => s.Group)
+                                                     .ThenBy(s => s.Path)
+                                                     .ThenBy(s => s.Method)
+                                                     .ToArray())
             {
-                var index = bitmapEndpoints.FindIndex(s => s.Path.Equals(descriptor.Path, StringComparison.OrdinalIgnoreCase));
-                endpoints.Add(new BitmapEndpoint
-                {
-                    Path = descriptor.Path,
-                    Index = index + 1,
-                    Name = descriptor.Name,
-                    Method=descriptor.Method
-                });
+                item.Index = ++index;
             }
-
-            return Task.FromResult(endpoints.AsEnumerable());
         }
     }
 }

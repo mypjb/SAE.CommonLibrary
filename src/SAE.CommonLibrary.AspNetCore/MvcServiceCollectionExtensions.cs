@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using SAE.CommonLibrary;
+using SAE.CommonLibrary.AspNetCore;
 using SAE.CommonLibrary.AspNetCore.Authorization;
 using SAE.CommonLibrary.AspNetCore.Filters;
 using SAE.CommonLibrary.AspNetCore.Routing;
@@ -83,6 +84,10 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddMvcCore()
                     .AddApiExplorer();
+
+            services.AddOptions<SystemOptions>()
+                    .Bind(SystemOptions.Option);
+
             services.TryAddSingleton<IPathDescriptorProvider, PathDescriptorProvider>();
             return services;
         }
@@ -93,7 +98,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IApplicationBuilder UseRoutingScanning(this IApplicationBuilder app)
         {
-            return app.UseRoutingScanning(Constants.DefaultRoutesPath);
+            return app.UseRoutingScanning(Constants.Route.DefaultPath);
         }
         /// <summary>
         /// 使用<paramref name="pathString"/>配置路由中间件
@@ -136,7 +141,8 @@ namespace Microsoft.Extensions.DependencyInjection
         public static BitmapAuthorizationBuilder AddBitmapAuthorization(this IServiceCollection services, string policyName = null)
         {
             services.AddNlogLogger()
-                    .AddHttpContextAccessor();
+                    .AddHttpContextAccessor()
+                    .AddRoutingScanning();
 
             services.AddSingleton<IAuthorizationHandler, BitmapAuthorizationHandler>();
             services.TryAddSingleton<IBitmapAuthorization, BitmapAuthorization>();
@@ -168,45 +174,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static BitmapAuthorizationBuilder AddLocalBitmapEndpointProvider(this BitmapAuthorizationBuilder builder)
         {
-            return builder.AddLocalBitmapEndpointProvider(provider =>
-            {
-                var descriptors= provider.GetService<IPathDescriptorProvider>()
-                                         .GetDescriptors()
-                                         .OrderBy(s => s.Path)
-                                         .ThenBy(s => s.Method)
-                                         .ThenBy(s => s.Name)
-                                         .ToArray();
-
-                var endpoints = new List<BitmapEndpoint>();
-
-                for (int i = 0; i < descriptors.Length; i++)
-                {
-                    endpoints.Add(new BitmapEndpoint
-                    {
-                        Path = descriptors[i].Path
-                    });
-                }
-
-                return endpoints;
-            });
-        }
-
-        /// <summary>
-        /// 添加本地位图终端配置
-        /// </summary>
-        /// <param name="builder"></param>
-        /// <param name="pathProvider"></param>
-        /// <returns></returns>
-        public static BitmapAuthorizationBuilder AddLocalBitmapEndpointProvider(
-                                                 this BitmapAuthorizationBuilder builder,
-                                                 Func<IServiceProvider,IEnumerable<BitmapEndpoint>> endpointProvider)
-        {
-            builder.Services.AddSingleton<IBitmapEndpointProvider, LocalBitmapEndpointProvider>(provider=>
-            {
-                return new LocalBitmapEndpointProvider(endpointProvider.Invoke(provider));
-            }) ;
+            builder.Services.TryAddSingleton<IBitmapEndpointProvider, LocalBitmapEndpointProvider>();
             return builder;
         }
+
         /// <summary>
         /// 添加远程位图终端配置
         /// </summary>
@@ -218,6 +189,20 @@ namespace Microsoft.Extensions.DependencyInjection
                             .Bind(RemoteBitmapEndpointOptions.Option);
 
             builder.Services.TryAddSingleton<IBitmapEndpointProvider, RemoteBitmapEndpointProvider>();
+            return builder;
+        }
+
+        /// <summary>
+        /// Use default Provider Configuration
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static BitmapAuthorizationBuilder AddConfigurationProvider(this BitmapAuthorizationBuilder builder)
+        {
+            builder.Services.AddOptions<ConfigurationEndpointOptions>()
+                            .Bind(ConfigurationEndpointOptions.Option);
+
+            builder.Services.TryAddSingleton<IBitmapEndpointProvider, ConfigurationBitmapEndpointProvider>();
             return builder;
         }
 
