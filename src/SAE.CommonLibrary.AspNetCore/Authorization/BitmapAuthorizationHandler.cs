@@ -53,7 +53,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
                         context.Succeed(requirement);
                     }
                 }
-                else if(index==0)
+                else if (index == 0)
                 {
                     //index not exist default auth
                     context.Succeed(requirement);

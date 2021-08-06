@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
-    <PackageReference Include="mongocsharpdriver" Version="2.11.6" />
+    <PackageReference Include="mongocsharpdriver" Version="2.13.1" />
   </ItemGroup>
 
   <ItemGroup>

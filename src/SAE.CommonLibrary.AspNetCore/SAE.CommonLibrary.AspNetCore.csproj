@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.8" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SAE.CommonLibrary.Extension.HttpClient\SAE.CommonLibrary.Extension.HttpClient.csproj" />

@@ -20,13 +20,13 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Orleans.Client" Version="3.4.1" />
-    <PackageReference Include="Microsoft.Orleans.CodeGenerator.MSBuild" Version="3.4.1">
+    <PackageReference Include="Microsoft.Orleans.Client" Version="3.4.3" />
+    <PackageReference Include="Microsoft.Orleans.CodeGenerator.MSBuild" Version="3.4.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Orleans.OrleansZooKeeperUtils" Version="3.4.1" />
-    <PackageReference Include="Microsoft.Orleans.Server" Version="3.4.1" />
+    <PackageReference Include="Microsoft.Orleans.OrleansZooKeeperUtils" Version="3.4.3" />
+    <PackageReference Include="Microsoft.Orleans.Server" Version="3.4.3" />
   </ItemGroup>
 
   <ItemGroup>
