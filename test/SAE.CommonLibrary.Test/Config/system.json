@@ -57,7 +57,7 @@
         "method": "get",
         "path": "home/custom",
         "name": "sae.commonlibrary.aspnetcore.test.controllers.homecontroller.custom (sae.commonlibrary.aspnetcore.test)",
-        "group": "custom",
+        "group": "test",
         "index": 99999
       }
     ]

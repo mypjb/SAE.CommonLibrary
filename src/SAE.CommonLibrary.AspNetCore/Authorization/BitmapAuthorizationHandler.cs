@@ -41,7 +41,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
             {
                 var index = this._bitmapEndpointStorage.GetIndex(this._httpContextAccessor.HttpContext);
 
-                if (index > -1)
+                if (index > 0)
                 {
                     var claims = context.User.FindAll(Constants.BitmapAuthorize.Claim) ?? Enumerable.Empty<Claim>();
 
@@ -53,7 +53,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
                         context.Succeed(requirement);
                     }
                 }
-                else
+                else if(index==0)
                 {
                     //index not exist default auth
                     context.Succeed(requirement);

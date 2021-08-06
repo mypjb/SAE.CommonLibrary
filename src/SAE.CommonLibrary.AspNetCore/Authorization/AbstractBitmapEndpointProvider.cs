@@ -56,9 +56,9 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
             foreach (var descriptor in descriptors)
             {
                 var pathDescriptor = this.PathDescriptors?.FirstOrDefault(s =>
-                                                        s.Group.Equals(descriptor.Group, StringComparison.OrdinalIgnoreCase) &&
-                                                        s.Path.Equals(descriptor.Path, StringComparison.OrdinalIgnoreCase) &&
-                                                        s.Method.Equals(descriptor.Method, StringComparison.OrdinalIgnoreCase));
+                                                        s.Group == descriptor.Group &&
+                                                        s.Path == descriptor.Path &&
+                                                        s.Method == descriptor.Method);
                 if (pathDescriptor != null)
                 {
                     bitmapEndpoints.Add(new BitmapEndpoint

@@ -14,14 +14,6 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         public LocalBitmapEndpointProvider(ILogging<AbstractBitmapEndpointProvider> logging, IPathDescriptorProvider provider) : base(logging)
         {
             this.PathDescriptors = provider.GetDescriptors();
-            var index = 0;
-            foreach (var item in this.PathDescriptors.OrderBy(s => s.Group)
-                                                     .ThenBy(s => s.Path)
-                                                     .ThenBy(s => s.Method)
-                                                     .ToArray())
-            {
-                item.Index = ++index;
-            }
         }
     }
 }
