@@ -1,0 +1,7 @@
+{
+  "Name": "TestAPI",
+  "Path": "SAE.CommonLibrary.Plugin.TestAPI.dll",
+  "Description": "this is a TestAPI plugin",
+  "Version": "1.0.0.0",
+  "Status":true
+}

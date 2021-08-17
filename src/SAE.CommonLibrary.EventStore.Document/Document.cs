@@ -20,7 +20,7 @@ namespace SAE.CommonLibrary.EventStore.Document
 
         void IDocument.Mutate(IEvent @event)
         {
-            this.Extend(@event);
+            this.To(this.GetType(), @event.GetType(), @event);
         }
 
         protected virtual void Apply(IEvent @event)

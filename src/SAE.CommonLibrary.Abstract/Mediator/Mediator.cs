@@ -20,11 +20,25 @@ namespace SAE.CommonLibrary.Abstract.Mediator
             this._dic = new ConcurrentDictionary<string, object>();
         }
 
-        public async Task Send(object command)
-        {
-            var commandType = command.GetType();
 
-            var key = commandType.GUID.ToString();
+        public async Task<object> SendAsync(object command, Type commandType, Type responseType)
+        {
+            var key = $"{commandType}_{responseType}";
+
+            var wrapper = this._dic.GetOrAdd(key, k =>
+            {
+                return Activator.CreateInstance(typeof(RequestHandlerWrapper<,>)
+                                .MakeGenericType(commandType, responseType), this._serviceProvider);
+            });
+
+            var response = await((RequestHandlerWrapper)wrapper).InvokeAsync(command);
+
+            return response;
+        }
+
+        public async Task SendAsync(object command, Type commandType)
+        {
+            var key = commandType.ToString();
 
             var wrapper = this._dic.GetOrAdd(key, k =>
             {
@@ -32,25 +46,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator
                                 .MakeGenericType(commandType), this._serviceProvider);
             });
 
-            await ((CommandHandlerWrapper)wrapper).Invoke(command);
+            await((CommandHandlerWrapper)wrapper).InvokeAsync(command);
         }
-
-        public async Task<TResponse> Send<TResponse>(object command)
-        {
-            var commandType = command.GetType();
-            var responseType = typeof(TResponse);
-            var key = $"{commandType.GUID}_{responseType.GUID}";
-
-            var wrapper = this._dic.GetOrAdd(key, k =>
-            {
-                return Activator.CreateInstance(typeof(RequestHandlerWrapper<,>)
-                                .MakeGenericType(commandType, responseType), this._serviceProvider); 
-            });
-
-            var response = await ((RequestHandlerWrapper)wrapper).Invoke(command);
-
-            return (TResponse)response;
-        }
-        
     }
 }

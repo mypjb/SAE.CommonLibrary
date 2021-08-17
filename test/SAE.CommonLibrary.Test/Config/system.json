@@ -1,0 +1,65 @@
+﻿{
+  "system": {
+    "id": "test"
+  },
+  "authorize": {
+    "PathDescriptors": [
+      {
+        "method": "get",
+        "path": "api/home",
+        "name": "sae.commonlibrary.aspnetcore.test.controllers.homecontroller.index (sae.commonlibrary.aspnetcore.test)",
+        "group": "test",
+        "index": 99
+      },
+      {
+        "method": "post",
+        "path": "api/home",
+        "name": "sae.commonlibrary.aspnetcore.test.controllers.homecontroller.add (sae.commonlibrary.aspnetcore.test)",
+        "group": "test",
+        "index": 100
+      },
+      {
+        "method": "put",
+        "path": "api/home",
+        "name": "sae.commonlibrary.aspnetcore.test.controllers.homecontroller.edit (sae.commonlibrary.aspnetcore.test)",
+        "group": "test",
+        "index": 101
+      },
+      {
+        "method": "delete",
+        "path": "api/home",
+        "name": "sae.commonlibrary.aspnetcore.test.controllers.homecontroller.delete (sae.commonlibrary.aspnetcore.test)",
+        "group": "test",
+        "index": 2323
+      },
+      {
+        "method": "post",
+        "path": "api/student",
+        "name": "sae.commonlibrary.aspnetcore.test.controllers.studentcontroller.add (sae.commonlibrary.aspnetcore.test)",
+        "group": "test",
+        "index": 4553
+      },
+      {
+        "method": "put",
+        "path": "api/student",
+        "name": "sae.commonlibrary.aspnetcore.test.controllers.studentcontroller.edit (sae.commonlibrary.aspnetcore.test)",
+        "group": "test",
+        "index": 123123
+      },
+      {
+        "method": "get",
+        "path": "api/student/display/{id}",
+        "name": "sae.commonlibrary.aspnetcore.test.controllers.studentcontroller.display (sae.commonlibrary.aspnetcore.test)",
+        "group": "test",
+        "index": 79
+      },
+      {
+        "method": "get",
+        "path": "home/custom",
+        "name": "sae.commonlibrary.aspnetcore.test.controllers.homecontroller.custom (sae.commonlibrary.aspnetcore.test)",
+        "group": "test",
+        "index": 99999
+      }
+    ]
+  }
+}

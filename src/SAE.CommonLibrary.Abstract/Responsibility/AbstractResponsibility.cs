@@ -46,6 +46,5 @@ namespace SAE.CommonLibrary.Abstract.Responsibility
             if (context.Complete || this.Responsibility == null) return;
             await this.Responsibility.HandleAsync(context);
         }
-
     }
 }

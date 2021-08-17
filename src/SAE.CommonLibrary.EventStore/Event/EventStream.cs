@@ -1,6 +1,7 @@
 ﻿using SAE.CommonLibrary.EventStore.Event;
 using SAE.CommonLibrary.EventStore.Serialize;
 using SAE.CommonLibrary.Extension;
+using SAE.CommonLibrary.Logging;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace SAE.CommonLibrary.EventStore
     /// <summary>
     /// 事件流
     /// </summary>
-    public class EventStream:IEnumerable<IEvent>
+    public class EventStream : IEnumerable<IEvent>
     {
         /// <summary>
         /// 
@@ -20,11 +21,11 @@ namespace SAE.CommonLibrary.EventStore
         /// <param name="version"></param>
         /// <param name="eventJsons"></param>
         /// <param name="dateTime"></param>
-        public EventStream(IIdentity identity,int version,string eventJsons,DateTimeOffset dateTime):this(identity,version, Enumerable.Empty<IEvent>(),dateTime)
+        public EventStream(IIdentity identity, int version, string eventJsons, DateTimeOffset dateTime) : this(identity, version, Enumerable.Empty<IEvent>(), dateTime)
         {
-            var serializer= SerializerProvider.Current;
+            var serializer = SerializerProvider.Current;
 
-            this._store = serializer.Deserialize<List<InternalEvent>>(eventJsons)
+            this._store = serializer.Deserialize<List<WrapperEvent>>(eventJsons)
                                     .Cast<IEvent>()
                                     .ToList();
         }
@@ -35,7 +36,7 @@ namespace SAE.CommonLibrary.EventStore
         /// <param name="identity">主键</param>
         /// <param name="version">版本号</param>
         /// <param name="events">事件集合</param>
-        public EventStream(IIdentity identity, int version, IEnumerable<IEvent> events):this(identity,version,events,DateTimeOffset.Now)
+        public EventStream(IIdentity identity, int version, IEnumerable<IEvent> events) : this(identity, version, events, DateTimeOffset.Now)
         {
         }
 
@@ -46,7 +47,7 @@ namespace SAE.CommonLibrary.EventStore
         /// <param name="version">版本号</param>
         /// <param name="events">事件集合</param>
         /// <param name="timeStamp">时间戳</param>
-        public EventStream(IIdentity identity, int version, IEnumerable<IEvent> events,DateTimeOffset timeStamp)
+        public EventStream(IIdentity identity, int version, IEnumerable<IEvent> events, DateTimeOffset timeStamp)
         {
             this._store = new List<IEvent>();
             this.Identity = identity;
@@ -55,10 +56,10 @@ namespace SAE.CommonLibrary.EventStore
             {
                 foreach (var @event in events)
                 {
-                    this._store.Add(new InternalEvent(@event));
+                    this._store.Add(new WrapperEvent(@event));
                 }
             }
-            
+
             this.TimeStamp = timeStamp;
         }
 
@@ -70,7 +71,7 @@ namespace SAE.CommonLibrary.EventStore
         /// <summary>
         /// 标识
         /// </summary>
-        public IIdentity Identity { get;private set; }
+        public IIdentity Identity { get; private set; }
 
         /// <summary>
         /// 时间戳
@@ -101,16 +102,20 @@ namespace SAE.CommonLibrary.EventStore
         /// <returns></returns>
         protected IEnumerator<IEvent> Recover()
         {
-            List<IEvent> eventList = new List<IEvent>();
+            //var logging = ServiceFacade.GetService<ILogging<EventStream>>();
 
-            this._store.ForEach(e =>
-            {
-                var internalEvent= e as InternalEvent;
-                var @event = (IEvent)SerializerProvider.Current.Deserialize(internalEvent.Event, internalEvent.GetEventType());
-                eventList.Add(@event);
-            });
+            //List<IEvent> eventList = new List<IEvent>();
 
-            return eventList.GetEnumerator();
+            //this._store.ForEach(e =>
+            //{
+            //    var internalEvent = e as WrapperEvent;
+            //    var type = internalEvent.GetEventType();
+            //    logging.Debug($"Recover type:'{type}',:'{internalEvent.Event}',raw:'{internalEvent.ToJsonString()}'");
+            //    var @event = (IEvent)SerializerProvider.Current.Deserialize(internalEvent.Event, type);
+            //    eventList.Add(@event);
+            //});
+
+            return this._store.GetEnumerator();
         }
 
         /// <summary>

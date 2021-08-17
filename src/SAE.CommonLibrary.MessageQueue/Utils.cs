@@ -23,7 +23,7 @@ namespace SAE.CommonLibrary.MessageQueue
         public static string Get<TMessage>()
         {
             var type = typeof(TMessage);
-            var identity= typeof(TMessage).FullName.ToMd5(true);
+            var identity = type.GetIdentity();
             var logging = ServiceFacade.GetService<ILogging<Utils>>();
             logging.Debug($"简化标识'{type.Name}' => '{identity}'");
             return identity;

@@ -1,6 +1,9 @@
-﻿using SAE.CommonLibrary.EventStore.Serialize;
+﻿using Microsoft.Extensions.Options;
+using SAE.CommonLibrary.EventStore.Event;
+using SAE.CommonLibrary.EventStore.Serialize;
 using SAE.CommonLibrary.EventStore.Snapshot;
 using SAE.CommonLibrary.Extension;
+using SAE.CommonLibrary.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +21,9 @@ namespace SAE.CommonLibrary.EventStore.Document
         private readonly ISerializer _serializer = SerializerProvider.Current;
         private readonly IEventStore _eventStore;
         private readonly IEnumerable<IDocumentEvent> _documentEvents;
-        private readonly DocumentConfig _config;
+        private readonly IEventMapping _mapping;
+        private readonly ILogging<DefaultDocumentStore> _logging;
+        private readonly DocumentOptions _options;
 
         /// <summary>
         /// 
@@ -29,12 +34,16 @@ namespace SAE.CommonLibrary.EventStore.Document
         public DefaultDocumentStore(ISnapshotStore snapshot,
                                     IEventStore eventStore,
                                     IEnumerable<IDocumentEvent> documentEvents,
-                                    DocumentConfig config)
+                                    IOptions<DocumentOptions> options,
+                                    IEventMapping mapping,
+                                    ILogging<DefaultDocumentStore> logging)
         {
             this._snapshot = snapshot;
             this._eventStore = eventStore;
             this._documentEvents = documentEvents;
-            this._config = config;
+            this._mapping = mapping;
+            this._logging = logging;
+            this._options = options.Value;
         }
 
         /// <summary>
@@ -65,9 +74,21 @@ namespace SAE.CommonLibrary.EventStore.Document
                 document = this._serializer.Deserialize<TDocument>(snapshot.Data);
             }
             //重放事件
-            foreach (IEvent @event in eventStream)
+            foreach (IEvent e in eventStream)
             {
-                document.Mutate(@event);
+                var wrapperEvent = e as WrapperEvent;
+                if (wrapperEvent==null)
+                {
+                    this._logging.Warn($"event to {nameof(WrapperEvent)} fail. event:{this._serializer.Serialize(e)}");
+                    document.Mutate(e);
+                }
+                else
+                {
+                    var type = this._mapping.Get(wrapperEvent.Key);
+                    this._logging.Debug($"Recover type:'{type}',:'{wrapperEvent.Event}',raw:'{wrapperEvent.ToJsonString()}'");
+                    var @event = (IEvent)SerializerProvider.Current.Deserialize(wrapperEvent.Event, type);
+                    document.Mutate(@event);
+                }
             }
             document.Version = eventStream.Version <= 0 ? snapshot.Version : eventStream.Version;
             return document;
@@ -81,12 +102,12 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// <returns></returns>
         protected virtual async Task<Snapshot.Snapshot> FindSnapshotAsync(IIdentity identity, int version)
         {
-            if (version == this._config.VersionPeak)
+            if (version == this._options.VersionPeak)
             {
                 return await this._snapshot.FindAsync(identity);
             }
 
-            var snapshotInterval = this._config.SnapshotInterval;
+            var snapshotInterval = this._options.SnapshotInterval;
 
             if (version < snapshotInterval)
             {
@@ -126,7 +147,7 @@ namespace SAE.CommonLibrary.EventStore.Document
             await this._documentEvents.ForEachAsync(@event => @event.AppendAsync(document, eventStream));
             
             //如果版本号满足快照要求就将对象存储到快照中
-            if (version % this._config.SnapshotInterval != 0)
+            if (version % this._options.SnapshotInterval != 0)
             {
                 //不满足快照要求
                 return;
@@ -150,7 +171,7 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// </summary>
         /// <param name="identity"></param>
         /// <returns></returns>
-        public async Task RemoveAsync<TDocument>(IIdentity identity) where TDocument : IDocument, new()
+        public async Task DeleteAsync<TDocument>(IIdentity identity) where TDocument : IDocument, new()
         {
             await this._snapshot.RemoveAsync(identity);
             await this._eventStore.RemoveAsync(identity);

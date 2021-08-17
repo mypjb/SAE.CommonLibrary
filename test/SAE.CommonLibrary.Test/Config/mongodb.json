@@ -1,0 +1,7 @@
+{
+  "mongodb":
+    {
+      "connection": "mongodb://root:Aa123456@mongo.db.lass.net:27017/",
+      "db": "test"
+    }
+}

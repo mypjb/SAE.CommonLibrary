@@ -9,9 +9,21 @@ namespace SAE.CommonLibrary
     public partial class Constant
     {
         /// <summary>
-        /// 编码
+        /// default encoding
         /// </summary>
         public static Encoding Encoding = Encoding.UTF8;
-        
+
+        /// <summary>
+        /// time zone generator
+        /// </summary>
+        public static Func<DateTime> TimeZoneGenerator = () => DateTime.UtcNow;
+
+        /// <summary>
+        /// default Time zone utc
+        /// </summary>
+        public static DateTime DefaultTimeZone
+        {
+            get => TimeZoneGenerator.Invoke();
+        }
     }
 }

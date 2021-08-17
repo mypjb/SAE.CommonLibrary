@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Abstract.Responsibility
 {
-    public interface IResponsibility<TContext>where TContext:ResponsibilityContext
+    
+    public interface IResponsibility<TContext> where TContext : ResponsibilityContext
     {
         /// <summary>
         /// 执行职责链

@@ -13,6 +13,7 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test.Domain
 
         public int Sex { get; set; }
 
+
         public void Create(string loginName,string password)
         {
             if (string.IsNullOrWhiteSpace(loginName))

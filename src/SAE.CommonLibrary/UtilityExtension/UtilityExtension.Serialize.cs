@@ -34,7 +34,7 @@ namespace SAE.CommonLibrary.Extension
         /// <typeparam name="T"></typeparam>
         /// <param name="json"></param>
         /// <returns></returns>
-        public static T ToObject<T>(this string json) where T : class
+        public static T ToObject<T>(this string json)
         {
             return (T)json.ToObject(typeof(T));
         }

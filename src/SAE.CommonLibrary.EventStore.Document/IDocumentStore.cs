@@ -31,6 +31,6 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// </summary>
         /// <param name="identity"></param>
         /// <returns></returns>
-        Task RemoveAsync<TDocument>(IIdentity identity) where TDocument : IDocument, new();
+        Task DeleteAsync<TDocument>(IIdentity identity) where TDocument : IDocument, new();
     }
 }

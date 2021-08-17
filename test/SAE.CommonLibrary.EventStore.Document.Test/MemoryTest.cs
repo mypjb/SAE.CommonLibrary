@@ -1,45 +1,47 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SAE.CommonLibrary.EventStore.Document;
+using SAE.CommonLibrary.Data;
 using SAE.CommonLibrary.EventStore.Document.Memory.Test.Domain;
-using SAE.CommonLibrary.EventStore.Document.Memory.Test.Event;
+using SAE.CommonLibrary.EventStore.Document.Test.Dtos;
 using SAE.CommonLibrary.MessageQueue;
 using SAE.CommonLibrary.Test;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
-using Assert = Xunit.Assert;
 namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
 {
     public class MemoryTest : BaseTest
     {
         private readonly IDocumentStore _documentStore;
-        private readonly IMessageQueue _messageQueue;
-        private readonly IPersistenceService<User> _persistenceService;
+        private readonly IStorage _storage;
         public const string Password = "111111";
         public MemoryTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
             this._documentStore = this._serviceProvider.GetService<IDocumentStore>();
 
-            this._messageQueue = this._serviceProvider.GetService<IMessageQueue>();
-            _persistenceService = this._serviceProvider.GetService<IPersistenceService<User>>();
+            this._storage = this._serviceProvider.GetService<IStorage>();
+        }
 
+        protected override void ConfigureServicesBefore(IServiceCollection services)
+        {
+            services.AddDataPersistenceService()
+                    .AddMemoryMessageQueue();
+            base.ConfigureServicesBefore(services);
         }
         protected override void ConfigureServices(IServiceCollection services)
         {
-            services.AddDefaultConfiguration();
-            services.AddMemoryPersistenceService();
             services.AddMemoryDocument();
-            services.AddMemoryMessageQueue();
+            
             base.ConfigureServices(services);
         }
 
         [Fact]
-        public async Task<User> Register()
+        public virtual async Task<User> Register()
         {
             var user = new User();
             user.Create(this.GetRandom(), Password);
-            _documentStore.Save(user);
+            await _documentStore.SaveAsync(user);
             this.WriteLine(user);
             var newUser = await _documentStore.FindAsync<User>(user.Id.ToIdentity());
             Xunit.Assert.NotNull(newUser);
@@ -53,7 +55,7 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
         }
 
         [Fact]
-        public async Task ChangePassword()
+        public virtual async Task ChangePassword()
         {
             var user = await this.Register();
             user = await _documentStore.FindAsync<User>(user.Id.ToIdentity());
@@ -70,13 +72,13 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
             this.WriteLine(newUser);
         }
 
-       [Fact]
-        public async Task ChangeProperty()
+        [Fact]
+        public virtual async Task ChangeProperty()
         {
             var user = await this.Register();
 
             user = await _documentStore.FindAsync<User>(user.Id.ToIdentity());
-            user.SetProperty(this.GetRandom(), Math.Abs(user.Sex-1));
+            user.SetProperty(this.GetRandom(), Math.Abs(user.Sex - 1));
             _documentStore.Save(user);
             var newUser = await _documentStore.FindAsync<User>(user.Id.ToIdentity());
             Xunit.Assert.NotNull(newUser);
@@ -90,11 +92,21 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
         }
 
         [Fact]
-        public async Task Remove()
+        public virtual async Task Delete()
         {
             var user = await this.Register();
-            await this._documentStore.RemoveAsync(user);
+            await this._documentStore.DeleteAsync(user);
             Xunit.Assert.Null(await _documentStore.FindAsync<User>(user.Id.ToIdentity()));
+        }
+        [Fact]
+        public virtual async Task Query()
+        {
+            var user = await this.Register();
+            var dto= this._storage.AsQueryable<UserDto>()
+                                  .Where(s => s.Sex == user.Sex)
+                                  .FirstOrDefault();
+
+            Xunit.Assert.NotNull(dto);
         }
 
     }

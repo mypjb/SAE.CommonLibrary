@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SAE.CommonLibrary.ObjectMapper;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Extension
@@ -9,13 +9,14 @@ namespace SAE.CommonLibrary.Extension
     /// <summary>
     /// 通用函数扩展
     /// </summary>
-    public static partial class  UtilityExtension
+    public static partial class UtilityExtension
     {
-        static UtilityExtension()
-        {
-            
-        }
 
+        public static int ToHttpStatusCode(this ErrorOutput errorOutput)
+        {
+            var code = errorOutput.StatusCode.ToString().Substring(0, 3);
+            return int.Parse(code);
+        }
 
         /// <summary>
         /// 循环<paramref name="enumerable"/>集合,并挨个执行<paramref name="action"/>函数
@@ -37,7 +38,7 @@ namespace SAE.CommonLibrary.Extension
         }
 
 
-        public static async Task<IEnumerable<T>> ForEachAsync<T>(this IEnumerable<T> enumerable, Func<T,Task> @delegate)
+        public static async Task<IEnumerable<T>> ForEachAsync<T>(this IEnumerable<T> enumerable, Func<T, Task> @delegate)
         {
             if (enumerable != null)
             {

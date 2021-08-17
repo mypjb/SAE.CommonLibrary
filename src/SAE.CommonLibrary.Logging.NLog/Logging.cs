@@ -23,7 +23,7 @@ namespace SAE.CommonLibrary.Logging.Nlog
         {
             _log = LogManager.GetLogger(name);
         }
-       
+
 
         #endregion Ctor
 

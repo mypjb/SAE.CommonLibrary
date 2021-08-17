@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using SAE.CommonLibrary.Logging;
+using SAE.CommonLibrary.Logging.Nlog;
 using SAE.CommonLibrary.Test;
 using System;
 using Xunit;
@@ -29,22 +30,19 @@ namespace SAE.CommonLibrary.Logging.Test
         [InlineData(Level.Trace)]
         public void Write(Level type)
         {
-            //LogHelper静态函数写入各种层次的信息
-            _logging.Write($"测试“{type}”类型的消息", type);
-            //使用LogHelperTest类型的日志记录器写入信息
-            this._logging.Write($"测试“{type}”类型的消息", type);
+            _logging.Write($"this level is {type}", type);
         }
         [Fact]
         public void Info()
         {
-            _logging.Info("记录一条详细信息");
-            this._logging.Info("你好{0},我是{1},我今年{2}岁了,-----{3}", "pjb", "cwj", 24, "...");
+            this._logging.Info("this is info output");
+            this._logging.Info("1.{0},2.{1},3.{2},-----4.{3}", "pjb", "cwj", 24, "...");
         }
         [Fact]
         public void Debug()
         {
-            _logging.Debug("记录一条调试信息");
-            this._logging.Debug("记录一条{0}信息{1}", "调试", "---");
+            _logging.Debug("this is debug output");
+            this._logging.Debug("1.{0}2.{1}", "pjb", "---");
         }
         [Fact]
         public void Error()
@@ -56,23 +54,21 @@ namespace SAE.CommonLibrary.Logging.Test
             }
             catch (Exception error)
             {
-                _logging.Error(error, "记录一条异常信息");
+                _logging.Error(error, "this is error output");
             }
 
         }
         [Fact]
         public void Fatal()
         {
-            this._logging.Error(new Exception("这是一个自定义的异常记录"));
-            this._logging.Error("这是字符拼接");
-            _logging.Fatal("记录一条致命错误信息");
+            this._logging.Error(new Exception("this is custom error"),"custom error");
+            this._logging.Error("this is error output");
+            this._logging.Fatal("this is Fatal output");
         }
         [Fact]
         public void Warn()
         {
-            _logging.Warn("记录一条警告信息");
-            //this._logging.WarnFormat("呵呵达。");
-            //LogHelper.Warn<object>($"记录一条{nameof(Object)}类型的的警告信息");
+            this._logging.Warn("this is Warn output");
         }
     }
 }
