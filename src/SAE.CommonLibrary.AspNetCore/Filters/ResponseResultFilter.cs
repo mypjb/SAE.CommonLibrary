@@ -5,14 +5,18 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using SAE.CommonLibrary.Extension;
+using SAE.CommonLibrary.Logging;
 
 namespace SAE.CommonLibrary.AspNetCore.Filters
 {
     public class ResponseResultFilter : IOrderedFilter, IActionFilter
     {
-        public ResponseResultFilter()
+        private readonly ILogging _logging;
+
+        public ResponseResultFilter(ILogging<ResponseResultFilter> logging)
         {
             this.Order = FilterScope.Global;
+            this._logging = logging;
         }
         public int Order
         {
@@ -41,6 +45,7 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
                 context.Result = new JsonResult(errorOutput);
                 context.HttpContext.Response.StatusCode = errorOutput.ToHttpStatusCode();
                 context.ExceptionHandled = true;
+                this._logging.Error(context.Exception, $"{errorOutput.ToJsonString()}");
             }
             else
             {
@@ -51,7 +56,8 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
                     {
                         errorOutput = new ErrorOutput(StatusCodes.ResourcesNotExist);
                     }
-                }else if (context.Result is JsonResult)
+                }
+                else if (context.Result is JsonResult)
                 {
                     var jsonResult = context.Result as JsonResult;
                     if (jsonResult.Value == null)
@@ -64,9 +70,9 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
                 {
                     context.Result = new JsonResult(errorOutput);
                     context.HttpContext.Response.StatusCode = errorOutput.ToHttpStatusCode();
+                    this._logging.Error(errorOutput.ToJsonString());
                 }
             }
-
 
         }
 
