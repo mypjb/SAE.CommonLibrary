@@ -31,7 +31,7 @@ namespace Microsoft.Extensions.Configuration
         /// <returns></returns>
         public static IConfigurationBuilder AddRemoteSource(this IConfigurationBuilder configurationBuilder, SAEOptions options)
         {
-            return configurationBuilder.AddRemoteSource(op=>
+            return configurationBuilder.AddRemoteSource(op =>
             {
                 op.Extend(options);
             });
@@ -149,9 +149,17 @@ namespace Microsoft.Extensions.Configuration
                                  .OrderBy(s => s)
                                  .ToList();
 
-            var files = paths.Select(s => Path.GetFileNameWithoutExtension(s).Split(Constants.FileSeparator).First())
-                             .Distinct()
-                             .ToArray();
+            var files = paths.Select(s =>
+            {
+                var fileName = Path.GetFileNameWithoutExtension(s);
+                var fileSeparatorIndex = fileName.LastIndexOf(Constants.FileSeparator);
+                if (fileSeparatorIndex != -1)
+                {
+                    fileName = fileName.Substring(0, fileSeparatorIndex);
+                }
+                return fileName;
+            }).Distinct()
+              .ToArray();
 
             foreach (var file in files)
             {
