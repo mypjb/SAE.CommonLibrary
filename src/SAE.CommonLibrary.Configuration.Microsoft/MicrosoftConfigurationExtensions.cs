@@ -68,7 +68,15 @@ namespace Microsoft.Extensions.Configuration
 
                 root = root.IsNullOrWhiteSpace() ? Constants.Config.DefaultRootDirectory : root;
 
-                option.FileName = Path.Combine(root, $"{applicationName}.{env}{Constants.JsonSuffix}");
+                if (env.IsNullOrWhiteSpace())
+                {
+                    option.FileName = Path.Combine(root, $"{applicationName}{Constants.JsonSuffix}");
+                }
+                else
+                {
+                    option.FileName = Path.Combine(root, $"{applicationName}.{env}{Constants.JsonSuffix}");
+                }
+                
             }
             //setting oauth
             if (option.OAuth != null && option.OAuth.Check())
@@ -164,14 +172,19 @@ namespace Microsoft.Extensions.Configuration
             foreach (var file in files)
             {
                 var originFile = Path.Combine(path, $"{file}{Constants.JsonSuffix}");
-                var envFile = Path.Combine(path, $"{file}{Constants.FileSeparator}{env}{Constants.JsonSuffix}");
+                
                 if (File.Exists(originFile))
                 {
                     configurationBuilder.AddJsonFile(originFile, true, true);
                 }
-                if (File.Exists(envFile))
+
+                if (!env.IsNullOrWhiteSpace())
                 {
-                    configurationBuilder.AddJsonFile(envFile, true, true);
+                    var envFile = Path.Combine(path, $"{file}{Constants.FileSeparator}{env}{Constants.JsonSuffix}");
+                    if (File.Exists(envFile))
+                    {
+                        configurationBuilder.AddJsonFile(envFile, true, true);
+                    }
                 }
             }
 
