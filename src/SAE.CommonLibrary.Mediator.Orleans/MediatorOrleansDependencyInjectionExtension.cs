@@ -76,8 +76,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IMediatorBuilder AddMediatorOrleansClient(this IMediatorBuilder builder)
         {
-            builder.AddMediatorOrleans()
-                   .Services.TryAddSingleton<IProxyCommandHandlerProvider, ProxyCommandHandlerProvider>();
+            //builder.AddMediatorOrleans()
+            //       .Services.TryAddSingleton<IProxyCommandHandlerProvider, ProxyCommandHandlerProvider>();
             return builder;
         }
 

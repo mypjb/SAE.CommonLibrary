@@ -48,7 +48,6 @@ namespace SAE.CommonLibrary.Plugin.TestAPI
 
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

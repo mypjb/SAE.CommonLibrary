@@ -6,12 +6,13 @@ using System.Text;
 
 namespace SAE.CommonLibrary.Abstract.Responsibility
 {
-    public class ResponsibilityProvider<TResponsibilityContext> : IResponsibilityProvider<TResponsibilityContext> 
+    public class ResponsibilityProvider<TResponsibilityContext> : IResponsibilityProvider<TResponsibilityContext>
         where TResponsibilityContext : ResponsibilityContext
     {
         public ResponsibilityProvider(IEnumerable<IResponsibility<TResponsibilityContext>> responsibilities)
         {
-            this.Responsibilities = responsibilities;
+            this.Responsibilities = responsibilities.OrderByDescending(s => s, OrderComparer.Comparer)
+                                                    .ToArray();
             this.Root = this.Compose();
         }
 
@@ -50,7 +51,7 @@ namespace SAE.CommonLibrary.Abstract.Responsibility
                     responsibility.Add(this.Responsibilities.ElementAt(i));
                 }
             }
-            
+
             return responsibility;
         }
     }
