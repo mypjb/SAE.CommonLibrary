@@ -12,25 +12,25 @@ namespace SAE.CommonLibrary.Caching
         /// </summary>
         /// <param name="description"></param>
         /// <returns></returns>
-        Task<bool> AddAsync(CacheDescription description);
+        Task<bool> AddAsync<T>(CacheDescription<T> description);
         /// <summary>
         /// 批量添加
         /// </summary>
         /// <param name="descriptions"></param>
         /// <returns></returns>
-        Task<IEnumerable<bool>> AddAsync(IEnumerable<CacheDescription> descriptions);
+        Task<IEnumerable<bool>> AddAsync<T>(IEnumerable<CacheDescription<T>> descriptions);
         /// <summary>
         /// 根据<paramref name="key"/>获得缓存
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        Task<object> GetAsync(string key);
+        Task<T> GetAsync<T>(string key);
         /// <summary>
         /// 获得多个结果
         /// </summary>
         /// <param name="keys"></param>
         /// <returns></returns>
-        Task<IEnumerable<object>> GetAsync(IEnumerable<string> keys);
+        Task<IEnumerable<T>> GetAsync<T>(IEnumerable<string> keys);
         /// <summary>
         /// 根据<paramref name="key"/>移除缓存
         /// </summary>

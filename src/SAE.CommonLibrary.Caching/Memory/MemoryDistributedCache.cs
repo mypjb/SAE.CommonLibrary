@@ -18,10 +18,5 @@ namespace SAE.CommonLibrary.Caching.Memory
             this._logging.Warn("您正在使用基于内存的分布式缓存，如果您正在构建分布式应用，建议使用AddRedisCache构建基于Redis的分布式缓存");
         }
 
-        public override async Task<object> GetAsync(string key)
-        {
-            var obj = await base.GetAsync(key);
-            return obj == null ? string.Empty : obj.ToJsonString();
-        }
     }
 }

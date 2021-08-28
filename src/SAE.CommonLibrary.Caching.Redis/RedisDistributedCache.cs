@@ -54,7 +54,7 @@ namespace SAE.CommonLibrary.Caching.Redis
                 this._logging.Error($"{methodNmae} => 服务器连接失败，请检查网络是否正常");
             }
         }
-        public async Task<bool> AddAsync(CacheDescription description)
+        public async Task<bool> AddAsync<T>(CacheDescription<T> description)
         {
             bool result = false;
             await this.DatabaseOperation(async db =>
@@ -66,7 +66,7 @@ namespace SAE.CommonLibrary.Caching.Redis
             return result;
         }
 
-        public async Task<IEnumerable<bool>> AddAsync(IEnumerable<CacheDescription> descriptions)
+        public async Task<IEnumerable<bool>> AddAsync<T>(IEnumerable<CacheDescription<T>> descriptions)
         {
             var result = new List<bool>();
             await this.DatabaseOperation(async db =>
@@ -103,7 +103,7 @@ namespace SAE.CommonLibrary.Caching.Redis
             return true;
         }
 
-        public async Task<object> GetAsync(string key)
+        public async Task<T> GetAsync<T>(string key)
         {
             string result = null;
             await this.DatabaseOperation(async db =>
@@ -111,10 +111,10 @@ namespace SAE.CommonLibrary.Caching.Redis
                 this._logging.Debug($"读取缓存:{db.Database} => {key}");
                 result = await db.StringGetAsync(key);
             });
-            return result;
+            return result.IsNullOrWhiteSpace() ? default(T) : result.ToObject<T>();
         }
 
-        public async Task<IEnumerable<object>> GetAsync(IEnumerable<string> keys)
+        public async Task<IEnumerable<T>> GetAsync<T>(IEnumerable<string> keys)
         {
             IEnumerable<string> results = Enumerable.Empty<string>();
             await this.DatabaseOperation(async db =>
@@ -124,7 +124,10 @@ namespace SAE.CommonLibrary.Caching.Redis
                                    .Select(v => (string)v)
                                    .ToArray();
             });
-            return results;
+            return results.Select(s=>
+            {
+                return s.IsNullOrWhiteSpace() ? default(T) : s.ToObject<T>();
+            }).ToArray();
         }
 
         public async Task<IEnumerable<string>> GetKeysAsync()

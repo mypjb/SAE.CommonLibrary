@@ -73,6 +73,7 @@ namespace SAE.CommonLibrary.Cache.Test
         public async Task Remove()
         {
             var student = await this.Add();
+            
             Xunit.Assert.True(_distributedCache.Remove(student.Name));
             Xunit.Assert.Null(_distributedCache.Get<Student>(student.Name));
         }
