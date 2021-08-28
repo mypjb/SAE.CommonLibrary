@@ -21,7 +21,8 @@ namespace SAE.CommonLibrary.Abstract.Test.Mediator
 
     public class QueryCommand
     {
-
+        public int Begin { get; set; }
+        public int End { get; set; }
     }
 
 }

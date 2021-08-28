@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\SAE.CommonLibrary.Abstract.Mediator.Behavior\SAE.CommonLibrary.Abstract.Mediator.Behavior.csproj" />
     <ProjectReference Include="..\..\src\SAE.CommonLibrary.Abstract\SAE.CommonLibrary.Abstract.csproj" />
     <ProjectReference Include="..\SAE.CommonLibrary.Test\SAE.CommonLibrary.Test.csproj" />
   </ItemGroup>

@@ -414,9 +414,11 @@ namespace SAE.CommonLibrary.Caching
         /// <returns></returns>
         public static T GetOrAdd<T>(this IDistributedCache cache, string key, Func<T> valueFactory)
         {
-            return cache.GetOrAddAsync(key, valueFactory)
-                        .GetAwaiter()
-                        .GetResult();
+            return cache.GetOrAddAsync(key, ()=>
+            {
+                return Task.FromResult(valueFactory.Invoke());
+            }) .GetAwaiter()
+               .GetResult();
         }
         /// <summary>
         /// 根据<paramref name="key"/>获得缓存,如果缓存不存在
@@ -431,8 +433,10 @@ namespace SAE.CommonLibrary.Caching
         /// <returns></returns>
         public static T GetOrAdd<T>(this IDistributedCache cache, string key, Func<T> valueFactory, DateTime dateTime)
         {
-            return cache.GetOrAddAsync(key, valueFactory, dateTime)
-                        .GetAwaiter()
+            return cache.GetOrAddAsync(key, () =>
+            {
+                return Task.FromResult(valueFactory.Invoke());
+            }, dateTime).GetAwaiter()
                         .GetResult();
         }
         /// <summary>
@@ -448,8 +452,10 @@ namespace SAE.CommonLibrary.Caching
         /// <returns></returns>
         public static T GetOrAdd<T>(this IDistributedCache cache, string key, Func<T> valueFactory, TimeSpan timeSpan)
         {
-            return cache.GetOrAddAsync(key, valueFactory, timeSpan)
-                        .GetAwaiter()
+            return cache.GetOrAddAsync(key, () =>
+            {
+                return Task.FromResult(valueFactory.Invoke());
+            }, timeSpan).GetAwaiter()
                         .GetResult();
         }
         /// <summary>
@@ -465,9 +471,11 @@ namespace SAE.CommonLibrary.Caching
         /// <returns></returns>
         public static T GetOrAdd<T>(this IDistributedCache cache, string key, Func<T> valueFactory, long second)
         {
-            return cache.GetOrAddAsync(key, valueFactory, second)
-                        .GetAwaiter()
-                        .GetResult();
+            return cache.GetOrAddAsync(key, () =>
+            {
+                return Task.FromResult(valueFactory.Invoke());
+            }, second).GetAwaiter()
+                      .GetResult();
         }
         /// <summary>
         /// 根据<paramref name="key"/>获得缓存,如果缓存不存在
@@ -482,7 +490,10 @@ namespace SAE.CommonLibrary.Caching
         /// <returns></returns>
         public static T GetOrAdd<T>(this IDistributedCache cache, string key, long second, Func<T> valueFactory)
         {
-            return cache.GetOrAddAsync(key, second, valueFactory).GetAwaiter().GetResult();
+            return cache.GetOrAddAsync(key, second, () =>
+            {
+                return Task.FromResult(valueFactory.Invoke());
+            }).GetAwaiter().GetResult();
         }
         /// <summary>
         /// 根据<paramref name="key"/>获得缓存,如果缓存不存在
@@ -497,7 +508,10 @@ namespace SAE.CommonLibrary.Caching
         /// <returns></returns>
         public static T GetOrAdd<T>(this IDistributedCache cache, string key, TimeSpan timeSpan, Func<T> valueFactory)
         {
-            return cache.GetOrAddAsync(key, timeSpan, valueFactory).GetAwaiter().GetResult();
+            return cache.GetOrAddAsync(key, timeSpan, () =>
+            {
+                return Task.FromResult(valueFactory.Invoke());
+            }).GetAwaiter().GetResult();
         }
         #endregion
 
@@ -542,13 +556,13 @@ namespace SAE.CommonLibrary.Caching
         /// <param name="key"></param>
         /// <param name="valueFactory"></param>
         /// <returns></returns>
-        public static async Task<T> GetOrAddAsync<T>(this IDistributedCache cache, string key, Func<T> valueFactory)
+        public static async Task<T> GetOrAddAsync<T>(this IDistributedCache cache, string key, Func<Task<T>> valueFactory)
         {
             var value = await cache.GetAsync<T>(key);
 
             if (value == null)
             {
-                value = valueFactory.Invoke();
+                value = await valueFactory.Invoke();
                 await cache.AddAsync(key, value);
             }
 
@@ -565,13 +579,13 @@ namespace SAE.CommonLibrary.Caching
         /// <param name="valueFactory"></param>
         /// <param name="dateTime"></param>
         /// <returns></returns>
-        public static async Task<T> GetOrAddAsync<T>(this IDistributedCache cache, string key, Func<T> valueFactory, DateTime dateTime)
+        public static async Task<T> GetOrAddAsync<T>(this IDistributedCache cache, string key, Func<Task<T>> valueFactory, DateTime dateTime)
         {
             var value = await cache.GetAsync<T>(key);
 
             if (value == null)
             {
-                value = valueFactory.Invoke();
+                value =await valueFactory.Invoke();
                 await cache.AddAsync(key, value, dateTime);
             }
 
@@ -588,13 +602,13 @@ namespace SAE.CommonLibrary.Caching
         /// <param name="valueFactory"></param>
         /// <param name="timeSpan"></param>
         /// <returns></returns>
-        public static async Task<T> GetOrAddAsync<T>(this IDistributedCache cache, string key, Func<T> valueFactory, TimeSpan timeSpan)
+        public static async Task<T> GetOrAddAsync<T>(this IDistributedCache cache, string key, Func<Task<T>> valueFactory, TimeSpan timeSpan)
         {
             var value = await cache.GetAsync<T>(key);
 
             if (value == null)
             {
-                value = valueFactory.Invoke();
+                value =await valueFactory.Invoke();
                 await cache.AddAsync(key, value, timeSpan);
             }
 
@@ -611,7 +625,7 @@ namespace SAE.CommonLibrary.Caching
         /// <param name="valueFactory"></param>
         /// <param name="second"></param>
         /// <returns></returns>
-        public static Task<T> GetOrAddAsync<T>(this IDistributedCache cache, string key, Func<T> valueFactory, long second)
+        public static Task<T> GetOrAddAsync<T>(this IDistributedCache cache, string key, Func<Task<T>> valueFactory, long second)
         {
             return cache.GetOrAddAsync(key, valueFactory, TimeSpan.FromSeconds(second));
         }
@@ -626,7 +640,7 @@ namespace SAE.CommonLibrary.Caching
         /// <param name="second"></param>
         /// <param name="valueFactory"></param>
         /// <returns></returns>
-        public static Task<T> GetOrAddAsync<T>(this IDistributedCache cache, string key, long second, Func<T> valueFactory)
+        public static Task<T> GetOrAddAsync<T>(this IDistributedCache cache, string key, long second, Func<Task<T>> valueFactory)
         {
             return cache.GetOrAddAsync(key, TimeSpan.FromSeconds(second), valueFactory);
         }
@@ -641,13 +655,13 @@ namespace SAE.CommonLibrary.Caching
         /// <param name="timeSpan"></param>
         /// <param name="valueFactory"></param>
         /// <returns></returns>
-        public static async Task<T> GetOrAddAsync<T>(this IDistributedCache cache, string key, TimeSpan timeSpan, Func<T> valueFactory)
+        public static async Task<T> GetOrAddAsync<T>(this IDistributedCache cache, string key, TimeSpan timeSpan, Func<Task<T>> valueFactory)
         {
             var value = await cache.GetAsync<T>(key);
 
             if (value == null)
             {
-                value = valueFactory.Invoke();
+                value =await valueFactory.Invoke();
                 await cache.AddAsync(key, timeSpan, value);
             }
 
@@ -691,9 +705,11 @@ namespace SAE.CommonLibrary.Caching
         /// <returns></returns>
         public static T GetOrAdd<T>(this IMemoryCache cache, string key, Func<T> valueFactory)
         {
-            return cache.GetOrAddAsync(key, valueFactory)
-                        .GetAwaiter()
-                        .GetResult();
+            return cache.GetOrAddAsync(key, () =>
+            {
+                return Task.FromResult(valueFactory.Invoke());
+            }).GetAwaiter()
+              .GetResult();
         }
         /// <summary>
         /// /// 根据<paramref name="key"/>获得缓存,如果缓存不存在
@@ -708,8 +724,10 @@ namespace SAE.CommonLibrary.Caching
         /// <returns></returns>
         public static T GetOrAdd<T>(this IMemoryCache cache, string key, Func<T> valueFactory, DateTime dateTime)
         {
-            return cache.GetOrAddAsync(key, valueFactory, dateTime)
-                        .GetAwaiter()
+            return cache.GetOrAddAsync(key, () =>
+            {
+                return Task.FromResult(valueFactory.Invoke());
+            }, dateTime).GetAwaiter()
                         .GetResult();
         }
         /// <summary>
@@ -725,8 +743,10 @@ namespace SAE.CommonLibrary.Caching
         /// <returns></returns>
         public static T GetOrAdd<T>(this IMemoryCache cache, string key, Func<T> valueFactory, TimeSpan timeSpan)
         {
-            return cache.GetOrAddAsync(key, valueFactory, timeSpan)
-                        .GetAwaiter()
+            return cache.GetOrAddAsync(key, () =>
+            {
+                return Task.FromResult(valueFactory.Invoke());
+            }, timeSpan).GetAwaiter()
                         .GetResult();
         }
         /// <summary>
@@ -742,9 +762,11 @@ namespace SAE.CommonLibrary.Caching
         /// <returns></returns>
         public static T GetOrAdd<T>(this IMemoryCache cache, string key, Func<T> valueFactory, long second)
         {
-            return cache.GetOrAddAsync(key, valueFactory, second)
-                        .GetAwaiter()
-                        .GetResult();
+            return cache.GetOrAddAsync(key, () =>
+            {
+                return Task.FromResult(valueFactory.Invoke());
+            }, second).GetAwaiter()
+                      .GetResult();
         }
         /// <summary>
         /// 根据<paramref name="key"/>获得缓存,如果缓存不存在
@@ -759,7 +781,10 @@ namespace SAE.CommonLibrary.Caching
         /// <returns></returns>
         public static T GetOrAdd<T>(this IMemoryCache cache, string key, long second, Func<T> valueFactory)
         {
-            return cache.GetOrAddAsync(key, second, valueFactory).GetAwaiter().GetResult();
+            return cache.GetOrAddAsync(key, second, () =>
+            {
+                return Task.FromResult(valueFactory.Invoke());
+            }).GetAwaiter().GetResult();
         }
         /// <summary>
         /// 根据<paramref name="key"/>获得缓存,如果缓存不存在
@@ -774,7 +799,10 @@ namespace SAE.CommonLibrary.Caching
         /// <returns></returns>
         public static T GetOrAdd<T>(this IMemoryCache cache, string key, TimeSpan timeSpan, Func<T> valueFactory)
         {
-            return cache.GetOrAddAsync(key, timeSpan, valueFactory).GetAwaiter().GetResult();
+            return cache.GetOrAddAsync(key, timeSpan, () =>
+            {
+                return Task.FromResult(valueFactory.Invoke());
+            }).GetAwaiter().GetResult();
         }
         /// <summary>
         /// 根据<paramref name="key"/>获得缓存,如果缓存不存在
@@ -785,13 +813,13 @@ namespace SAE.CommonLibrary.Caching
         /// <param name="key"></param>
         /// <param name="valueFactory"></param>
         /// <returns></returns>
-        public static async Task<T> GetOrAddAsync<T>(this IMemoryCache cache, string key, Func<T> valueFactory)
+        public static async Task<T> GetOrAddAsync<T>(this IMemoryCache cache, string key, Func<Task<T>> valueFactory)
         {
             var value = await cache.GetAsync<T>(key);
 
             if (value == null)
             {
-                value = valueFactory.Invoke();
+                value =await valueFactory.Invoke();
                 await cache.AddAsync(key, value);
             }
 
@@ -808,13 +836,13 @@ namespace SAE.CommonLibrary.Caching
         /// <param name="valueFactory"></param>
         /// <param name="dateTime"></param>
         /// <returns></returns>
-        public static async Task<T> GetOrAddAsync<T>(this IMemoryCache cache, string key, Func<T> valueFactory, DateTime dateTime)
+        public static async Task<T> GetOrAddAsync<T>(this IMemoryCache cache, string key, Func<Task<T>> valueFactory, DateTime dateTime)
         {
             var value = await cache.GetAsync<T>(key);
 
             if (value == null)
             {
-                value = valueFactory.Invoke();
+                value =await valueFactory.Invoke();
                 await cache.AddAsync(key, value, dateTime);
             }
 
@@ -831,13 +859,13 @@ namespace SAE.CommonLibrary.Caching
         /// <param name="valueFactory"></param>
         /// <param name="timeSpan"></param>
         /// <returns></returns>
-        public static async Task<T> GetOrAddAsync<T>(this IMemoryCache cache, string key, Func<T> valueFactory, TimeSpan timeSpan)
+        public static async Task<T> GetOrAddAsync<T>(this IMemoryCache cache, string key, Func<Task<T>> valueFactory, TimeSpan timeSpan)
         {
             var value = await cache.GetAsync<T>(key);
 
             if (value == null)
             {
-                value = valueFactory.Invoke();
+                value =await valueFactory.Invoke();
                 await cache.AddAsync(key, value, timeSpan);
             }
 
@@ -854,12 +882,12 @@ namespace SAE.CommonLibrary.Caching
         /// <param name="valueFactory"></param>
         /// <param name="second"></param>
         /// <returns></returns>
-        public static async Task<T> GetOrAddAsync<T>(this IMemoryCache cache, string key, Func<T> valueFactory, long second)
+        public static async Task<T> GetOrAddAsync<T>(this IMemoryCache cache, string key, Func<Task<T>> valueFactory, long second)
         {
             var value = await cache.GetAsync<T>(key);
             if (value == null)
             {
-                value = valueFactory.Invoke();
+                value =await valueFactory.Invoke();
                 await cache.AddAsync(key, value, second);
             }
 
@@ -877,7 +905,7 @@ namespace SAE.CommonLibrary.Caching
         /// <param name="second"></param>
         /// <param name="valueFactory"></param>
         /// <returns></returns>
-        public static Task<T> GetOrAddAsync<T>(this IMemoryCache cache, string key, long second, Func<T> valueFactory)
+        public static Task<T> GetOrAddAsync<T>(this IMemoryCache cache, string key, long second, Func<Task<T>> valueFactory)
         {
             return cache.GetOrAddAsync(key, TimeSpan.FromSeconds(second), valueFactory);
         }
@@ -892,13 +920,13 @@ namespace SAE.CommonLibrary.Caching
         /// <param name="timeSpan"></param>
         /// <param name="valueFactory"></param>
         /// <returns></returns>
-        public static async Task<T> GetOrAddAsync<T>(this IMemoryCache cache, string key, TimeSpan timeSpan, Func<T> valueFactory)
+        public static async Task<T> GetOrAddAsync<T>(this IMemoryCache cache, string key, TimeSpan timeSpan, Func<Task<T>> valueFactory)
         {
             var value = await cache.GetAsync<T>(key);
 
             if (value == null)
             {
-                value = valueFactory.Invoke();
+                value =await valueFactory.Invoke();
                 await cache.AddAsync(key, timeSpan, value);
             }
 

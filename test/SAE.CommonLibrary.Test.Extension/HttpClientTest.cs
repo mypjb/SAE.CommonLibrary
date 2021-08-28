@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using System.Threading;
 using Xunit.Abstractions;
+using SAE.CommonLibrary.Extension.Middleware;
 
 namespace SAE.CommonLibrary.Test.Extension
 {
