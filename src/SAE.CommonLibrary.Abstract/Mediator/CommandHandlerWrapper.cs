@@ -19,6 +19,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator
     {
         private readonly IEnumerable<ICommandHandler<TCommand>> _handlers;
         private readonly IEnumerable<IPipelineBehavior<TCommand>> _pipelineBehaviors;
+        private bool _handlerExist;
         public CommandHandlerWrapper(IServiceProvider serviceProvider)
         {
             this._handlers = serviceProvider.GetServices<ICommandHandler<TCommand>>();
@@ -32,10 +33,15 @@ namespace SAE.CommonLibrary.Abstract.Mediator
             //    if (provider != null)
             //        this._handlers = new[] { new DelegateCommandHandlerWrapper<TCommand>(provider) };
             //}
+            this._handlerExist = this._handlers.Any();
         }
 
         public override async Task InvokeAsync(object command)
         {
+            if (!this._handlerExist)
+            {
+                new SAEException(StatusCodes.ResourcesNotExist, $"'{typeof(ICommandHandler<TCommand>)}' handler not exist");
+            }
             TCommand arg = (TCommand)command;
 
             Func<Task> next = () => this.InvokeCoreAsync(arg);

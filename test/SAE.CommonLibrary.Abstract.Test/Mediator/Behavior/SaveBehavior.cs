@@ -23,7 +23,6 @@ namespace SAE.CommonLibrary.Abstract.Test.Mediator.Behavior
 
         public async Task<Student> ExecutionAsync(SaveCommand command, Func<Task<Student>> next)
         {
-            command.Name += Guid.Empty.ToString("N");
             var student = await next();
             student.Age = 100;
             return student;

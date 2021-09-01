@@ -150,7 +150,7 @@ namespace SAE.CommonLibrary.Caching.Redis
             return keys.Distinct();
         }
 
-        public async Task<bool> RemoveAsync(string key)
+        public async Task<bool> DeleteAsync(string key)
         {
             var result = false;
             await this.DatabaseOperation(async db =>
@@ -161,7 +161,7 @@ namespace SAE.CommonLibrary.Caching.Redis
             return result;
         }
 
-        public async Task<IEnumerable<bool>> RemoveAsync(IEnumerable<string> keys)
+        public async Task<IEnumerable<bool>> DeleteAsync(IEnumerable<string> keys)
         {
             var result = keys.Select(s => false).ToArray();
             await this.DatabaseOperation(async db =>

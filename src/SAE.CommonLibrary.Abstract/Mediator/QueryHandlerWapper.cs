@@ -10,13 +10,16 @@ namespace SAE.CommonLibrary.Abstract.Mediator
 {
     internal abstract class RequestHandlerWrapper
     {
-        public abstract Task<object> InvokeAsync(object command);
+        
+           public abstract Task<object> InvokeAsync(object command);
     }
 
     internal class RequestHandlerWrapper<TCommand, TResponse> : RequestHandlerWrapper where TCommand : class
     {
         private readonly IEnumerable<ICommandHandler<TCommand, TResponse>> _handlers;
         private readonly IEnumerable<IPipelineBehavior<TCommand, TResponse>> _pipelineBehaviors;
+        private readonly bool _handlerExist;
+
         public RequestHandlerWrapper(IServiceProvider serviceProvider)
         {
             this._pipelineBehaviors = serviceProvider.GetServices<IPipelineBehavior<TCommand, TResponse>>()
@@ -34,10 +37,15 @@ namespace SAE.CommonLibrary.Abstract.Mediator
             //    if (provider != null)
             //        this._handlers = new[] { new DelegateCommandHandlerWrapper<TCommand, TResponse>(provider) };
             //}
+            this._handlerExist = this._handlers.Any();
         }
 
         public override async Task<object> InvokeAsync(object command)
         {
+            if (!this._handlerExist)
+            {
+                new SAEException(StatusCodes.ResourcesNotExist, $"'{typeof(ICommandHandler<TCommand, TResponse>)}' handler not exist");
+            }
             TCommand arg = (TCommand)command;
 
             Func<Task<TResponse>> next = () => this.InvokeCoreAsync(arg);

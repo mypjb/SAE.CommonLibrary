@@ -36,7 +36,10 @@ namespace SAE.CommonLibrary.Abstract.Test.Mediator
             services.AddSingleton<IPipelineBehavior<SaveCommand, Student>, SaveBehavior>();
             services.AddSingleton<IPipelineBehavior<ChangeCommand>, SaveBehavior>();
             services.AddMediatorBehavior()
-                    .AddCaching<QueryCommand, IEnumerable<Student>>();
+                    .AddCaching<QueryCommand, IEnumerable<Student>>()
+                    .AddDeleteCaching<QueryCommand>()
+                    .AddUpdateCaching<SaveCommand, IEnumerable<Student>>()
+                    .AddDeleteCaching<SaveCommand, Student>(); ;
             base.ConfigureServices(services);
         }
 
@@ -53,7 +56,6 @@ namespace SAE.CommonLibrary.Abstract.Test.Mediator
             var student = await this._mediator.SendAsync<Student>(command);
             stopwatch.Stop();
             this.WriteLine(new { time = stopwatch.Elapsed.Ticks, student });
-            Assert.NotEqual(command.Name, defaultName);
             Assert.True(student.Age > 0);
             Assert.NotEqual(student.Name, command.Name);
             Assert.Equal(Sex.Man, student.Sex);
@@ -86,18 +88,57 @@ namespace SAE.CommonLibrary.Abstract.Test.Mediator
                 Begin = 0,
                 End = 10
             };
-            var cacheDatas = await this._distributedCache.GetAsync<IEnumerable<Student>>(command.ToString());
+
+            var key = command.ToString();
+
+            var cacheDatas = await this._distributedCache.GetAsync<IEnumerable<Student>>(key);
+
             Assert.Null(cacheDatas);
+
             var students = await this._mediator.SendAsync<IEnumerable<Student>>(command);
-            cacheDatas = await this._distributedCache.GetAsync<IEnumerable<Student>>(command.ToString());
+
+            cacheDatas = await this._distributedCache.GetAsync<IEnumerable<Student>>(key);
 
             this.WriteLine(new { Source = students, Cache = cacheDatas });
+
             Assert.NotNull(cacheDatas);
+
             Assert.Contains(students,
                             s => cacheDatas.Any(c => c.Age == s.Age &&
                                                 c.Name == s.Name &&
                                                 c.Sex == s.Sex &&
                                                 c.CreateTime == s.CreateTime));
+
+            await this._mediator.SendAsync(command);
+
+            var deleteCacheDatas = await this._distributedCache.GetAsync<IEnumerable<Student>>(key);
+
+            Assert.Null(deleteCacheDatas);
+
+            var saveCommand = new SaveCommand
+            {
+                Name = this.GetRandom()
+            };
+
+            var saveKey = saveCommand.ToString();
+
+            var saveStudents = await this._mediator.SendAsync<IEnumerable<Student>>(saveCommand);
+
+            var saveCacheDatas = await this._distributedCache.GetAsync<IEnumerable<Student>>(saveKey);
+
+            Assert.Contains(saveStudents,
+                            s => saveCacheDatas.Any(c => c.Age == s.Age &&
+                                                c.Name == s.Name &&
+                                                c.Sex == s.Sex &&
+                                                c.CreateTime == s.CreateTime));
+
+            this.WriteLine(new { Source = saveStudents, Cache = saveCacheDatas });
+
+            var student = await this._mediator.SendAsync<Student>(saveCommand);
+
+            var deleteSaveCacheDatas = await this._distributedCache.GetAsync<IEnumerable<Student>>(saveKey);
+
+            Assert.Null(deleteSaveCacheDatas);
         }
     }
 }

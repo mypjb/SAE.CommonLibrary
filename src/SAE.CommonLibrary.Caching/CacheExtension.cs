@@ -358,16 +358,16 @@ namespace SAE.CommonLibrary.Caching
 
         #endregion
 
-        #region Remove
+        #region Delete
         /// <summary>
         /// 通过<paramref name="key"/>移除缓存
         /// </summary>
         /// <param name="cache"></param>
         /// <param name="key"></param>
         /// <returns></returns>
-        public static bool Remove(this ICache cache, string key)
+        public static bool Delete(this ICache cache, string key)
         {
-            return cache.RemoveAsync(key).GetAwaiter().GetResult();
+            return cache.DeleteAsync(key).GetAwaiter().GetResult();
         }
         /// <summary>
         /// 根据<paramref name="keys"/>批量移除缓存
@@ -375,9 +375,9 @@ namespace SAE.CommonLibrary.Caching
         /// <param name="cache"></param>
         /// <param name="keys"></param>
         /// <returns></returns>
-        public static IEnumerable<bool> Remove(this ICache cache, IEnumerable<string> keys)
+        public static IEnumerable<bool> Delete(this ICache cache, IEnumerable<string> keys)
         {
-            return cache.RemoveAsync(keys).GetAwaiter().GetResult();
+            return cache.DeleteAsync(keys).GetAwaiter().GetResult();
         }
 
         #endregion

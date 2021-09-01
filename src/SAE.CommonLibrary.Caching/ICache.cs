@@ -36,13 +36,13 @@ namespace SAE.CommonLibrary.Caching
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        Task<bool> RemoveAsync(string key);
+        Task<bool> DeleteAsync(string key);
         /// <summary>
         /// 移除所有匹配键
         /// </summary>
         /// <param name="keys"></param>
         /// <returns></returns>
-        Task<IEnumerable<bool>> RemoveAsync(IEnumerable<string> keys);
+        Task<IEnumerable<bool>> DeleteAsync(IEnumerable<string> keys);
         /// <summary>
         /// 移除所有缓存
         /// </summary>

@@ -8,27 +8,29 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Abstract.Mediator.Behavior
 {
-    public class CachingPipelineBehavior<TCommand, TResponse> : IPipelineBehavior<TCommand, TResponse> where TCommand : class
+    public class UpdateCachingPipelineBehavior<TCommand, TResponse> : IPipelineBehavior<TCommand, TResponse> where TCommand : class
     {
         private readonly IDistributedCache _distributedCache;
-        private readonly ILogging<CachingPipelineBehavior<TCommand, TResponse>> _logging;
+        private readonly ILogging _logging;
         private readonly ICacheIdentityService _cacheIdentityService;
 
-        public CachingPipelineBehavior(IDistributedCache distributedCache,
-                                       ILogging<CachingPipelineBehavior<TCommand,TResponse>> logging,
-                                       ICacheIdentityService cacheIdentityService)
+        public UpdateCachingPipelineBehavior(IDistributedCache distributedCache,
+                                             ILogging<UpdateCachingPipelineBehavior<TCommand, TResponse>> logging,
+                                             ICacheIdentityService cacheIdentityService)
         {
             this._distributedCache = distributedCache;
             this._logging = logging;
             this._cacheIdentityService = cacheIdentityService;
-            this._logging.Info($"Enable caching PipelineBehavior");
+            this._logging.Info($"Enable update caching PipelineBehavior");
         }
+
         public async Task<TResponse> ExecutionAsync(TCommand command, Func<Task<TResponse>> next)
         {
             var key = this._cacheIdentityService.GetKey(command);
-            this._logging.Debug($"Entry caching pipeline key('{key}')");
-            var response = await this._distributedCache.GetOrAddAsync(key, next);
-            this._logging.Debug($"End caching pipeline key('{key}')");
+            this._logging.Debug($"Ready update cache '{key}'");
+            var response = await next();
+            await this._distributedCache.AddAsync(key, response);
+            this._logging.Debug($"Cache update '{key}' success");
             return response;
         }
     }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Abstract.Test.Mediator
 {
-    public class AddHandler : ICommandHandler<SaveCommand, Student>
+    public class AddHandler : ICommandHandler<SaveCommand, Student>, ICommandHandler<SaveCommand, IEnumerable<Student>>
     {
         public Task<Student> HandleAsync(SaveCommand command)
         {
@@ -18,6 +18,21 @@ namespace SAE.CommonLibrary.Abstract.Test.Mediator
                 CreateTime = DateTime.Now,
                 Sex = Sex.Man
             });
+        }
+
+        Task<IEnumerable<Student>> ICommandHandler<SaveCommand, IEnumerable<Student>>.HandleAsync(SaveCommand command)
+        {
+            var students = new[]
+            {
+                new Student
+                {
+                    CreateTime = DateTime.Now,
+                    Sex = Sex.Man,
+                    Name=command.Name,
+                    Age=100
+                }
+            }.AsEnumerable();
+            return Task.FromResult(students);
         }
     }
 
@@ -29,7 +44,8 @@ namespace SAE.CommonLibrary.Abstract.Test.Mediator
         }
     }
 
-    public class QueryHandler : ICommandHandler<QueryCommand, IEnumerable<Student>>
+    public class QueryHandler : ICommandHandler<QueryCommand, IEnumerable<Student>>,
+                                ICommandHandler<QueryCommand>
     {
         public async Task<IEnumerable<Student>> HandleAsync(QueryCommand command)
         {
@@ -41,6 +57,11 @@ namespace SAE.CommonLibrary.Abstract.Test.Mediator
                           Name = s.ToString(),
                           Sex = s % 2 == 0 ? Sex.Nav : Sex.Man
                       }).ToArray();
+        }
+
+        Task ICommandHandler<QueryCommand>.HandleAsync(QueryCommand command)
+        {
+            return Task.CompletedTask;
         }
     }
 }

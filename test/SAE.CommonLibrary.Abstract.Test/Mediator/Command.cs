@@ -7,6 +7,11 @@ namespace SAE.CommonLibrary.Abstract.Test.Mediator
     public class SaveCommand
     {
         public string Name { get; set; }
+
+        public override string ToString()
+        {
+            return this.Name;
+        }
     }
 
     public class ChangeCommand
@@ -23,6 +28,11 @@ namespace SAE.CommonLibrary.Abstract.Test.Mediator
     {
         public int Begin { get; set; }
         public int End { get; set; }
+
+        public override string ToString()
+        {
+            return $"{this.Begin}-{this.End}";
+        }
     }
 
 }

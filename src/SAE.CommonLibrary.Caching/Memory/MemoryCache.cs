@@ -57,7 +57,7 @@ namespace SAE.CommonLibrary.Caching.Memory
 
         public async Task<bool> ClearAsync()
         {
-            await this.RemoveAsync(this.keys);
+            await this.DeleteAsync(this.keys);
             return true;
         }
 
@@ -83,19 +83,19 @@ namespace SAE.CommonLibrary.Caching.Memory
             return Task.FromResult<IEnumerable<string>>(this.keys);
         }
 
-        public Task<bool> RemoveAsync(string key)
+        public Task<bool> DeleteAsync(string key)
         {
             this._cache.Remove(key);
             this.keys.Remove(key);
             return Task.FromResult(true);
         }
 
-        public async Task<IEnumerable<bool>> RemoveAsync(IEnumerable<string> keys)
+        public async Task<IEnumerable<bool>> DeleteAsync(IEnumerable<string> keys)
         {
             IList<bool> results = new List<bool>();
             while (this.keys.Count > 0)
             {
-                results.Add(await this.RemoveAsync(this.keys[0]));
+                results.Add(await this.DeleteAsync(this.keys[0]));
             }
             return results;
         }
