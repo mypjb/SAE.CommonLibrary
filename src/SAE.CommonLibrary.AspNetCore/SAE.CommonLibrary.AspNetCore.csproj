@@ -1,35 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <Version>2.0.4.7</Version>
-    <RepositoryUrl>https://github.com/mypjb/SAE.CommonLibrary</RepositoryUrl>
-    <PackageIconUrl></PackageIconUrl>
-    <RepositoryType>github</RepositoryType>
-    <PackageTags>SAE</PackageTags>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <FileVersion>2.0.4.7</FileVersion>
-    <PackageIcon>nuget.png</PackageIcon>
-  </PropertyGroup>
-  <ItemGroup>
-    <None Include="..\..\nuget.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.9" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SAE.CommonLibrary.Extension.HttpClient\SAE.CommonLibrary.Extension.HttpClient.csproj" />
-    <ProjectReference Include="..\SAE.CommonLibrary.Logging.NLog\SAE.CommonLibrary.Logging.NLog.csproj" />
-    <ProjectReference Include="..\SAE.CommonLibrary.Logging\SAE.CommonLibrary.Logging.csproj" />
-    <ProjectReference Include="..\SAE.CommonLibrary\SAE.CommonLibrary.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.1" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\SAE.CommonLibrary.Extension.HttpClient\SAE.CommonLibrary.Extension.HttpClient.csproj" />
+		<ProjectReference Include="..\SAE.CommonLibrary.Logging.NLog\SAE.CommonLibrary.Logging.NLog.csproj" />
+		<ProjectReference Include="..\SAE.CommonLibrary.Logging\SAE.CommonLibrary.Logging.csproj" />
+		<ProjectReference Include="..\SAE.CommonLibrary\SAE.CommonLibrary.csproj" />
+	</ItemGroup>
 
 </Project>

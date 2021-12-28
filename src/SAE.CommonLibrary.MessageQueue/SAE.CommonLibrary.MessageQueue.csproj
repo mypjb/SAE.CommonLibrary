@@ -1,30 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+	</ItemGroup>
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <Version>2.0.4.7</Version>
-    <RepositoryUrl>https://github.com/mypjb/SAE.CommonLibrary</RepositoryUrl>
-    <PackageIconUrl></PackageIconUrl>
-    <RepositoryType>github</RepositoryType>
-    <PackageTags>SAE</PackageTags>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <FileVersion>2.0.4.7</FileVersion>
-    <PackageIcon>nuget.png</PackageIcon>
-  </PropertyGroup>
-  <ItemGroup>
-    <None Include="..\..\nuget.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\SAE.CommonLibrary.DependencyInjection\SAE.CommonLibrary.DependencyInjection.csproj" />
-    <ProjectReference Include="..\SAE.CommonLibrary.Logging.NLog\SAE.CommonLibrary.Logging.NLog.csproj" />
-    <ProjectReference Include="..\SAE.CommonLibrary\SAE.CommonLibrary.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\SAE.CommonLibrary.DependencyInjection\SAE.CommonLibrary.DependencyInjection.csproj" />
+		<ProjectReference Include="..\SAE.CommonLibrary.Logging.NLog\SAE.CommonLibrary.Logging.NLog.csproj" />
+		<ProjectReference Include="..\SAE.CommonLibrary\SAE.CommonLibrary.csproj" />
+	</ItemGroup>
 </Project>
