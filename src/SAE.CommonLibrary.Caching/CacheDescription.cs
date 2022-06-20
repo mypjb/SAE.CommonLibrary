@@ -20,9 +20,9 @@ namespace SAE.CommonLibrary.Caching
         /// </summary>
         Sliding
     }
-    public class CacheDescription
+    public class CacheDescription<T>
     {
-        public CacheDescription(string key, object value)
+        public CacheDescription(string key, T value)
         {
             Assert.Build(key).NotNullOrWhiteSpace("请提供有效的 'key'");
             Assert.Build(value).NotNull("请提供有效的 'value'");
@@ -36,7 +36,7 @@ namespace SAE.CommonLibrary.Caching
         /// <summary>
         /// 缓存值
         /// </summary>
-        public object Value { get; set; }
+        public T Value { get; set; }
 
         private DateTimeOffset? absoluteExpiration;
 

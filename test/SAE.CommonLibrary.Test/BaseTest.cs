@@ -10,11 +10,27 @@ using Xunit.Abstractions;
 
 namespace SAE.CommonLibrary.Test
 {
+    /// <summary>
+    /// base test class 
+    /// </summary>
     public abstract class BaseTest
     {
+        /// <summary>
+        /// console output object
+        /// </summary>
         protected readonly ITestOutputHelper _output;
+        /// <summary>
+        /// service provider 
+        /// </summary>
         protected IServiceProvider _serviceProvider;
+        /// <summary>
+        /// configuration
+        /// </summary>
         protected IConfiguration _configuration;
+        /// <summary>
+        /// default ctor
+        /// </summary>
+        /// <param name="output"></param>
         public BaseTest(ITestOutputHelper output)
         {
             _output = output;
@@ -24,6 +40,11 @@ namespace SAE.CommonLibrary.Test
             this.Configure(this._serviceProvider);
         }
 
+        /// <summary>
+        /// build <see cref="_serviceProvider"/>
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
         protected IServiceProvider Build(IServiceCollection services)
         {
             var configurationBuilder = new ConfigurationBuilder();
@@ -42,12 +63,19 @@ namespace SAE.CommonLibrary.Test
             return services.BuildAutofacProvider();
         }
 
-
+        /// <summary>
+        /// add default(json) configuration directory
+        /// </summary>
+        /// <param name="configurationBuilder"></param>
         public virtual void ConfigureConfiguration(IConfigurationBuilder configurationBuilder)
         {
             configurationBuilder.AddJsonFileDirectory();
         }
 
+        /// <summary>
+        /// add default(development) env
+        /// </summary>
+        /// <param name="configurationBuilder"></param>
         protected virtual void ConfigureEnvironment(IConfigurationBuilder configurationBuilder)
         {
             configurationBuilder.AddInMemoryCollection(new Dictionary<string, string>
@@ -58,23 +86,33 @@ namespace SAE.CommonLibrary.Test
                 }
             });
         }
+        /// <summary>
+        /// configure services
+        /// </summary>
+        /// <param name="services"></param>
         protected virtual void ConfigureServices(IServiceCollection services)
         {
             
         }
-
+        /// <summary>
+        /// configure services before
+        /// </summary>
+        /// <param name="services"></param>
         protected virtual void ConfigureServicesBefore(IServiceCollection services)
         {
 
         }
-
+        /// <summary>
+        /// configure <see cref="_serviceProvider"/>
+        /// </summary>
+        /// <param name="provider"></param>
         protected virtual void Configure(IServiceProvider provider)
         {
             
         }
 
         /// <summary>
-        /// 打印输出
+        /// print <paramref name="object"/> to console
         /// </summary>
         /// <param name="object"></param>
         protected void WriteLine(object @object)
@@ -82,7 +120,7 @@ namespace SAE.CommonLibrary.Test
             this._output.WriteLine(@object.ToJsonString());
         }
         /// <summary>
-        /// 获得随机值
+        /// get random
         /// </summary>
         /// <returns></returns>
         protected string GetRandom()

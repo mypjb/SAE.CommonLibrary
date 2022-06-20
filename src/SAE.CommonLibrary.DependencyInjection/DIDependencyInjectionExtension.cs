@@ -25,7 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceProvider BuildAutofacProvider(this IServiceCollection serviceDescriptors, IContainer container)
         {
-            var serviceProvider= new AutofacServiceProvider(container);
+            var serviceProvider = new AutofacServiceProvider(container);
             return serviceProvider;
         }
 
@@ -75,6 +75,21 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return serviceDescriptors.Any(s => s.ServiceType == ServiceType);
         }
+
+        /// <summary>
+        /// 判断<paramref name="ServiceType"/>是否有<paramref name="implementationType"/>实现
+        /// </summary>
+        /// <param name="serviceDescriptors"></param>
+        /// <param name="ServiceType">服务类型</param>
+        /// <param name="implementationType">实现类型</param>
+        /// <returns></returns>
+        public static bool IsRegister(this IServiceCollection serviceDescriptors, Type ServiceType, Type implementationType)
+        {
+            return serviceDescriptors.Any(s => s.ServiceType == ServiceType &&
+                                          s.ImplementationType == implementationType);
+        }
+
+
         /// <summary>
         /// 是否注册
         /// </summary>
@@ -84,6 +99,19 @@ namespace Microsoft.Extensions.DependencyInjection
         public static bool IsRegister<TService>(this IServiceCollection serviceDescriptors) where TService : class
         {
             return serviceDescriptors.IsRegister(typeof(TService));
+        }
+        /// <summary>
+        /// 判断<typeparamref name="TService"/>是否有<typeparamref name="TImplementation"/>实现
+        /// </summary>
+        /// <typeparam name="TService"></typeparam>
+        /// <typeparam name="TImplementation"></typeparam>
+        /// <param name="serviceDescriptors"></param>
+        /// <returns></returns>
+        public static bool IsRegister<TService, TImplementation>(this IServiceCollection serviceDescriptors)
+            where TService : class 
+            where TImplementation : TService
+        {
+            return serviceDescriptors.IsRegister(typeof(TService), typeof(TImplementation));
         }
     }
 }

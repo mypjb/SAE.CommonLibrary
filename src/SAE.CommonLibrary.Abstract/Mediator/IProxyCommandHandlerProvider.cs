@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Abstract.Mediator
 {
-    public interface IProxyCommandHandlerProvider
-    {
-        Task<ICommandHandler<TCommand>> Get<TCommand>() where TCommand : class;
+#warning 采用其他方式进行调用
+    //public interface IProxyCommandHandlerProvider
+    //{
+    //    Task<ICommandHandler<TCommand>> Get<TCommand>() where TCommand : class;
 
-        Task<ICommandHandler<TCommand, TResponse>> Get<TCommand, TResponse>() where TCommand : class;
-    }
+    //    Task<ICommandHandler<TCommand, TResponse>> Get<TCommand, TResponse>() where TCommand : class;
+    //}
 }

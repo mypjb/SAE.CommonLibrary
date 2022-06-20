@@ -1,12 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29519.87
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C5C42E96-17D9-480C-B5DF-B3C2F7080D42}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		build.sh = build.sh
+		Directory.Build.props = Directory.Build.props
+		test\Directory.Build.props = test\Directory.Build.props
 		EventStore.sql = EventStore.sql
 		global.json = global.json
 		Jenkinsfile = Jenkinsfile
@@ -105,13 +107,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAE.CommonLibrary.Configura
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAE.CommonLibrary.Configuration.Microsoft.Test", "test\SAE.CommonLibrary.Configuration.Microsoft.Test\SAE.CommonLibrary.Configuration.Microsoft.Test.csproj", "{230E8CDC-7EF1-4634-BFDC-24C36F3752EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.Extension.HttpClient", "src\SAE.CommonLibrary.Extension.HttpClient\SAE.CommonLibrary.Extension.HttpClient.csproj", "{760ACFDE-D513-44E6-B5E1-68383F7B1749}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAE.CommonLibrary.Extension.HttpClient", "src\SAE.CommonLibrary.Extension.HttpClient\SAE.CommonLibrary.Extension.HttpClient.csproj", "{760ACFDE-D513-44E6-B5E1-68383F7B1749}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAE.CommonLibrary.Plugin.FrontEnd", "test\Plugins\SAE.CommonLibrary.Plugin.FrontEnd\SAE.CommonLibrary.Plugin.FrontEnd.csproj", "{81552D00-926E-427F-8C10-FE4B210000E9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", "{AF806C25-026D-4628-BB3E-071C20852612}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.Test.Extension", "test\SAE.CommonLibrary.Test.Extension\SAE.CommonLibrary.Test.Extension.csproj", "{7FA5E131-D9BA-4411-9054-A674163D5FF6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAE.CommonLibrary.Test.Extension", "test\SAE.CommonLibrary.Test.Extension\SAE.CommonLibrary.Test.Extension.csproj", "{7FA5E131-D9BA-4411-9054-A674163D5FF6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAE.CommonLibrary.Abstract.Mediator.Behavior", "src\SAE.CommonLibrary.Abstract.Mediator.Behavior\SAE.CommonLibrary.Abstract.Mediator.Behavior.csproj", "{4AA2CF95-2135-4A93-A8F8-9C1F3FC1926F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -295,6 +299,10 @@ Global
 		{7FA5E131-D9BA-4411-9054-A674163D5FF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FA5E131-D9BA-4411-9054-A674163D5FF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FA5E131-D9BA-4411-9054-A674163D5FF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AA2CF95-2135-4A93-A8F8-9C1F3FC1926F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AA2CF95-2135-4A93-A8F8-9C1F3FC1926F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AA2CF95-2135-4A93-A8F8-9C1F3FC1926F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AA2CF95-2135-4A93-A8F8-9C1F3FC1926F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -346,6 +354,7 @@ Global
 		{81552D00-926E-427F-8C10-FE4B210000E9} = {041569C8-77AD-490C-A700-61292F063778}
 		{AF806C25-026D-4628-BB3E-071C20852612} = {78157883-8166-46DB-9754-E093FE2A3936}
 		{7FA5E131-D9BA-4411-9054-A674163D5FF6} = {8AD43B5B-ED55-4712-B865-1E6E1D7B19FE}
+		{4AA2CF95-2135-4A93-A8F8-9C1F3FC1926F} = {78157883-8166-46DB-9754-E093FE2A3936}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2FF66E70-E062-4202-A1AD-A821991FEA65}

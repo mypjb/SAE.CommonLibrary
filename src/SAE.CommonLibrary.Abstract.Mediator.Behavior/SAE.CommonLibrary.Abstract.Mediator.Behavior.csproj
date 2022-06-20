@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\SAE.CommonLibrary.Abstract\SAE.CommonLibrary.Abstract.csproj" />
+    <ProjectReference Include="..\SAE.CommonLibrary.Caching\SAE.CommonLibrary.Caching.csproj" />
+    <ProjectReference Include="..\SAE.CommonLibrary.Logging\SAE.CommonLibrary.Logging.csproj" />
+  </ItemGroup>
+
+</Project>

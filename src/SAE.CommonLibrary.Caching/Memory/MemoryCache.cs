@@ -16,7 +16,7 @@ namespace SAE.CommonLibrary.Caching.Memory
             this.keys = new List<string>();
             this._cache = cache;
         }
-        public Task<bool> AddAsync(CacheDescription description)
+        public Task<bool> AddAsync<T>(CacheDescription<T> description)
         {
             using (var entry = this._cache.CreateEntry(description.Key))
             {
@@ -45,7 +45,7 @@ namespace SAE.CommonLibrary.Caching.Memory
             return Task.FromResult(true);
         }
 
-        public async Task<IEnumerable<bool>> AddAsync(IEnumerable<CacheDescription> descriptions)
+        public async Task<IEnumerable<bool>> AddAsync<T>(IEnumerable<CacheDescription<T>> descriptions)
         {
             IList<bool> resutls = new List<bool>();
             foreach (var description in descriptions)
@@ -57,23 +57,23 @@ namespace SAE.CommonLibrary.Caching.Memory
 
         public async Task<bool> ClearAsync()
         {
-            await this.RemoveAsync(this.keys);
+            await this.DeleteAsync(this.keys);
             return true;
         }
 
-        public virtual Task<object> GetAsync(string key)
+        public virtual Task<T> GetAsync<T>(string key)
         {
             object @object;
             this._cache.TryGetValue(key,out @object);
-            return Task.FromResult(@object);
+            return Task.FromResult((T)@object);
         }
 
-        public virtual async Task<IEnumerable<object>> GetAsync(IEnumerable<string> keys)
+        public virtual async Task<IEnumerable<T>> GetAsync<T>(IEnumerable<string> keys)
         {
-            IList<object> results = new List<object>();
+            IList<T> results = new List<T>();
             foreach (var key in keys)
             {
-                results.Add(await this.GetAsync(key));
+                results.Add(await this.GetAsync<T>(key));
             }
             return results;
         }
@@ -83,19 +83,19 @@ namespace SAE.CommonLibrary.Caching.Memory
             return Task.FromResult<IEnumerable<string>>(this.keys);
         }
 
-        public Task<bool> RemoveAsync(string key)
+        public Task<bool> DeleteAsync(string key)
         {
             this._cache.Remove(key);
             this.keys.Remove(key);
             return Task.FromResult(true);
         }
 
-        public async Task<IEnumerable<bool>> RemoveAsync(IEnumerable<string> keys)
+        public async Task<IEnumerable<bool>> DeleteAsync(IEnumerable<string> keys)
         {
             IList<bool> results = new List<bool>();
             while (this.keys.Count > 0)
             {
-                results.Add(await this.RemoveAsync(this.keys[0]));
+                results.Add(await this.DeleteAsync(this.keys[0]));
             }
             return results;
         }

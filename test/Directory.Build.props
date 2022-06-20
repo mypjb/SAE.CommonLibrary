@@ -1,0 +1,21 @@
+<Project>
+	<!--Test project props file-->
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<IsPackable>false</IsPackable>
+		<IsPackable>false</IsPackable>
+		<FileVersion>$(Version)</FileVersion>
+		<PackageIcon>nuget.png</PackageIcon>
+		<AssemblyVersion>$(Version)</AssemblyVersion>
+		<PackageVersion>$(Version)</PackageVersion>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="$(MSBuildStartupDirectory)/nuget.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
+	<PropertyGroup>
+		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(MSBuildProjectName).xml</DocumentationFile>
+	</PropertyGroup>
+</Project>

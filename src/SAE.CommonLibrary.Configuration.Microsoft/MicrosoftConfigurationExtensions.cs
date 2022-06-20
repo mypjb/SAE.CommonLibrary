@@ -31,7 +31,7 @@ namespace Microsoft.Extensions.Configuration
         /// <returns></returns>
         public static IConfigurationBuilder AddRemoteSource(this IConfigurationBuilder configurationBuilder, SAEOptions options)
         {
-            return configurationBuilder.AddRemoteSource(op=>
+            return configurationBuilder.AddRemoteSource(op =>
             {
                 op.Extend(options);
             });
@@ -68,7 +68,15 @@ namespace Microsoft.Extensions.Configuration
 
                 root = root.IsNullOrWhiteSpace() ? Constants.Config.DefaultRootDirectory : root;
 
-                option.FileName = Path.Combine(root, $"{applicationName}.{env}{Constants.JsonSuffix}");
+                if (env.IsNullOrWhiteSpace())
+                {
+                    option.FileName = Path.Combine(root, $"{applicationName}{Constants.JsonSuffix}");
+                }
+                else
+                {
+                    option.FileName = Path.Combine(root, $"{applicationName}.{env}{Constants.JsonSuffix}");
+                }
+                
             }
             //setting oauth
             if (option.OAuth != null && option.OAuth.Check())
@@ -149,21 +157,34 @@ namespace Microsoft.Extensions.Configuration
                                  .OrderBy(s => s)
                                  .ToList();
 
-            var files = paths.Select(s => Path.GetFileNameWithoutExtension(s).Split(Constants.FileSeparator).First())
-                             .Distinct()
-                             .ToArray();
+            var files = paths.Select(s =>
+            {
+                var fileName = Path.GetFileNameWithoutExtension(s);
+                var fileSeparatorIndex = fileName.LastIndexOf(Constants.FileSeparator);
+                if (fileSeparatorIndex != -1)
+                {
+                    fileName = fileName.Substring(0, fileSeparatorIndex);
+                }
+                return fileName;
+            }).Distinct()
+              .ToArray();
 
             foreach (var file in files)
             {
                 var originFile = Path.Combine(path, $"{file}{Constants.JsonSuffix}");
-                var envFile = Path.Combine(path, $"{file}{Constants.FileSeparator}{env}{Constants.JsonSuffix}");
+                
                 if (File.Exists(originFile))
                 {
                     configurationBuilder.AddJsonFile(originFile, true, true);
                 }
-                if (File.Exists(envFile))
+
+                if (!env.IsNullOrWhiteSpace())
                 {
-                    configurationBuilder.AddJsonFile(envFile, true, true);
+                    var envFile = Path.Combine(path, $"{file}{Constants.FileSeparator}{env}{Constants.JsonSuffix}");
+                    if (File.Exists(envFile))
+                    {
+                        configurationBuilder.AddJsonFile(envFile, true, true);
+                    }
                 }
             }
 

@@ -70,18 +70,19 @@ namespace SAE.CommonLibrary.Cache.Test
 
 
         [Fact]
-        public async Task Remove()
+        public async Task Delete()
         {
             var student = await this.Add();
-            Xunit.Assert.True(_distributedCache.Remove(student.Name));
+            
+            Xunit.Assert.True(_distributedCache.Delete(student.Name));
             Xunit.Assert.Null(_distributedCache.Get<Student>(student.Name));
         }
         [Fact]
-        public async Task RemoveAll()
+        public async Task DeleteAll()
         {
             var keys = await this.Adds();
             Xunit.Assert.True(keys.Count() > 0);
-            await this._distributedCache.RemoveAsync(keys);
+            await this._distributedCache.DeleteAsync(keys);
             var students = await this._distributedCache.GetAsync<Student>(keys);
             Xunit.Assert.True(students.Count(s => s != null) == 0);
         }

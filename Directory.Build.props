@@ -1,0 +1,23 @@
+<Project>
+	<PropertyGroup Condition="'$(MSBuildProjectName)' != 'BenchmarkInternal'">
+		<Version>2.0.4.7</Version>
+		<TargetFramework>net6.0</TargetFramework>
+		<RepositoryUrl>https://github.com/mypjb/SAE.CommonLibrary</RepositoryUrl>
+		<RepositoryType>github</RepositoryType>
+		<PackageTags>SAE</PackageTags>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<FileVersion>$(Version)</FileVersion>
+		<PackageIcon>nuget.png</PackageIcon>
+		<AssemblyVersion>$(Version)</AssemblyVersion>
+		<PackageVersion>$(Version)</PackageVersion>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="$(MSBuildStartupDirectory)/nuget.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
+	<PropertyGroup>
+		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(MSBuildProjectName).xml</DocumentationFile>
+	</PropertyGroup>
+</Project>

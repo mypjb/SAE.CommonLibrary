@@ -6,6 +6,9 @@ using System.Text;
 namespace SAE.CommonLibrary
 {
     
+    /// <summary>
+    /// system constant
+    /// </summary>
     public partial class Constant
     {
         /// <summary>
@@ -18,6 +21,10 @@ namespace SAE.CommonLibrary
         /// </summary>
         public static Func<DateTime> TimeZoneGenerator = () => DateTime.UtcNow;
 
+        /// <summary>
+        /// default name
+        /// </summary>
+        public const string Default = "";
         /// <summary>
         /// default Time zone utc
         /// </summary>
