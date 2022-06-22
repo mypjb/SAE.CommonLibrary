@@ -3,8 +3,6 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -24,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\SAE.CommonLibrary.Scope\SAE.CommonLibrary.Scope.csproj" />
     <ProjectReference Include="..\SAE.CommonLibrary.Test\SAE.CommonLibrary.Test.csproj" />
+    <ProjectReference Include="..\..\src\SAE.CommonLibrary.Scope.AspNetCore\SAE.CommonLibrary.Scope.AspNetCore.csproj" />
   </ItemGroup>
 
 </Project>

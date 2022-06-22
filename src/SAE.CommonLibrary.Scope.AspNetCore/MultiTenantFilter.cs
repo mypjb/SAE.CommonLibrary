@@ -8,6 +8,7 @@ using SAE.CommonLibrary.Logging;
 namespace SAE.CommonLibrary.Scope.AspNetCore
 {
     /// <summary>
+    /// <inheritdoc/>
     /// aspnetcore multi tenant filter
     /// </summary>
     public class MultiTenantFilter : IAsyncActionFilter
@@ -20,15 +21,17 @@ namespace SAE.CommonLibrary.Scope.AspNetCore
         /// ctor
         /// </summary>
         /// <param name="multiTenantService"></param>
+        /// <param name="scopeFactory"></param>
         /// <param name="logging"></param>
         public MultiTenantFilter(IMultiTenantService multiTenantService,
                                  IScopeFactory scopeFactory,
                                  ILogging<MultiTenantFilter> logging)
         {
-            this._multiTenantService = _multiTenantService;
+            this._multiTenantService = multiTenantService;
             this._scopeFactory = scopeFactory;
             this._logging = logging;
         }
+
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             this._logging.Debug("find tenant identity");

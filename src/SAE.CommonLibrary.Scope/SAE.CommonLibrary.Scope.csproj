@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SAE.CommonLibrary\SAE.CommonLibrary.csproj" />
+    <ProjectReference Include="..\SAE.CommonLibrary.Logging.NLog\SAE.CommonLibrary.Logging.NLog.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -30,11 +30,11 @@ namespace SAE.CommonLibrary.Scope.AspNetCore
         /// <summary>
         /// default user claim name
         /// </summary>
-        public const string DefaultClaimName = "SiteId";
+        public const string DefaultClaimName = "siteid";
         /// <summary>
         /// default header name
         /// </summary>
-        public const string DefalutHeaderName = "Tenant";
+        public const string DefalutHeaderName = "tenant";
         /// <summary>
         /// ctor
         /// </summary>

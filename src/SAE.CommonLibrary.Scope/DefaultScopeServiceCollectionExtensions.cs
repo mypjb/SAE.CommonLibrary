@@ -20,6 +20,7 @@ namespace SAE.CommonLibrary.Scope
         /// <returns></returns>
         public static IServiceCollection AddDefaultScope(this IServiceCollection services)
         {
+            services.AddNlogLogger();
             services.TryAddSingleton<IScopeFactory, DefaultScopeFactory>();
             return services;
         }

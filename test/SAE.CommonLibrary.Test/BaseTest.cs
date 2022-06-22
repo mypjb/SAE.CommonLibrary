@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting.Internal;
 using SAE.CommonLibrary.Extension;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using Xunit.Abstractions;
 
 namespace SAE.CommonLibrary.Test
@@ -76,11 +76,12 @@ namespace SAE.CommonLibrary.Test
         /// add default(development) env
         /// </summary>
         /// <param name="configurationBuilder"></param>
-        protected virtual void ConfigureEnvironment(IConfigurationBuilder configurationBuilder)
+        /// <param name="environmentName"></param>
+        protected virtual void ConfigureEnvironment(IConfigurationBuilder configurationBuilder, string environmentName = nameof(Environments.Development))
         {
             configurationBuilder.AddInMemoryCollection(new Dictionary<string, string>
             {
-                {HostDefaults.EnvironmentKey,Environments.Development },
+                {HostDefaults.EnvironmentKey,environmentName },
                 {
                     HostDefaults.ApplicationKey,Path.GetFileNameWithoutExtension(AppDomain.CurrentDomain.FriendlyName)
                 }
@@ -92,7 +93,7 @@ namespace SAE.CommonLibrary.Test
         /// <param name="services"></param>
         protected virtual void ConfigureServices(IServiceCollection services)
         {
-            
+
         }
         /// <summary>
         /// configure services before
@@ -108,7 +109,7 @@ namespace SAE.CommonLibrary.Test
         /// <param name="provider"></param>
         protected virtual void Configure(IServiceProvider provider)
         {
-            
+
         }
 
         /// <summary>

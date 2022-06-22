@@ -1,0 +1,25 @@
+{
+    "MultiTenant": {
+        "ClaimName": "siteid",
+        "HeaderName": "tenant",
+        "Strategy": "domain",
+        "Host": ".localhost",
+        "UseDefaultRule": true,
+        "Mapper":{
+            "bj":"bj_tenant",
+            "sh":"sh_tenant",
+            "t1":"t1_tt",
+            "t2":"t2_tt",
+            "t3":"t3_tt",
+            "t4":"t4_tt",
+            "t5":"t5_tt",
+            "t6":"t6_tt",
+            "t7":"t7_tt",
+            "t8":"t8_tt",
+            "t9":"t9_tt",
+            "t10":"t10_tt",
+            "t11":"t11_tt",
+            "t12":"t12_tt"
+        }
+    }
+}
