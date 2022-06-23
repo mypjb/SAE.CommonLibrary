@@ -25,17 +25,19 @@ namespace SAE.CommonLibrary.Scope.Test.Controllers
             return scope.Name;
         }
 
-        [HttpPost("{action}/name")]
-        public async Task<ActionResult> Switch(string name)
+        [HttpPost("{action}/{name}")]
+        public async Task<object> Switch(string name)
         {
+            var switchName = string.Empty;
             var current = await this._scopeFactory.GetAsync();
 
-            using (var scope =await this._scopeFactory.GetAsync(name))
+            using (var scope = await this._scopeFactory.GetAsync(name))
             {
                 Assert.Build(current.Name.Equals(scope.Name))
-                      .True();
+                      .False();
                 Assert.Build(name.Equals(scope.Name))
                       .True();
+                switchName = scope.Name;
             }
 
             var newScope = await this._scopeFactory.GetAsync();
@@ -43,7 +45,7 @@ namespace SAE.CommonLibrary.Scope.Test.Controllers
             Assert.Build(current.Name.Equals(newScope.Name))
                   .True();
 
-            return this.Ok();
+            return switchName;
         }
     }
 }

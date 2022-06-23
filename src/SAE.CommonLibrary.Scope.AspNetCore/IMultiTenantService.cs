@@ -79,7 +79,7 @@ namespace SAE.CommonLibrary.Scope.AspNetCore
 
             if (tenantId.IsNullOrWhiteSpace())
             {
-                tenantId = this.UserFind(ctx);
+                tenantId = this.HeaderFind(ctx);
             }
 
             return Task.FromResult(tenantId);
@@ -133,7 +133,7 @@ namespace SAE.CommonLibrary.Scope.AspNetCore
         {
             var tenantId = string.Empty;
             StringValues sv;
-            if (ctx.Request.Headers.TryGetValue(this.Options.ClaimName, out sv))
+            if (ctx.Request.Headers.TryGetValue(this.Options.HeaderName, out sv))
             {
                 tenantId = sv.First();
             }

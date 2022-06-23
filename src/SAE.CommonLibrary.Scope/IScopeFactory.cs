@@ -1,5 +1,8 @@
 ﻿namespace SAE.CommonLibrary.Scope
 {
+    /// <summary>
+    /// scope factory
+    /// </summary>
     public interface IScopeFactory
     {
         /// <summary>

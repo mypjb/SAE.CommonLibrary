@@ -1,12 +1,10 @@
-using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using SAE.CommonLibrary.Extension;
 using SAE.CommonLibrary.Scope.AspNetCore;
 using SAE.CommonLibrary.Test;
 using Xunit;
@@ -18,13 +16,12 @@ namespace SAE.CommonLibrary.Scope.Test
     public class AspNetCoreDomainScopeTest : HostTest
     {
         protected IEnumerable<string> _scopes;
-        private readonly IOptions<MultiTenantOptions> _options;
+        protected readonly IOptions<MultiTenantOptions> _options;
 
         public AspNetCoreDomainScopeTest(ITestOutputHelper output) : base(output)
         {
             this._options = this._serviceProvider.GetService<IOptions<MultiTenantOptions>>();
             this._scopes = this._options.Value.Mapper.Values.ToArray();
-            this.WriteLine(this._options.Value);
         }
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
@@ -39,7 +36,7 @@ namespace SAE.CommonLibrary.Scope.Test
         public override void ConfigureConfiguration(IConfigurationBuilder configurationBuilder)
         {
             base.ConfigureConfiguration(configurationBuilder);
-            return;
+
             var scopes = this.GenerateScopes()
                              .ToDictionary(s =>
                              {
@@ -57,27 +54,21 @@ namespace SAE.CommonLibrary.Scope.Test
         [Fact]
         public virtual async Task Get()
         {
-           await this._scopes
-                        // .AsParallel()
-                        // .ForAll(async s =>
-                        .ForEachAsync(async s =>
-                        {
-                            var req = this.GetRrequest(HttpMethod.Get, "/home", s);
-
-                            var rep = await this._client.SendAsync(req);
-                            rep.EnsureSuccessStatusCode();
-                            var current = await rep.Content.ReadAsStringAsync();
-
-                            Assert.Equal(s, current);
-                        });
+            var tasks = this._scopes.Select(async s =>
+                       {
+                           var req = await this.GetRrequestAsync(HttpMethod.Get, "/home", s);
+                           var rep = await this._client.SendAsync(req);
+                           rep.EnsureSuccessStatusCode();
+                           var current = await rep.Content.ReadAsStringAsync();
+                           Assert.Equal(s, current);
+                       });
+            await Task.WhenAll(tasks);
         }
 
-        // [Fact]
+        [Fact]
         public virtual async Task Switch()
         {
-            return;
-            this._scopes.AsParallel()
-                        .ForAll(async s =>
+            var tasks = this._scopes.Select(async s =>
                         {
                             var switchScope = string.Empty;
                             while (true)
@@ -90,24 +81,25 @@ namespace SAE.CommonLibrary.Scope.Test
                                 }
                             }
 
-                            var req = this.GetRrequest(HttpMethod.Post, $"/home/switch/{switchScope}", s);
+                            var req = await this.GetRrequestAsync(HttpMethod.Post, $"/home/switch/{switchScope}", s);
 
                             var rep = await this._client.SendAsync(req);
                             rep.EnsureSuccessStatusCode();
                             var current = await rep.Content.ReadAsStringAsync();
 
-                            Assert.Equal(s, current);
+                            Assert.Equal(switchScope, current);
                         });
+            await Task.WhenAll(tasks);
         }
 
 
-        protected virtual HttpRequestMessage GetRrequest(HttpMethod method, string pathString, string scopeName)
+        protected virtual async Task<HttpRequestMessage> GetRrequestAsync(HttpMethod method, string pathString, string scopeName)
         {
             foreach (var kv in this._options.Value.Mapper)
             {
                 if (kv.Value.Equals(scopeName))
                 {
-                    scopeName = kv.Value;
+                    scopeName = kv.Key;
                     break;
                 }
             }
@@ -122,7 +114,10 @@ namespace SAE.CommonLibrary.Scope.Test
             public void ConfigureServices(IServiceCollection services)
             {
                 services.AddControllers();
+                services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                        .AddCookie();
                 services.AddMultiTenant();
+
             }
 
             // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -130,6 +125,8 @@ namespace SAE.CommonLibrary.Scope.Test
             {
                 app.UseRouting();
 
+                app.UseAuthentication();
+                app.UseAuthorization();
                 app.UseMultiTenant();
 
                 app.UseEndpoints(endpoints =>
