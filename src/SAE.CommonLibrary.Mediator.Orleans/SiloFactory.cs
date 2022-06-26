@@ -144,7 +144,7 @@ namespace SAE.CommonLibrary.Mediator.Orleans
                              })
                              .ConfigureServices(service =>
                              {
-                                 service.AddLogger(this._loggingFactory)
+                                 service.AddSingleton<ILoggingFactory>(this._loggingFactory)
                                         .AddMicrosoftLogging()
                                         .AddSingleton(this._mediator);
                              });

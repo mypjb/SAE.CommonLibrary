@@ -8,17 +8,17 @@ namespace SAE.CommonLibrary.Extension
     {
         #region IsNullOrWhiteSpace
         /// <summary>
-        /// <see cref="IAssert{TAssert}.Current"/>由空null或一连串空格组成
+        /// <see cref="IAssert{TAssert}.Current"/>Consists of empty nulls or a series of spaces
         /// </summary>
         /// <param name="assert"></param>
         /// <returns></returns>
         public static IAssert<string> IsNullOrWhiteSpace(this IAssert<string> assert)
         {
-            return assert.IsNullOrWhiteSpace($"{assert.Name},不是空null或一连串空格组成");
+            return assert.IsNullOrWhiteSpace($"{assert.Name},Not null or a string of spaces");
         }
 
         /// <summary>
-        /// <see cref="IAssert{TAssert}.Current"/>由空null或一连串空格组成
+        /// <see cref="IAssert{TAssert}.Current"/>Consists of empty nulls or a series of spaces
         /// </summary>
         /// <param name="assert"></param>
         /// <param name="message"></param>
@@ -36,17 +36,17 @@ namespace SAE.CommonLibrary.Extension
         #region NotNullOrWhiteSpace
 
         /// <summary>
-        /// <see cref="IAssert{TAssert}.Current"/>不为空null或一连串空格
+        /// <see cref="IAssert{TAssert}.Current"/>Not null or a string of spaces
         /// </summary>
         /// <param name="assert"></param>
         /// <returns></returns>
         public static IAssert<string> NotNullOrWhiteSpace(this IAssert<string> assert)
         {
-            return assert.NotNullOrWhiteSpace($"{assert.Name},是null空或一连串连续空格组成");
+            return assert.NotNullOrWhiteSpace($"{assert.Name},Is null or a series of consecutive spaces");
         }
 
         /// <summary>
-        /// <see cref="IAssert{TAssert}.Current"/>不为空null或一连串空格
+        /// <see cref="IAssert{TAssert}.Current"/>Not null or a string of spaces
         /// </summary>
         /// <param name="assert"></param>
         /// <param name="message"></param>
@@ -63,17 +63,17 @@ namespace SAE.CommonLibrary.Extension
 
         #region True
         /// <summary>
-        /// <see cref="IAssert{TAssert}.Current"/>为<see cref="bool.TrueString"/>
+        /// <see cref="IAssert{TAssert}.Current"/> is <see cref="bool.TrueString"/>
         /// </summary>
         /// <param name="assert"></param>
         /// <returns></returns>
         public static IAssert<bool> True(this IAssert<bool> assert)
         {
-            return assert.True($"{assert.Name},不满足true条件");
+            return assert.True($"{assert.Name},Does not meet the true condition");
         }
 
         /// <summary>
-        /// <see cref="IAssert{TAssert}.Current"/>为<see cref="bool.TrueString"/>
+        /// <see cref="IAssert{TAssert}.Current"/> is <see cref="bool.TrueString"/>
         /// </summary>
         /// <param name="assert"></param>
         /// <param name="message"></param>
@@ -91,13 +91,13 @@ namespace SAE.CommonLibrary.Extension
         #region False
 
         /// <summary>
-        /// <see cref="IAssert{TAssert}.Current"/>为<see cref="bool.FalseString"/>
+        /// <see cref="IAssert{TAssert}.Current"/> is <see cref="bool.FalseString"/>
         /// </summary>
         /// <param name="assert"></param>
         /// <returns></returns>
-        public static IAssert<bool> False(this IAssert<bool> assert) => assert.False($"{assert.Name},不满足false条件");
+        public static IAssert<bool> False(this IAssert<bool> assert) => assert.False($"{assert.Name},False condition not met");
         /// <summary>
-        /// <see cref="IAssert{TAssert}.Current"/>为<see cref="bool.FalseString"/>
+        /// <see cref="IAssert{TAssert}.Current"/> is <see cref="bool.FalseString"/>
         /// </summary>
         /// <param name="assert"></param>
         /// <param name="message"></param>
@@ -114,17 +114,17 @@ namespace SAE.CommonLibrary.Extension
 
         #region Null
         /// <summary>
-        /// <see cref="IAssert{TAssert}.Current"/>为null
+        /// <see cref="IAssert{TAssert}.Current"/> is null
         /// </summary>
         /// <param name="assert"></param>
         /// <returns></returns>
         public static IAssert<TAssert> Null<TAssert>(this IAssert<TAssert> assert)
         {
-            return assert.Null($"{assert.Name},不为null");
+            return assert.Null($"{assert.Name},not null");
         }
 
         /// <summary>
-        /// <see cref="IAssert{TAssert}.Current"/>为null
+        /// <see cref="IAssert{TAssert}.Current"/> is null
         /// </summary>
         /// <param name="assert"></param>
         /// <param name="message"></param>
@@ -143,17 +143,17 @@ namespace SAE.CommonLibrary.Extension
         #region NotNull
 
         /// <summary>
-        /// <see cref="IAssert{TAssert}.Current"/>不为null
+        /// <see cref="IAssert{TAssert}.Current"/> Cannot be null
         /// </summary>
         /// <param name="assert"></param>
         /// <returns></returns>
         public static IAssert<TAssert> NotNull<TAssert>(this IAssert<TAssert> assert)
         {
-            return assert.NotNull($"{assert.Name},不能为null");
+            return assert.NotNull($"{assert.Name},Cannot be null");
         }
 
         /// <summary>
-        /// <see cref="IAssert{TAssert}.Current"/>不为null
+        /// <see cref="IAssert{TAssert}.Current"/>Cannot be null
         /// </summary>
         /// <param name="assert"></param>
         /// <param name="message"></param>
@@ -169,6 +169,15 @@ namespace SAE.CommonLibrary.Extension
         #endregion
 
         #region Then
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="assert"></param>
+        /// <param name="delegate"></param>
+        /// <param name="name"></param>
+        /// <typeparam name="TAssert"></typeparam>
+        /// <typeparam name="TThen"></typeparam>
+        /// <returns></returns>
         public static IAssert<TThen> Then<TAssert, TThen>(this IAssert<TAssert> assert, Func<TAssert, TThen> @delegate, string name = "")
         {
             return Assert.Build(@delegate(assert.Current), name);
@@ -186,7 +195,7 @@ namespace SAE.CommonLibrary.Extension
         {
             assert.NotNull()
                   .Then(s => s.Any(predicate))
-                  .True(message ?? "不存在匹配项");
+                  .True(message ?? "No match exists");
             return assert;
         }
 
@@ -199,7 +208,7 @@ namespace SAE.CommonLibrary.Extension
         {
             assert.NotNull()
                   .Then(s => s.Any(predicate))
-                  .False(message ?? "已存在匹配项");
+                  .False(message ?? "Match already exists");
             return assert;
         }
         #endregion

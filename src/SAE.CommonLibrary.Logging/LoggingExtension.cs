@@ -311,8 +311,16 @@ namespace SAE.CommonLibrary.Logging
         public static ILogging Write(this ILogging log, string message, Level level)
             => log.Write(level, null,null, message);
         #endregion
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="factory"></param>
         public static ILogging Create(this ILoggingFactory factory) => factory.Create("Default");
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="factory"></param>
+        /// <typeparam name="TCategory"></typeparam>
         public static ILogging Create<TCategory>(this ILoggingFactory factory) => factory.Create(typeof(TCategory).Name);
     }
 }

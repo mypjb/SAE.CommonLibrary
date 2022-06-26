@@ -19,7 +19,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             serviceDescriptors.AddMemoryCache();
             serviceDescriptors.TryAddSingleton<IDistributedCache, MemoryDistributedCache>();
-            serviceDescriptors.AddNlogLogger();
+            serviceDescriptors.AddDefaultLogger();
             return serviceDescriptors;
         }
     }

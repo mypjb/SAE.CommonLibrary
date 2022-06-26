@@ -16,7 +16,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddMicrosoftLogging(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<ILoggerProvider, MicrosoftProxyLoggingProvider>();
-            serviceCollection.AddNlogLogger();
+            serviceCollection.AddDefaultLogger();
             return serviceCollection;
         }
     }

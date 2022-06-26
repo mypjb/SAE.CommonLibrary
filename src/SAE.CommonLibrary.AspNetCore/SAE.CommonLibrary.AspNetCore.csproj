@@ -8,9 +8,9 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\SAE.CommonLibrary.Extension.HttpClient\SAE.CommonLibrary.Extension.HttpClient.csproj" />
-		<ProjectReference Include="..\SAE.CommonLibrary.Logging.NLog\SAE.CommonLibrary.Logging.NLog.csproj" />
 		<ProjectReference Include="..\SAE.CommonLibrary.Logging\SAE.CommonLibrary.Logging.csproj" />
 		<ProjectReference Include="..\SAE.CommonLibrary\SAE.CommonLibrary.csproj" />
+		<ProjectReference Include="..\SAE.CommonLibrary.Configuration.Microsoft\SAE.CommonLibrary.Configuration.Microsoft.csproj" />
 	</ItemGroup>
 
 </Project>

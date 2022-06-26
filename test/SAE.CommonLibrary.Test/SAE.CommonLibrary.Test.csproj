@@ -22,6 +22,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="Config\multiTenant.domain.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Config\multiTenant.user.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Config\multiTenant.header.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="Config\logging.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>

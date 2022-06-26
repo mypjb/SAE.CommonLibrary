@@ -6,6 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SAE.CommonLibrary.Data\SAE.CommonLibrary.Data.csproj" />
-    <ProjectReference Include="..\SAE.CommonLibrary.Logging.NLog\SAE.CommonLibrary.Logging.NLog.csproj" />
+    <ProjectReference Include="..\SAE.CommonLibrary.Configuration.Microsoft\SAE.CommonLibrary.Configuration.Microsoft.csproj" />
   </ItemGroup>
 </Project>

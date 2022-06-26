@@ -1,0 +1,9 @@
+{
+    "MultiTenant": {
+        "ClaimName": "siteid",
+        "HeaderName": "tenant-id",
+        "Strategy": "header",
+        "Host": ".localhost",
+        "UseDefaultRule": true
+    }
+}

@@ -7,7 +7,7 @@ namespace SAE.CommonLibrary.Scope
     /// <summary>
     /// <inheritdoc/>
     /// </summary>
-    public class DefaultScopeFactory:IScopeFactory
+    public class DefaultScopeFactory : IScopeFactory
     {
         private readonly AsyncLocal<IScope> _asyncLocal;
         public DefaultScopeFactory()
@@ -28,9 +28,11 @@ namespace SAE.CommonLibrary.Scope
 
             scope.OnDispose += this.Restore;
 
+            this._asyncLocal.Value = scope;
+
             return Task.FromResult<IScope>(scope);
         }
-        
+
         /// <summary>
         /// get current scope
         /// </summary>

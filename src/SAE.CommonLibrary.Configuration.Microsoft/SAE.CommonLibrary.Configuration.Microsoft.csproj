@@ -13,5 +13,6 @@
     <ProjectReference Include="..\SAE.CommonLibrary.Extension.HttpClient\SAE.CommonLibrary.Extension.HttpClient.csproj" />
     <ProjectReference Include="..\SAE.CommonLibrary.Logging\SAE.CommonLibrary.Logging.csproj" />
     <ProjectReference Include="..\SAE.CommonLibrary\SAE.CommonLibrary.csproj" />
+    <ProjectReference Include="..\SAE.CommonLibrary.Scope\SAE.CommonLibrary.Scope.csproj" />
   </ItemGroup>
 </Project>
