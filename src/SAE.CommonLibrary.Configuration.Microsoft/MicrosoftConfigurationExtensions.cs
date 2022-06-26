@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using Constants = SAE.CommonLibrary.Configuration.Constants;
+using Constant = SAE.CommonLibrary.Configuration.Constant;
 
 namespace Microsoft.Extensions.Configuration
 {
@@ -46,7 +46,7 @@ namespace Microsoft.Extensions.Configuration
         {
             var configuration = configurationBuilder.Build();
 
-            var section = configuration.GetSection(Constants.Config.OptionKey);
+            var section = configuration.GetSection(Constant.Config.OptionKey);
 
             SAEOptions option;
 
@@ -64,17 +64,17 @@ namespace Microsoft.Extensions.Configuration
 
                 var env = configuration.GetSection(HostDefaults.EnvironmentKey).Value;
 
-                var root = configuration.GetSection(Constants.Config.RootDirectoryKey)?.Value;
+                var root = configuration.GetSection(Constant.Config.RootDirectoryKey)?.Value;
 
-                root = root.IsNullOrWhiteSpace() ? Constants.Config.DefaultRootDirectory : root;
+                root = root.IsNullOrWhiteSpace() ? Constant.Config.DefaultRootDirectory : root;
 
                 if (env.IsNullOrWhiteSpace())
                 {
-                    option.FileName = Path.Combine(root, $"{applicationName}{Constants.JsonSuffix}");
+                    option.FileName = Path.Combine(root, $"{applicationName}{Constant.JsonSuffix}");
                 }
                 else
                 {
-                    option.FileName = Path.Combine(root, $"{applicationName}.{env}{Constants.JsonSuffix}");
+                    option.FileName = Path.Combine(root, $"{applicationName}.{env}{Constant.JsonSuffix}");
                 }
                 
             }
@@ -87,9 +87,9 @@ namespace Microsoft.Extensions.Configuration
             action.Invoke(option);
             option.Check();
 
-            if (!configuration.GetSection(Constants.Config.RootDirectoryKey).Exists())
+            if (!configuration.GetSection(Constant.Config.RootDirectoryKey).Exists())
             {
-                configurationBuilder.AddInMemoryCollection(new Dictionary<string, string> { { Constants.Config.RootDirectoryKey, Path.GetDirectoryName(option.FileName) } });
+                configurationBuilder.AddInMemoryCollection(new Dictionary<string, string> { { Constant.Config.RootDirectoryKey, Path.GetDirectoryName(option.FileName) } });
             }
 
             return configurationBuilder.Add(new SAEConfigurationSource(option));
@@ -133,10 +133,10 @@ namespace Microsoft.Extensions.Configuration
 
             if (path.IsNullOrWhiteSpace())
             {
-                var section = env.IsNullOrWhiteSpace() ? configuration.GetSection(Constants.Config.RootDirectoryKey) :
-                                                         configuration.GetSection($"{env}{Constants.ConfigSeparator}{Constants.Config.RootDirectoryKey}");
+                var section = env.IsNullOrWhiteSpace() ? configuration.GetSection(Constant.Config.RootDirectoryKey) :
+                                                         configuration.GetSection($"{env}{Constant.ConfigSeparator}{Constant.Config.RootDirectoryKey}");
 
-                path = section.Value.IsNullOrWhiteSpace() ? Constants.Config.DefaultRootDirectory : section.Value;
+                path = section.Value.IsNullOrWhiteSpace() ? Constant.Config.DefaultRootDirectory : section.Value;
             }
 
             var applicationDirectory = Path.Combine(path, applicationName);
@@ -153,14 +153,14 @@ namespace Microsoft.Extensions.Configuration
                 }
             }
 
-            var paths = Directory.GetFiles(path, $"*{Constants.JsonSuffix}", SearchOption.TopDirectoryOnly)
+            var paths = Directory.GetFiles(path, $"*{Constant.JsonSuffix}", SearchOption.TopDirectoryOnly)
                                  .OrderBy(s => s)
                                  .ToList();
 
             var files = paths.Select(s =>
             {
                 var fileName = Path.GetFileNameWithoutExtension(s);
-                var fileSeparatorIndex = fileName.LastIndexOf(Constants.FileSeparator);
+                var fileSeparatorIndex = fileName.LastIndexOf(Constant.FileSeparator);
                 if (fileSeparatorIndex != -1)
                 {
                     fileName = fileName.Substring(0, fileSeparatorIndex);
@@ -171,7 +171,7 @@ namespace Microsoft.Extensions.Configuration
 
             foreach (var file in files)
             {
-                var originFile = Path.Combine(path, $"{file}{Constants.JsonSuffix}");
+                var originFile = Path.Combine(path, $"{file}{Constant.JsonSuffix}");
                 
                 if (File.Exists(originFile))
                 {
@@ -180,7 +180,7 @@ namespace Microsoft.Extensions.Configuration
 
                 if (!env.IsNullOrWhiteSpace())
                 {
-                    var envFile = Path.Combine(path, $"{file}{Constants.FileSeparator}{env}{Constants.JsonSuffix}");
+                    var envFile = Path.Combine(path, $"{file}{Constant.FileSeparator}{env}{Constant.JsonSuffix}");
                     if (File.Exists(envFile))
                     {
                         configurationBuilder.AddJsonFile(envFile, true, true);
@@ -188,7 +188,7 @@ namespace Microsoft.Extensions.Configuration
                 }
             }
 
-            configurationBuilder.AddInMemoryCollection(new Dictionary<string, string> { { Constants.Config.RootDirectoryKey, path } });
+            configurationBuilder.AddInMemoryCollection(new Dictionary<string, string> { { Constant.Config.RootDirectoryKey, path } });
 
             return configurationBuilder;
         }

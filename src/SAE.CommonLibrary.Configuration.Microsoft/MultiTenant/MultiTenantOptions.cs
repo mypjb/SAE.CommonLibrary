@@ -10,6 +10,10 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
     /// </summary>
     public class MultiTenantOptions
     {
+        public MultiTenantOptions()
+        {
+            this.ConfigurationNodeName = SAE.CommonLibrary.Constant.Scope;
+        }
         /// <summary>
         /// configuration node name
         /// </summary>

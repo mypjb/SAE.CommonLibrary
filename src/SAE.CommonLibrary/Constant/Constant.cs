@@ -26,6 +26,10 @@ namespace SAE.CommonLibrary
         /// </summary>
         public const string Default = "";
         /// <summary>
+        /// scope default configuration scope
+        /// </summary>
+        public const string Scope = nameof(Scope);
+        /// <summary>
         /// default Time zone utc
         /// </summary>
         public static DateTime DefaultTimeZone

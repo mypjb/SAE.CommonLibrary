@@ -10,8 +10,8 @@ namespace SAE.CommonLibrary.Configuration
         public SAEOptions()
         {
             this.Client = new HttpClient();
-            this.Client.Timeout = TimeSpan.FromMilliseconds(Constants.DefaultClientTimeout);
-            this.PollInterval = Constants.DefaultPollInterval;
+            this.Client.Timeout = TimeSpan.FromMilliseconds(Constant.DefaultClientTimeout);
+            this.PollInterval = Constant.DefaultPollInterval;
             //this.SystemKey = Constants.Config.SystemKey;
         }
 

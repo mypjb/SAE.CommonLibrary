@@ -4,8 +4,14 @@ using System.Text;
 
 namespace SAE.CommonLibrary.Configuration
 {
-    public class Constants
+    /// <summary>
+    /// 
+    /// </summary>
+    public class Constant
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public class Config
         {
             /// <summary>
@@ -27,11 +33,25 @@ namespace SAE.CommonLibrary.Configuration
             public const string SystemKey = "System:Id";
         }
 
-       
+        /// <summary>
+        /// 
+        /// </summary>
         public const string FileSeparator = ".";
+        /// <summary>
+        /// 
+        /// </summary>
         public const char ConfigSeparator = ':';
+        /// <summary>
+        /// 
+        /// </summary>
         public const string JsonSuffix = ".json";
+        /// <summary>
+        /// 
+        /// </summary>
         public const int DefaultPollInterval = 60;
+        /// <summary>
+        /// 
+        /// </summary>
         public const int DefaultClientTimeout = 1000 * 3;
     }
 }
