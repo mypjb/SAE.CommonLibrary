@@ -33,7 +33,7 @@ namespace SAE.CommonLibrary.Scope.Test
             return Enumerable.Range(0, new Random().Next(999, 9999)).Select(s => $"{s}_t").ToArray();
         }
 
-        public override void ConfigureConfiguration(IConfigurationBuilder configurationBuilder)
+        protected override void ConfigureConfiguration(IConfigurationBuilder configurationBuilder)
         {
             base.ConfigureConfiguration(configurationBuilder);
 

@@ -21,7 +21,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             serviceCollection.TryAddSingleton<IMetadataProvider, MetadataProvider>();
             serviceCollection.TryAddSingleton<IStorage, MemoryStorage>();
-            serviceCollection.AddNlogLogger()
+            serviceCollection.AddDefaultLogger()
                              .AddTinyMapper();
             return new StorageOptions(serviceCollection);
         }

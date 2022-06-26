@@ -16,12 +16,11 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddNlogLogger(this IServiceCollection serviceCollection)
         {
-            if (!serviceCollection.IsRegister<ILoggingFactory>())
+            if (serviceCollection.IsAddLoggerFactory())
             {
                 serviceCollection.AddOptions<LoggingOptions>()
                                  .Bind(LoggingOptions.Option);
-                serviceCollection.TryAddSingleton<ILoggingFactory, LoggingFactory>();
-                serviceCollection.TryAddSingleton(typeof(ILogging<>), typeof(Logging<>));
+                serviceCollection.AddLogger<LoggingFactory>();
             }
             return serviceCollection;
         }

@@ -20,7 +20,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         private static IMediatorBuilder AddMediatorOrleans(this IMediatorBuilder builder)
         {
-            builder.Services.AddNlogLogger()
+            builder.Services.AddDefaultLogger()
                             .AddMicrosoftLogging()
                             .AddOptions<OrleansOptions>()
                             .Bind(OrleansOptions.Option)

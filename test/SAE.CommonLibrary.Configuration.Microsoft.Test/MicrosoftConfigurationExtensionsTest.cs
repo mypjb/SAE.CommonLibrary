@@ -29,7 +29,6 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
         protected override void ConfigureServices(IServiceCollection services)
         {
             services.AddTinyMapper();
-            services.AddNlogLogger();
             base.ConfigureServices(services);
         }
 

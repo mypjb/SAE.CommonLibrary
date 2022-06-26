@@ -37,7 +37,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddSAECors(this IServiceCollection services,Action<CorsOptions> action)
         {
             services.AddOptions<CorsOptions>(CorsOptions.Options).Configure(action);
-            services.AddNlogLogger();
+            services.AddDefaultLogger();
             return services;
         }
 
@@ -140,7 +140,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static BitmapAuthorizationBuilder AddBitmapAuthorization(this IServiceCollection services, string policyName = null)
         {
-            services.AddNlogLogger()
+            services.AddDefaultLogger()
                     .AddHttpContextAccessor()
                     .AddRoutingScanning();
 

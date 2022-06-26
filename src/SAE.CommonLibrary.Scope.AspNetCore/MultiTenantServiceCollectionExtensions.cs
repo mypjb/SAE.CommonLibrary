@@ -19,7 +19,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddMultiTenant(this IServiceCollection services)
         {
-            services.AddNlogLogger();
+            services.AddDefaultLogger();
             services.AddDefaultScope();
             services.AddOptions<MultiTenantOptions>()
                     .Bind(MultiTenantOptions.Option);

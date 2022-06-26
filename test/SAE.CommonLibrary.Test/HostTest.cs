@@ -56,6 +56,10 @@ namespace SAE.CommonLibrary.Test
                             {
                                 builder.UseTestServer();
                                 this.ConfigureWebHost(builder);
+                                builder.ConfigureServices((host, services) =>
+                                {
+                                    this.ConfigureServices(services);
+                                });
                             })
                             .UseAutofacProviderFactory()
                             .Build();
@@ -88,9 +92,17 @@ namespace SAE.CommonLibrary.Test
         /// add default(json) configuration directory
         /// </summary>
         /// <param name="configurationBuilder"></param>
-        public virtual void ConfigureConfiguration(IConfigurationBuilder configurationBuilder)
+        protected virtual void ConfigureConfiguration(IConfigurationBuilder configurationBuilder)
         {
             configurationBuilder.AddJsonFileDirectory();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="services"></param>
+        protected virtual void ConfigureServices(IServiceCollection services)
+        {
+
         }
 
         /// <summary>

@@ -15,7 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             serviceDescriptors.AddOptions<RedisOptions>()
                               .Bind(RedisOptions.Option);
-            serviceDescriptors.AddNlogLogger();
+            serviceDescriptors.AddDefaultLogger();
             serviceDescriptors.AddSingleton<IDistributedCache, RedisDistributedCache>();
             
             return serviceDescriptors;

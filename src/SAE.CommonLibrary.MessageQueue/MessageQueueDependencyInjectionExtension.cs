@@ -17,7 +17,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddMemoryMessageQueue(this IServiceCollection serviceCollection)
         {
             serviceCollection.TryAddSingleton<IMessageQueue, MemoryMessageQueue>();
-            serviceCollection.AddNlogLogger();
+            serviceCollection.AddDefaultLogger();
             return serviceCollection;
         }
     }

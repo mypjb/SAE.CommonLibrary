@@ -54,7 +54,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
                 services.TryAddSingleton<IDocumentStore, DefaultDocumentStore>();
                 services.TryAddSingleton<IDocumentEvent, DefaultDocumentEvent>();
-                services.AddNlogLogger();
+                services.AddDefaultLogger();
             }
 
             return services;

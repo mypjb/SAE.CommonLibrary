@@ -43,7 +43,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddPluginManage(this IServiceCollection services, PluginOptions options)
         {
-            services.AddNlogLogger();
+            services.AddDefaultLogger();
 
             if (!services.IsRegister<IPluginManage>())
             {
