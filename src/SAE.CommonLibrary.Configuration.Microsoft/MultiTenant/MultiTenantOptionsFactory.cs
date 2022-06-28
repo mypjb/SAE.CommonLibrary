@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using SAE.CommonLibrary.Extension;
 using SAE.CommonLibrary.Scope;
 
 namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
@@ -16,6 +17,7 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
     {
         private readonly IScopeFactory _scopeFactory;
         private readonly IConfiguration _configuration;
+        private readonly MultiTenantOptions<TOptions> _options;
 
         /// <summary>
         /// 
@@ -24,14 +26,17 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
         /// <param name="postConfigures"></param>
         /// <param name="scopeFactory"></param>
         /// <param name="configuration"></param>
+        /// <param name="options"></param>
         public MultiTenantOptionsFactory(
             IEnumerable<IConfigureOptions<TOptions>> setups,
             IEnumerable<IPostConfigureOptions<TOptions>> postConfigures,
             IScopeFactory scopeFactory,
-            IConfiguration configuration) : base(setups, postConfigures)
+            IConfiguration configuration,
+            IOptions<MultiTenantOptions<TOptions>> options) : base(setups, postConfigures)
         {
             this._scopeFactory = scopeFactory;
             this._configuration = configuration;
+            this._options = options.Value;
         }
 
         /// <summary>
@@ -47,15 +52,37 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
             IEnumerable<IPostConfigureOptions<TOptions>> postConfigures,
             IEnumerable<IValidateOptions<TOptions>> validations,
             IScopeFactory scopeFactory,
-            IConfiguration configuration) : base(setups, postConfigures, validations)
+            IConfiguration configuration,
+            IOptions<MultiTenantOptions<TOptions>> options) : base(setups, postConfigures, validations)
         {
             _scopeFactory = scopeFactory;
             this._configuration = configuration;
+            this._options = options.Value;
         }
 
         protected override TOptions CreateInstance(string name)
         {
-            return base.CreateInstance(name);
+
+            using (var scope = this._scopeFactory.Get())
+            {
+                if (scope.Name.IsNullOrWhiteSpace())
+                {
+                    return base.CreateInstance(name);
+                }
+                else
+                {
+                    var key = $"{scope.Name}{Constant.ConfigSeparator}{this._options.Key}";
+
+                    var configuration = this._configuration.GetSection(key);
+
+                    if (configuration.Exists())
+                    {
+                        return configuration.Get<TOptions>();
+                    }
+                    return base.CreateInstance(name);
+                }
+            }
+
         }
     }
 }

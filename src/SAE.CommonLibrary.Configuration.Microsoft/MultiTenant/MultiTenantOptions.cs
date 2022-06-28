@@ -8,7 +8,7 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
     /// <summary>
     /// multi tenant options
     /// </summary>
-    public class MultiTenantOptions
+    public class MultiTenantOptions<TOptions> where TOptions : class
     {
         public MultiTenantOptions()
         {
@@ -19,6 +19,11 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
         /// </summary>
         /// <value></value>
         public string ConfigurationNodeName { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <value></value>
+        public string Key {get;set;}
 
     }
 }

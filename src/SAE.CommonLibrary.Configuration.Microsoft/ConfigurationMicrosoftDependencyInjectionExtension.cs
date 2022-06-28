@@ -1,8 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using SAE.CommonLibrary.Configuration;
-using System;
+using SAE.CommonLibrary.Configuration.Microsoft.MultiTenant;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -26,7 +27,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="optionsBuilder"></param>
         /// <param name="key"><see cref="IConfiguration"/> section</param>
         /// <returns></returns>
-        public static OptionsBuilder<TOptions> Bind<TOptions>(this OptionsBuilder<TOptions> optionsBuilder,string key) where TOptions : class
+        public static OptionsBuilder<TOptions> Bind<TOptions>(this OptionsBuilder<TOptions> optionsBuilder, string key) where TOptions : class
         {
             var services = optionsBuilder.Services;
             services.AddOptions();
@@ -41,6 +42,11 @@ namespace Microsoft.Extensions.DependencyInjection
                 var configuration = provider.GetService<IConfiguration>();
                 return new NamedConfigureFromConfigurationOptions<TOptions>(optionsBuilder.Name, configuration.GetSection(key), _ => { });
             });
+
+            services.TryAddSingleton<IOptions<TOptions>, MultiTenantUnnamedOptionsManager<TOptions>>();
+            services.TryAddSingleton<IOptionsSnapshot<TOptions>, MultiTenantOptionsManager<TOptions>>();
+            services.TryAddSingleton<IOptionsMonitor<TOptions>, MultiTenantOptionsMonitor<TOptions>>();
+            services.TryAddSingleton<IOptionsFactory<TOptions>, MultiTenantOptionsFactory<TOptions>>();
             return optionsBuilder;
         }
 

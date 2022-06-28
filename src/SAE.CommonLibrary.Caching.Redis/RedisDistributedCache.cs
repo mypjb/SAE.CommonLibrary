@@ -11,6 +11,10 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Caching.Redis
 {
+
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
     public class RedisDistributedCache : IDistributedCache
     {
         private readonly ILogging _logging;
@@ -29,11 +33,11 @@ namespace SAE.CommonLibrary.Caching.Redis
             var connectMessage = $"connect:'{options.Connection}',db:'{options.DB}'";
             if (this.ConnectionMultiplexer == null)
             {
-                this._logging.Info($"初始化连接 {connectMessage}");
+                this._logging.Info($"initial {connectMessage}");
             }
             else
             {
-                this._logging.Info($"更改缓存配置 {connectMessage}");
+                this._logging.Info($"change cache setting {connectMessage}");
             }
 
 
