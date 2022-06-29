@@ -22,7 +22,7 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
 
         public override TOptions Get(string name)
         {
-            return this._monitor.CurrentValue;
+            return this._monitor.Get(name);
         }
     }
 }

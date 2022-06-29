@@ -17,7 +17,7 @@ namespace SAE.CommonLibrary.Scope
 
         public Task<IScope> GetAsync()
         {
-            return Task.FromResult(this.GetCurrentScope());
+            return Task.FromResult<IScope>(this.GetCurrentScope());
         }
 
         public Task<IScope> GetAsync(string scopeName)

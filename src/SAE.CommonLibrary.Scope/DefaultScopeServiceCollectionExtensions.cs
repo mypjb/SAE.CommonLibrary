@@ -4,8 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using SAE.CommonLibrary.Scope;
 
-namespace SAE.CommonLibrary.Scope
+namespace Microsoft.Extensions.DependencyInjection
 {
 
     /// <summary>
