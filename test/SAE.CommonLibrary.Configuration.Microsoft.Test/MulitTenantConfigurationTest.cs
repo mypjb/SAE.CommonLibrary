@@ -33,7 +33,12 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
         }
         private string GenericTenantConfiguration(int add)
         {
-            this.EndIndex = new Random().Next(5, 10);
+            if (this.EndIndex <= 0)
+            {
+                this.EndIndex = new Random().Next(999, 9999);
+
+            }
+
             var data = Enumerable.Range(0, this.EndIndex)
                       .Select(s =>
                       {
@@ -78,7 +83,10 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
 
             base.ConfigureServices(services);
         }
-
+        
+        /// <summary>
+        /// 
+        /// </summary>
         [Fact]
         public async Task MulitTenantTest()
         {
@@ -104,14 +112,14 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
 
             this.GenericTenantConfiguration(1);
 
-            Thread.Sleep(1000 * 10);
+            Thread.Sleep(1000 * 5);
 
             scopes.AsParallel()
                   .ForAll(s =>
             {
                 using (var scope = this._scopeFactory.Get(s))
                 {
-                    this.WriteLine(new {scope.Name,option.Value});
+                    this.WriteLine(new { scope.Name, option.Value });
                     Assert.Equal(option.Value, snapshot.Value);
                     Assert.Equal(option.Value, monitor.CurrentValue);
                     Assert.Equal((option.Value.Version - 2).ToString(), s);
