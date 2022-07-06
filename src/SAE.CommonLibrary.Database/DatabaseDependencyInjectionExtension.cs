@@ -15,7 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddOptions<List<DBConnectOptions>>()
                     .Bind(DBConnectOptions.Option);
 
-            services.TryAddSingleton<IDBConnectionFactory, DBConnectionFactory>();
+            services.TryAddSingleton<IDBConnectionFactory, DefaultDBConnectionFactory>();
             return services;
         }
         public static IServiceCollection AddDatabase<TDatabaseResponsibility>(this IServiceCollection services) where TDatabaseResponsibility : DatabaseResponsibility

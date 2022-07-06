@@ -24,21 +24,23 @@ namespace SAE.CommonLibrary.Scope
             this._scopeFactory = scopeFactory;
             this._serviceProvider = serviceProvider;
         }
-        public TService GetService()
+
+        public void Clear()
+        {
+            this._cache.Clear();
+        }
+
+        public TService GetService(Func<TService> constructor)
         {
             var scope = this._scopeFactory.Get();
-            return this._cache.GetOrAdd(scope.Name, this.GetServiceCore);
-        }
-        /// <summary>
-        /// get service core
-        /// </summary>
-        /// <param name="name"></param>
-        private TService GetServiceCore(string name)
-        {
-            using (this._scopeFactory.GetAsync(name))
+            return this._cache.GetOrAdd(scope.Name, scopeName =>
             {
-                return this._serviceProvider.GetService<TService>();
-            }
+                using (this._scopeFactory.Get(scopeName))
+                {
+                    return constructor.Invoke();
+                }
+            });
         }
+
     }
 }

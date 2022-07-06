@@ -8,6 +8,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SAE.CommonLibrary.Abstract\SAE.CommonLibrary.Abstract.csproj" />
     <ProjectReference Include="..\SAE.CommonLibrary.Configuration.Microsoft\SAE.CommonLibrary.Configuration.Microsoft.csproj" />
+    <ProjectReference Include="..\SAE.CommonLibrary.Scope\SAE.CommonLibrary.Scope.csproj" />
   </ItemGroup>
 
 </Project>

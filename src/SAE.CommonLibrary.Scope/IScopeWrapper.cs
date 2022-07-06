@@ -13,7 +13,13 @@ namespace SAE.CommonLibrary.Scope
     {
         /// <summary>
         /// get scope
+        /// <param name="constructor"><typeparamref name="TService"/> constructor</param>>
         /// </summary>
-        TService GetService();
+        TService GetService(Func<TService> constructor);
+
+        /// <summary>
+        /// clear
+        /// </summary>
+        void Clear();
     }
 }
