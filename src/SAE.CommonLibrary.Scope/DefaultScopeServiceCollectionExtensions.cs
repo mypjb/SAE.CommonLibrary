@@ -15,7 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class DefaultScopeServiceCollectionExtensions
     {
         /// <summary>
-        /// 添加默认区域配置
+        /// add default scope
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>

@@ -101,7 +101,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return serviceDescriptors.IsRegister(typeof(TService));
         }
         /// <summary>
-        /// 判断<typeparamref name="TService"/>是否有<typeparamref name="TImplementation"/>实现
+        /// <typeparamref name="TService"/> is register<typeparamref name="TImplementation"/> imp
         /// </summary>
         /// <typeparam name="TService"></typeparam>
         /// <typeparam name="TImplementation"></typeparam>

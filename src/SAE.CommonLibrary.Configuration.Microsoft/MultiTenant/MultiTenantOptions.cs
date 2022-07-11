@@ -5,15 +5,19 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
 {
-    /// <summary>
-    /// multi tenant options
-    /// </summary>
-    public class MultiTenantOptions<TOptions> where TOptions : class
+    public class MultiTenantOptions
     {
         /// <summary>
         /// configuration key
         /// </summary>
         public const string Options = "multitenant:options";
+    }
+    /// <summary>
+    /// multi tenant options
+    /// </summary>
+    public class MultiTenantOptions<TOptions> where TOptions : class
+    {
+
         /// <summary>
         /// multi tenant options
         /// </summary>

@@ -57,24 +57,22 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
 
         public override TOptions Get(string name)
         {
-            var scopeName = name;
-            
+
             var scope = this._scopeFactory.Get();
 
+            name ??= Options.DefaultName;
 
             if (!scope.Name.IsNullOrWhiteSpace())
             {
-                scopeName = $"{scope.Name}{Constant.ConfigSeparator}{scopeName}";
-                this._logging.Debug($"find '{scopeName}' options name");
+                name = name.IsNullOrWhiteSpace() ? scope.Name : $"{scope.Name}{Constant.ConfigSeparator}{name}";
+                this._logging.Debug($"find '{name}' options name");
             }
             else
             {
                 this._logging.Warn("not find scope");
             }
 
-
-
-            return _cache.GetOrAdd(scopeName ?? Options.DefaultName, () => _factory.Create(name ?? Options.DefaultName));
+            return _cache.GetOrAdd(name, () => _factory.Create(name));
         }
     }
 }

@@ -14,7 +14,10 @@ namespace SAE.CommonLibrary.Database
     {
         protected IEnumerable<DBConnectOptions> Options
         {
-            get => this._optionsMonitor.CurrentValue;
+            get
+            {
+                return this._optionsMonitor.CurrentValue;
+            }
         }
 
         private readonly IResponsibility<DatabaseResponsibilityContext> _responsibility;
@@ -32,7 +35,7 @@ namespace SAE.CommonLibrary.Database
             Assert.Build(name)
                   .NotNullOrWhiteSpace($"'name' cannot be empty");
 
-            var options =await this.GetOptionsAsync(name);
+            var options = await this.GetOptionsAsync(name);
 
             Assert.Build(options)
                   .NotNull($"'{name}' database connection not exist");

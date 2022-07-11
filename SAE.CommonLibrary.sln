@@ -123,6 +123,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.Scope.Asp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.Scope.Test", "test\SAE.CommonLibrary.Scope.Test\SAE.CommonLibrary.Scope.Test.csproj", "{4D7E331A-42F1-42B8-8A3D-FC6BFB28115D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.Database.Test", "test\SAE.CommonLibrary.Database.Test\SAE.CommonLibrary.Database.Test.csproj", "{2EF9EFAE-330A-4F36-8B4D-D1CC46E53093}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -321,6 +323,10 @@ Global
 		{4D7E331A-42F1-42B8-8A3D-FC6BFB28115D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D7E331A-42F1-42B8-8A3D-FC6BFB28115D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D7E331A-42F1-42B8-8A3D-FC6BFB28115D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EF9EFAE-330A-4F36-8B4D-D1CC46E53093}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EF9EFAE-330A-4F36-8B4D-D1CC46E53093}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EF9EFAE-330A-4F36-8B4D-D1CC46E53093}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EF9EFAE-330A-4F36-8B4D-D1CC46E53093}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -376,6 +382,7 @@ Global
 		{F649869A-D13C-42BB-8D07-A342176A60E3} = {78157883-8166-46DB-9754-E093FE2A3936}
 		{AF18A183-052A-4064-ABB4-EA2BF58E6763} = {78157883-8166-46DB-9754-E093FE2A3936}
 		{4D7E331A-42F1-42B8-8A3D-FC6BFB28115D} = {8AD43B5B-ED55-4712-B865-1E6E1D7B19FE}
+		{2EF9EFAE-330A-4F36-8B4D-D1CC46E53093} = {8AD43B5B-ED55-4712-B865-1E6E1D7B19FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2FF66E70-E062-4202-A1AD-A821991FEA65}

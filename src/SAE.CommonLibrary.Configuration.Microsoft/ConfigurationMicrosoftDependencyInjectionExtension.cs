@@ -34,7 +34,6 @@ namespace Microsoft.Extensions.DependencyInjection
         public static OptionsBuilder<TOptions> Bind<TOptions>(this OptionsBuilder<TOptions> optionsBuilder, string key) where TOptions : class
         {
 
-
             var services = optionsBuilder.Services;
 
             var configurationName = optionsBuilder.Name;
@@ -57,7 +56,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
 
                 services.AddOptions<MultiTenantOptions<TOptions>>(optionsBuilder.Name)
-                        .Bind(configuration.GetSection(MultiTenantOptions<TOptions>.Options))
+                        .Bind(configuration.GetSection(MultiTenantOptions.Options))
                         .Configure(p =>
                         {
                             p.Key = key;
