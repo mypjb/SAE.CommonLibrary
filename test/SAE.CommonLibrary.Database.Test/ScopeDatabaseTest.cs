@@ -22,9 +22,9 @@ namespace SAE.CommonLibrary.Database.Test
 
         protected override void ConfigureServices(IServiceCollection services)
         {
-            services.AddDefaultScope()
-                    .AddScopeDatabaseFactory()
-                    .AddSingleton(typeof(IScopeWrapper<>), typeof(DefaultScopeWrapper<>));
+            services.AddDefaultScope();
+            // .AddScopeDatabaseFactory()
+            // .AddSingleton(typeof(IScopeWrapper<>), typeof(DefaultScopeWrapper<>));
             base.ConfigureServices(services);
         }
 
@@ -40,14 +40,14 @@ namespace SAE.CommonLibrary.Database.Test
             Enumerable.Range(0, this._maxIndex)
                       .ForEach(s =>
                       {
-                          var prefix = $"{MultiTenantOptions.Options}:{s}:";
+                          var prefix = $"{Constant.Scope}:{s}:";
                           Enumerable.Range(0, this.GetDbCount(s))
                                     .ForEach(p =>
                                     {
-                                        dict[$"{prefix}{DBConnectOptions.Option}:{p}:{nameof(DBConnectOptions.Name)}"] = s.ToString();
+                                        dict[$"{prefix}{DBConnectOptions.Option}:{p}:{nameof(DBConnectOptions.Name)}"] = p.ToString();
                                         dict[$"{prefix}{DBConnectOptions.Option}:{p}:{nameof(DBConnectOptions.ConnectionString)}"] = p % 2 == 0 ?
-                                        $"Data Source=127.0.0.1;Database={p}_mysql;User ID={s}_user;Password={s}_pwd;pooling=true;sslmode=none;CharSet=utf8;allowPublicKeyRetrieval=true" :
-                                        $"server=127.0.0.1:database={s}_mssql;uid={s}_user;pwd={s}_pwd;";
+                                        $"Data Source=127.0.0.1;Database={p}_mysql;User ID={s}_{p};Password={p}_pwd;pooling=true;sslmode=none;CharSet=utf8;allowPublicKeyRetrieval=true" :
+                                        $"server=127.0.0.1:database={p}_mssql;uid={s}_{p};pwd={p}_pwd;";
                                         dict[$"{prefix}{DBConnectOptions.Option}:{p}:{nameof(DBConnectOptions.Provider)}"] = p % 2 == 0 ? "mysql" : "mssql";
                                     });
                       });
@@ -59,20 +59,22 @@ namespace SAE.CommonLibrary.Database.Test
         public override void DBTest()
         {
             Enumerable.Range(0, this._maxIndex)
-                      //   .AsParallel()
-                      //   .ForAll(p =>
-                      .ForEach(p =>
+                        .AsParallel()
+                        .ForAll(s =>
+                    //   .ForEach(s =>
                       {
 
-                          Enumerable.Range(0, this.GetDbCount(p))
-                                    // .AsParallel()
-                                    // .ForAll(s =>
-                                    .ForEach(s =>
+                          Enumerable.Range(0, this.GetDbCount(s))
+                                    .AsParallel()
+                                    .ForAll(p =>
+                                    // .ForEach(p =>
                                     {
-                                        using (this._scopeFactory.Get(p.ToString()))
+                                        using (this._scopeFactory.Get(s.ToString()))
                                         {
-                                            var dbConnection = this._connectionFactory.GetAsync(s.ToString()).GetAwaiter().GetResult();
-                                            Xunit.Assert.Contains(s % 2 == 0 ? $"{s}_mysql" : $"{s}_mssql", dbConnection.ConnectionString);
+                                            var configuration = this._configuration;
+                                            var dbConnection = this._connectionFactory.GetAsync(p.ToString()).GetAwaiter().GetResult();
+                                            Xunit.Assert.Contains(p % 2 == 0 ? $"{p}_mysql" : $"{p}_mssql", dbConnection.ConnectionString);
+                                            Xunit.Assert.Contains($"{s}_{p}", dbConnection.ConnectionString);
                                         }
                                     });
                       });

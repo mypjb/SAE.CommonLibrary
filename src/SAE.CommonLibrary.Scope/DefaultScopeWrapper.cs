@@ -32,6 +32,7 @@ namespace SAE.CommonLibrary.Scope
 
         public TService GetService(Func<TService> constructor)
         {
+            #warning 在类似与工厂方法下，该函数会由于缓存的原因导致无法切换上下文。
             var scope = this._scopeFactory.Get();
             return this._cache.GetOrAdd(scope.Name, scopeName =>
             {

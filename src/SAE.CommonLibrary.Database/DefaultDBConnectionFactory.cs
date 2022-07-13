@@ -48,7 +48,8 @@ namespace SAE.CommonLibrary.Database
         /// <param name="name"></param>
         protected virtual Task<DBConnectOptions> GetOptionsAsync(string name)
         {
-            return Task.FromResult(this.Options.FirstOrDefault(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase)));
+            var options = this.Options.FirstOrDefault(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            return Task.FromResult(options);
         }
 
         /// <summary>

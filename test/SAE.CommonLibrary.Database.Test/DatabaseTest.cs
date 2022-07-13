@@ -11,7 +11,7 @@ public class DatabaseTest : BaseTest
 {
     protected readonly IDBConnectionFactory _connectionFactory;
 
-    protected readonly int _maxIndex = new Random().Next(999, 9999);
+    protected readonly int _maxIndex = new Random().Next(333, 999);
     public DatabaseTest(ITestOutputHelper output) : base(output)
     {
         this._connectionFactory = this._serviceProvider.GetService<IDBConnectionFactory>();

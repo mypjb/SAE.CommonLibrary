@@ -28,24 +28,27 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
         /// <param name="factory"></param>
         /// <param name="sources"></param>
         /// <param name="cache"></param>
-        /// <param name="options"></param>
+        /// <param name="optionsMonitor"></param>
         /// <param name="configuration"></param>
         /// <param name="scopeFactory"></param>
         /// <param name="logging"></param>
         public MultiTenantOptionsMonitor(IOptionsFactory<TOptions> factory,
                                          IEnumerable<IOptionsChangeTokenSource<TOptions>> sources,
                                          IOptionsMonitorCache<TOptions> cache,
-                                         IOptions<MultiTenantOptions<TOptions>> options,
                                          IConfiguration configuration,
                                          IScopeFactory scopeFactory,
                                          ILogging<MultiTenantOptionsMonitor<TOptions>> logging) : base(factory, sources, cache)
         {
-            var changeToken = configuration.GetSection(options.Value.ConfigurationNodeName)
-                                           .GetReloadToken();
+
+
+
             this._factory = factory;
             this._cache = cache;
             this._scopeFactory = scopeFactory;
             this._logging = logging;
+
+            var changeToken = configuration.GetReloadToken();
+
             changeToken?.RegisterChangeCallback(s =>
             {
                 logging.Info("configuration change clear cache begin");
@@ -57,22 +60,23 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
 
         public override TOptions Get(string name)
         {
+            name ??= Options.DefaultName;
+
+            string cacheKey = name;
 
             var scope = this._scopeFactory.Get();
 
-            name ??= Options.DefaultName;
-
             if (!scope.Name.IsNullOrWhiteSpace())
             {
-                name = name.IsNullOrWhiteSpace() ? scope.Name : $"{scope.Name}{Constant.ConfigSeparator}{name}";
-                this._logging.Debug($"find '{name}' options name");
+                cacheKey = name.IsNullOrWhiteSpace() ? scope.Name : $"{scope.Name}{Constant.ConfigSeparator}{name}";
+                this._logging.Debug($"find '{cacheKey}' options name");
             }
             else
             {
-                this._logging.Warn("not find scope");
+                this._logging.Warn($"use root scope {cacheKey}");
             }
 
-            return _cache.GetOrAdd(name, () => _factory.Create(name));
+            return _cache.GetOrAdd(cacheKey, () => _factory.Create(name));
         }
     }
 }

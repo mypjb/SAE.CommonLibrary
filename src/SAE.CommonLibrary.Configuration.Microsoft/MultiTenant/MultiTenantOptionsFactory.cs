@@ -18,7 +18,7 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
     {
         private readonly IScopeFactory _scopeFactory;
         private readonly IConfiguration _configuration;
-        private readonly IOptionsSnapshot<MultiTenantOptions<TOptions>> _options;
+        private readonly IOptionsMonitor<MultiTenantOptions<TOptions>> _optionsMonitor;
         private readonly ILogging _logging;
 
         /// <summary>
@@ -35,12 +35,12 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
             IEnumerable<IPostConfigureOptions<TOptions>> postConfigures,
             IScopeFactory scopeFactory,
             IConfiguration configuration,
-            IOptionsSnapshot<MultiTenantOptions<TOptions>> options,
+            IOptionsMonitor<MultiTenantOptions<TOptions>> optionsMonitor,
             ILogging<MultiTenantOptionsFactory<TOptions>> logging) : base(setups, postConfigures)
         {
             this._scopeFactory = scopeFactory;
             this._configuration = configuration;
-            this._options = options;
+            this._optionsMonitor = optionsMonitor;
             this._logging = logging;
         }
 
@@ -58,19 +58,19 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
                                          IEnumerable<IValidateOptions<TOptions>> validations,
                                          IScopeFactory scopeFactory,
                                          IConfiguration configuration,
-                                         IOptionsSnapshot<MultiTenantOptions<TOptions>> options,
+                                         IOptionsMonitor<MultiTenantOptions<TOptions>> optionsMonitor,
                                          ILogging<MultiTenantOptionsFactory<TOptions>> logging) : base(setups, postConfigures, validations)
         {
             this._scopeFactory = scopeFactory;
             this._configuration = configuration;
-            this._options = options;
+            this._optionsMonitor = optionsMonitor;
             this._logging = logging;
         }
 
         protected override TOptions CreateInstance(string name)
         {
             // get 'name' multi tenant options
-            var options = this._options.Get(name);
+            var options = this._optionsMonitor.Get(name);
 
             this._logging.Info($"{options.ToJsonString()}");
 
