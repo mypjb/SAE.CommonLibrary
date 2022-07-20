@@ -11,6 +11,9 @@ using SAE.CommonLibrary.Scope;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class ConfigurationMicrosoftDependencyInjectionExtension
     {
         /// <summary>

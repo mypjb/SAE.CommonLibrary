@@ -17,7 +17,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddLogger<TLoggingFactory>(this IServiceCollection serviceCollection) where TLoggingFactory : class, ILoggingFactory
         {
-            if (serviceCollection.IsAddLoggerFactory())
+            if (serviceCollection.IsAddEmptyLoggingFactory())
             {
                 serviceCollection.AddSingleton<ILoggingFactory, TLoggingFactory>();
             }
@@ -45,7 +45,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <see cref="EmptyLoggingFactory"/> is register?
         /// </summary>
         /// <param name="services"></param>
-        public static bool IsAddLoggerFactory(this IServiceCollection services)
+        public static bool IsAddEmptyLoggingFactory(this IServiceCollection services)
         {
             return !services.Any(s => s.ServiceType == typeof(ILoggingFactory) &&
                                  s.ImplementationType != typeof(EmptyLoggingFactory));

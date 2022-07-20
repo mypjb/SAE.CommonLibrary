@@ -16,7 +16,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddNlogLogger(this IServiceCollection serviceCollection)
         {
-            if (serviceCollection.IsAddLoggerFactory())
+            if (serviceCollection.IsAddEmptyLoggingFactory())
             {
                 serviceCollection.AddOptions<LoggingOptions>()
                                  .Bind(LoggingOptions.Option);

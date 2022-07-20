@@ -30,11 +30,12 @@ namespace SAE.CommonLibrary.Scope
             this._cache.Clear();
         }
 
-        public TService GetService(Func<TService> constructor)
+        public TService GetService(string key, Func<TService> constructor)
         {
-            #warning 在类似与工厂方法下，该函数会由于缓存的原因导致无法切换上下文。
+#warning 在类似与工厂方法下，该函数会由于缓存的原因导致无法切换上下文。
             var scope = this._scopeFactory.Get();
-            return this._cache.GetOrAdd(scope.Name, scopeName =>
+            key = $"{scope.Name}_{key}";
+            return this._cache.GetOrAdd(key, scopeName =>
             {
                 using (this._scopeFactory.Get(scopeName))
                 {
