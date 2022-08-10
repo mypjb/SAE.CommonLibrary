@@ -1,6 +1,8 @@
-﻿using SAE.CommonLibrary.Caching;
-using SAE.CommonLibrary.Caching.Redis;
+﻿using System;
 using System.Collections.Generic;
+using SAE.CommonLibrary.Caching;
+using SAE.CommonLibrary.Caching.Redis;
+using StackExchange.Redis;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -14,12 +16,13 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddRedisCache(this IServiceCollection serviceDescriptors)
         {
             serviceDescriptors.AddOptions<RedisOptions>()
-                              .Bind(RedisOptions.Option);
+                              .Bind(RedisOptions.Option)
+                              .ConfigureService<RedisOptions, Tuple<IDatabase, IConnectionMultiplexer>>();
             serviceDescriptors.AddDefaultLogger();
             serviceDescriptors.AddSingleton<IDistributedCache, RedisDistributedCache>();
-            
+
             return serviceDescriptors;
         }
-       
+
     }
 }

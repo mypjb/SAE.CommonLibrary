@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using SAE.CommonLibrary.Configuration;
+using SAE.CommonLibrary.Configuration.Microsoft;
 using SAE.CommonLibrary.Configuration.Microsoft.MultiTenant;
 using SAE.CommonLibrary.DependencyInjection;
 using SAE.CommonLibrary.Scope;
@@ -16,6 +17,23 @@ namespace Microsoft.Extensions.DependencyInjection
     /// </summary>
     public static class ConfigurationMicrosoftDependencyInjectionExtension
     {
+        /// <summary>
+        /// add options manage
+        /// </summary>
+        /// <typeparam name="TOptions"></typeparam>
+        /// <typeparam name="TService"></typeparam>
+        public static IServiceCollection AddOptionsManage<TOptions, TService>(this IServiceCollection services) where TOptions : class where TService : class
+        {
+            services.AddTransient<IOptionsManage<TOptions, TService>, OptionsManager<TOptions, TService>>();
+            return services;
+        }
+
+        public static OptionsBuilder<TOptions> ConfigureService<TOptions, TService>(this OptionsBuilder<TOptions> optionsBuilder) where TOptions : class where TService : class
+        {
+            optionsBuilder.Services.AddOptionsManage<TOptions, TService>();
+            return optionsBuilder;
+        }
+
         /// <summary>
         /// From <see cref="IConfiguration"/> binding
         /// </summary>

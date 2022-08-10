@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using SAE.CommonLibrary.Configuration;
+using SAE.CommonLibrary.Configuration.Microsoft;
 using SAE.CommonLibrary.Extension;
 using SAE.CommonLibrary.Logging;
 using StackExchange.Redis;
@@ -18,42 +19,25 @@ namespace SAE.CommonLibrary.Caching.Redis
     /// </summary>
     public class RedisDistributedCache : IDistributedCache
     {
-        private readonly IOptionsMonitor<RedisOptions> _monitor;
+        private readonly IOptionsManage<RedisOptions, Tuple<IDatabase, IConnectionMultiplexer>> _optionsManage;
         private readonly ILogging _logging;
-        /// <summary>
-        /// redis connection cache
-        /// </summary>
-        protected ConcurrentDictionary<RedisOptions, Tuple<IDatabase, IConnectionMultiplexer>> _connectionCache;
         /// <summary>
         /// ctor
         /// </summary>
-        /// <param name="monitor"></param>
+        /// <param name="optionsManage"></param>
         /// <param name="logging"></param>
-        public RedisDistributedCache(IOptionsMonitor<RedisOptions> monitor, ILogging<RedisDistributedCache> logging)
+        public RedisDistributedCache(IOptionsManage<RedisOptions, Tuple<IDatabase, IConnectionMultiplexer>> optionsManage, ILogging<RedisDistributedCache> logging)
         {
-            this._connectionCache = new ConcurrentDictionary<RedisOptions, Tuple<IDatabase, IConnectionMultiplexer>>();
-            this._monitor = monitor;
+            this._optionsManage = optionsManage;
             this._logging = logging;
-            monitor.OnChange(s =>
-            {
-                this.DisplayConnectionCache();
-            });
+            this._optionsManage.OnChange+=this.DisplayConnection;
+            this._optionsManage.OnConfigure+=this.Configure;
         }
 
-        private void DisplayConnectionCache()
+        private void DisplayConnection(RedisOptions options, Tuple<IDatabase, IConnectionMultiplexer> tuple)
         {
-            var connectionMultiplexers = this._connectionCache.Values
-                                      .Select(s => s.Item2)
-                                      .ToArray();
-
-            this._logging.Info($"clear connect cache count({connectionMultiplexers.Length})");
-            this._connectionCache.Clear();
-
-            this._logging.Info("clear connect cache ok");
-
-            foreach (var connect in connectionMultiplexers)
-            {
-                try
+            var connect=tuple.Item2;
+            try
                 {
                     var message = $"dispose connection {connect.Configuration}";
                     this._logging.Info($"begin {message}");
@@ -64,9 +48,6 @@ namespace SAE.CommonLibrary.Caching.Redis
                 {
                     this._logging.Error(ex, "exception occurred while cleaning up old links");
                 }
-            }
-
-            this._logging.Info("dispose all old cache connection ok");
         }
 
         private Tuple<IDatabase, IConnectionMultiplexer> Configure(RedisOptions options)
@@ -83,9 +64,7 @@ namespace SAE.CommonLibrary.Caching.Redis
 
         private async Task DatabaseOperation(Func<IDatabase, Task> databaseOperation, [CallerMemberName] string methodNmae = null)
         {
-            var options = this._monitor.CurrentValue;
-
-            var tuple = this._connectionCache.GetOrAdd(options, this.Configure);
+            var tuple = this._optionsManage.Get();
 
             if (tuple.Item2.IsConnected)
             {

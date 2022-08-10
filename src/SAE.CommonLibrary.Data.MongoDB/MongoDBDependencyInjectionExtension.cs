@@ -1,8 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using MongoDB.Bson.Serialization.Conventions;
+using MongoDB.Driver;
 using SAE.CommonLibrary.Data;
 using SAE.CommonLibrary.Data.MongoDB;
-using System;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -33,7 +34,8 @@ namespace Microsoft.Extensions.DependencyInjection
             serviceCollection.TryAddSingleton<IStorage, MongoDBStorage>();
             serviceCollection.AddDefaultLogger();
             serviceCollection.AddOptions<MongoDBOptions>()
-                             .Bind(MongoDBOptions.Option);
+                             .Bind(MongoDBOptions.Option)
+                             .ConfigureService<MongoDBOptions, IMongoDatabase>();
             return new StorageOptions(serviceCollection);
         }
 

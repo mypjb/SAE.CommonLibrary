@@ -1,19 +1,21 @@
-﻿using Microsoft.Extensions.Options;
-using MongoDB.Bson;
-using MongoDB.Driver;
-using MongoDB.Driver.Linq;
-using SAE.CommonLibrary.Logging;
-using System;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
+using MongoDB.Bson;
+using MongoDB.Driver;
+using MongoDB.Driver.Linq;
+using SAE.CommonLibrary.Configuration.Microsoft;
+using SAE.CommonLibrary.Logging;
 
 namespace SAE.CommonLibrary.Data.MongoDB
 {
     /// <summary>
-    /// 
+    /// <inheritdoc/>
     /// </summary>
     public class MongoDBStorage : IStorage
     {
@@ -22,7 +24,7 @@ namespace SAE.CommonLibrary.Data.MongoDB
         private readonly IDictionary<Type, Delegate> _idDelegateStorage = new Dictionary<Type, Delegate>();
         private readonly ILogging _logging;
         private readonly IMetadataProvider _descriptionProvider;
-        private readonly IMongoDatabase _database;
+        private readonly IOptionsManage<MongoDBOptions, IMongoDatabase> _optionsManage;
         #endregion
 
         #region Ctor
@@ -31,32 +33,35 @@ namespace SAE.CommonLibrary.Data.MongoDB
         /// </summary>
         /// <param name="config"></param>
         /// <param name="log"></param>
-        public MongoDBStorage(IOptions<MongoDBOptions> options,
+        public MongoDBStorage(IOptionsManage<MongoDBOptions, IMongoDatabase> optionsManage,
                               ILogging<MongoDBStorage> logging,
                               IMetadataProvider descriptionProvider)
         {
             this._logging = logging;
             this._descriptionProvider = descriptionProvider;
-            this._logging.Debug($"Connection={options.Value.Connection},DB={options.Value.DB}");
-            var client = new MongoClient(new MongoUrl(options.Value.Connection));
-            this._database = client.GetDatabase(options.Value.DB);
+            this._optionsManage = optionsManage;
+            this._optionsManage.OnConfigure += this.Configure;
         }
         #endregion
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        private IMongoDatabase Configure(MongoDBOptions options)
+        {
+            this._logging.Debug($"Connection={options.Connection},DB={options.DB}");
+            var client = new MongoClient(new MongoUrl(options.Connection));
+            return client.GetDatabase(options.DB);
+        }
+
+        private IMongoCollection<T> GetCollection<T>() where T : class
+        {
+            var mongoDatabase = this._optionsManage.Get();
+            var description = this._descriptionProvider.Get<T>();
+            return mongoDatabase.GetCollection<T>(description.Name);
+        }
+
         public IQueryable<T> AsQueryable<T>() where T : class
         {
             return this.GetCollection<T>().AsQueryable();
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="model"></param>
+
         public async Task DeleteAsync<T>(T model) where T : class
         {
             if (model == null) return;
@@ -64,18 +69,12 @@ namespace SAE.CommonLibrary.Data.MongoDB
             var id = this._descriptionProvider.Get<T>().IdentiyFactory.Invoke(model);
 
             var query = new QueryDocument("_id", BsonValue.Create(id));
-            
+
             var collection = this.GetCollection<T>();
 
             await collection.DeleteOneAsync(query);
 
             this._logging.Debug($"Remove {collection.CollectionNamespace}:{id}");
-        }
-
-        private IMongoCollection<T> GetCollection<T>() where T : class
-        {
-            var description= this._descriptionProvider.Get<T>();
-            return this._database.GetCollection<T>(description.Name);
         }
 
         public async Task DeleteAsync<T>(object id) where T : class
@@ -104,37 +103,5 @@ namespace SAE.CommonLibrary.Data.MongoDB
             await this.GetCollection<T>()
                       .ReplaceOneAsync(query, model, new ReplaceOptions { IsUpsert = true });
         }
-
-        #region Add And Update
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <typeparam name="T"></typeparam>
-        ///// <param name="model"></param>
-        //public async Task AddAsync<T>(T model) where T : class
-        //{
-        //    if (model == null) return;
-        //    this._logging.Debug("Execute Add");
-        //    await this.GetCollection<T>().InsertOneAsync(model);
-        //}
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <typeparam name="T"></typeparam>
-        ///// <param name="model"></param>
-        //public async Task UpdateAsync<T>(T model) where T : class
-        //{
-        //    if (model == null) return;
-
-        //    this._logging.Debug("Execute Update");
-
-        //    var id = this._descriptionProvider.Get<T>().IdentiyFactory.Invoke(model);
-
-        //    var query = new QueryDocument("_id", BsonValue.Create(id));
-
-        //    await this.GetCollection<T>()
-        //              .ReplaceOneAsync(query, model, new ReplaceOptions { IsUpsert = true });
-        //}
-        #endregion
     }
 }

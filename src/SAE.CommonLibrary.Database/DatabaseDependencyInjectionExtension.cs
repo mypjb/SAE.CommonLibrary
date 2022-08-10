@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using SAE.CommonLibrary.Database;
@@ -30,17 +31,6 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        /// <summary>
-        /// use <see cref="ScopeDBConnectionFactory"/> imp <see cref="IDBConnectionFactory"/>
-        /// </summary>
-        /// <param name="services"></param>
-        public static IServiceCollection AddScopeDatabaseFactory(this IServiceCollection services)
-        {
-            services.TryAddSingleton<IDBConnectionFactory, ScopeDBConnectionFactory>();
-            services.AddOptions<List<DBConnectOptions>>()
-                    .Bind(DBConnectOptions.Option);
-            return services;
-        }
 
         /// <summary>
         /// add default provider
