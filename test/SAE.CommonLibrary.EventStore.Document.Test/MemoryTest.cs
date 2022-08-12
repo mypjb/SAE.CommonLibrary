@@ -36,6 +36,8 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
             base.ConfigureServices(services);
         }
 
+        
+
         [Fact]
         public virtual async Task<User> Register()
         {
