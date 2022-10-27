@@ -11,10 +11,13 @@ using Constant = SAE.CommonLibrary.Configuration.Constant;
 
 namespace Microsoft.Extensions.Configuration
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class MicrosoftConfigurationExtensions
     {
         /// <summary>
-        ///  Add remote configuration source
+        ///  add remote configuration source
         /// </summary>
         /// <param name="configurationBuilder"></param>
         /// <returns></returns>
@@ -24,7 +27,7 @@ namespace Microsoft.Extensions.Configuration
         }
 
         /// <summary>
-        /// Add remote configuration source
+        /// add remote configuration source
         /// </summary>
         /// <param name="configurationBuilder"></param>
         /// <param name="options"></param>
@@ -37,10 +40,10 @@ namespace Microsoft.Extensions.Configuration
             });
         }
         /// <summary>
-        /// Add remote configuration source
+        /// add remote configuration source
         /// </summary>
         /// <param name="configurationBuilder"></param>
-        /// <param name="options"></param>
+        /// <param name="action"></param>
         /// <returns></returns>
         public static IConfigurationBuilder AddRemoteSource(this IConfigurationBuilder configurationBuilder, Action<SAEOptions> action)
         {
@@ -95,10 +98,10 @@ namespace Microsoft.Extensions.Configuration
             return configurationBuilder.Add(new SAEConfigurationSource(option));
         }
         /// <summary>
-        /// Add remote configuration source
+        /// add remote configuration source
         /// </summary>
         /// <param name="configurationBuilder"></param>
-        /// <param name="options"></param>
+        /// <param name="url"></param>
         /// <returns></returns>
         public static IConfigurationBuilder AddRemoteSource(this IConfigurationBuilder configurationBuilder, string url)
         {
@@ -109,7 +112,7 @@ namespace Microsoft.Extensions.Configuration
         }
 
         /// <summary>
-        /// Scan <seealso cref="DefaultConfigDirectory"/> all <seealso cref="JsonSuffix"/> file
+        /// scan <see cref="Constant.DefaultConfigDirectory"/> all <see cref="Constant.JsonSuffix"/> file
         /// </summary>
         /// <param name="configurationBuilder"></param>
         /// <returns></returns>
@@ -118,7 +121,7 @@ namespace Microsoft.Extensions.Configuration
             return configurationBuilder.AddJsonFileDirectory(null);
         }
         /// <summary>
-        /// Scan <paramref name="path"/> all <seealso cref="JsonSuffix"/> file
+        /// scan <paramref name="path"/> all <see cref="Constant.JsonSuffix"/> file
         /// </summary>
         /// <param name="configurationBuilder"></param>
         /// <param name="path">json file directory</param>

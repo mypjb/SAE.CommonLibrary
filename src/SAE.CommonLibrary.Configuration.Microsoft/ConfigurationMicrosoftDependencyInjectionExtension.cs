@@ -27,7 +27,10 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddTransient<IOptionsManage<TOptions, TService>, OptionsManager<TOptions, TService>>();
             return services;
         }
-
+        /// <summary>
+        /// add <see cref="IOptions{TOptions}"/>
+        /// </summary>
+        /// <typeparam name="TOptions"></typeparam>
         public static OptionsBuilder<TOptions> ConfigureService<TOptions, TService>(this OptionsBuilder<TOptions> optionsBuilder) where TOptions : class where TService : class
         {
             optionsBuilder.Services.AddOptionsManage<TOptions, TService>();
@@ -35,7 +38,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// From <see cref="IConfiguration"/> binding
+        /// from <see cref="IConfiguration"/> binding
         /// </summary>
         /// <typeparam name="TOptions"></typeparam>
         /// <param name="optionsBuilder"></param>
@@ -46,7 +49,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Use <paramref name="key"/> bind <see cref="IConfiguration"/>
+        /// use <paramref name="key"/> bind <see cref="IConfiguration"/>
         /// </summary>
         /// <typeparam name="TOptions"></typeparam>
         /// <param name="optionsBuilder"></param>
@@ -95,7 +98,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         // <summary>
-        /// Find <see cref="IConfiguration"/> 
+        /// find <see cref="IConfiguration"/> 
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>

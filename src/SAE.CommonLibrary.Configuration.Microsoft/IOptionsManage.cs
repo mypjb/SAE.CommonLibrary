@@ -81,7 +81,9 @@ namespace SAE.CommonLibrary.Configuration.Microsoft
         public event Func<TOptions, TService> OnConfigure;
 
 
-
+        /// <summary>
+        /// get <typeparamref name="TService"/>
+        /// </summary>
         public TService Get()
         {
             var options = this._monitor.CurrentValue;

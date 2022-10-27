@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
 {
+    /// <summary>
+    /// multitenant options
+    /// </summary>
     public class MultiTenantOptions
     {
         /// <summary>

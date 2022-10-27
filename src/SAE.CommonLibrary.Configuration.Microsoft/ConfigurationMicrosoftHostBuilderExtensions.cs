@@ -5,10 +5,13 @@ using System;
 
 namespace Microsoft.Extensions.Hosting
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class ConfigurationMicrosoftHostBuilderExtensions
     {
         /// <summary>
-        /// Add SAE configuration source
+        /// add sae configuration source
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="action"></param>
@@ -30,7 +33,7 @@ namespace Microsoft.Extensions.Hosting
         }
 
         /// <summary>
-        /// Add remote configuration source
+        /// add remote configuration source
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="options"></param>
@@ -43,7 +46,7 @@ namespace Microsoft.Extensions.Hosting
             });
         }
         /// <summary>
-        /// Add remote configuration source
+        /// add remote configuration source
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="url"></param>
@@ -56,7 +59,7 @@ namespace Microsoft.Extensions.Hosting
             });
         }
         /// <summary>
-        /// Add <seealso cref="MicrosoftConfigurationExtensions.DefaultConfigDirectory"/>  directory As a configuration source
+        /// add <seealso cref="MicrosoftConfigurationExtensions.DefaultConfigDirectory"/>  directory As a configuration source
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
@@ -65,7 +68,7 @@ namespace Microsoft.Extensions.Hosting
             return builder.ConfigureJsonFileDirectorySource(null);
         }
         /// <summary>
-        /// Add <paramref name="path"/>  directory As a configuration source
+        /// add <paramref name="path"/>  directory As a configuration source
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="path">json file directory</param>
