@@ -101,15 +101,15 @@ namespace SAE.CommonLibrary.Configuration
 
             logging?.Info($"set source stream");
 
-            if (!this._options.ConfiguraionSection.IsNullOrWhiteSpace())
+            if (!this._options.ConfigurationSection.IsNullOrWhiteSpace())
             {
                 var json = await rep.Content.ReadAsStringAsync();
 
-                var sections = this._options.ConfiguraionSection
-                                            .Split(Constant.ConfiguraionSectionSeparator, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                var sections = this._options.ConfigurationSection
+                                            .Split(Constant.ConfigurationSectionSeparator, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
                                             .ToArray();
 
-                this._logging?.Info($"wrap the data:'{this._options.ConfiguraionSection}'");
+                this._logging?.Info($"wrap the data:'{this._options.ConfigurationSection}'");
 
                 var jsonBuilder = new StringBuilder();
 
@@ -127,6 +127,11 @@ namespace SAE.CommonLibrary.Configuration
                     jsonBuilder.Append("}");
                 }
 
+                var jsonData = jsonBuilder.ToString();
+
+                this._logging?.Debug($"pull json data：\r\n{jsonData}");
+
+                this.Source.Stream = new MemoryStream(SAE.CommonLibrary.Constant.Encoding.GetBytes(jsonData));
             }
             else
             {
@@ -134,6 +139,15 @@ namespace SAE.CommonLibrary.Configuration
             }
 
             logging?.Info($"persistence to local '{this._options.FileName}'");
+
+            var configDirectory = Path.GetDirectoryName(this._options.FileName);
+
+            if (!Directory.Exists(configDirectory))
+            {
+                this._logging?.Warn($"config directory not exist '{configDirectory}',auto create it");
+                Directory.CreateDirectory(configDirectory);
+            }
+
             using (var fileStream = new FileStream(this._options.FileName, FileMode.Create, FileAccess.Write, FileShare.Read))
             {
                 this.Source.Stream.Position = 0;

@@ -1,18 +1,19 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SAE.CommonLibrary.Extension;
 using SAE.CommonLibrary.Test;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
-using SAE.CommonLibrary.Extension;
-using System;
-using System.Threading;
-using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
 using Assert = Xunit.Assert;
 
 namespace SAE.CommonLibrary.Configuration.Microsoft.Test
@@ -74,7 +75,10 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
                 PollInterval = PollInterval
             };
 
-            var root = this.GetConfigurationBuilder(env).AddRemoteSource(remoteOptions).Build();
+            var root = this.GetConfigurationBuilder(env)
+                           .AddInMemoryCollection(new[] { new KeyValuePair<string, string>(Constant.Config.RootDirectoryKey, Path.Combine(Constant.Config.DefaultRootDirectory, nameof(Remote), env)) })
+                           .AddRemoteSource(remoteOptions)
+                           .Build();
 
             var configurationSection = root.GetSection(DBConnectOptions.Option);
 
@@ -99,6 +103,60 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
         [Theory]
         [InlineData("Development")]
         [InlineData("Production")]
+        public async Task CustomRemoteNode(string env)
+        {
+            var databaseOption = new DBConnectOptions
+            {
+                ConnectionString = this.GetRandom(),
+                Name = this.GetRandom(),
+                Provider = this.GetRandom()
+            };
+
+            var dic = new Dictionary<string, object>
+            {
+                {DBConnectOptions.Option,databaseOption }
+            };
+
+            await this.SetConfigAsync(ConfigPath, dic);
+
+            var remoteOptions = new SAEOptions
+            {
+                Url = ConfigPath,
+                Client = this._client,
+                PollInterval = PollInterval,
+                ConfigurationSection = "Custom.Scope"
+            };
+
+            var root = this.GetConfigurationBuilder(env)
+                           .AddInMemoryCollection(new[] { new KeyValuePair<string, string>(Constant.Config.RootDirectoryKey, Path.Combine(Constant.Config.DefaultRootDirectory, nameof(CustomRemoteNode), env)) })
+                           .AddRemoteSource(remoteOptions)
+                           .Build();
+
+            var key = $"{remoteOptions.ConfigurationSection.Replace(Constant.ConfigurationSectionSeparator, ':')}:{DBConnectOptions.Option}";
+            var configurationSection = root.GetSection(key);
+
+            var options = configurationSection.Get<DBConnectOptions>();
+
+            this.Eq(databaseOption, options);
+
+
+            databaseOption.Provider = this.GetRandom();
+            databaseOption.ConnectionString = this.GetRandom();
+
+            await this.SetConfigAsync(ConfigPath, dic);
+
+            Thread.Sleep((int)(remoteOptions.PollInterval * 1200));
+
+            options = configurationSection.Get<DBConnectOptions>();
+
+            this.Eq(databaseOption, options);
+
+        }
+
+
+        [Theory]
+        [InlineData("Development")]
+        [InlineData("Production")]
         public async Task Offline(string env)
         {
             await this.Remote(env);
@@ -110,7 +168,10 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
                 PollInterval = PollInterval
             };
 
-            var root = this.GetConfigurationBuilder(env).AddRemoteSource(remoteOptions).Build();
+            var root = this.GetConfigurationBuilder(env)
+                           .AddInMemoryCollection(new[] { new KeyValuePair<string, string>(Constant.Config.RootDirectoryKey, Path.Combine(Constant.Config.DefaultRootDirectory, nameof(Remote), env)) })
+                           .AddRemoteSource(remoteOptions)
+                           .Build();
 
             var configurationSection = root.GetSection(DBConnectOptions.Option);
 

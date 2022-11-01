@@ -50,7 +50,7 @@ namespace SAE.CommonLibrary.Configuration
         /// <code>
         /// var options = new SAEOptions
         /// {
-        ///     ConfiguraionSection="test.cf",
+        ///     ConfigurationSection="test.cf",
         ///     Url="http://xxx.xxx"
         /// }
         /// 
@@ -66,7 +66,7 @@ namespace SAE.CommonLibrary.Configuration
         /// 
         /// </code>
         /// </example>
-        public string ConfiguraionSection { get; set; }
+        public string ConfigurationSection { get; set; }
         /// <summary>
         /// when the remote request is successful, this parameter is used to specify the access address to get the next remote request from the response header
         /// </summary>

@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Microsoft.Net.Http.Headers;
+﻿using Microsoft.Net.Http.Headers;
 using Polly;
 using SAE.CommonLibrary.Extension.Middleware;
 using SAE.CommonLibrary.Logging;

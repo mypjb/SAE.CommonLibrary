@@ -39,7 +39,7 @@ namespace SAE.CommonLibrary.Configuration
         /// <summary>
         /// configuraion section separator
         /// </summary>
-        public const char ConfiguraionSectionSeparator = '.';
+        public const char ConfigurationSectionSeparator = '.';
         /// <summary>
         /// json suffix
         /// </summary>
