@@ -22,5 +22,11 @@ namespace SAE.CommonLibrary.EventStore.Serialize
         /// <param name="type"></param>
         /// <returns></returns>
         object Deserialize(string input,Type type);
+        /// <summary>
+        /// 使用字符串的值填充现有对象实例。
+        /// </summary>
+        /// <param name="input">事件序列化后的字符</param>
+        /// <param name="object">要填充的实例</param>
+        void Deserialize(string input,object @object);
     }
 }

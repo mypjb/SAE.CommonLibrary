@@ -59,7 +59,12 @@ namespace SAE.CommonLibrary.Extension
             return Utils.Serialize.Xml(@object);
         }
 
-        public static object ToObject(this XmlDocument document,Type type)
+        /// <summary>
+        /// xml反序列化
+        /// </summary>
+        /// <param name="document">xml对象</param>
+        /// <param name="type">反序列类型</param>
+        public static object ToObject(this XmlDocument document, Type type)
         {
             using (var nodeReader = new XmlNodeReader(document))
             {
@@ -67,15 +72,27 @@ namespace SAE.CommonLibrary.Extension
                 return XDocument.Load(nodeReader).ToObject(type);
             }
         }
-
-        public static object ToObject(this XDocument document,Type type)
+        /// <summary>
+        /// xml反序列化
+        /// </summary>
+        /// <param name="document">xml对象</param>
+        /// <param name="type">反序列类型</param>
+        public static object ToObject(this XDocument document, Type type)
         {
             return Utils.Deserialize.Xml(document, type);
         }
+        /// <summary>
+        /// xml反序列化
+        /// </summary>
+        /// <typeparam name="T">反序列类型</typeparam>
         public static T ToObject<T>(this XmlDocument document) where T : class
         {
             return document.ToObject(typeof(T)) as T;
         }
+        /// <summary>
+        /// xml反序列化
+        /// </summary>
+        /// <typeparam name="T">反序列类型</typeparam>
         public static T ToObject<T>(this XDocument document) where T : class
         {
             return document.ToObject(typeof(T)) as T;

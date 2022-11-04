@@ -1,11 +1,11 @@
-﻿using Microsoft.VisualBasic.CompilerServices;
-using Newtonsoft.Json;
-using SAE.CommonLibrary.Extension;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using Microsoft.VisualBasic.CompilerServices;
+using Newtonsoft.Json;
+using SAE.CommonLibrary.Extension;
 
 namespace SAE.CommonLibrary
 {
@@ -83,8 +83,8 @@ namespace SAE.CommonLibrary
             /// <summary>
             /// Json反序列化
             /// </summary>
-            /// <param name="json"></param>
-            /// <param name="type"></param>
+            /// <param name="json">json字符串</param>
+            /// <param name="type">反序列化的类型</param>
             /// <returns></returns>
             public static object Json(string json, Type type)
             {
@@ -93,6 +93,19 @@ namespace SAE.CommonLibrary
                 if (type == StringType) return json;
 
                 return JsonConvert.DeserializeObject(json, type);
+            }
+            /// <summary>
+            /// 使用<paramref name="json"/> 的值填充现有对象实例。
+            /// </summary>
+            /// <param name="json">json字符串</param>
+            /// <param name="object">要填充的对象</param>
+            public static void PopulateObject(string json, object @object)
+            {
+                if (json.IsNullOrWhiteSpace() || @object == null) return;
+
+                if (@object.GetType() == StringType) return;
+
+                JsonConvert.PopulateObject(json, @object);
             }
 
             /// <summary>

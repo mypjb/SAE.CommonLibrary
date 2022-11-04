@@ -1,17 +1,21 @@
-﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using SAE.CommonLibrary.Data;
 using SAE.CommonLibrary.EventStore;
 using SAE.CommonLibrary.EventStore.Document;
 using SAE.CommonLibrary.EventStore.Document.Memory;
+using SAE.CommonLibrary.EventStore.Serialize;
 using SAE.CommonLibrary.EventStore.Snapshot;
 using SAE.CommonLibrary.Extension;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// 事件存储注册类
+    /// </summary>
     public static class EventStoreDocumentDependencyInjectionExtension
     {
         /// <summary>
@@ -57,6 +61,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 services.AddDefaultLogger();
             }
 
+            services.TryAddSingleton<ISerializer,DefaultSerializer>();
+
             return services;
         }
 
@@ -88,13 +94,21 @@ namespace Microsoft.Extensions.DependencyInjection
             serviceCollection.TryAddSingleton(typeof(IPersistenceService<>), typeof(DataPersistenceServiceAdapter<>));
             return serviceCollection.AddMemoryStorage();
         }
-
+        /// <summary>
+        /// 添加基于内存的持久化数据存储
+        /// </summary>
+        /// <param name="serviceCollection"></param>
+        /// <param name="configure"></param>
         public static IServiceCollection AddDataPersistenceService(this IServiceCollection serviceCollection, Action<StorageOptions> configure)
         {
             configure.Invoke(serviceCollection.AddMemoryDataPersistenceService());
             return serviceCollection;
         }
-
+        /// <summary>
+        /// 添加默认的持久化存储
+        /// </summary>
+        /// <param name="serviceCollection"></param>
+        /// <param name="assemblies"></param>
         public static IServiceCollection AddDataPersistenceService(this IServiceCollection serviceCollection, params Assembly[] assemblies)
         {
             if (assemblies == null || !assemblies.Any())

@@ -8,31 +8,37 @@ using System.Text;
 namespace SAE.CommonLibrary.EventStore
 {
     /// <summary>
-    /// event mapping provider
+    /// 事件映射接口
     /// </summary>
     public interface IEventMapping
     {
         /// <summary>
-        /// add mapping
+        /// 添加映射
         /// </summary>
-        /// <param name="key">mapping key</param>
-        /// <param name="type">mapping type</param>
+        /// <param name="key">映射的key</param>
+        /// <param name="type">映射的类型</param>
         void Add(string key, Type type);
         /// <summary>
-        /// get mapping
+        /// 通过key获得映射
         /// </summary>
-        /// <param name="key">mapping key</param>
-        /// <returns>return mapping type</returns>
+        /// <param name="key">映射的key</param>
+        /// <returns>返回key对应的类型</returns>
         Type Get(string key);
     }
 
     /// <summary>
-    /// default <seealso cref="IEventMapping"/> implementation
+    /// <see cref="IEventMapping"/> 默认实现
     /// </summary>
+    /// <inheritdoc/>
     public class DefaultEventMapping : IEventMapping
     {
         private readonly ILogging<DefaultEventMapping> _logging;
         private readonly Dictionary<string, Type> _mapping;
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="logging"></param>
+        /// <param name="providers"></param>
         public DefaultEventMapping(ILogging<DefaultEventMapping> logging,IEnumerable<EventMappingProvider> providers)
         {
             this._logging = logging;

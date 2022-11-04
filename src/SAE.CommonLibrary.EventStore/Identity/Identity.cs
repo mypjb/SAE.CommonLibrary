@@ -3,6 +3,7 @@
     /// <summary>
     /// 标识
     /// </summary>
+    /// <inheritdoc/>
     public class Identity : IIdentity
     {
         /// <summary>
@@ -16,9 +17,9 @@
         {
         }
         /// <summary>
-        /// 根据<paramref name="id"/>构造一个<seealso cref="对象"/>
+        /// 根据<paramref name="id"/>构造一个<see cref="IIdentity"/>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">字符串形式的标识</param>
         public Identity(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
@@ -26,7 +27,7 @@
             this.Id = id;
         }
         /// <summary>
-        /// 
+        /// 返回字符串形式的标识
         /// </summary>
         /// <returns></returns>
         public override string ToString()
@@ -35,7 +36,7 @@
         }
 
         /// <summary>
-        /// 隐式转换
+        /// 字符串隐式转换为<see cref="Identity"/>
         /// </summary>
         /// <param name="identity"></param>
         public static implicit operator Identity(string identity)

@@ -4,11 +4,15 @@ using System.Text;
 
 namespace SAE.CommonLibrary.EventStore.Snapshot
 {
+    /// <summary>
+    /// <see cref="ISnapshotStore"/>扩展程序
+    /// </summary>
     public static class SnapshotExtension
     {
         /// <summary>
         /// 根据id和版本号从快照中查找聚合对象
         /// </summary>
+        /// <param name="snapshotStore"></param>
         /// <param name="identity">标识</param>
         /// <param name="version">返回版本的快照</param>
         /// <returns></returns>
@@ -19,8 +23,9 @@ namespace SAE.CommonLibrary.EventStore.Snapshot
                                 .GetResult();
         }
         /// <summary>
-        /// 查找
+        /// 查找快照
         /// </summary>
+        /// <param name="snapshotStore"></param>
         /// <param name="identity">标识</param>
         /// <returns></returns>
         public static Snapshot Find(this ISnapshotStore snapshotStore,IIdentity identity)
@@ -32,6 +37,7 @@ namespace SAE.CommonLibrary.EventStore.Snapshot
         /// <summary>
         /// 保存快照
         /// </summary>
+        /// <param name="snapshotStore"></param>
         /// <param name="snapshot">要保存的快照对象</param>
         public static void Save(this ISnapshotStore snapshotStore,Snapshot snapshot)
         {

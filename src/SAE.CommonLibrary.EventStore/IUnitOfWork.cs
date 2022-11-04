@@ -13,5 +13,9 @@ namespace SAE.CommonLibrary.EventStore
         /// 回滚
         /// </summary>
         void RollBack();
+        /// <summary>
+        /// 提交
+        /// </summary>
+        void Commit();
     }
 }

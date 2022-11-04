@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 namespace SAE.CommonLibrary.EventStore.Document
 {
     /// <summary>
-    /// <seealso cref="IDocumentStore"/>扩展
+    /// <see cref="IDocumentStore"/>扩展
     /// </summary>
     public static class DocumentStoreExtension
     {
         /// <summary>
-        /// 从文档中获得文档对象
+        /// 获得文档对象
         /// </summary>
         /// <typeparam name="TDocument"></typeparam>
         /// <param name="documentStore"></param>
-        /// <param name="id"></param>
+        /// <param name="id">文档标识</param>
         /// <returns></returns>
         public static TDocument Find<TDocument>(this IDocumentStore documentStore, string id) where TDocument : IDocument, new()
         {
@@ -26,44 +26,46 @@ namespace SAE.CommonLibrary.EventStore.Document
         }
 
         /// <summary>
-        /// 从文档中获得文档对象
+        /// 获得指定版本的文档对象
         /// </summary>
         /// <typeparam name="TDocument"></typeparam>
         /// <param name="documentStore"></param>
-        /// <param name="id"></param>
+        /// <param name="id">文档标识</param>
+        /// <param name="version">版本号</param>
         /// <returns></returns>
         public static TDocument Find<TDocument>(this IDocumentStore documentStore, string id, int version) where TDocument : IDocument, new()
         {
             return documentStore.Find<TDocument>(id.ToIdentity(), version);
         }
         /// <summary>
-        /// 从文档中获得文档对象
+        /// 文档对象
         /// </summary>
         /// <typeparam name="TDocument"></typeparam>
         /// <param name="documentStore"></param>
-        /// <param name="id"></param>
+        /// <param name="id">文档标识</param>
         /// <returns></returns>
         public static Task<TDocument> FindAsync<TDocument>(this IDocumentStore documentStore, string id) where TDocument : IDocument, new()
         {
             return documentStore.FindAsync<TDocument>(id.ToIdentity());
         }
         /// <summary>
-        /// 从文档中获得文档对象
+        /// 获得指定版本的文档对象
         /// </summary>
         /// <typeparam name="TDocument"></typeparam>
         /// <param name="documentStore"></param>
-        /// <param name="id"></param>
+        /// <param name="id">文档标识</param>
+        /// <param name="version">版本号</param>
         /// <returns></returns>
         public static Task<TDocument> FindAsync<TDocument>(this IDocumentStore documentStore, string id, int version) where TDocument : IDocument, new()
         {
             return documentStore.FindAsync<TDocument>(id.ToIdentity(), version);
         }
         /// <summary>
-        /// 从文档中获得最新文档对象
+        /// 获得最新文档对象
         /// </summary>
         /// <typeparam name="TDocument"></typeparam>
         /// <param name="documentStore"></param>
-        /// <param name="identity"></param>
+        /// <param name="identity">文档标识</param>
         /// <returns></returns>
         public static Task<TDocument> FindAsync<TDocument>(this IDocumentStore documentStore, IIdentity identity) where TDocument : IDocument, new()
         {
@@ -71,11 +73,11 @@ namespace SAE.CommonLibrary.EventStore.Document
         }
 
         /// <summary>
-        /// 从文档中获得文档对象
+        /// 获得文档对象
         /// </summary>
         /// <typeparam name="TDocument"></typeparam>
         /// <param name="documentStore"></param>
-        /// <param name="identity"></param>
+        /// <param name="identity">文档标识</param>
         /// <returns></returns>
         public static TDocument Find<TDocument>(this IDocumentStore documentStore, IIdentity identity) where TDocument : IDocument, new()
         {
@@ -85,7 +87,7 @@ namespace SAE.CommonLibrary.EventStore.Document
         }
 
         /// <summary>
-        /// 获取特点版本的文档对象
+        /// 获得指定版本的文档对象
         /// </summary>
         /// <typeparam name="TDocument"></typeparam>
         /// <param name="documentStore"></param>
@@ -135,21 +137,21 @@ namespace SAE.CommonLibrary.EventStore.Document
         }
 
         /// <summary>
-        /// delete document
+        /// 删除文档
         /// </summary>
         /// <typeparam name="TDocument"></typeparam>
         /// <param name="documentStore"></param>
-        /// <param name="id"></param>
+        /// <param name="id">文档标识</param>
         public static void Delete<TDocument>(this IDocumentStore documentStore, string id) where TDocument : IDocument, new()
         {
             documentStore.Delete<TDocument>(id.ToIdentity());
         }
 
         /// <summary>
-        /// 从<seealso cref="IDocumentStore"/>中移除该对象
+        /// 删除文档
         /// </summary>
         /// <param name="documentStore"></param>
-        /// <param name="identity"></param>
+        /// <param name="identity">文档标识</param>
         public static void Delete<TDocument>(this IDocumentStore documentStore, IIdentity identity) where TDocument : IDocument,new()
         {
             documentStore.DeleteAsync<TDocument>(identity)
@@ -158,7 +160,7 @@ namespace SAE.CommonLibrary.EventStore.Document
         }
 
         /// <summary>
-        /// 从<seealso cref="IDocumentStore"/>中移除该对象
+        /// 删除文档
         /// </summary>
         /// <param name="documentStore"></param>
         /// <param name="document"></param>
@@ -170,7 +172,7 @@ namespace SAE.CommonLibrary.EventStore.Document
         }
 
         /// <summary>
-        /// 从<seealso cref="IDocumentStore"/>中移除该对象
+        /// 批量删除文档
         /// </summary>
         /// <param name="documentStore"></param>
         /// <param name="documents"></param>
@@ -182,7 +184,7 @@ namespace SAE.CommonLibrary.EventStore.Document
         }
 
         /// <summary>
-        /// 从<seealso cref="IDocumentStore"/>中移除该对象
+        /// 批量删除文档
         /// </summary>
         /// <param name="documentStore"></param>
         /// <param name="documents"></param>
@@ -193,17 +195,17 @@ namespace SAE.CommonLibrary.EventStore.Document
 
 
         /// <summary>
-        /// 从<seealso cref="IDocumentStore"/>中移除该对象
+        /// 删除文档
         /// </summary>
         /// <param name="documentStore"></param>
-        /// <param name="id"></param>
+        /// <param name="id">标识</param>
         public static Task DeleteAsync<TDocument>(this IDocumentStore documentStore, string id) where TDocument : IDocument, new()
         {
             return documentStore.DeleteAsync<TDocument>(id.ToIdentity());
         }
 
         /// <summary>
-        /// 从<seealso cref="IDocumentStore"/>中移除该对象
+        /// 删除文档
         /// </summary>
         /// <param name="documentStore"></param>
         /// <param name="document"></param>
@@ -213,10 +215,10 @@ namespace SAE.CommonLibrary.EventStore.Document
         }
 
         /// <summary>
-        /// 从<seealso cref="IDocumentStore"/>中移除该对象
+        /// 批量删除文档
         /// </summary>
         /// <param name="documentStore"></param>
-        /// <param name="ids"></param>
+        /// <param name="ids">标识集合</param>
         public static void Delete<TDocument>(this IDocumentStore documentStore, IEnumerable<string> ids) where TDocument : IDocument, new()
         {
             documentStore.DeleteAsync<TDocument>(ids)
@@ -225,20 +227,20 @@ namespace SAE.CommonLibrary.EventStore.Document
         }
 
         /// <summary>
-        /// 从<seealso cref="IDocumentStore"/>中移除该对象
+        /// 批量删除文档
         /// </summary>
         /// <param name="documentStore"></param>
-        /// <param name="ids"></param>
+        /// <param name="ids">标识集合</param>
         public static Task DeleteAsync<TDocument>(this IDocumentStore documentStore, IEnumerable<string> ids) where TDocument : IDocument, new()
         {
             return ids.ForEachAsync(documentStore.DeleteAsync<TDocument>);
         }
 
         /// <summary>
-        /// 从<seealso cref="IDocumentStore"/>中移除该对象
+        /// 批量删除文档
         /// </summary>
         /// <param name="documentStore"></param>
-        /// <param name="identitys"></param>
+        /// <param name="identitys">标识集合</param>
         public static void Delete<TDocument>(this IDocumentStore documentStore, IEnumerable<Identity> identitys) where TDocument : IDocument, new()
         {
             documentStore.DeleteAsync<TDocument>(identitys)
@@ -247,10 +249,10 @@ namespace SAE.CommonLibrary.EventStore.Document
         }
 
         /// <summary>
-        /// 从<seealso cref="IDocumentStore"/>中移除该对象
+        /// 批量删除文档
         /// </summary>
         /// <param name="documentStore"></param>
-        /// <param name="identitys"></param>
+        /// <param name="identitys">标识集合</param>
         public static Task DeleteAsync<TDocument>(this IDocumentStore documentStore, IEnumerable<Identity> identitys) where TDocument : IDocument, new()
         {
             return identitys.ForEachAsync(documentStore.DeleteAsync<TDocument>);

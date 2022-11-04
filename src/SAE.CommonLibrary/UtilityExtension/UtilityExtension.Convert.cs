@@ -89,7 +89,7 @@ namespace SAE.CommonLibrary.Extension
             {
                 if (propertyInfo.SetMethod != null && propertyInfo.GetMethod != null)
                 {
-                    var value= propertyInfo.GetMethod.Invoke(@object, objectEmply);
+                    var value = propertyInfo.GetMethod.Invoke(@object, objectEmply);
 
                     if (value != null)
                     {
@@ -98,6 +98,16 @@ namespace SAE.CommonLibrary.Extension
                 }
             }
 
+        }
+        /// <summary>
+        /// 使用<paramref name="json"/> 的值填充现有对象实例。
+        /// </summary>
+        /// <param name="json">json字符串</param>
+        /// <param name="target">要进行填充的对象</param>
+        /// <typeparam name="T"></typeparam>
+        public static void JsonExtend<T>(this T target, string json) where T : class
+        {
+            Utils.Deserialize.PopulateObject(json, target);
         }
         #endregion
     }

@@ -24,7 +24,7 @@ namespace SAE.CommonLibrary.EventStore.Document.MySql
 
             using (var conn = this._factory.Get())
             {
-                snapshot = await conn.QueryFirstOrDefaultAsync<Snapshot.Snapshot>($"select data,version,type from {nameof(Snapshot)} where id=@id and version=@version limit 1", new
+                snapshot = await conn.QueryFirstOrDefaultAsync<Snapshot.Snapshot>($"select * from {nameof(Snapshot)} where id=@id and version=@version limit 1", new
                 {
                     Id = identity.ToString(),
                     Version = version
@@ -42,7 +42,7 @@ namespace SAE.CommonLibrary.EventStore.Document.MySql
 
             using (var conn = this._factory.Get())
             {
-                snapshot = await conn.QueryFirstOrDefaultAsync<Snapshot.Snapshot>($"select data,version,type from {nameof(Snapshot)} where id=@id order by version desc limit 1", new
+                snapshot = await conn.QueryFirstOrDefaultAsync<Snapshot.Snapshot>($"select * from {nameof(Snapshot)} where id=@id order by version desc limit 1", new
                 {
                     Id = identity.ToString()
                 }) ?? new Snapshot.Snapshot();
@@ -51,7 +51,7 @@ namespace SAE.CommonLibrary.EventStore.Document.MySql
             return snapshot;
         }
 
-        public async Task RemoveAsync(IIdentity identity)
+        public async Task DeleteAsync(IIdentity identity)
         {
             using (var conn = this._factory.Get())
             {
@@ -63,7 +63,7 @@ namespace SAE.CommonLibrary.EventStore.Document.MySql
         {
             using (var conn = this._factory.Get())
             {
-                if (await conn.ExecuteAsync($"insert into {nameof(Snapshot)}(id,type,version,data) values(@id,@type,@version,@data)", snapshot) != 1)
+                if (await conn.ExecuteAsync($"insert into {nameof(Snapshot)}(id,version,data) values(@id,@version,@data)", snapshot) != 1)
                 {
                     throw new SAEException($"{nameof(snapshot)} add fail");
                 }

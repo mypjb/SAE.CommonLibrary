@@ -8,12 +8,17 @@ using Microsoft.Extensions.DependencyInjection;
 namespace SAE.CommonLibrary.EventStore.Document
 {
     /// <summary>
-    /// 
+    /// <see cref="IDocumentEvent"/>默认实现
     /// </summary>
+    /// <inheritdoc/>
     public class DefaultDocumentEvent : IDocumentEvent
     {
         private readonly IServiceProvider _provider;
-        private ConcurrentDictionary<Type, object> _dictionary;
+        private readonly ConcurrentDictionary<Type, object> _dictionary;
+        /// <summary>
+        /// 创建一个新的对象
+        /// </summary>
+        /// <param name="provider"></param>
         public DefaultDocumentEvent(IServiceProvider provider)
         {
             this._provider = provider;
@@ -27,13 +32,16 @@ namespace SAE.CommonLibrary.EventStore.Document
             await persistenceService.SaveAsync(document);
         }
 
-        public async Task RemoveAsync<TDocument>(IIdentity identity) where TDocument : IDocument
+        public async Task DeleteAsync<TDocument>(IIdentity identity) where TDocument : IDocument
         {
             var persistenceService = this.GetService<TDocument>();
 
-            await persistenceService.RemoveAsync(identity);
+            await persistenceService.DeleteAsync(identity);
         }
-
+        /// <summary>
+        /// 获得<see cref="IPersistenceService{TDocument}"/>持久化服务
+        /// </summary>
+        /// <typeparam name="TDocument"></typeparam>
         private IPersistenceService<TDocument> GetService<TDocument>() where TDocument : IDocument
         {
             var key = typeof(TDocument);

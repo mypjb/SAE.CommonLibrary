@@ -1,9 +1,11 @@
-﻿using SAE.CommonLibrary.Extension;
-using SAE.CommonLibrary.Logging.Nlog;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Xml;
 using System.Xml.Linq;
+using Newtonsoft.Json.Linq;
+using SAE.CommonLibrary.Extension;
+using SAE.CommonLibrary.Logging.Nlog;
 using Xunit;
 using Xunit.Abstractions;
 

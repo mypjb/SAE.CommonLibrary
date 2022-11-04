@@ -10,7 +10,13 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory
     /// </summary>
     public class MemorySnapshotStore : ISnapshotStore
     {
+        /// <summary>
+        /// 快照列表
+        /// </summary>
         private readonly List<Snapshot.Snapshot> _store;
+        /// <summary>
+        /// 
+        /// </summary>
         public MemorySnapshotStore()
         {
             _store = new List<Snapshot.Snapshot>();
@@ -27,7 +33,7 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory
                                          .FirstOrDefault());
         }
 
-        public Task RemoveAsync(IIdentity identity)
+        public Task DeleteAsync(IIdentity identity)
         {
             this._store.RemoveAll(s => s.Id == identity.ToString());
             return Task.CompletedTask;

@@ -3,12 +3,12 @@
 namespace SAE.CommonLibrary.EventStore
 {
     /// <summary>
-    /// <seealso cref="IIdentity"/>扩展
+    /// <see cref="IIdentity"/>扩展
     /// </summary>
     public static class IdentityExtension
     {
         /// <summary>
-        /// string 转 <seealso cref="IIdentity"/>
+        /// string 转 <see cref="IIdentity"/>
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

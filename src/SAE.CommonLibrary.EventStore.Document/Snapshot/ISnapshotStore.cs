@@ -33,6 +33,6 @@ namespace SAE.CommonLibrary.EventStore.Snapshot
         /// </summary>
         /// <param name="identity"></param>
         /// <returns></returns>
-        Task RemoveAsync(IIdentity identity);
+        Task DeleteAsync(IIdentity identity);
     }
 }

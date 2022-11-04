@@ -17,10 +17,11 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// <returns></returns>
         Task SaveAsync(TDocument document);
         /// <summary>
-        /// 移除<typeparamref name="TDocument"/>
+        /// 删除<typeparamref name="TDocument"/>
         /// </summary>
+        /// <param name="identity">对象标识</param>
         /// <param name="docuemnt"></param>
         /// <returns></returns>
-        Task RemoveAsync(IIdentity identity);
+        Task DeleteAsync(IIdentity identity);
     }
 }

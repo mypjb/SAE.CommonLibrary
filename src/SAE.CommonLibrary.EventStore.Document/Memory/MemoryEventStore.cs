@@ -1,17 +1,24 @@
-﻿using SAE.CommonLibrary.EventStore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SAE.CommonLibrary.EventStore;
 
 namespace SAE.CommonLibrary.EventStore.Document.Memory
 {
     /// <summary>
     /// 基于内存的事件存储
     /// </summary>
+    /// <inheritdoc/>
     public class MemoryEventStore : IEventStore
     {
+        /// <summary>
+        /// 事件流存储器
+        /// </summary>
         private readonly List<EventStream> _store;
+        /// <summary>
+        /// 
+        /// </summary>
         public MemoryEventStore()
         {
             _store = new List<EventStream>();
@@ -31,7 +38,7 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory
 
         public Task<EventStream> LoadEventStreamAsync(IIdentity identity, int skipEvents, int maxCount)
         {
-            var eventStream = new EventStream(identity, 0, events: null, timeStamp: DateTimeOffset.Now);
+            var eventStream = new EventStream(identity, 0, string.Empty);
             foreach (var @event in _store.Where(s => s.Identity.Equals(identity))
                                          .Skip((int)skipEvents)
                                          .Take(maxCount))
@@ -41,7 +48,7 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory
             return Task.FromResult(eventStream);
         }
 
-        public Task RemoveAsync(IIdentity identity)
+        public Task DeleteAsync(IIdentity identity)
         {
             this._store.RemoveAll(s => s.Identity.Equals(identity));
             return Task.CompletedTask;
