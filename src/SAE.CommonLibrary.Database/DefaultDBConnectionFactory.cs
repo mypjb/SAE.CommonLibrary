@@ -54,6 +54,7 @@ namespace SAE.CommonLibrary.Database
             this._responsibility = provider.Root;
             this._optionsMonitor = optionsMonitor;
             this._logging = logging;
+            this.Change(optionsMonitor.CurrentValue);
             this._optionsMonitor.OnChange(this.Change);
         }
 
@@ -63,6 +64,11 @@ namespace SAE.CommonLibrary.Database
         /// <param name="options"></param>
         protected virtual void Change(IEnumerable<DBConnectOptions> dBConnectOptions)
         {
+            if (dBConnectOptions == null || !dBConnectOptions.Any())
+            {
+                this._logging.Warn("尚未对数据库进行设置!");
+                return;
+            }
             foreach (var options in dBConnectOptions)
             {
                 this.InitialAsync(options).GetAwaiter().GetResult();
@@ -96,6 +102,7 @@ namespace SAE.CommonLibrary.Database
                             command.ExecuteNonQuery();
                         }
                     }
+                    this._logging.Info($"数据库'{options.Name}',初始化操作完成。");
                 }
                 catch (Exception ex)
                 {

@@ -28,6 +28,7 @@ namespace SAE.CommonLibrary.Configuration.Microsoft
         /// </summary>
         event Func<TOptions, TService> OnConfigure;
     }
+
     /// <summary>
     /// <inheritdoc/>
     /// </summary>
@@ -45,10 +46,11 @@ namespace SAE.CommonLibrary.Configuration.Microsoft
             this._monitor = monitor;
             this._logging = logging;
             this._monitor.OnChange(this.Change);
+            this.Configure(this._monitor.CurrentValue);
         }
 
         /// <summary>
-        /// configure <seealso cref="TService"/>
+        /// configure <see cref="TService"/>
         /// </summary>
         /// <param name="options"></param>
         private TService Configure(TOptions options)

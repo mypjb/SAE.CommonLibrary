@@ -28,7 +28,7 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
         /// <param name="postConfigures"></param>
         /// <param name="scopeFactory"></param>
         /// <param name="configuration"></param>
-        /// <param name="options"></param>
+        /// <param name="optionsMonitor"></param>
         /// <param name="logging"></param>
         public MultiTenantOptionsFactory(
             IEnumerable<IConfigureOptions<TOptions>> setups,
@@ -52,7 +52,8 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
         /// <param name="validations"></param>
         /// <param name="scopeFactory"></param>
         /// <param name="configuration"></param>
-        /// <param name="options"></param>
+        /// <param name="optionsMonitor"></param>
+        /// <param name="logging"></param>
         public MultiTenantOptionsFactory(IEnumerable<IConfigureOptions<TOptions>> setups,
                                          IEnumerable<IPostConfigureOptions<TOptions>> postConfigures,
                                          IEnumerable<IValidateOptions<TOptions>> validations,

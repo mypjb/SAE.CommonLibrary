@@ -41,6 +41,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddDefaultDBConnectionFactory()
                     .AddResponsibility<DatabaseResponsibilityContext, TDatabaseResponsibility>();
+            services.AddDefaultLogger();
             return services;
         }
 
