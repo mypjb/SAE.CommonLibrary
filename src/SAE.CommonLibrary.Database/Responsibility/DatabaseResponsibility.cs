@@ -8,23 +8,24 @@ using System.Threading.Tasks;
 namespace SAE.CommonLibrary.Database.Responsibility
 {
     /// <summary>
-    /// database responsibility
+    /// 数据库职责链
     /// </summary>
+    /// <inheritdoc/>
     public abstract class DatabaseResponsibility : AbstractResponsibility<DatabaseResponsibilityContext>
     {
         /// <summary>
-        /// database provider
+        /// 数据库提供者
         /// </summary>
         protected string Provider { get; }
+        /// <summary>
+        /// 使用指定的数据库提供者初始化对象
+        /// </summary>
+        /// <param name="provider"></param>
         public DatabaseResponsibility(string provider)
         {
             this.Provider = provider;
         }
-        /// <summary>
-        /// override <seealso cref="AbstractResponsibility.HandleAsync(TContext)"/> method
-        /// </summary>
-        /// <param name="context"><seealso cref="DatabaseResponsibilityContext"/></param>
-        /// <returns></returns>
+    
         public override async Task HandleAsync(DatabaseResponsibilityContext context)
         {
             if (this.HasProvider(context))
@@ -33,19 +34,18 @@ namespace SAE.CommonLibrary.Database.Responsibility
             await base.HandleAsync(context);
 
             Assert.Build(!context.Complete && this.Responsibility == null)
-                  .False($"I won't support it '{context.Options.Provider}' provider");
+                  .False($"不支持这个'{context.Options.Provider}'数据库驱动");
         }
         /// <summary>
-        /// <paramref name="context"/> provider is <seealso cref="Provider"/>?
+        /// 上下文的提供者和当前对象是否匹配
         /// </summary>
         /// <param name="context"></param>
-        /// <returns></returns>
         protected virtual bool HasProvider(DatabaseResponsibilityContext context)
         {
             return context.Options.Provider.Equals(this.Provider, StringComparison.OrdinalIgnoreCase);
         }
         /// <summary>
-        /// handler core
+        /// 核心处理函数
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>

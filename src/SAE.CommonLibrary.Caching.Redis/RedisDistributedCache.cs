@@ -30,11 +30,11 @@ namespace SAE.CommonLibrary.Caching.Redis
         {
             this._optionsManage = optionsManage;
             this._logging = logging;
-            this._optionsManage.OnChange+=this.DisplayConnection;
+            this._optionsManage.OnChange+=this.DisposeConnection;
             this._optionsManage.OnConfigure+=this.Configure;
         }
 
-        private void DisplayConnection(RedisOptions options, Tuple<IDatabase, IConnectionMultiplexer> tuple)
+        private void DisposeConnection(RedisOptions options, Tuple<IDatabase, IConnectionMultiplexer> tuple)
         {
             var connect=tuple.Item2;
             try

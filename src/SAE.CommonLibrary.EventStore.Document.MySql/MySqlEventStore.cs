@@ -20,7 +20,7 @@ namespace SAE.CommonLibrary.EventStore.Document.MySql
         {
             using (var conn = await this._factory.GetAsync())
             {
-                if (await conn.ExecuteAsync("insert into EventStream(id,timestamp,version,data) values(@id,@timestamp,@version,@data)", new
+                if (await conn.ExecuteAsync("insert into event_stream(id,timestamp,version,data) values(@id,@timestamp,@version,@data)", new
                 {
                     Id = eventStream.Identity.ToString(),
                     Timestamp = eventStream.TimeStamp,
@@ -28,7 +28,7 @@ namespace SAE.CommonLibrary.EventStore.Document.MySql
                     Data = eventStream.ToString()
                 }) != 1)
                 {
-                    throw new SAEException(StatusCodes.Custom, "EventStream Append Fail");
+                    throw new SAEException(StatusCodes.Custom, "event stream append fail");
                 }
             }
         }
@@ -37,7 +37,7 @@ namespace SAE.CommonLibrary.EventStore.Document.MySql
         {
             using (var conn = await this._factory.GetAsync())
             {
-                return await conn.ExecuteScalarAsync<int>("select version from EventStream where id=@id order by version desc limit 1", new { id = identity.ToString() });
+                return await conn.ExecuteScalarAsync<int>("select version from event_stream where id=@id order by version desc limit 1", new { id = identity.ToString() });
             }
         }
 
@@ -46,7 +46,7 @@ namespace SAE.CommonLibrary.EventStore.Document.MySql
             var eventStream = new EventStream(identity, 0, string.Empty);
             using (var conn = await this._factory.GetAsync())
             {
-                using (var reader = await conn.ExecuteReaderAsync($"select * from EventStream where id=@id and version > @skipVersion limit {maxCount}",
+                using (var reader = await conn.ExecuteReaderAsync($"select * from event_stream where id=@id and version > @skipVersion limit {maxCount}",
                                                                  new
                                                                  {
                                                                      Id = identity.ToString(),
@@ -69,7 +69,7 @@ namespace SAE.CommonLibrary.EventStore.Document.MySql
         {
             using (var conn = await this._factory.GetAsync())
             {
-                await conn.ExecuteAsync("delete from  EventStream where id=@id", new { id = identity.ToString() });
+                await conn.ExecuteAsync("delete from  event_stream where id=@id", new { id = identity.ToString() });
             }
         }
     }

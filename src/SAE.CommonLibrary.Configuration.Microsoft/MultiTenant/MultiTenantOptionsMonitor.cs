@@ -11,8 +11,8 @@ using SAE.CommonLibrary.Scope;
 namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
 {
 
-    /// <summary>
     /// <inheritdoc/>
+    /// <summary>
     /// </summary>
     /// <typeparam name="TOptions"></typeparam>
     public class MultiTenantOptionsMonitor<TOptions> : OptionsMonitor<TOptions> where TOptions : class
@@ -28,7 +28,6 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
         /// <param name="factory"></param>
         /// <param name="sources"></param>
         /// <param name="cache"></param>
-        /// <param name="optionsMonitor"></param>
         /// <param name="configuration"></param>
         /// <param name="scopeFactory"></param>
         /// <param name="logging"></param>

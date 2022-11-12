@@ -9,13 +9,13 @@ using SAE.CommonLibrary.Database.Responsibility;
 namespace Microsoft.Extensions.DependencyInjection
 {
     /// <summary>
-    /// 
+    /// 数据库依赖注入扩展程序
     /// </summary>
     public static class DatabaseDependencyInjectionExtension
     {
         internal const string MYSQL = "mysql";
         /// <summary>
-        /// add default db connection <see cref="DefaultDBConnectionFactory"/>
+        /// 注册默认<see cref="DefaultDBConnectionFactory"/>
         /// </summary>
         /// <param name="services"></param>
         private static IServiceCollection AddDefaultDBConnectionFactory(this IServiceCollection services)
@@ -33,10 +33,10 @@ namespace Microsoft.Extensions.DependencyInjection
 
 
         /// <summary>
-        /// add default provider
+        /// 添加数据库驱动
         /// </summary>
         /// <param name="services"></param>
-        /// <typeparam name="TDatabaseResponsibility"></typeparam>
+        /// <typeparam name="TDatabaseResponsibility">处理程序类</typeparam>
         public static IServiceCollection AddDatabase<TDatabaseResponsibility>(this IServiceCollection services) where TDatabaseResponsibility : DatabaseResponsibility
         {
             services.AddDefaultDBConnectionFactory()
@@ -45,14 +45,14 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// add provider
+        /// 使用委托的方式，添加数据库驱动。
         /// </summary>
         /// <param name="services"></param>
-        /// <param name="provider"></param>
-        /// <param name="handler"></param>
+        /// <param name="provider">驱动名称</param>
+        /// <param name="handler">处理函数</param>
         public static IServiceCollection AddDatabase(this IServiceCollection services,
             string provider,
-            Func<DatabaseResponsibilityContext, Task<IDbConnection>> handler)
+            Func<string, DBConnectOptions, Task<IDbConnection>> handler)
         {
             services.AddDefaultDBConnectionFactory()
                     .AddResponsibility<DatabaseResponsibilityContext, DelegateDatabaseResponsibility>(new DelegateDatabaseResponsibility(provider, handler));
@@ -60,7 +60,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// add mssql provider
+        /// 添加<c>mssql</c>数据库驱动
         /// </summary>
         /// <param name="services"></param>
         public static IServiceCollection AddMSSqlDatabase(this IServiceCollection services)
@@ -68,14 +68,14 @@ namespace Microsoft.Extensions.DependencyInjection
             return services.AddDatabase<MSSqlDatabaseResponsibility>();
         }
         /// <summary>
-        /// add mysql provider
+        /// 添加<c>mysql</c>数据库驱动
         /// </summary>
         /// <param name="services"></param>
         public static IServiceCollection AddMySqlDatabase(this IServiceCollection services)
         {
-            return services.AddDatabase(MYSQL, context =>
+            return services.AddDatabase(MYSQL, (connStr, options) =>
             {
-                return Task.FromResult<IDbConnection>(new MySqlConnector.MySqlConnection(context.Options.ConnectionString));
+                return Task.FromResult<IDbConnection>(new MySqlConnector.MySqlConnection(connStr));
             });
         }
     }
