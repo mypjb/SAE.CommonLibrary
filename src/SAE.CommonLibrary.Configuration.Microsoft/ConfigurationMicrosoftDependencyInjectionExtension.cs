@@ -31,6 +31,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// add <see cref="IOptions{TOptions}"/>
         /// </summary>
         /// <typeparam name="TOptions"></typeparam>
+        /// <typeparam name="TService"></typeparam>
         public static OptionsBuilder<TOptions> ConfigureService<TOptions, TService>(this OptionsBuilder<TOptions> optionsBuilder) where TOptions : class where TService : class
         {
             optionsBuilder.Services.AddOptionsManage<TOptions, TService>();

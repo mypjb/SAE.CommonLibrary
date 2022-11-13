@@ -46,7 +46,6 @@ namespace SAE.CommonLibrary.Configuration.Microsoft
             this._monitor = monitor;
             this._logging = logging;
             this._monitor.OnChange(this.Change);
-            this.Configure(this._monitor.CurrentValue);
         }
 
         /// <summary>

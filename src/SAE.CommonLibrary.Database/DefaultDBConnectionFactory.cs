@@ -54,103 +54,9 @@ namespace SAE.CommonLibrary.Database
             this._responsibility = provider.Root;
             this._optionsMonitor = optionsMonitor;
             this._logging = logging;
-            this.Change(optionsMonitor.CurrentValue);
-            this._optionsMonitor.OnChange(this.Change);
         }
 
-        /// <summary>
-        /// 配置变更
-        /// </summary>
-        /// <param name="options"></param>
-        protected virtual void Change(IEnumerable<DBConnectOptions> dBConnectOptions)
-        {
-            if (dBConnectOptions == null || !dBConnectOptions.Any())
-            {
-                this._logging.Warn("尚未对数据库进行设置!");
-                return;
-            }
-            foreach (var options in dBConnectOptions)
-            {
-                this.InitialAsync(options).GetAwaiter().GetResult();
-            }
-        }
-        /// <summary>
-        /// 初始化操作
-        /// </summary>
-        protected virtual async Task InitialAsync(DBConnectOptions options)
-        {
-            if (await this.InitialCheckAsync(options))
-            {
-                this._logging.Info($"数据库'{options.Name}'不需要进行初始化!");
-            }
-            else
-            {
-                this._logging.Info($"准备对数据库'{options.Name}'进行初始化操作!");
-
-                var context = await this.GetContextAsync(options);
-
-                var connectionStrings = options.InitialConnectionString.IsNullOrWhiteSpace() ? options.ConnectionString : options.InitialConnectionString;
-
-                try
-                {
-                    using (var conn = await context.GetAsync(connectionStrings))
-                    {
-                        conn.Open();
-                        using (var command = conn.CreateCommand())
-                        {
-                            command.CommandText = options.InitialCommand;
-                            command.ExecuteNonQuery();
-                        }
-                    }
-                    this._logging.Info($"数据库'{options.Name}',初始化操作完成。");
-                }
-                catch (Exception ex)
-                {
-                    this._logging.Error(ex, $"数据库'{options.Name}'初始化失败,请检查语句或链接是否正常。initialCommand：{options.InitialCommand}");
-                }
-            }
-        }
-
-        /// <summary>
-        /// 使用<see cref="DBConnectOptions.InitialDetectionCommand"/>,执行初始化检查，
-        /// 返回true已经初始化过，返回false尚未初始化
-        /// </summary>
-        /// <param name="options">数据库配置对象</param>
-        protected virtual async Task<bool> InitialCheckAsync(DBConnectOptions options)
-        {
-            if (options.InitialCommand.IsNullOrWhiteSpace() ||
-                options.InitialDetectionCommand.IsNullOrWhiteSpace())
-            {
-                this._logging.Info($"该数据库'{options.Name}'不需要进行初始化,如需进行初始化操作，请设置'{nameof(options.InitialCommand)}'、'{nameof(options.InitialDetectionCommand)}'。");
-                return true;
-            }
-
-            var context = await this.GetContextAsync(options);
-
-            var connectionStrings = options.InitialConnectionString.IsNullOrWhiteSpace() ? options.ConnectionString : options.InitialConnectionString;
-
-            int status = 0;
-            try
-            {
-                using (var conn = await context.GetAsync(connectionStrings))
-                {
-                    conn.Open();
-                    using (var command = conn.CreateCommand())
-                    {
-                        command.CommandText = options.InitialDetectionCommand;
-                        var result = command.ExecuteScalar();
-                        int.TryParse(result?.ToString() ?? "0", out status);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                status = 0;
-                this._logging.Error(ex, $"在对'{options.Name}'进行数据库检查时出错了,initialDetectionCommand：\r\n{options.InitialDetectionCommand}");
-            }
-            return status != 0;
-        }
-
+        
         public async Task<IDbConnection> GetAsync(string name)
         {
             Assert.Build(name)
@@ -172,7 +78,6 @@ namespace SAE.CommonLibrary.Database
             var options = this.Options.FirstOrDefault(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             return Task.FromResult(options);
         }
-
 
         /// <summary>
         /// 获得数据上下文

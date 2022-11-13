@@ -95,10 +95,10 @@ namespace SAE.CommonLibrary.Database.Test
         [Fact]
         public override Task InitialTest()
         {
-            Enumerable.Range(0, this._maxIndex)
+            Enumerable.Range(0, this._maxIndex / 100)
                         .AsParallel()
-                        .ForEach(s =>
-                        // .ForAll(s =>
+                        // .ForEach(s =>
+                        .ForAll(s =>
                         {
                             using (this._scopeFactory.Get(s.ToString()))
                             {
@@ -106,7 +106,7 @@ namespace SAE.CommonLibrary.Database.Test
 
                                 using (var conn = this._connectionFactory.Get(count.ToString()))
                                 {
-                                    var key = $"{DBConnectOptions.Option}:{count}";
+                                    var key = $"{Constant.Scope}:{s}:{DBConnectOptions.Option}:{count}";
                                     var dBConnectOptions = this._configuration.GetSection(key).Get<DBConnectOptions>();
                                     conn.Open();
                                     using (var command = conn.CreateCommand())
@@ -124,9 +124,10 @@ namespace SAE.CommonLibrary.Database.Test
 
         public override void Dispose()
         {
-            Enumerable.Range(0, this._maxIndex)
+            Enumerable.Range(0, this._maxIndex / 100)
                         .AsParallel()
-                        .ForAll(s =>
+                        .ForEach(s =>
+                        // .ForAll(s =>
                         {
                             using (this._scopeFactory.Get(s.ToString()))
                             {

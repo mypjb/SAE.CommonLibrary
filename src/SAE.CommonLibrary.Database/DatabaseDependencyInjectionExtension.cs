@@ -23,9 +23,14 @@ namespace Microsoft.Extensions.DependencyInjection
             if (!services.IsRegister<IDBConnectionFactory>())
             {
                 services.AddOptions<List<DBConnectOptions>>()
-                        .Bind(DBConnectOptions.Option);
+                        .Bind(DBConnectOptions.Option)
+                        .PostConfigure<IDBConnectOptionsConfigure>((options, configure) =>
+                        {
+                            configure.Configure(options);
+                        });
 
                 services.TryAddSingleton<IDBConnectionFactory, DefaultDBConnectionFactory>();
+                services.TryAddSingleton<IDBConnectOptionsConfigure, DefaultDBConnectOptionsConfigure>();
             }
 
             return services;
