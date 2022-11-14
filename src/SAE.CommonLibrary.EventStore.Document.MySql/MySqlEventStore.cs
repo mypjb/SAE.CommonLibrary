@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using SAE.CommonLibrary.Database;
+using SAE.CommonLibrary.EventStore.Serialize;
 
 namespace SAE.CommonLibrary.EventStore.Document.MySql
 {
@@ -11,9 +13,11 @@ namespace SAE.CommonLibrary.EventStore.Document.MySql
     public class MySqlEventStore : IEventStore
     {
         private readonly IDBConnectionFactory _factory;
+        private readonly ISerializer _serializer;
 
-        public MySqlEventStore(IDBConnectionFactory factory)
+        public MySqlEventStore(IDBConnectionFactory factory,ISerializer serializer)
         {
+            this._serializer = serializer;
             this._factory = factory;
         }
         public async Task AppendAsync(EventStream eventStream)
@@ -25,7 +29,7 @@ namespace SAE.CommonLibrary.EventStore.Document.MySql
                     Id = eventStream.Identity.ToString(),
                     Timestamp = eventStream.TimeStamp,
                     eventStream.Version,
-                    Data = eventStream.ToString()
+                    Data = eventStream.First()
                 }) != 1)
                 {
                     throw new SAEException(StatusCodes.Custom, "event stream append fail");

@@ -136,6 +136,20 @@ namespace SAE.CommonLibrary.EventStore.Document
             document.Version = version;
             //创建事件流
             var eventStream = new EventStream(identity, version, this._serializer.Serialize(document.ChangeEvents));
+
+            if (eventStream.Count() == 0)
+            {
+                this._logging.Warn("事件内不存在数据，丢弃更改！");
+                return;
+            }
+
+            if (eventStream.Count() != 1)
+            {
+                this._logging.Warn($"事件流存储的时候，有且只有一个事件流，不允许存在多个!当前存在'{eventStream.Count()}'个");
+                return;
+            }
+
+
             //累加事件流
             await this._eventStore.AppendAsync(eventStream);
 

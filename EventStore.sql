@@ -1,7 +1,7 @@
 ﻿
-CREATE DATABASE sae_dev IF NOT EXISTS;
+CREATE DATABASE  IF NOT EXISTS sae_lib_test;
 
-use sae_dev;
+use sae_lib_test;
 
 create table if not exists `event_stream`(
 id varchar(128) not null,

@@ -126,8 +126,7 @@ namespace SAE.CommonLibrary.Database.Test
         {
             Enumerable.Range(0, this._maxIndex / 100)
                         .AsParallel()
-                        .ForEach(s =>
-                        // .ForAll(s =>
+                        .ForAll(s =>
                         {
                             using (this._scopeFactory.Get(s.ToString()))
                             {
