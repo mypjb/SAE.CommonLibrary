@@ -8,16 +8,18 @@ using SAE.CommonLibrary.EventStore.Serialize;
 namespace SAE.CommonLibrary.EventStore.Document.MySql
 {
     /// <summary>
-    /// 基于内存的事件存储
+    /// 基于mysql的事件存储
     /// </summary>
+    /// <inheritdoc/>
     public class MySqlEventStore : IEventStore
     {
         private readonly IDBConnectionFactory _factory;
-        private readonly ISerializer _serializer;
-
-        public MySqlEventStore(IDBConnectionFactory factory,ISerializer serializer)
+        /// <summary>
+        /// 创建一个新的对象
+        /// </summary>
+        /// <param name="factory"></param>
+        public MySqlEventStore(IDBConnectionFactory factory)
         {
-            this._serializer = serializer;
             this._factory = factory;
         }
         public async Task AppendAsync(EventStream eventStream)
@@ -27,9 +29,9 @@ namespace SAE.CommonLibrary.EventStore.Document.MySql
                 if (await conn.ExecuteAsync("insert into event_stream(id,timestamp,version,data) values(@id,@timestamp,@version,@data)", new
                 {
                     Id = eventStream.Identity.ToString(),
-                    Timestamp = eventStream.TimeStamp,
+                    eventStream.Timestamp,
                     eventStream.Version,
-                    Data = eventStream.First()
+                    eventStream.Data
                 }) != 1)
                 {
                     throw new SAEException(StatusCodes.Custom, "event stream append fail");

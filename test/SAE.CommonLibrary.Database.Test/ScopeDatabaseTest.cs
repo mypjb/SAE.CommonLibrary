@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SAE.CommonLibrary.Extension;
@@ -32,6 +33,7 @@ namespace SAE.CommonLibrary.Database.Test
 
         protected override Dictionary<string, string> GenerateConfiguration()
         {
+            var max = this._maxIndex / 100;
             var dict = new Dictionary<string, string>();
 
             Enumerable.Range(0, this._maxIndex)
@@ -44,7 +46,7 @@ namespace SAE.CommonLibrary.Database.Test
                                     {
                                         var key = $"{prefix}{DBConnectOptions.Option}:{p}";
                                         dict[$"{key}:{nameof(DBConnectOptions.Name)}"] = p.ToString();
-                                        if (count == p)
+                                        if (max > s && count == p)
                                         {
                                             var databaseName = $"test_{Guid.NewGuid():N}";
                                             dict[$"{key}:{nameof(DBConnectOptions.ConnectionString)}"] = $"Data Source={Constants.DBConnection.MYSQL.Server};Database={databaseName};User ID={Constants.DBConnection.MYSQL.UId};Password={Constants.DBConnection.MYSQL.Password};pooling=true;port=3306;sslmode=none;CharSet=utf8;allowPublicKeyRetrieval=true";

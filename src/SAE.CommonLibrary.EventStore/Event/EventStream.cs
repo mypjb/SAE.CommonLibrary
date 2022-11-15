@@ -35,10 +35,13 @@ namespace SAE.CommonLibrary.EventStore
             this._store = new List<string>();
             this.Identity = identity;
             this.Version = version;
-            this.TimeStamp = dateTime;
+            this.Timestamp = dateTime;
 
             if (!eventString.IsNullOrWhiteSpace())
+            {
                 this._store.Add(eventString);
+                this.Data = eventString;
+            }
         }
 
         /// <summary>
@@ -54,7 +57,12 @@ namespace SAE.CommonLibrary.EventStore
         /// <summary>
         /// 时间戳
         /// </summary>
-        public DateTimeOffset TimeStamp { get; private set; }
+        public DateTimeOffset Timestamp { get; private set; }
+        /// <summary>
+        /// 事件的字符串形式
+        /// </summary>
+        /// <value></value>
+        public string Data { get; set; }
 
         /// <summary>
         /// 事件存储
@@ -67,13 +75,13 @@ namespace SAE.CommonLibrary.EventStore
         IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 
         /// <summary>
-        /// 附加事件,该操作将会替换当前<see cref="EventStream.Identity"/>,<see cref="EventStream.TimeStamp"/>,<see cref="EventStream.Version"/>并附加event
+        /// 附加事件,该操作将会替换当前<see cref="EventStream.Identity"/>,<see cref="EventStream.Timestamp"/>,<see cref="EventStream.Version"/>并附加event
         /// </summary>
         /// <param name="eventStream"></param>
         public void Append(EventStream eventStream)
         {
             this.Identity = eventStream.Identity;
-            this.TimeStamp = eventStream.TimeStamp;
+            this.Timestamp = eventStream.Timestamp;
             this.Version = eventStream.Version;
 
             if (eventStream._store.Any())

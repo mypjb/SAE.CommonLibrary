@@ -21,7 +21,6 @@ namespace SAE.CommonLibrary.EventStore.Document
         private readonly ISerializer _serializer;
         private readonly IEventStore _eventStore;
         private readonly IEnumerable<IDocumentEvent> _documentEvents;
-        private readonly IEventMapping _mapping;
         private readonly ILogging<DefaultDocumentStore> _logging;
         private readonly DocumentOptions _options;
 
@@ -40,14 +39,12 @@ namespace SAE.CommonLibrary.EventStore.Document
                                     IEnumerable<IDocumentEvent> documentEvents,
                                     ISerializer serializer,
                                     IOptions<DocumentOptions> options,
-                                    IEventMapping mapping,
                                     ILogging<DefaultDocumentStore> logging)
         {
             this._snapshot = snapshot;
             this._eventStore = eventStore;
             this._documentEvents = documentEvents;
             this._serializer = serializer;
-            this._mapping = mapping;
             this._logging = logging;
             this._options = options.Value;
         }

@@ -8,12 +8,16 @@ using System.Threading.Tasks;
 namespace SAE.CommonLibrary.EventStore.Document.MySql
 {
     /// <summary>
-    /// 基于内存的快照存储
+    /// 基于mysql的快照存储
     /// </summary>
+    /// <inheritdoc/>
     public class MySqlSnapshotStore : ISnapshotStore
     {
         private readonly IDBConnectionFactory _factory;
-
+        /// <summary>
+        /// 创建一个新的对象
+        /// </summary>
+        /// <param name="factory"></param>
         public MySqlSnapshotStore(IDBConnectionFactory factory)
         {
             this._factory = factory;

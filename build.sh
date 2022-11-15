@@ -1,4 +1,5 @@
 #!/bin/bash
+set -o errexit
 
 base_dir=$(cd $(dirname $0) && pwd)
 
@@ -10,7 +11,7 @@ release_dir=$3
 
 dotnet build -c release
 
-#dotnet test -v n
+dotnet test -v n
 
 
 dotnet pack --no-build --include-source -c release --output $release_dir

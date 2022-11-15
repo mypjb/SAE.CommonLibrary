@@ -8,10 +8,13 @@ using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// <see cref="IEventStore"/> mysql注入
+    /// </summary>
     public static class MySqlEventStoreDocumentDependencyInjectionExtension
     {
         /// <summary>
-        /// Add MySql Document Store
+        /// 使用MySql存储文档
         /// </summary>
         /// <param name="serviceCollection"></param>
         /// <returns></returns>
