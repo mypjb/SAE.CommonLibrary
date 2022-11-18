@@ -3,16 +3,17 @@ set -o errexit
 
 base_dir=$(cd $(dirname $0) && pwd)
 
-app_key=$1
+app_key=${1:-"111111"}
 
-nuget_source=$2
+nuget_source=${2:-"http://nuget.lass.net/v3/index.json"}
 
-release_dir=$3
+release_dir=${3:-"nupkgs"}
 
 dotnet build -c release
 
 dotnet test -v n
 
+rm -rf $release_dir
 
 dotnet pack --no-build --include-source -c release --output $release_dir
 
