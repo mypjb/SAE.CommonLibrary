@@ -66,5 +66,20 @@ namespace SAE.CommonLibrary.AspNetCore.Test.Controllers
             return SignIn(claimsPrincipal, CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
+
+        [AllowAnonymous]
+        public IActionResult AdminLogin()
+        {
+
+            var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            identity.AddClaim(new Claim(ClaimTypes.Name, "pjb"));
+            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, Guid.Empty.ToString("N")));
+            identity.AddClaim(new Claim(Constants.BitmapAuthorize.Administrator, "1"));
+
+            var claimsPrincipal = new ClaimsPrincipal(identity);
+
+            return SignIn(claimsPrincipal, CookieAuthenticationDefaults.AuthenticationScheme);
+        }
     }
 }

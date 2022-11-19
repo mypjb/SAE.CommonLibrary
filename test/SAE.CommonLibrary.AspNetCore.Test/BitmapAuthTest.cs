@@ -103,6 +103,22 @@ namespace SAE.CommonLibrary.AspNetCore.Test
 
                 var rep = await this._client.SendAsync(req);
                 this.WriteLine(descriptor);
+                Assert.Equal(System.Net.HttpStatusCode.Found, rep.StatusCode);
+            }
+
+
+            var adminRep = await this._client.GetAsync($"/account/adminlogin");
+
+            var adminCookies = adminRep.Headers.GetValues(HeaderNames.SetCookie);
+
+            foreach (var descriptor in pathDescriptors.Where(s => s.Path.StartsWith("noauth") || s.Path.StartsWith("auth")))
+            {
+                var req = new HttpRequestMessage(new HttpMethod(descriptor.Method), descriptor.Path);
+
+                req.Headers.Add(HeaderNames.Cookie, adminCookies);
+
+                var rep = await this._client.SendAsync(req);
+                this.WriteLine(descriptor);
                 Assert.Equal(System.Net.HttpStatusCode.OK, rep.StatusCode);
             }
 
