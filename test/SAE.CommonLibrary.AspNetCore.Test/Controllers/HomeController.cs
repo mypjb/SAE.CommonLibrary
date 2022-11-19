@@ -7,7 +7,7 @@ using System.Text;
 namespace SAE.CommonLibrary.AspNetCore.Test.Controllers
 {
     [ApiController]
-    [Route("api/{controller}")]
+    [Route("auth/api/[controller]")]
     public class HomeController:Controller
     {
         [HttpGet]
@@ -31,7 +31,7 @@ namespace SAE.CommonLibrary.AspNetCore.Test.Controllers
         {
             return new { value = $"{nameof(HomeController)}_{nameof(Delete)}" };
         }
-        [HttpGet("~/{controller}/{action}")]
+        [HttpGet("~/auth/[controller]/{action}")]
         public object Custom()
         {
             return new { value = $"{nameof(HomeController)}_{nameof(Custom)}" };

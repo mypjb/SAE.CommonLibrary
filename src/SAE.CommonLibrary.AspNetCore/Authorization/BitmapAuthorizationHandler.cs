@@ -119,13 +119,13 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
                                    .ToArray();
             }, Constants.BitmapAuthorize.Caching.AuthorizeCodeTime);
 
-            var max = indexs.Max();
+            var max = indexs.Any() ? indexs.Max() : 0;
 
             if (descriptors.Length >= max)
             {
                 return descriptors.Where((desc, index) =>
                 {
-                    return indexs.Contains(index);
+                    return indexs.Contains(desc.Index);
                 }).ToArray();
             }
             else

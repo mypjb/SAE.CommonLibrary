@@ -1,17 +1,18 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using SAE.CommonLibrary.Test;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+using SAE.CommonLibrary.Test;
 
 namespace SAE.CommonLibrary.AspNetCore.Test.Controllers
 {
     [ApiController]
-    [Route("api/{controller}")]
+    [Route("/noauth/api/[controller]")]
     public class StudentController : Controller
     {
-        [HttpGet("{action}/{id}")]
+        [HttpGet("[action]/{id}")]
         public object Display(string id)
         {
             return new { value = $"{nameof(StudentController)}_{nameof(Display)}" };

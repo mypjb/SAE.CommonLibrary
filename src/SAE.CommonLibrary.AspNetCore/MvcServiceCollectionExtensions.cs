@@ -240,8 +240,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 var paths = pathDescriptorProvider.GetDescriptors();
 
                 var endpoints = provider.FindsAsync(paths)
-                                              .GetAwaiter()
-                                              .GetResult();
+                                        .GetAwaiter()
+                                        .GetResult();
 
                 storage.AddRange(endpoints);
             }

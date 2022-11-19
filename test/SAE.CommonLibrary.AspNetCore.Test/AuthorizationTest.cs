@@ -1,12 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using SAE.CommonLibrary.AspNetCore.Authorization;
-using SAE.CommonLibrary.Extension;
-using SAE.CommonLibrary.Test;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using Microsoft.Extensions.DependencyInjection;
+using SAE.CommonLibrary.AspNetCore.Authorization;
+using SAE.CommonLibrary.Extension;
+using SAE.CommonLibrary.Test;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -28,7 +28,8 @@ namespace SAE.CommonLibrary.AspNetCore.Test
         [Fact]
         public void Auth()
         {
-            Enumerable.Range(0, 1000)
+            var random = new Random();
+            Enumerable.Range(0, random.Next(66))
                       .AsParallel()
                       .ForEach(s =>
                       {
@@ -41,8 +42,9 @@ namespace SAE.CommonLibrary.AspNetCore.Test
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            var max = 4096;
-            var permissionBits = Enumerable.Range(0, 100)
+            var max = 3;
+            var random = new Random();
+            var permissionBits = Enumerable.Range(0, random.Next(6666))
                                            .Select(s =>
                                           {
                                               var bit = Math.Abs(this.GetRandom().GetHashCode() % max);
@@ -56,7 +58,7 @@ namespace SAE.CommonLibrary.AspNetCore.Test
             this.WriteLine(code);
             this.WriteLine(code.Length);
             this.WriteLine(permissionBits);
-            permissionBits.ForEach(bit =>
+            permissionBits.AsParallel().ForAll(bit =>
             {
                 var result = this._authorization.Authorize(code, bit);
                 if (!result)
@@ -66,19 +68,29 @@ namespace SAE.CommonLibrary.AspNetCore.Test
                 Xunit.Assert.True(result);
             });
             stopwatch.Stop();
+
             this.WriteLine(stopwatch.Elapsed.TotalMilliseconds);
+
+            var i = 0;
+
+            var num = random.Next(permissionBits.Max() / 3);
+
             while (true)
             {
-                var bit = Math.Abs(this.GetRandom().GetHashCode() % permissionBits.Max());
-                bit = bit == 0 ? 1 : bit;
-                if (permissionBits.Contains(bit)) continue;
+                i++;
+                if (permissionBits.Contains(i)) continue;
 
-                var result = this._authorization.Authorize(code, bit);
+                num--;
 
-                this.WriteLine(bit);
+                var result = this._authorization.Authorize(code, i);
+
+                this.WriteLine(i);
 
                 Xunit.Assert.False(result);
-                break;
+                if (num < 0)
+                {
+                    break;
+                }
             }
 
         }

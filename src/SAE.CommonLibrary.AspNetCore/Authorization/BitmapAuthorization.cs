@@ -34,7 +34,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         {
             var authorize = false;
 
-            if (index >= 0)
+            if (index >= 0 && !code.IsNullOrWhiteSpace())
             {
                 var bitIndex = (int)Math.Ceiling(index * 1.0 / Constants.BitmapAuthorize.MaxPow) - 1;
 

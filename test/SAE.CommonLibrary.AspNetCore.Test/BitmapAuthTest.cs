@@ -1,19 +1,21 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.AspNetCore.Mvc.Cors;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Net.Http.Headers;
-using SAE.CommonLibrary.AspNetCore.Routing;
-using SAE.CommonLibrary.Extension;
-using SAE.CommonLibrary.Test;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc.Cors;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Net.Http.Headers;
+using SAE.CommonLibrary.AspNetCore.Authorization;
+using SAE.CommonLibrary.AspNetCore.Routing;
+using SAE.CommonLibrary.Extension;
+using SAE.CommonLibrary.Test;
 using Xunit;
 using Xunit.Abstractions;
 using Assert = Xunit.Assert;
@@ -22,6 +24,7 @@ namespace SAE.CommonLibrary.AspNetCore.Test
 {
     public class BitmapAuthTest : HostTest
     {
+        private readonly List<BitmapAuthorizationDescriptor> _bitmaps = new List<BitmapAuthorizationDescriptor>();
         public BitmapAuthTest(ITestOutputHelper output) : base(output)
         {
         }
@@ -40,6 +43,24 @@ namespace SAE.CommonLibrary.AspNetCore.Test
             builder.AddLocalBitmapEndpointProvider();
         }
 
+        protected override void ConfigureConfiguration(IConfigurationBuilder configurationBuilder)
+        {
+            base.ConfigureConfiguration(configurationBuilder);
+            // var dict = new Dictionary<string, string>();
+
+            // Enumerable.Range(0, new Random().Next(1, 999))
+            //           .ForEach(s =>
+            //           {
+            //               var key = $"{BitmapAuthorizationDescriptor.Option}:{s}";
+            //               dict[$"{key}:{nameof(BitmapAuthorizationDescriptor.Index)}"] = (s + 1).ToString();
+            //               dict[$"{key}:{nameof(BitmapAuthorizationDescriptor.Name)}"] = $"role_{s}";
+            //               dict[$"{key}:{nameof(BitmapAuthorizationDescriptor.Description)}"] = "this is a role";
+            //               dict[$"{key}:{nameof(BitmapAuthorizationDescriptor.Code)}"] = string.Empty;
+            //           });
+
+            // configurationBuilder.AddInMemoryCollection(dict);
+        }
+
         [Fact]
         public async Task<IEnumerable<IPathDescriptor>> RouterScanningTest()
         {
@@ -55,7 +76,7 @@ namespace SAE.CommonLibrary.AspNetCore.Test
         {
             var pathDescriptors = await this.RouterScanningTest();
 
-            foreach (var descriptor in pathDescriptors.Where(s => s.Group == "test"))
+            foreach (var descriptor in pathDescriptors.Where(s => s.Path.StartsWith("auth")))
             {
                 var httpResponse = await this._client.GetAsync($"/account/login?path={HttpUtility.UrlEncode(descriptor.Path)}&method={descriptor.Method}");
 
@@ -70,9 +91,9 @@ namespace SAE.CommonLibrary.AspNetCore.Test
                 Assert.Equal(System.Net.HttpStatusCode.OK, rep.StatusCode);
             }
 
-            foreach (var descriptor in pathDescriptors.Where(s => s.Group != "test"))
+            foreach (var descriptor in pathDescriptors.Where(s => s.Path.StartsWith("noauth")))
             {
-                var httpResponse = await this._client.GetAsync($"/account/login?path={HttpUtility.UrlEncode(descriptor.Path)}&method={descriptor.Method}");
+                var httpResponse = await this._client.GetAsync($"/account/login?path={HttpUtility.UrlEncode(descriptor.Path + "/noauth")}&method={descriptor.Method}");
 
                 var cookies = httpResponse.Headers.GetValues(HeaderNames.SetCookie);
 
@@ -100,6 +121,8 @@ namespace SAE.CommonLibrary.AspNetCore.Test
                         .AddCookie();
 
                 services.AddAuthorization();
+
+                services.AddBitmapAuthorization();
 
                 services.AddRoutingScanning();
             }
