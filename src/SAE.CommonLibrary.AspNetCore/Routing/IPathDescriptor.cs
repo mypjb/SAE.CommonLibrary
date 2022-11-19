@@ -5,41 +5,57 @@ using SAE.CommonLibrary.Extension;
 
 namespace SAE.CommonLibrary.AspNetCore.Routing
 {
+    /// <summary>
+    /// 路径描述符
+    /// </summary>
     public interface IPathDescriptor
     {
         /// <summary>
-        /// path Index 
-        /// Note: the index starts from 1 
+        /// 路径索引，
+        /// 索引总是从1开始
         /// </summary>
         public int Index { get; set; }
         /// <summary>
-        /// request method
+        /// 请求谓词
         /// </summary>
         /// <value></value>
         public string Method { get; }
         /// <summary>
-        /// path name
+        /// 具体路径
         /// </summary>
         /// <value></value>
         public string Path { get; }
         /// <summary>
-        /// display name
+        /// 显示名称
         /// </summary>
         /// <value></value>
         public string Name { get; }
         /// <summary>
-        /// group name
+        /// 所属组
         /// </summary>
         /// <value></value>
         public string Group { get; }
     }
-
+    /// <summary>
+    /// <see cref="IPathDescriptor"/>实现
+    /// </summary>
+    /// <inheritdoc/>
     public class PathDescriptor : IPathDescriptor
     {
+        /// <summary>
+        /// 创建一个新对象,你不应该手动调用该函数，如果想创建一个新的<see cref="IPathDescriptor"/>,请使用同名重载。
+        /// </summary>
         public PathDescriptor()
         {
 
         }
+        /// <summary>
+        /// 创建一个新的对象
+        /// </summary>
+        /// <param name="name">名称</param>
+        /// <param name="method">请求谓词</param>
+        /// <param name="path">路径</param>
+        /// <param name="group">组</param>
         public PathDescriptor(string name, string method, string path, string group)
         {
             this.Name = name?.ToLower().Trim();

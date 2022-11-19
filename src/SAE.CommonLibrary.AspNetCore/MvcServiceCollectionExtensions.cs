@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -9,22 +12,31 @@ using SAE.CommonLibrary.AspNetCore.Authorization;
 using SAE.CommonLibrary.AspNetCore.Filters;
 using SAE.CommonLibrary.AspNetCore.Routing;
 using SAE.CommonLibrary.Extension;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Constants = SAE.CommonLibrary.AspNetCore.Constants;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// <see cref="IBitmapAuthorization"/>授权构造器
+    /// </summary>
     public class BitmapAuthorizationBuilder
     {
+        /// <summary>
+        /// 依赖注册服务
+        /// </summary>
         internal readonly IServiceCollection Services;
-
+        /// <summary>
+        /// 创建一个新的对象
+        /// </summary>
+        /// <param name="services"></param>
         internal BitmapAuthorizationBuilder(IServiceCollection services)
         {
             this.Services = services;
         }
     }
+    /// <summary>
+    /// MVC注册扩展程序
+    /// </summary>
     public static class MvcServiceCollectionExtensions
     {
 
@@ -34,7 +46,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services"></param>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static IServiceCollection AddSAECors(this IServiceCollection services,Action<CorsOptions> action)
+        public static IServiceCollection AddSAECors(this IServiceCollection services, Action<CorsOptions> action)
         {
             services.AddOptions<CorsOptions>(CorsOptions.Options).Configure(action);
             services.AddDefaultLogger();
@@ -63,7 +75,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// 拦截响应将其重置为<seealso cref="ResponseResult"/>
+        /// 拦截错误响应，并将其重置为<see cref="ErrorOutput"/>
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
@@ -85,14 +97,11 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddMvcCore()
                     .AddApiExplorer();
 
-            services.AddOptions<SystemOptions>()
-                    .Bind(SystemOptions.Option);
-
             services.TryAddSingleton<IPathDescriptorProvider, PathDescriptorProvider>();
             return services;
         }
         /// <summary>
-        /// 使用默认<seealso cref="Constants.DefaultRoutesPath"/>配置路由扫描中间件
+        /// 使用默认<see cref="Constants.Route.DefaultPath"/>配置路由扫描中间件
         /// </summary>
         /// <param name="app"></param>
         /// <returns></returns>
@@ -104,7 +113,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// 使用<paramref name="pathString"/>配置路由中间件
         /// </summary>
         /// <param name="app"></param>
-        /// <param name="pathString"></param>
+        /// <param name="pathString">对外暴露的访问路径</param>
         /// <returns></returns>
         public static IApplicationBuilder UseRoutingScanning(this IApplicationBuilder app, PathString pathString)
         {
@@ -142,11 +151,15 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddDefaultLogger()
                     .AddHttpContextAccessor()
-                    .AddRoutingScanning();
+                    .AddRoutingScanning()
+                    .AddDefaultScope()
+                    .AddSaeMemoryDistributedCache();
 
             services.AddSingleton<IAuthorizationHandler, BitmapAuthorizationHandler>();
             services.TryAddSingleton<IBitmapAuthorization, BitmapAuthorization>();
             services.TryAddSingleton<IBitmapEndpointStorage, BitmapEndpointStorage>();
+            services.AddOptions<List<BitmapAuthorizationDescriptor>>()
+                    .Bind(BitmapAuthorizationDescriptor.Option);
 
             services.PostConfigure<AuthorizationOptions>(options =>
             {
@@ -154,7 +167,7 @@ namespace Microsoft.Extensions.DependencyInjection
                                     .AddRequirements(new BitmapAuthorizationRequirement())
                                     .Combine(options.DefaultPolicy)
                                     .Build();
-               
+
                 if (policyName.IsNullOrWhiteSpace())
                 {
                     options.DefaultPolicy = policy;
@@ -164,7 +177,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     options.AddPolicy(policyName, policy);
                 }
             });
-            
+
             return new BitmapAuthorizationBuilder(services);
         }
         /// <summary>
@@ -193,7 +206,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Use default Provider Configuration
+        /// 使用默认
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>

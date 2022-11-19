@@ -7,8 +7,15 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.AspNetCore.Filters
 {
+    /// <summary>
+    /// <see cref="CorsOptions"/>构造器
+    /// </summary>
     public class CorsOptionsBuilder
     {
+        /// <summary>
+        /// 基于用户的cors
+        /// </summary>
+        /// <param name="options"></param>
         public void UserCorsFilter(CorsOptions options)
         {
             options.AllowRequestAsync += async (HttpContext ctx, string host) =>
@@ -17,10 +24,8 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
                 if (ctx.User.HasClaim(s => s.Type.Equals(Constants.Cors.Claim)))
                 {
                     return ctx.User
-                              .FindFirst(Constants.Cors.Claim)
-                              .Value
-                              .Split(Constants.Cors.Separator)
-                              .Contains(host, StringComparer.OrdinalIgnoreCase);
+                              .FindAll(Constants.Cors.Claim)
+                              .Any(s=>host.Equals(s.Value,StringComparison.CurrentCultureIgnoreCase));
                 }
                 return result;
             };

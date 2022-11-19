@@ -8,9 +8,18 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.AspNetCore.Filters
 {
+    /// <summary>
+    /// cors<see cref="CorsMiddleware"/>配置项
+    /// </summary>
     public class CorsOptions
     {
+        /// <summary>
+        /// 配置节
+        /// </summary>
         public const string Options = "cors";
+        /// <summary>
+        /// 创建一个对象
+        /// </summary>
         public CorsOptions()
         {
             this.AllowHeaders = "*";

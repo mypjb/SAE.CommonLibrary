@@ -1,8 +1,5 @@
 ﻿{
-  "system": {
-    "id": "test"
-  },
-  "authorize": {
+  "auth": {
     "PathDescriptors": [
       {
         "method": "get",

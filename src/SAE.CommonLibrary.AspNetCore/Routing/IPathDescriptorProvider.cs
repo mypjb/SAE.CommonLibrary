@@ -12,30 +12,30 @@ using Microsoft.Extensions.Options;
 namespace SAE.CommonLibrary.AspNetCore.Routing
 {
     /// <summary>
-    /// path descriptor provider
+    /// 路径描述符提供程序
     /// </summary>
     public interface IPathDescriptorProvider
     {
         /// <summary>
-        /// get all path descriptor
+        /// 获得所有路径描述符
         /// </summary>
         /// <returns></returns>
         IEnumerable<IPathDescriptor> GetDescriptors();
     }
-
+    /// <summary>
+    /// <see cref="IPathDescriptorProvider"/> 内部实现
+    /// </summary>
+    /// <inheritdoc/>
     internal class PathDescriptorProvider : IPathDescriptorProvider
     {
         private readonly IApiDescriptionGroupCollectionProvider _provider;
         private IList<IPathDescriptor> pathDescriptors;
-        private SystemOptions Options { get; set; }
-        public PathDescriptorProvider(IApiDescriptionGroupCollectionProvider provider,
-                                      IOptionsMonitor<SystemOptions> optionsMonitor)
+        /// <summary>
+        /// 创建一个新的对象
+        /// </summary>
+        /// <param name="provider">api提供者</param>
+        public PathDescriptorProvider(IApiDescriptionGroupCollectionProvider provider)
         {
-            this.Options = optionsMonitor.CurrentValue;
-            optionsMonitor.OnChange(option =>
-            {
-                this.Options = option;
-            });
             this._provider = provider;
             this.Scan();
         }
@@ -43,6 +43,9 @@ namespace SAE.CommonLibrary.AspNetCore.Routing
         {
             return this.pathDescriptors;
         }
+        /// <summary>
+        /// 扫描当前请求的路径
+        /// </summary>
         private void Scan()
         {
             this.pathDescriptors = new List<IPathDescriptor>();
@@ -75,7 +78,7 @@ namespace SAE.CommonLibrary.AspNetCore.Routing
                 pathDescriptors.Add(new PathDescriptor(name,
                                                        group.HttpMethod,
                                                        url,
-                                                       this.Options.Id));
+                                                       string.Empty));
             }
             this.pathDescriptors = this.pathDescriptors
                                       .OrderBy(s => s.Group)

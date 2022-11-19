@@ -9,19 +9,25 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.AspNetCore.Authorization
 {
+    /// <inheritdoc/>
+    /// /// <summary>
+    /// 抽象的端点提供程序
+    /// </summary>
     public abstract class AbstractBitmapEndpointProvider : IBitmapEndpointProvider
     {
         private readonly ILogging _logging;
-
+        /// <summary>
+        /// 创建一个新的对象
+        /// </summary>
+        /// <param name="logging">日志记录器</param>
         public AbstractBitmapEndpointProvider(ILogging<AbstractBitmapEndpointProvider> logging)
         {
             this._logging = logging;
-            this.PathDescriptors = new IPathDescriptor[0];
+            this.PathDescriptors = Array.Empty<IPathDescriptor>();
         }
         private IEnumerable<IPathDescriptor> pathDescriptors;
         /// <summary>
-        /// When <see cref="PathDescriptors"/> all indexes are 0,
-        /// index calculation will be performed automatically
+        /// 当存在为0的索引时将会重新计算索引
         /// </summary>
         protected IEnumerable<IPathDescriptor> PathDescriptors
         {

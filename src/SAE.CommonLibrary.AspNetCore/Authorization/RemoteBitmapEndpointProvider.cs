@@ -8,15 +8,32 @@ using SAE.CommonLibrary.Extension;
 
 namespace SAE.CommonLibrary.AspNetCore.Authorization
 {
+    /// <summary>
+    /// 远程端点配置
+    /// </summary>
     public class RemoteBitmapEndpointOptions
     {
-        public const string Option = "authorize";
+        /// <summary>
+        /// 配置节
+        /// </summary>
+        public const string Option = Constants.BitmapAuthorize.Option;
+        /// <summary>
+        /// 端点
+        /// </summary>
+        /// <value></value>
         public string BitmapEndpoint { get; set; }
     }
+    /// <summary>
+    /// 远程端点提供程序
+    /// </summary>
+    /// <inheritdoc/>
     public class RemoteBitmapEndpointProvider : IBitmapEndpointProvider
     {
         private readonly RemoteBitmapEndpointOptions _options;
-
+        /// <summary>
+        /// 创建一个新的对象
+        /// </summary>
+        /// <param name="options"></param>
         public RemoteBitmapEndpointProvider(RemoteBitmapEndpointOptions options)
         {
             this._options = options;

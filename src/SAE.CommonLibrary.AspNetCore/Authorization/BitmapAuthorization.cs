@@ -1,55 +1,44 @@
-﻿using Microsoft.Extensions.Options;
-using SAE.CommonLibrary.Extension;
-using SAE.CommonLibrary.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.Extensions.Options;
+using SAE.CommonLibrary.Extension;
+using SAE.CommonLibrary.Logging;
+using SAE.CommonLibrary.Scope;
 
 namespace SAE.CommonLibrary.AspNetCore.Authorization
 {
+    /// <summary>
+    /// 默认的<see cref="IBitmapAuthorization"/>实现
+    /// </summary>
     public class BitmapAuthorization : IBitmapAuthorization
     {
-        protected readonly ILogging<BitmapAuthorization> _logging;
-        protected SystemOptions Options
-        {
-            get;
-            private set;
-        }
-        public BitmapAuthorization(ILogging<BitmapAuthorization> logging,
-                                   IOptionsMonitor<SystemOptions> optionsMonitor)
+        private readonly ILogging _logging;
+        private readonly IScopeFactory _scopeFactory;
+        /// <summary>
+        /// 创建一个新的对象
+        /// </summary>
+        /// <param name="logging">日志记录器</param>
+        /// <param name="scopeFactory">区域工厂</param>
+        public BitmapAuthorization(
+            ILogging<BitmapAuthorization> logging,
+            IScopeFactory scopeFactory)
         {
             this._logging = logging;
-            this.SetOption(optionsMonitor.CurrentValue);
-            optionsMonitor.OnChange(SetOption);
+            this._scopeFactory = scopeFactory;
         }
 
-
-
-        private void SetOption(SystemOptions options)
+        public virtual bool Authorize(string code, int index)
         {
-            if (options?.Id.IsNullOrWhiteSpace() ?? false)
-            {
-                this._logging.Warn($"PermissionGroup = null,Enable single application mode");
-            }
-            else
-            {
-                this._logging.Info($"PermissionGroup = {options.Id},Enable multiple application mode");
-            }
-
-            this.Options = options;
-        }
-
-        public virtual bool Authorizate(string code, int index)
-        {
-            var authorizate = false;
+            var authorize = false;
 
             if (index >= 0)
             {
                 var bitIndex = (int)Math.Ceiling(index * 1.0 / Constants.BitmapAuthorize.MaxPow) - 1;
 
-                if (code.Count() > bitIndex)
+                if (code.Length > bitIndex)
                 {
                     var bit = Convert.ToUInt16(code[bitIndex]);
                     //将00000001向前推进 index % Constant.BitmapAuthorize.MaxPow 个位
@@ -58,7 +47,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
                     var permissionBit = 1 << ((bitPosition == 0 ? Constants.BitmapAuthorize.MaxPow : bitPosition) - 1);
 
                     //bit位没有变化说明匹配权限位匹配正确
-                    authorizate = (bit | permissionBit) == bit;
+                    authorize = (bit | permissionBit) == bit;
                 }
                 else
                 {
@@ -66,46 +55,56 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
                 }
             }
 
-            return authorizate;
+            return authorize;
         }
 
-        public virtual string FindPermissionCode(IEnumerable<Claim> claims)
+        public virtual string FindCode(IEnumerable<Claim> claims)
         {
-            //if (this.Options?.Id.IsNullOrWhiteSpace() ?? false)
-            //    return claims.FirstOrDefault()?.Value;
 
-            var prefix = $"{this.Options.Id}{Constants.BitmapAuthorize.GroupSeparator}";
+            string code = null;
 
-            foreach (var claim in claims)
+            var name = this._scopeFactory.Get().Name;
+
+            if (name.IsNullOrWhiteSpace())
             {
-                if (claim.Value.StartsWith(prefix))
+                code = claims.FirstOrDefault()?.Value;
+            }
+            else
+            {
+                var prefix = $"{name}{Constants.BitmapAuthorize.GroupSeparator}";
+
+                foreach (var claim in claims)
                 {
-                    return claim.Value.Substring(prefix.Length);
+                    if (claim.Value.StartsWith(prefix))
+                    {
+                        code = claim.Value.Substring(prefix.Length);
+                        break;
+                    }
                 }
             }
 
-            return string.Empty;
+            return code.IsNullOrWhiteSpace() ? string.Empty : code;
         }
 
-        public virtual string GeneratePermissionCode(IEnumerable<int> permissionBits)
+        public virtual string GenerateCode(IEnumerable<int> authBits)
         {
-            if (!permissionBits.Any()) return string.Empty;
+            if (!authBits.Any()) return string.Empty;
 
-            var bits = permissionBits.ToList();
-            //delete invalid bit
+            var bits = authBits.ToList();
+            //删除无效的索引
             bits.RemoveAll(s => s < Constants.BitmapAuthorize.InitialIndex);
-            //duplicate removal
-            permissionBits = bits.Distinct().ToArray();
+            //去除重复的索引
+            authBits = bits.Distinct().ToArray();
 
-            if (!permissionBits.Any()) return string.Empty;
+            if (!authBits.Any()) return string.Empty;
 
             StringBuilder sb = new StringBuilder();
 
-            var max = permissionBits.Max();
+            var max = authBits.Max();
 
             for (int i = 1; i <= max; i++)
             {
-                sb.Append(permissionBits.Contains(i) ? '1' : '0');
+                sb.Append(authBits.Contains(i) ? '1' : '0');
             }
 
             var binaryDigit = sb.ToString();

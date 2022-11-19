@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.AspNetCore.Authorization
 {
+    /// <summary>
+    /// 标记类，位图授权需求。
+    /// </summary>
     public class BitmapAuthorizationRequirement : IAuthorizationRequirement
     {
     }

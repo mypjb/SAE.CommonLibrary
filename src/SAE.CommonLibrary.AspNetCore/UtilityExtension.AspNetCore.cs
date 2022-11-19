@@ -7,10 +7,13 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Extension
 {
+    /// <summary>
+    /// 扩展程序
+    /// </summary>
     public static class UtilityExtension
     {
         /// <summary>
-        /// is ajax request
+        /// 请求是否来自于ajax
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>

@@ -11,6 +11,7 @@
 		<ProjectReference Include="..\SAE.CommonLibrary.Logging\SAE.CommonLibrary.Logging.csproj" />
 		<ProjectReference Include="..\SAE.CommonLibrary\SAE.CommonLibrary.csproj" />
 		<ProjectReference Include="..\SAE.CommonLibrary.Configuration.Microsoft\SAE.CommonLibrary.Configuration.Microsoft.csproj" />
+		<ProjectReference Include="..\SAE.CommonLibrary.Caching\SAE.CommonLibrary.Caching.csproj" />
 	</ItemGroup>
 
 </Project>

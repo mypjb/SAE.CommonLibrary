@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.AspNetCore.Authorization
 {
+    /// <summary>
+    /// 端点存储器
+    /// </summary>
     public interface IBitmapEndpointStorage
     {
         /// <summary>
@@ -29,17 +32,18 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         /// </summary>
         /// <param name="endpoints"></param>
         void AddRange(IEnumerable<BitmapEndpoint> endpoints);
-
+        /// <summary>
+        /// 返回端点长度
+        /// </summary>
         int Count();
     }
     /// <summary>
-    /// 位图终点
+    /// 位图端点
     /// </summary>
     public class BitmapEndpoint
     {
         /// <summary>
-        /// path Index 
-        /// Note: the index starts from 1 
+        /// 索引，从1开始。
         /// </summary>
         public int Index { get; set; }
         /// <summary>
@@ -55,10 +59,16 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         /// </summary>
         public string Method { get; set; }
     }
-
+    /// <summary>
+    /// <see cref="IBitmapEndpointStorage"/> 默认实现
+    /// </summary>
+    /// <inheritdoc/>
     public class BitmapEndpointStorage : IBitmapEndpointStorage
     {
         private readonly ConcurrentDictionary<string, int> _store;
+        /// <summary>
+        /// 创建一个新的对象
+        /// </summary>
         public BitmapEndpointStorage()
         {
             this._store = new ConcurrentDictionary<string, int>();
@@ -100,14 +110,16 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
             return index;
         }
     }
-
+    /// <summary>
+    /// 端点存储扩展类
+    /// </summary>
     public static class BitmapEndpointStorageExtension
     {
         /// <summary>
-        /// Query the index from <see cref="IBitmapEndpointStorage"/>
+        /// 依据<paramref name="context"/>从<see cref="IBitmapEndpointStorage"/>查询索引s
         /// </summary>
-        /// <param name="storage"></param>
-        /// <param name="context">request context</param>
+        /// <param name="storage">存储类</param>
+        /// <param name="context">请求上下文</param>
         /// <returns></returns>
         public static int GetIndex(this IBitmapEndpointStorage storage, HttpContext context)
         {

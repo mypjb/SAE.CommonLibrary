@@ -32,12 +32,12 @@ namespace SAE.CommonLibrary.AspNetCore.Test
                       .AsParallel()
                       .ForEach(s =>
                       {
-                          this.GeneratePermissionCode();
+                          this.GenerateCode();
                       });
         }
 
         [Fact]
-        public void GeneratePermissionCode()
+        public void GenerateCode()
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -51,14 +51,14 @@ namespace SAE.CommonLibrary.AspNetCore.Test
                                           .OrderBy(s => s)
                                           .ToArray();
 
-            var code = this._authorization.GeneratePermissionCode(permissionBits);
+            var code = this._authorization.GenerateCode(permissionBits);
 
             this.WriteLine(code);
             this.WriteLine(code.Length);
             this.WriteLine(permissionBits);
             permissionBits.ForEach(bit =>
             {
-                var result = this._authorization.Authorizate(code, bit);
+                var result = this._authorization.Authorize(code, bit);
                 if (!result)
                 {
                     this.WriteLine($"授权失败:{bit}");
@@ -73,7 +73,7 @@ namespace SAE.CommonLibrary.AspNetCore.Test
                 bit = bit == 0 ? 1 : bit;
                 if (permissionBits.Contains(bit)) continue;
 
-                var result = this._authorization.Authorizate(code, bit);
+                var result = this._authorization.Authorize(code, bit);
 
                 this.WriteLine(bit);
 
