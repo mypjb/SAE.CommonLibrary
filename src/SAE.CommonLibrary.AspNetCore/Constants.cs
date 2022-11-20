@@ -61,6 +61,11 @@ namespace SAE.CommonLibrary.AspNetCore
             /// </summary>
             public const string GroupSeparator = ":";
             /// <summary>
+            /// 组格式化形式
+            /// </summary>
+            /// <value></value>
+            public const string GroupFormat = "{0}" + GroupSeparator + "{1}";
+            /// <summary>
             /// 授权分割符
             /// </summary>
             public const char Separator = '.';
