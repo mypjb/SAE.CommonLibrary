@@ -1,10 +1,11 @@
-﻿using SAE.CommonLibrary.AspNetCore.Routing;
-using SAE.CommonLibrary.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SAE.CommonLibrary.AspNetCore.Routing;
+using SAE.CommonLibrary.Extension;
+using SAE.CommonLibrary.Logging;
 
 namespace SAE.CommonLibrary.AspNetCore.Authorization
 {
@@ -19,9 +20,18 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         /// <param name="logging">日志</param>
         /// <param name="provider">提供器</param>
 
-        public LocalBitmapEndpointProvider(ILogging<AbstractBitmapEndpointProvider> logging, IPathDescriptorProvider provider) : base(logging)
+        public LocalBitmapEndpointProvider(ILogging<LocalBitmapEndpointProvider> logging, IPathDescriptorProvider provider) : base(logging)
         {
-            this.PathDescriptors = provider.GetDescriptors();
+            this.BitmapEndpoints = provider.GetDescriptors().Select((desc, index) =>
+            {
+                return new BitmapEndpoint
+                {
+                    Name = desc.Name,
+                    Index = desc.Index,
+                    Path = desc.Path,
+                    Method = desc.Method
+                };
+            });
         }
     }
 }

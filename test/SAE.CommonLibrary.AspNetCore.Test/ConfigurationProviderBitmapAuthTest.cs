@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace SAE.CommonLibrary.AspNetCore.Test
@@ -17,6 +18,12 @@ namespace SAE.CommonLibrary.AspNetCore.Test
         protected override void AddProvider(BitmapAuthorizationBuilder builder)
         {
             builder.AddConfigurationProvider();
+        }
+
+        [Fact]
+        public override Task BitmapAuthorizationTest()
+        {
+            return base.BitmapAuthorizationTest();
         }
     }
 }

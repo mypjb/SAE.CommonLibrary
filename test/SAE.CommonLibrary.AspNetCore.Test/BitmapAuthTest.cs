@@ -31,34 +31,18 @@ namespace SAE.CommonLibrary.AspNetCore.Test
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            builder.UseStartup<Startup>()
-                   .ConfigureServices(service =>
-                   {
-                       this.AddProvider(service.AddBitmapAuthorization());
-                   });
+            builder.UseStartup<Startup>();
         }
 
+        protected override void ConfigureServices(IServiceCollection services)
+        {
+            base.ConfigureServices(services);
+            this.AddProvider(services.AddBitmapAuthorization());
+            services.AddNlogLogger();
+        }
         protected virtual void AddProvider(BitmapAuthorizationBuilder builder)
         {
             builder.AddLocalBitmapEndpointProvider();
-        }
-
-        protected override void ConfigureConfiguration(IConfigurationBuilder configurationBuilder)
-        {
-            base.ConfigureConfiguration(configurationBuilder);
-            // var dict = new Dictionary<string, string>();
-
-            // Enumerable.Range(0, new Random().Next(1, 999))
-            //           .ForEach(s =>
-            //           {
-            //               var key = $"{BitmapAuthorizationDescriptor.Option}:{s}";
-            //               dict[$"{key}:{nameof(BitmapAuthorizationDescriptor.Index)}"] = (s + 1).ToString();
-            //               dict[$"{key}:{nameof(BitmapAuthorizationDescriptor.Name)}"] = $"role_{s}";
-            //               dict[$"{key}:{nameof(BitmapAuthorizationDescriptor.Description)}"] = "this is a role";
-            //               dict[$"{key}:{nameof(BitmapAuthorizationDescriptor.Code)}"] = string.Empty;
-            //           });
-
-            // configurationBuilder.AddInMemoryCollection(dict);
         }
 
         [Fact]
@@ -67,12 +51,12 @@ namespace SAE.CommonLibrary.AspNetCore.Test
             var httpResponseMessage = await this._client.GetAsync(Constants.Route.DefaultPath);
             var descriptors = await httpResponseMessage.AsAsync<IEnumerable<PathDescriptor>>();
             Assert.True(descriptors.Any());
-            //Assert.DoesNotContain(descriptors, s => s.Index == 0);
+            Assert.DoesNotContain(descriptors, s => s.Index == 0);
             this.WriteLine(descriptors);
             return descriptors;
         }
         [Fact]
-        public async Task BitmapAuthorizationTest()
+        public virtual async Task BitmapAuthorizationTest()
         {
             var pathDescriptors = await this.RouterScanningTest();
 
@@ -87,7 +71,12 @@ namespace SAE.CommonLibrary.AspNetCore.Test
                 req.Headers.Add(HeaderNames.Cookie, cookies);
 
                 var rep = await this._client.SendAsync(req);
-                this.WriteLine(descriptor);
+
+                if (!rep.IsSuccessStatusCode)
+                {
+                    this.WriteLine(rep.Headers);
+                }
+
                 Assert.Equal(System.Net.HttpStatusCode.OK, rep.StatusCode);
             }
 
@@ -102,7 +91,10 @@ namespace SAE.CommonLibrary.AspNetCore.Test
                 req.Headers.Add(HeaderNames.Cookie, cookies);
 
                 var rep = await this._client.SendAsync(req);
-                this.WriteLine(descriptor);
+                if (rep.IsSuccessStatusCode)
+                {
+                    this.WriteLine(rep.Headers);
+                }
                 Assert.Equal(System.Net.HttpStatusCode.Found, rep.StatusCode);
             }
 
@@ -118,7 +110,10 @@ namespace SAE.CommonLibrary.AspNetCore.Test
                 req.Headers.Add(HeaderNames.Cookie, adminCookies);
 
                 var rep = await this._client.SendAsync(req);
-                this.WriteLine(descriptor);
+                if (!rep.IsSuccessStatusCode)
+                {
+                    this.WriteLine(rep.Headers);
+                }
                 Assert.Equal(System.Net.HttpStatusCode.OK, rep.StatusCode);
             }
 
@@ -136,8 +131,6 @@ namespace SAE.CommonLibrary.AspNetCore.Test
                 services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                         .AddCookie();
 
-                services.AddAuthorization();
-
                 services.AddBitmapAuthorization();
 
                 services.AddRoutingScanning();
@@ -146,8 +139,6 @@ namespace SAE.CommonLibrary.AspNetCore.Test
             // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
             public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
             {
-                app.UseDeveloperExceptionPage();
-
                 app.UseRouting();
 
                 app.UseBitmapAuthorization();

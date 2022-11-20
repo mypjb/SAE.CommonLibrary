@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SAE.CommonLibrary.Extension
 {
@@ -37,6 +37,26 @@ namespace SAE.CommonLibrary.Extension
             return enumerable;
         }
 
+        /// <summary>
+        /// 循环<paramref name="enumerable"/>集合,并挨个执行<paramref name="action"/>函数
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="enumerable"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> enumerable, Action<T, int> action)
+        {
+            if (enumerable != null)
+            {
+                var i = 0;
+                foreach (var itm in enumerable)
+                {
+                    action(itm, i++);
+                }
+            }
+            return enumerable;
+        }
+
 
         public static async Task<IEnumerable<T>> ForEachAsync<T>(this IEnumerable<T> enumerable, Func<T, Task> @delegate)
         {
@@ -45,6 +65,19 @@ namespace SAE.CommonLibrary.Extension
                 foreach (var itm in enumerable)
                 {
                     await @delegate(itm);
+                }
+            }
+            return enumerable;
+        }
+
+        public static async Task<IEnumerable<T>> ForEachAsync<T>(this IEnumerable<T> enumerable, Func<T, int, Task> @delegate)
+        {
+            if (enumerable != null)
+            {
+                var i = 0;
+                foreach (var itm in enumerable)
+                {
+                    await @delegate(itm, i++);
                 }
             }
             return enumerable;

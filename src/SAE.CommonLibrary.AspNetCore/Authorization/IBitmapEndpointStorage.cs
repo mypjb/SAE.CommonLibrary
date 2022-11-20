@@ -1,12 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
+using Microsoft.Extensions.Logging;
+using SAE.CommonLibrary.Extension;
+using SAE.CommonLibrary.Logging;
 
 namespace SAE.CommonLibrary.AspNetCore.Authorization
 {
@@ -22,16 +26,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         /// <param name="method">请求方式</param>
         /// <returns>返回和终结点匹配的索引</returns>
         int GetIndex(string path, string method);
-        /// <summary>
-        /// 添加位图终点
-        /// </summary>
-        /// <param name="endpoint"></param>
-        void Add(BitmapEndpoint endpoint);
-        /// <summary>
-        /// 批量添加位图终点
-        /// </summary>
-        /// <param name="endpoints"></param>
-        void AddRange(IEnumerable<BitmapEndpoint> endpoints);
+
         /// <summary>
         /// 返回端点长度
         /// </summary>
@@ -65,35 +60,31 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
     /// <inheritdoc/>
     public class BitmapEndpointStorage : IBitmapEndpointStorage
     {
-        private readonly ConcurrentDictionary<string, int> _store;
+        private readonly ILogging _logging;
+        private readonly IBitmapEndpointProvider _bitmapEndpointProvider;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <value></value>
+        protected IEnumerable<BitmapEndpoint> BitmapEndpoints
+        {
+            get => this._bitmapEndpointProvider.ListAsync().GetAwaiter().GetResult();
+        }
         /// <summary>
         /// 创建一个新的对象
         /// </summary>
-        public BitmapEndpointStorage()
+        /// <param name="logging"></param>
+        /// <param name="bitmapEndpointProvider"></param>
+        public BitmapEndpointStorage(ILogging<BitmapEndpointStorage> logging,
+                                     IBitmapEndpointProvider bitmapEndpointProvider)
         {
-            this._store = new ConcurrentDictionary<string, int>();
-        }
-        public void Add(BitmapEndpoint endpoint)
-        {
-            if (string.IsNullOrWhiteSpace(endpoint.Path))
-            {
-                return;
-            }
-            this._store.AddOrUpdate($"{endpoint.Path}{Constants.BitmapAuthorize.Separator}{endpoint.Method}".ToLower(), endpoint.Index, (a, b) => endpoint.Index);
-            //this._store.AddOrUpdate(endpoint.Path, endpoint.Index, (a, b) => endpoint.Index);
-        }
-
-        public void AddRange(IEnumerable<BitmapEndpoint> endpoints)
-        {
-            foreach (var endpoint in endpoints)
-            {
-                this.Add(endpoint);
-            }
+            this._logging = logging;
+            this._bitmapEndpointProvider = bitmapEndpointProvider;
         }
 
         public int Count()
         {
-            return this._store.Count;
+            return this.BitmapEndpoints.Count();
         }
 
         public int GetIndex(string path, string method)
@@ -102,9 +93,17 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
 
             var key = $"{path}{Constants.BitmapAuthorize.Separator}{method}".ToLower();
 
-            if (!this._store.TryGetValue(key, out index))
+            var bitmapEndpoint = this.BitmapEndpoints.FirstOrDefault(s => s.Path.Equals(path, StringComparison.OrdinalIgnoreCase) &&
+                                                                     s.Method.Equals(method, StringComparison.OrdinalIgnoreCase));
+
+            if (bitmapEndpoint == null)
             {
+                this._logging.Info($"未找到对应存储位置,key:{key},path:{path},method:{method}");
                 index = -1;
+            }
+            else
+            {
+                index = bitmapEndpoint.Index;
             }
 
             return index;
@@ -123,7 +122,10 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         /// <returns></returns>
         public static int GetIndex(this IBitmapEndpointStorage storage, HttpContext context)
         {
-            if (context == null) return -1;
+            if (context == null)
+            {
+                return -1;
+            }
 
             var path = string.Empty;
 
@@ -142,7 +144,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
             {
                 path = endpoint.DisplayName;
             }
-            return storage.GetIndex(path,context.Request.Method);
+            return storage.GetIndex(path, context.Request.Method);
         }
     }
 }

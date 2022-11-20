@@ -25,7 +25,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         /// 路径描述
         /// </summary>
         /// <value></value>
-        public IEnumerable<PathDescriptor> PathDescriptors { get; set; }
+        public IEnumerable<BitmapEndpoint> BitmapEndpoints { get; set; }
     }
     /// <summary>
     /// 基于<see cref="IConfiguration"/>、<see cref="IOptions{ConfigurationEndpointOptions}"/>端点提供者。
@@ -39,12 +39,12 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         /// <param name="optionsMonitor">监控器</param>
         /// <param name="logging">日志记录器</param>
         public ConfigurationBitmapEndpointProvider(IOptionsMonitor<ConfigurationEndpointOptions> optionsMonitor,
-                                                   ILogging<AbstractBitmapEndpointProvider> logging) : base(logging)
+                                                   ILogging<ConfigurationBitmapEndpointProvider> logging) : base(logging)
         {
-            this.PathDescriptors = optionsMonitor.CurrentValue.PathDescriptors;
+            this.BitmapEndpoints = optionsMonitor.CurrentValue.BitmapEndpoints;
             optionsMonitor.OnChange(s =>
             {
-                this.PathDescriptors = s.PathDescriptors;
+                this.BitmapEndpoints = s.BitmapEndpoints;
             });
         }
     }

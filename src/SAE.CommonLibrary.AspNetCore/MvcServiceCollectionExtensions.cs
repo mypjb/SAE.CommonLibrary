@@ -228,23 +228,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             app.UseAuthentication()
                .UseAuthorization();
-
-            var storage = app.ApplicationServices.GetService<IBitmapEndpointStorage>();
-
-            if (storage.Count() == 0)
-            {
-                var provider = app.ApplicationServices.GetService<IBitmapEndpointProvider>();
-
-                var pathDescriptorProvider = app.ApplicationServices.GetService<IPathDescriptorProvider>();
-
-                var paths = pathDescriptorProvider.GetDescriptors();
-
-                var endpoints = provider.FindsAsync(paths)
-                                        .GetAwaiter()
-                                        .GetResult();
-
-                storage.AddRange(endpoints);
-            }
+               
             return app;
         }
 

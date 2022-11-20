@@ -46,7 +46,7 @@
 		<None Update="Config\redis.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Config\system.json">
+		<None Update="Config\bitmapAuth.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>

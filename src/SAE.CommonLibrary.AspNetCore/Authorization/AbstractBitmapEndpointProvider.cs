@@ -1,21 +1,24 @@
-﻿using SAE.CommonLibrary.AspNetCore.Routing;
-using SAE.CommonLibrary.Extension;
-using SAE.CommonLibrary.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SAE.CommonLibrary.AspNetCore.Routing;
+using SAE.CommonLibrary.Extension;
+using SAE.CommonLibrary.Logging;
 
 namespace SAE.CommonLibrary.AspNetCore.Authorization
 {
     /// <inheritdoc/>
-    /// /// <summary>
+    /// <summary>
     /// 抽象的端点提供程序
     /// </summary>
     public abstract class AbstractBitmapEndpointProvider : IBitmapEndpointProvider
     {
-        private readonly ILogging _logging;
+        /// <summary>
+        /// 日志记录器
+        /// </summary>
+        protected readonly ILogging _logging;
         /// <summary>
         /// 创建一个新的对象
         /// </summary>
@@ -23,61 +26,39 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         public AbstractBitmapEndpointProvider(ILogging<AbstractBitmapEndpointProvider> logging)
         {
             this._logging = logging;
-            this.PathDescriptors = Array.Empty<IPathDescriptor>();
+            this.BitmapEndpoints = Array.Empty<BitmapEndpoint>();
         }
-        private IEnumerable<IPathDescriptor> pathDescriptors;
+        private IEnumerable<BitmapEndpoint> bitmapEndpoints;
         /// <summary>
         /// 当存在为0的索引时将会重新计算索引
         /// </summary>
-        protected IEnumerable<IPathDescriptor> PathDescriptors
+        protected IEnumerable<BitmapEndpoint> BitmapEndpoints
         {
-            get => this.pathDescriptors;
+            get => this.bitmapEndpoints;
             set
             {
                 if (value == null) return;
 
-                this.pathDescriptors = value;
+                var descriptors = value.ToArray();
 
-                if (this.PathDescriptors.All(s => s.Index == 0))
+                if (descriptors.All(s => s.Index == 0))
                 {
                     var index = 0;
-                    foreach (var item in this.PathDescriptors.OrderBy(s => s.Group)
-                                                             .ThenBy(s => s.Path)
-                                                             .ThenBy(s => s.Method)
-                                                             .ToArray())
+                    foreach (var item in descriptors.OrderBy(s => s.Path)
+                                                    .ThenBy(s => s.Method)
+                                                    .ThenBy(s => s.Index))
                     {
-                        item.Index = ++index;
+                        ++index;
+                        item.Index = index;
                     }
                 }
+
+                this.bitmapEndpoints = descriptors;
             }
         }
-        public virtual Task<IEnumerable<BitmapEndpoint>> FindsAsync(IEnumerable<IPathDescriptor> descriptors)
+        public virtual Task<IEnumerable<BitmapEndpoint>> ListAsync()
         {
-            var bitmapEndpoints = new List<BitmapEndpoint>();
-
-            this._logging.Info($"Remote Source:{this.PathDescriptors?.ToJsonString()}");
-
-            this._logging.Info($"Local Target:{descriptors.ToJsonString()}");
-
-            foreach (var descriptor in descriptors)
-            {
-                var pathDescriptor = this.PathDescriptors?.FirstOrDefault(s =>
-                                                        s.Group == descriptor.Group &&
-                                                        s.Path == descriptor.Path &&
-                                                        s.Method == descriptor.Method);
-                if (pathDescriptor != null)
-                {
-                    bitmapEndpoints.Add(new BitmapEndpoint
-                    {
-                        Index = pathDescriptor.Index,
-                        Method = pathDescriptor.Method,
-                        Name = pathDescriptor.Name,
-                        Path = pathDescriptor.Path
-                    });
-                }
-            }
-            this._logging.Info($"BitmapEndpoints:{bitmapEndpoints.ToJsonString()}");
-            return Task.FromResult<IEnumerable<BitmapEndpoint>>(bitmapEndpoints);
+            return Task.FromResult<IEnumerable<BitmapEndpoint>>(this.BitmapEndpoints);
         }
     }
 }

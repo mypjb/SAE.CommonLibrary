@@ -38,13 +38,11 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         {
             this._options = options;
         }
-        public async Task<IEnumerable<BitmapEndpoint>> FindsAsync(IEnumerable<IPathDescriptor> descriptors)
+        public async Task<IEnumerable<BitmapEndpoint>> ListAsync()
         {
             var client = new HttpClient();
 
             var requestMessage = new HttpRequestMessage(HttpMethod.Get, this._options.BitmapEndpoint);
-
-            requestMessage.AddJsonContent(descriptors);
 
             var responseMessage = await client.SendAsync(requestMessage);
 

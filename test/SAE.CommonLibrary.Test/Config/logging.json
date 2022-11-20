@@ -4,17 +4,27 @@
     "internalLogLevel": "Warn",
     "internalLogFile": "logs/internal-nlog.log",
     "targets": {
-      "FileTarget": {
+      "file": {
         "type": "File",
         "fileName": "logs/${shortdate}.log",
         "layout": "${level}: ${logger}[${threadid}] ${longdate}${newline}        ${message} ${exception:message,stacktrace}",
-        "MaxArchiveFiles": "10"
+        "maxArchiveFiles": "10"
+      },
+      "console": {
+        "type": "ColoredConsole",
+        "layout": "${level}: ${logger}[${threadid}] ${longdate}${newline}        ${message} ${exception:message,stacktrace}",
       }
     },
-    "rules": [{
+    "rules": [
+      {
         "logger": "*",
-        "minlevel": "Trace",
-        "writeTo": "FileTarget"
+        "minLevel": "Trace",
+        "writeTo": "file"
+      },
+      {
+        "logger": "*",
+        "minLevel": "Trace",
+        "writeTo": "console"
       }
     ]
   }

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
 using SAE.CommonLibrary.Caching;
@@ -72,13 +73,15 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
 
         protected virtual void AuthorizeCore(AuthorizationHandlerContext context, BitmapAuthorizationRequirement requirement)
         {
-            var index = this._bitmapEndpointStorage.GetIndex(this._httpContextAccessor.HttpContext);
+            var ctx = this._httpContextAccessor.HttpContext;
 
+            var index = this._bitmapEndpointStorage.GetIndex(ctx);
+            string code = string.Empty;
             if (index > 0)
             {
                 var claims = context.User.FindAll(Constants.BitmapAuthorize.Claim) ?? Enumerable.Empty<Claim>();
 
-                var code = this._bitmapAuthorization.FindCode(claims);
+                code = this._bitmapAuthorization.FindCode(claims);
 
                 var bitmapAuthorizations = this.GetAuthorizeDescriptor(code);
 
@@ -93,8 +96,19 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
             }
             else if (index == 0)
             {
+                this._logging.Info("索引为0,默认授权访问");
                 //index not exist default auth
                 context.Succeed(requirement);
+            }
+
+            var message = $"url:'{ctx.Request.GetDisplayUrl()}',method:{ctx.Request.Method},index:{index},code:'{code}'";
+            if (context.HasSucceeded)
+            {
+                this._logging.Debug($"本次请求，授权成功！{message}");
+            }
+            else
+            {
+                this._logging.Debug($"本次请求，授权失败！{message}");
             }
         }
 

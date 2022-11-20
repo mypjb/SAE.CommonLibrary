@@ -1,0 +1,60 @@
+{
+    "auth": {
+        "bitmapEndpoints": [
+            {
+                "method": "delete",
+                "path": "auth/api/home",
+                "name": "sae.commonlibrary.aspnetcore.test.controllers.homecontroller.delete (sae.commonlibrary.aspnetcore.test)",
+                "index": 1
+            },
+            {
+                "method": "get",
+                "path": "auth/api/home",
+                "name": "sae.commonlibrary.aspnetcore.test.controllers.homecontroller.index (sae.commonlibrary.aspnetcore.test)",
+
+                "index": 2
+            },
+            {
+                "method": "post",
+                "path": "auth/api/home",
+                "name": "sae.commonlibrary.aspnetcore.test.controllers.homecontroller.add (sae.commonlibrary.aspnetcore.test)",
+                "index": 3
+            },
+            {
+                "method": "put",
+                "path": "auth/api/home",
+                "name": "sae.commonlibrary.aspnetcore.test.controllers.homecontroller.edit (sae.commonlibrary.aspnetcore.test)",
+
+                "index": 4
+            },
+            {
+                "method": "get",
+                "path": "auth/home/custom",
+                "name": "sae.commonlibrary.aspnetcore.test.controllers.homecontroller.custom (sae.commonlibrary.aspnetcore.test)",
+                
+                "index": 5
+            },
+            {
+                "method": "post",
+                "path": "noauth/api/student",
+                "name": "sae.commonlibrary.aspnetcore.test.controllers.studentcontroller.add (sae.commonlibrary.aspnetcore.test)",
+                
+                "index": 6
+            },
+            {
+                "method": "put",
+                "path": "noauth/api/student",
+                "name": "sae.commonlibrary.aspnetcore.test.controllers.studentcontroller.edit (sae.commonlibrary.aspnetcore.test)",
+                
+                "index": 7
+            },
+            {
+                "method": "get",
+                "path": "noauth/api/student/display/{id}",
+                "name": "sae.commonlibrary.aspnetcore.test.controllers.studentcontroller.display (sae.commonlibrary.aspnetcore.test)",
+                
+                "index": 8
+            }
+        ]
+    }
+}

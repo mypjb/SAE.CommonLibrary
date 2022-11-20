@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using SAE.CommonLibrary.AspNetCore.Authorization;
 using SAE.CommonLibrary.Extension;
 using SAE.CommonLibrary.Test;
@@ -22,7 +23,9 @@ namespace SAE.CommonLibrary.AspNetCore.Test
         }
         protected override void ConfigureServices(IServiceCollection services)
         {
-            services.AddBitmapAuthorization();
+            services.TryAddSingleton<IBitmapAuthorization, BitmapAuthorization>();
+            services.AddDefaultScope()
+                    .AddNlogLogger();
             base.ConfigureServices(services);
         }
         [Fact]

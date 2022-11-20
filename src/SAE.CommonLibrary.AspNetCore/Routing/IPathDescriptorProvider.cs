@@ -1,13 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.AspNetCore.Mvc.Controllers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SAE.CommonLibrary.Extension;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Configuration;
-using SAE.CommonLibrary.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
+using SAE.CommonLibrary.AspNetCore.Authorization;
+using SAE.CommonLibrary.Extension;
+using SAE.CommonLibrary.Logging;
 
 namespace SAE.CommonLibrary.AspNetCore.Routing
 {
@@ -29,14 +30,17 @@ namespace SAE.CommonLibrary.AspNetCore.Routing
     internal class PathDescriptorProvider : IPathDescriptorProvider
     {
         private readonly IApiDescriptionGroupCollectionProvider _provider;
+        private readonly ILogging _logging;
         private IList<IPathDescriptor> pathDescriptors;
         /// <summary>
         /// 创建一个新的对象
         /// </summary>
         /// <param name="provider">api提供者</param>
-        public PathDescriptorProvider(IApiDescriptionGroupCollectionProvider provider)
+        /// <param name="logging"></param>
+        public PathDescriptorProvider(IApiDescriptionGroupCollectionProvider provider, ILogging<PathDescriptorProvider> logging)
         {
             this._provider = provider;
+            this._logging = logging;
             this.Scan();
         }
         public IEnumerable<IPathDescriptor> GetDescriptors()
@@ -49,6 +53,7 @@ namespace SAE.CommonLibrary.AspNetCore.Routing
         private void Scan()
         {
             this.pathDescriptors = new List<IPathDescriptor>();
+            this._logging.Info("准备扫描本地路径");
             foreach (var group in this._provider.ApiDescriptionGroups.Items
                                                 .SelectMany(group => group.Items)
                                                 .Where(s => !s.GetType().IsDefined(typeof(ObsoleteAttribute), false)))
@@ -83,7 +88,16 @@ namespace SAE.CommonLibrary.AspNetCore.Routing
             this.pathDescriptors = this.pathDescriptors
                                       .OrderBy(s => s.Group)
                                       .ThenBy(s => s.Path)
+                                      .ThenBy(s => s.Method)
                                       .ToList();
+
+
+            this.pathDescriptors.ForEach((s, i) =>
+            {
+                s.Index = ++i;
+            });
+
+            this._logging.Info($"扫描完成：{this.pathDescriptors.ToJsonString()}");
         }
     }
 }

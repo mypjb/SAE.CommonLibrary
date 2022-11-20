@@ -12,9 +12,8 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
     public interface IBitmapEndpointProvider
     {
         /// <summary>
-        /// 传入端点地址返回端点对象
+        /// 返回端点对象集合
         /// </summary>
-        /// <param name="paths"></param>
-        Task<IEnumerable<BitmapEndpoint>> FindsAsync(IEnumerable<IPathDescriptor> paths);
+        Task<IEnumerable<BitmapEndpoint>> ListAsync();
     }
 }

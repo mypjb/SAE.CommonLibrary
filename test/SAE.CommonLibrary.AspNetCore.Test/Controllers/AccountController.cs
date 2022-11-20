@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using SAE.CommonLibrary.AspNetCore.Authorization;
+using SAE.CommonLibrary.Extension;
 
 namespace SAE.CommonLibrary.AspNetCore.Test.Controllers
 {
@@ -63,7 +64,9 @@ namespace SAE.CommonLibrary.AspNetCore.Test.Controllers
 
             var claimsPrincipal = new ClaimsPrincipal(identity);
 
-            return SignIn(claimsPrincipal, CookieAuthenticationDefaults.AuthenticationScheme);
+            this.Response.Headers.Add(Constants.BitmapAuthorize.Claim, bitmapCode);
+            this.Response.Headers.Add(Constants.BitmapAuthorize.Claim + "-index", index.ToString());
+            return this.SignIn(claimsPrincipal, CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
 
