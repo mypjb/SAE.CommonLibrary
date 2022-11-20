@@ -11,7 +11,7 @@ release_dir=${3:-"nupkgs"}
 
 dotnet build -c release
 
-dotnet test -v n
+dotnet test -v q -l "console;verbosity=detailed"
 
 rm -rf $release_dir
 
