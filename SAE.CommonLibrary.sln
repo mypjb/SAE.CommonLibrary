@@ -125,6 +125,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.Scope.Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.Database.Test", "test\SAE.CommonLibrary.Database.Test\SAE.CommonLibrary.Database.Test.csproj", "{2EF9EFAE-330A-4F36-8B4D-D1CC46E53093}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.MessageQueue.Test", "test\SAE.CommonLibrary.MessageQueue.Test\SAE.CommonLibrary.MessageQueue.Test.csproj", "{427C739D-7282-4D20-ADE6-7D81447DE806}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -327,6 +329,10 @@ Global
 		{2EF9EFAE-330A-4F36-8B4D-D1CC46E53093}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2EF9EFAE-330A-4F36-8B4D-D1CC46E53093}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2EF9EFAE-330A-4F36-8B4D-D1CC46E53093}.Release|Any CPU.Build.0 = Release|Any CPU
+		{427C739D-7282-4D20-ADE6-7D81447DE806}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{427C739D-7282-4D20-ADE6-7D81447DE806}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{427C739D-7282-4D20-ADE6-7D81447DE806}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{427C739D-7282-4D20-ADE6-7D81447DE806}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -383,6 +389,7 @@ Global
 		{AF18A183-052A-4064-ABB4-EA2BF58E6763} = {78157883-8166-46DB-9754-E093FE2A3936}
 		{4D7E331A-42F1-42B8-8A3D-FC6BFB28115D} = {8AD43B5B-ED55-4712-B865-1E6E1D7B19FE}
 		{2EF9EFAE-330A-4F36-8B4D-D1CC46E53093} = {8AD43B5B-ED55-4712-B865-1E6E1D7B19FE}
+		{427C739D-7282-4D20-ADE6-7D81447DE806} = {8AD43B5B-ED55-4712-B865-1E6E1D7B19FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2FF66E70-E062-4202-A1AD-A821991FEA65}

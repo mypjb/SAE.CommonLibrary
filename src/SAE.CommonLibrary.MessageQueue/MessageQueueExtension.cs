@@ -1,9 +1,9 @@
-﻿using SAE.CommonLibrary.DependencyInjection;
-using SAE.CommonLibrary.Logging;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using SAE.CommonLibrary.DependencyInjection;
+using SAE.CommonLibrary.Logging;
 
 namespace SAE.CommonLibrary.MessageQueue
 {
@@ -58,7 +58,7 @@ namespace SAE.CommonLibrary.MessageQueue
         /// </summary>
         /// <typeparam name="TMessage"></typeparam>
         /// <param name="messageQueue"></param>
-        /// <param name="@delegate">订阅处理程序</param>
+        /// <param name="delegate">订阅处理程序</param>
         /// <returns></returns>
         public static void Subscibe<TMessage>(this IMessageQueue messageQueue, Func<TMessage, Task> @delegate) where TMessage : class
         {
@@ -72,13 +72,13 @@ namespace SAE.CommonLibrary.MessageQueue
         /// </summary>
         /// <typeparam name="TMessage"></typeparam>
         /// <param name="messageQueue"></param>
-        /// <param name="@delegate">订阅处理程序</param>
+        /// <param name="delegate">订阅处理程序</param>
         /// <returns></returns>
         public static async Task SubscibeAsync<TMessage>(this IMessageQueue messageQueue, Func<TMessage, Task> @delegate) where TMessage : class
         {
             var identity = Utils.Get<TMessage>();
             await messageQueue.MappingAsync(identity, @delegate);
-            await messageQueue.SubscibeAcync(identity, @delegate);
+            await messageQueue.SubscibeAsync(identity, @delegate);
         }
 
         /// <summary>
@@ -91,7 +91,8 @@ namespace SAE.CommonLibrary.MessageQueue
             var identity = Utils.Get<TMessage>();
             await messageQueue.SubscibeAsync<TMessage>(message =>
             {
-                return messageQueue.HandlerCoreAsync(identity, message);
+                var handler = ServiceFacade.GetService<IHandler<TMessage>>();
+                return handler.HandleAsync(message);
             });
         }
 

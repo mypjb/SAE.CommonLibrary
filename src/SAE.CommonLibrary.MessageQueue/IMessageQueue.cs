@@ -25,6 +25,6 @@ namespace SAE.CommonLibrary.MessageQueue
         /// <param name="identity"></param>
         /// <param name="delegate"></param>
         /// <returns></returns>
-        Task SubscibeAcync<TMessage>(string identity, Func<TMessage, Task> @delegate) where TMessage : class;
+        Task SubscibeAsync<TMessage>(string identity, Func<TMessage, Task> @delegate) where TMessage : class;
     }
 }
