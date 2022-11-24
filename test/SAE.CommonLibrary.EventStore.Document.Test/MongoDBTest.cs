@@ -13,6 +13,7 @@ namespace SAE.CommonLibrary.EventStore.Document.Test
     {
         public MongoDBTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
+            this.range = new Random().Next(50, 100);
         }
 
         protected override void ConfigureServicesBefore(IServiceCollection services)

@@ -1,21 +1,22 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using SAE.CommonLibrary.Data;
 using SAE.CommonLibrary.EventStore.Document.Memory.Test.Domain;
 using SAE.CommonLibrary.EventStore.Document.Test.Dtos;
 using SAE.CommonLibrary.MessageQueue;
 using SAE.CommonLibrary.Test;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
-namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
+namespace SAE.CommonLibrary.EventStore.Document.Test
 {
     public class MemoryTest : BaseTest
     {
         private readonly IDocumentStore _documentStore;
         private readonly IStorage _storage;
         public const string Password = "111111";
+        protected int range = new Random().Next(1000, 9999);
         public MemoryTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
             this._documentStore = this._serviceProvider.GetService<IDocumentStore>();
@@ -32,11 +33,11 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
         protected override void ConfigureServices(IServiceCollection services)
         {
             services.AddMemoryDocument();
-            
+
             base.ConfigureServices(services);
         }
 
-        
+
 
         [Fact]
         public virtual async Task<User> Register()
@@ -44,15 +45,17 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
             var user = new User();
             user.Create(this.GetRandom(), Password);
             await _documentStore.SaveAsync(user);
-            this.WriteLine(user);
             var newUser = await _documentStore.FindAsync<User>(user.Id.ToIdentity());
+            if (newUser == null)
+            {
+
+            }
             Xunit.Assert.NotNull(newUser);
             Xunit.Assert.Equal(user.Id, newUser.Id);
             Xunit.Assert.Equal(user.LoginName, newUser.LoginName);
             Xunit.Assert.Equal(user.Name, newUser.Name);
             Xunit.Assert.Equal(user.Password, newUser.Password);
             Xunit.Assert.Equal(user.Sex, newUser.Sex);
-            this.WriteLine(newUser);
             return user;
         }
 
@@ -71,7 +74,7 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
             Xunit.Assert.Equal(user.Password, newUser.Password);
             Xunit.Assert.Equal(user.Sex, newUser.Sex);
             //Xunit.Assert.NotEqual(user, newUser);
-            this.WriteLine(newUser);
+
         }
 
         [Fact]
@@ -90,7 +93,7 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
             Xunit.Assert.Equal(user.Password, newUser.Password);
             Xunit.Assert.Equal(user.Sex, newUser.Sex);
             //Xunit.Assert.NotEqual(user, newUser);
-            this.WriteLine(newUser);
+
         }
 
         [Fact]
@@ -104,12 +107,33 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory.Test
         public virtual async Task Query()
         {
             var user = await this.Register();
-            var dto= this._storage.AsQueryable<UserDto>()
+            var dto = this._storage.AsQueryable<UserDto>()
                                   .Where(s => s.Sex == user.Sex)
                                   .FirstOrDefault();
 
             Xunit.Assert.NotNull(dto);
         }
+        [Fact]
+        public virtual void Batch()
+        {
+            Enumerable.Range(0, range)
+                                  .AsParallel()
+                                  .ForAll(s =>
+                                  {
+                                      this.Register().GetAwaiter().GetResult();
+                                      this.Delete().GetAwaiter().GetResult();
+                                      this.ChangePassword().GetAwaiter().GetResult();
+                                      this.ChangeProperty().GetAwaiter().GetResult();
+                                  });
 
+            if (this.range > 999)
+            {
+                var count = this._storage.AsQueryable<UserDto>().Count();
+
+                Assert.Equal(range * 3, count);
+            }
+
+
+        }
     }
 }

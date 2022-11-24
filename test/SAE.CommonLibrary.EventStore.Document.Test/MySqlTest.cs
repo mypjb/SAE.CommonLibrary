@@ -20,16 +20,11 @@ namespace SAE.CommonLibrary.EventStore.Document.Test
     {
         public MySqlTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
+            this.range = new Random().Next(50, 100);
         }
         protected override void ConfigureServices(IServiceCollection services)
         {
             services.AddMySqlDocument();
         }
-
-        [Fact]
-        public override Task ChangePassword()
-        {
-            return base.ChangePassword();
-        } 
     }
 }
