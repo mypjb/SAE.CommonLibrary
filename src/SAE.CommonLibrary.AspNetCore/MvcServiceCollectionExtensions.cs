@@ -153,7 +153,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     .AddHttpContextAccessor()
                     .AddRoutingScanning()
                     .AddDefaultScope()
-                    .AddSaeMemoryDistributedCache();
+                    .AddSAEMemoryDistributedCache();
 
             services.AddSingleton<IAuthorizationHandler, BitmapAuthorizationHandler>();
             services.TryAddSingleton<IBitmapAuthorization, BitmapAuthorization>();

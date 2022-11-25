@@ -8,14 +8,14 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class DependencyInjectionExtension
     {
-        public static IServiceCollection AddSaeMemoryCache(this IServiceCollection serviceDescriptors)
+        public static IServiceCollection AddSAEMemoryCache(this IServiceCollection serviceDescriptors)
         {
             serviceDescriptors.AddMemoryCache();
             serviceDescriptors.TryAddSingleton<IMemoryCache,MemoryCache>();
             return serviceDescriptors;
         }
 
-        public static IServiceCollection AddSaeMemoryDistributedCache(this IServiceCollection serviceDescriptors)
+        public static IServiceCollection AddSAEMemoryDistributedCache(this IServiceCollection serviceDescriptors)
         {
             serviceDescriptors.AddMemoryCache();
             serviceDescriptors.TryAddSingleton<IDistributedCache, MemoryDistributedCache>();

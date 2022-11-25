@@ -20,7 +20,7 @@ namespace SAE.CommonLibrary
         /// </summary>
         [Display(Name = "内部异常,请联系工程")]
         Unknown = 500,
-        Custom=501,
+        Custom = 501,
         /// <summary>
         /// 账号或密码错误
         /// </summary>
@@ -42,10 +42,15 @@ namespace SAE.CommonLibrary
         [Display(Name = "资源存在")]
         ResourcesExist = 4003,
         /// <summary>
+        /// 
+        /// </summary>
+        [Display(Name = "版本号不一致")]
+        ResourcesVersion = 4004,
+        /// <summary>
         /// 资源不存在
         /// </summary>
         [Display(Name = "资源不存在")]
         ResourcesNotExist = 404,
-        
+
     }
 }

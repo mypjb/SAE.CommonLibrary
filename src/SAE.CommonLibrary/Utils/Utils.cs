@@ -36,7 +36,6 @@ namespace SAE.CommonLibrary
             Array.Copy(msecsArray, msecsArray.Length - 4, guidArray, guidArray.Length - 4, 4);
 
             return new Guid(guidArray).ToString("N");
-
         }
     }
 }

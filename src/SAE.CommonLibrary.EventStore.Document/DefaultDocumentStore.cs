@@ -126,7 +126,7 @@ namespace SAE.CommonLibrary.EventStore.Document
 
             if (currentVersion > document.Version)
             {
-                throw new Exception("版本不一致");
+                throw new SAEException(StatusCodes.Custom,"版本不一致");
             }
             //将当前版本号+1以保持循序性
             var version = currentVersion + 1;

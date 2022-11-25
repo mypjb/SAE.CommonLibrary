@@ -23,7 +23,7 @@ namespace SAE.CommonLibrary.Cache.Test
 
         protected override void ConfigureServices(IServiceCollection services)
         {
-            services.AddSaeMemoryDistributedCache();
+            services.AddSAEMemoryDistributedCache();
         }
 
         [Fact]
