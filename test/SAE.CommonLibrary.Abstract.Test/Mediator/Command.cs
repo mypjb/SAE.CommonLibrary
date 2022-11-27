@@ -21,7 +21,7 @@ namespace SAE.CommonLibrary.Abstract.Test.Mediator
 
     public class RemoveCommand
     {
-        
+
     }
 
     public class QueryCommand
@@ -33,6 +33,11 @@ namespace SAE.CommonLibrary.Abstract.Test.Mediator
         {
             return $"{this.Begin}-{this.End}";
         }
+    }
+
+    public class RetryCommand
+    {
+        public int Number { get; set; }
     }
 
 }

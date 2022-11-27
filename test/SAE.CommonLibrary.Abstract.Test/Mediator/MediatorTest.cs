@@ -1,16 +1,17 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using SAE.CommonLibrary.Abstract.Mediator;
-using SAE.CommonLibrary.Abstract.Mediator.Behavior;
-using SAE.CommonLibrary.Abstract.Test.Mediator.Behavior;
-using SAE.CommonLibrary.Caching;
-using SAE.CommonLibrary.Test;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using SAE.CommonLibrary.Abstract.Mediator;
+using SAE.CommonLibrary.Abstract.Mediator.Behavior;
+using SAE.CommonLibrary.Abstract.Test.Mediator.Behavior;
+using SAE.CommonLibrary.Caching;
+using SAE.CommonLibrary.Test;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -26,6 +27,14 @@ namespace SAE.CommonLibrary.Abstract.Test.Mediator
             _mediator = this._serviceProvider.GetService<IMediator>();
             this._distributedCache = this._serviceProvider.GetService<IDistributedCache>();
         }
+        public override void ConfigureConfiguration(IConfigurationBuilder configurationBuilder)
+        {
+            base.ConfigureConfiguration(configurationBuilder);
+            configurationBuilder.AddInMemoryCollection(new Dictionary<string, string>()
+            {
+               {$"{RetryPipelineBehaviorOptions.Option}:{nameof(RetryPipelineBehaviorOptions.Num)}","10"}
+            });
+        }
         protected override void ConfigureServices(IServiceCollection services)
         {
             services.AddMediator();
@@ -39,7 +48,10 @@ namespace SAE.CommonLibrary.Abstract.Test.Mediator
                     .AddCaching<QueryCommand, IEnumerable<Student>>()
                     .AddDeleteCaching<QueryCommand>()
                     .AddUpdateCaching<SaveCommand, IEnumerable<Student>>()
-                    .AddDeleteCaching<SaveCommand, Student>(); ;
+                    .AddDeleteCaching<SaveCommand, Student>()
+                    .AddRetry<RetryCommand>()
+                    .AddRetry<RetryCommand, Student>();
+
             base.ConfigureServices(services);
         }
 
@@ -139,6 +151,27 @@ namespace SAE.CommonLibrary.Abstract.Test.Mediator
             var deleteSaveCacheDatas = await this._distributedCache.GetAsync<IEnumerable<Student>>(saveKey);
 
             Assert.Null(deleteSaveCacheDatas);
+        }
+
+        [Fact]
+        public async Task Retry()
+        {
+
+            var command = new RetryCommand();
+
+            var student = await this._mediator.SendAsync<Student>(command);
+
+            Assert.Equal(10, student.Age);
+            command.Number = 1;
+            await this._mediator.SendAsync(command);
+
+            Assert.Equal(10, command.Number);
+
+            var exception = await Assert.ThrowsAsync<SAEException>(() => this._mediator.SendAsync(command));
+            this.WriteLine(exception.Message);
+
+            exception = await Assert.ThrowsAsync<SAEException>(() => this._mediator.SendAsync<Student>(command));
+            this.WriteLine(exception.Message);
         }
     }
 }

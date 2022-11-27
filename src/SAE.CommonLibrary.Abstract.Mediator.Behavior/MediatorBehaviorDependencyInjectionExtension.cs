@@ -126,7 +126,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// 为所有命令添加重试策略
         /// </summary>
         /// <param name="builder"></param>
-        public static IMediatorBehaviorBuilder AddRetry(IMediatorBehaviorBuilder builder)
+        public static IMediatorBehaviorBuilder AddRetry(this IMediatorBehaviorBuilder builder)
         {
             return builder.AddDefaultRetry()
                           .AddPipelineBehavior(typeof(IPipelineBehavior<>), typeof(RetryPipelineBehavior<>))
@@ -137,18 +137,17 @@ namespace Microsoft.Extensions.DependencyInjection
         /// 为单个命令添加重试策略
         /// </summary>
         /// <param name="builder"></param>
-        public static IMediatorBehaviorBuilder AddRetry<TCommand>(IMediatorBehaviorBuilder builder) where TCommand : class
+        public static IMediatorBehaviorBuilder AddRetry<TCommand>(this IMediatorBehaviorBuilder builder) where TCommand : class
         {
             return builder.AddDefaultRetry()
-                          .AddPipelineBehavior(typeof(IPipelineBehavior<TCommand>), typeof(RetryPipelineBehavior<TCommand>))
-                          .AddPipelineBehavior(typeof(IPipelineBehavior<TCommand>), typeof(RetryPipelineBehavior<,>));
+                          .AddPipelineBehavior(typeof(IPipelineBehavior<TCommand>), typeof(RetryPipelineBehavior<TCommand>));
         }
 
         /// <summary>
         /// 为单个命令添加重试策略
         /// </summary>
         /// <param name="builder"></param>
-        public static IMediatorBehaviorBuilder AddRetry<TCommand, TResponse>(IMediatorBehaviorBuilder builder) where TCommand : class
+        public static IMediatorBehaviorBuilder AddRetry<TCommand, TResponse>(this IMediatorBehaviorBuilder builder) where TCommand : class
         {
             return builder.AddDefaultRetry()
                           .AddPipelineBehavior(typeof(IPipelineBehavior<TCommand, TResponse>), typeof(RetryPipelineBehavior<TCommand, TResponse>));

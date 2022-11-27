@@ -1,15 +1,18 @@
-﻿using SAE.CommonLibrary.Abstract.Mediator;
-using SAE.CommonLibrary.Extension;
-using SAE.CommonLibrary.Test;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SAE.CommonLibrary.Abstract.Mediator;
+using SAE.CommonLibrary.Extension;
+using SAE.CommonLibrary.Test;
 
 namespace SAE.CommonLibrary.Abstract.Test.Mediator
 {
-    public class AddHandler : ICommandHandler<SaveCommand, Student>, ICommandHandler<SaveCommand, IEnumerable<Student>>
+    public class AddHandler : ICommandHandler<SaveCommand, Student>,
+                              ICommandHandler<SaveCommand, IEnumerable<Student>>,
+                              ICommandHandler<RetryCommand>,
+                              ICommandHandler<RetryCommand, Student>
     {
         public Task<Student> HandleAsync(SaveCommand command)
         {
@@ -18,6 +21,20 @@ namespace SAE.CommonLibrary.Abstract.Test.Mediator
                 CreateTime = DateTime.Now,
                 Sex = Sex.Man
             });
+        }
+
+        public async Task<Student> HandleAsync(RetryCommand command)
+        {
+            command.Number += 1;
+            if (command.Number != 10)
+            {
+                throw new SAEException(StatusCodes.ParamesterInvalid, $"age:{command.Number}");
+            }
+            return new Student
+            {
+                Name = command.Number.ToString(),
+                Age = command.Number
+            };
         }
 
         Task<IEnumerable<Student>> ICommandHandler<SaveCommand, IEnumerable<Student>>.HandleAsync(SaveCommand command)
@@ -33,6 +50,16 @@ namespace SAE.CommonLibrary.Abstract.Test.Mediator
                 }
             }.AsEnumerable();
             return Task.FromResult(students);
+        }
+
+        Task ICommandHandler<RetryCommand>.HandleAsync(RetryCommand command)
+        {
+            command.Number += 1;
+            if (command.Number != 10)
+            {
+                throw new SAEException(StatusCodes.ParamesterInvalid, $"age:{command.Number}");
+            }
+            return Task.CompletedTask;
         }
     }
 
