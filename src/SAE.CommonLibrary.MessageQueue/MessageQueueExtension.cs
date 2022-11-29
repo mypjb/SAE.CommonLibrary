@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using SAE.CommonLibrary.DependencyInjection;
@@ -102,7 +103,14 @@ namespace SAE.CommonLibrary.MessageQueue
             var identity = Utils.Get<TMessage>();
             await messageQueue.SubscibeAsync<TMessage>(message =>
             {
+                var logging = ServiceFacade.GetService<ILogging<TMessage>>();
                 var handler = ServiceFacade.GetService<IHandler<TMessage>>();
+                if (handler == null)
+                {
+                    var error = $"订阅'{identity}'，不存在对应实现";
+                    logging.Error(error);
+                    throw new Exception(error);
+                }
                 return handler.HandleAsync(message);
             });
         }
