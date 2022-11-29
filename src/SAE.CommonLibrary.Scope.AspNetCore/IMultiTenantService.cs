@@ -1,9 +1,12 @@
+using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using SAE.CommonLibrary.Extension;
 using SAE.CommonLibrary.Logging;
+
 
 namespace SAE.CommonLibrary.Scope.AspNetCore
 {

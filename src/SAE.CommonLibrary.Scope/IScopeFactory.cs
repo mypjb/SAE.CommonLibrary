@@ -1,4 +1,6 @@
-﻿namespace SAE.CommonLibrary.Scope
+﻿using System.Threading.Tasks;
+
+namespace SAE.CommonLibrary.Scope
 {
     /// <summary>
     /// scope factory

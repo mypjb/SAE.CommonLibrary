@@ -1,4 +1,5 @@
-﻿using Orleans.Configuration;
+﻿using Microsoft.Extensions.Hosting;
+using Orleans.Configuration;
 using Orleans.Hosting;
 using System;
 using System.Collections.Generic;
@@ -10,20 +11,20 @@ namespace SAE.CommonLibrary.Mediator.Orleans
 {
     public class SiloService : ISiloService
     {
-        private readonly ISiloHost _silo;
+        private readonly IHost _host;
 
-        public SiloService(ISiloHost silo)
+        public SiloService(IHost host)
         {
-            this._silo = silo;
+            this._host = host;
         }
         public async Task StartAsync()
         {
-            await this._silo.StartAsync();
+            await this._host.StartAsync();
         }
 
         public Task StopAsync()
         {
-            return this._silo.StopAsync();
+            return this._host.StopAsync();
         }
     }
 }

@@ -132,11 +132,6 @@ namespace Microsoft.Extensions.DependencyInjection
                           .AddPipelineBehavior(typeof(IPipelineBehavior<>), typeof(RetryPipelineBehavior<>))
                           .AddPipelineBehavior(typeof(IPipelineBehavior<,>), typeof(RetryPipelineBehavior<,>));
         }
-
-        /// <summary>
-        /// 为单个命令添加重试策略
-        /// </summary>
-        /// <param name="builder"></param>
         public static IMediatorBehaviorBuilder AddRetry<TCommand>(this IMediatorBehaviorBuilder builder) where TCommand : class
         {
             return builder.AddDefaultRetry()

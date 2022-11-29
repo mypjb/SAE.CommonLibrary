@@ -21,7 +21,7 @@ namespace SAE.CommonLibrary.Mediator.Orleans
         }
         public Task HandleAsync(TCommand command)
         {
-            this._logging.Debug($"get grain {this._client.IsInitialized}");
+            this._logging.Debug($"get grain {this._client}");
             var grain = this._client.GetGrain<IGrainCommandHandler>("0");
             //this._logging.Info($"grain:{grain.GetGrainIdentity().ToJsonString()}");
             return grain.Send(command);
@@ -41,7 +41,7 @@ namespace SAE.CommonLibrary.Mediator.Orleans
 
         public async Task<TResponse> HandleAsync(TCommand command)
         {
-            this._logging.Debug($"get grain {this._client.IsInitialized}");
+            this._logging.Debug($"get grain {this._client}");
             var grain = this._client.GetGrain<IGrainCommandHandler>("0");
             //this._logging.Info($"grain:{grain.GetGrainIdentity().}");
             var response = await grain.Send<TCommand, TResponse>(command);

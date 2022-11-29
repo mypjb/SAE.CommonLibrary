@@ -1,4 +1,7 @@
+using System;
 using System.Net;
+using System.Threading.Tasks;
+
 namespace SAE.CommonLibrary.Scope
 {
     /// <summary>

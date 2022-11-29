@@ -1,28 +1,26 @@
-﻿using Microsoft.Extensions.Hosting;
-using Orleans;
-using Orleans.Configuration;
-using Orleans.Hosting;
-using SAE.CommonLibrary.Extension;
-using SAE.CommonLibrary.Logging;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using SAE.CommonLibrary.Abstract.Mediator;
-using System.Reflection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using org.apache.zookeeper;
 using Microsoft.Extensions.Options;
+using Orleans.Configuration;
+using Orleans.Hosting;
+using SAE.CommonLibrary.Abstract.Mediator;
+using SAE.CommonLibrary.Extension;
+using SAE.CommonLibrary.Logging;
 
 namespace SAE.CommonLibrary.Mediator.Orleans
 {
     public class SiloFactory : ISiloFactory
     {
-        private readonly ConcurrentDictionary<string, ISiloService> _dictionary;
+        private readonly ConcurrentDictionary<string, IHost> _dictionary;
         private readonly ILogging<SiloFactory> _logging;
         private readonly ILoggingFactory _loggingFactory;
         private readonly IMediator _mediator;
@@ -33,7 +31,7 @@ namespace SAE.CommonLibrary.Mediator.Orleans
                            IHostEnvironment hostingEnvironment,
                            IMediator mediator)
         {
-            this._dictionary = new ConcurrentDictionary<string, ISiloService>();
+            this._dictionary = new ConcurrentDictionary<string, IHost>();
 
             this._logging = logging;
             this._loggingFactory = loggingFactory;
@@ -74,8 +72,9 @@ namespace SAE.CommonLibrary.Mediator.Orleans
                         var iPEndPoint = gatewayPort == Constants.MasterGatewayPort ? null : new IPEndPoint(IPAddress.Loopback, Constants.MasterSiloPort);
                         this._logging.Info($"筒仓端口'{siloPort}',网关端口:'{gatewayPort}'");
 
-                        var silo = this.DefaultConfiguration(options)
-                                    .UseLocalhostClustering(siloPort,
+                        var host = this.DefaultConfiguration(builder =>
+                        {
+                            builder.UseLocalhostClustering(siloPort,
                                                             gatewayPort,
                                                             iPEndPoint)
                                     .Configure<ClusterOptions>(clusterOptions =>
@@ -83,16 +82,14 @@ namespace SAE.CommonLibrary.Mediator.Orleans
                                         clusterOptions.ClusterId = options.ClusterId;
                                         clusterOptions.ServiceId = kv.Key.ToLower();
                                     })
-                                    .ConfigureLogging(configure => configure.SetMinimumLevel(LogLevel.Debug))
-                                    .Build();
+                                    .ConfigureLogging(configure => configure.SetMinimumLevel(LogLevel.Debug));
+                        });
 
-                        var siloService = new SiloService(silo);
-
-                        await siloService.StartAsync();
+                        await host.StartAsync();
 
                         this._logging.Info($"筒仓'{options.ClusterId}'-'{kv.Key}'已启动");
 
-                        this._dictionary.TryAdd(kv.Key, siloService);
+                        this._dictionary.TryAdd(kv.Key, host);
                         break;
                     }
                     catch (Exception ex)
@@ -112,62 +109,58 @@ namespace SAE.CommonLibrary.Mediator.Orleans
             await options.GrainNames.ForEachAsync(async kv =>
             {
                 this._logging.Info($"创建'{options.ClusterId}'-'{kv.Key}'筒仓服务");
-                var silo = this.DefaultConfiguration(options)
-                               .UseZooKeeperClustering(zooKeeperOptions =>
-                               {
-                                   zooKeeperOptions.ConnectionString = options.ZooKeeperConnectionString;
-                               })
-                               .Configure<ClusterOptions>(clusterOptions =>
-                               {
-                                   clusterOptions.ClusterId = options.ClusterId;
-                                   clusterOptions.ServiceId = kv.Key.ToLower();
-                               })
-                               .ConfigureLogging(configure => configure.SetMinimumLevel(LogLevel.Information))
-                               .Build();
+                var host = this.DefaultConfiguration(builder =>
+                {
+                    builder.Configure<ClusterOptions>(clusterOptions =>
+                           {
+                               clusterOptions.ClusterId = options.ClusterId;
+                               clusterOptions.ServiceId = kv.Key.ToLower();
+                           })
+                           .ConfigureLogging(configure => configure.SetMinimumLevel(LogLevel.Information));
+                });
 
-                var siloService = new SiloService(silo);
-
-                await siloService.StartAsync();
+                await host.StartAsync();
 
                 this._logging.Info($"筒仓'{options.ClusterId}'-'{kv.Key}'已启动");
 
-                this._dictionary.TryAdd(kv.Key, siloService);
+                this._dictionary.TryAdd(kv.Key, host);
             });
         }
 
-        private ISiloHostBuilder DefaultConfiguration(OrleansOptions options)
+        private IHost DefaultConfiguration(Action<ISiloBuilder> action)
         {
-            var silo = new SiloHostBuilder()
-                             .ConfigureApplicationParts(part =>
-                             {
-                                 part.AddApplicationPart(Assembly.GetExecutingAssembly()).WithReferences();
-                             })
-                             .ConfigureServices(service =>
-                             {
-                                 service.AddSingleton<ILoggingFactory>(this._loggingFactory)
-                                        .AddMicrosoftLogging()
-                                        .AddSingleton(this._mediator);
-                             });
 
-            return silo;
+            var silo = new HostBuilder()
+                            .UseOrleans(builder =>
+                            {
+                                builder.ConfigureServices(service =>
+                                  {
+                                      service.AddSingleton<ILoggingFactory>(this._loggingFactory)
+                                              .AddMicrosoftLogging()
+                                              .AddSingleton(this._mediator);
+                                  });
+                                action(builder);
+                            });
+
+            return silo.Build();
         }
-        public IEnumerable<ISiloService> AsEnumerable()
+        public IEnumerable<IHost> AsEnumerable()
         {
             return this._dictionary.Values;
         }
 
-        public ISiloService Get(Type type)
+        public IHost Get(Type type)
         {
-            ISiloService siloService = null;
+            IHost host = null;
 
             if (type != null)
             {
                 var key = Utility.GetIdentity(type);
 
-                this._dictionary.TryGetValue(key, out siloService);
+                this._dictionary.TryGetValue(key, out host);
             }
 
-            return siloService;
+            return host;
         }
     }
 }
