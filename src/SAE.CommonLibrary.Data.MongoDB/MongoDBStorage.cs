@@ -46,7 +46,9 @@ namespace SAE.CommonLibrary.Data.MongoDB
         private IMongoDatabase Configure(MongoDBOptions options)
         {
             this._logging.Debug($"Connection={options.Connection},DB={options.DB}");
-            var client = new MongoClient(new MongoUrl(options.Connection));
+            var clientSettings = MongoClientSettings.FromConnectionString(options.Connection);
+            clientSettings.LinqProvider = LinqProvider.V3;
+            var client = new MongoClient(clientSettings);
             return client.GetDatabase(options.DB);
         }
 

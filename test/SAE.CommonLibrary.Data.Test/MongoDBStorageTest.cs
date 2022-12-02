@@ -1,10 +1,12 @@
-using Microsoft.Extensions.DependencyInjection;
-using SAE.CommonLibrary.Test;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using SAE.CommonLibrary.Test;
+using StackExchange.Redis;
 using Xunit;
 using Xunit.Abstractions;
+using Role = SAE.CommonLibrary.Test.Role;
 
 namespace SAE.CommonLibrary.Data.Test
 {
@@ -21,6 +23,26 @@ namespace SAE.CommonLibrary.Data.Test
         {
             services.AddMongoDB();
             base.ConfigureServices(services);
+        }
+
+        [Fact]
+        public async Task AssociatedQuery()
+        {
+            var student = new Student();
+            var role = new Role();
+            var studenRole = new StudenRole(student.Id, role.Id);
+            await this._storage.SaveAsync(student);
+            await this._storage.SaveAsync(role);
+            await this._storage.SaveAsync(studenRole);
+            var query = from s in this._storage.AsQueryable<Student>()
+                        join sr in this._storage.AsQueryable<StudenRole>()
+                        on s.Id equals sr.StudentId
+                        where sr.RoleId == role.Id
+                        select s;
+            var students = query.ToArray();
+
+            this.WriteLine(students);
+
         }
 
         [Fact]
