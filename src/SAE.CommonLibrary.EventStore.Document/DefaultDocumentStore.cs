@@ -126,7 +126,7 @@ namespace SAE.CommonLibrary.EventStore.Document
 
             if (currentVersion > document.Version)
             {
-                throw new SAEException(StatusCodes.Custom,"版本不一致");
+                throw new SAEException(StatusCodes.Custom, "版本不一致");
             }
             //将当前版本号+1以保持循序性
             var version = currentVersion + 1;
@@ -151,7 +151,7 @@ namespace SAE.CommonLibrary.EventStore.Document
             await this._eventStore.AppendAsync(eventStream);
 
             //触发附加事件
-            await this._documentEvents.ForEachAsync(@event => @event.AppendAsync(document, document.ChangeEvents));
+            await this._documentEvents.ForEachAsync(async @event => await @event.AppendAsync(document, document.ChangeEvents));
 
             //如果版本号满足快照要求就将对象存储到快照中
             if (version % this._options.SnapshotInterval != 0)
@@ -167,7 +167,7 @@ namespace SAE.CommonLibrary.EventStore.Document
         {
             await this._snapshot.DeleteAsync(identity);
             await this._eventStore.DeleteAsync(identity);
-            await this._documentEvents.ForEachAsync(@event => @event.DeleteAsync<TDocument>(identity));
+            await this._documentEvents.ForEachAsync(async @event => await @event.DeleteAsync<TDocument>(identity));
         }
     }
 }

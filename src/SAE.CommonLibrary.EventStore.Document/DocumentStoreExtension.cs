@@ -44,9 +44,9 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// <param name="documentStore"></param>
         /// <param name="id">文档标识</param>
         /// <returns></returns>
-        public static Task<TDocument> FindAsync<TDocument>(this IDocumentStore documentStore, string id) where TDocument : IDocument, new()
+        public static async Task<TDocument> FindAsync<TDocument>(this IDocumentStore documentStore, string id) where TDocument : IDocument, new()
         {
-            return documentStore.FindAsync<TDocument>(id.ToIdentity());
+            return await documentStore.FindAsync<TDocument>(id.ToIdentity());
         }
         /// <summary>
         /// 获得指定版本的文档对象
@@ -56,9 +56,9 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// <param name="id">文档标识</param>
         /// <param name="version">版本号</param>
         /// <returns></returns>
-        public static Task<TDocument> FindAsync<TDocument>(this IDocumentStore documentStore, string id, int version) where TDocument : IDocument, new()
+        public static async Task<TDocument> FindAsync<TDocument>(this IDocumentStore documentStore, string id, int version) where TDocument : IDocument, new()
         {
-            return documentStore.FindAsync<TDocument>(id.ToIdentity(), version);
+            return await documentStore.FindAsync<TDocument>(id.ToIdentity(), version);
         }
         /// <summary>
         /// 获得最新文档对象
@@ -67,9 +67,9 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// <param name="documentStore"></param>
         /// <param name="identity">文档标识</param>
         /// <returns></returns>
-        public static Task<TDocument> FindAsync<TDocument>(this IDocumentStore documentStore, IIdentity identity) where TDocument : IDocument, new()
+        public static async Task<TDocument> FindAsync<TDocument>(this IDocumentStore documentStore, IIdentity identity) where TDocument : IDocument, new()
         {
-            return documentStore.FindAsync<TDocument>(identity, int.MaxValue);
+            return await documentStore.FindAsync<TDocument>(identity, int.MaxValue);
         }
 
         /// <summary>

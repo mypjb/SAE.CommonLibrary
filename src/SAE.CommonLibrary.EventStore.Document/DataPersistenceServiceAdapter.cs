@@ -1,9 +1,9 @@
-﻿using SAE.CommonLibrary.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Linq;
+using SAE.CommonLibrary.Data;
 
 namespace SAE.CommonLibrary.EventStore.Document
 {
@@ -23,14 +23,14 @@ namespace SAE.CommonLibrary.EventStore.Document
         {
             this._storage = storage;
         }
-        public Task DeleteAsync(IIdentity identity)
+        public async Task DeleteAsync(IIdentity identity)
         {
-            return this._storage.DeleteAsync<TDocument>(identity.ToString());
+            await this._storage.DeleteAsync<TDocument>(identity.ToString());
         }
 
-        public Task SaveAsync(TDocument document)
+        public async Task SaveAsync(TDocument document)
         {
-            return this._storage.SaveAsync(document);
+            await this._storage.SaveAsync(document);
         }
     }
 }

@@ -42,17 +42,17 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// 删除操作
         /// </summary>
         /// <param name="identity">文档标识</param>
-        protected virtual Task DeleteAsync(string identity)
+        protected virtual async Task DeleteAsync(string identity)
         {
-            return this._documentStore.DeleteAsync<TDocument>(identity);
+            await this._documentStore.DeleteAsync<TDocument>(identity);
         }
         /// <summary>
         /// 查找文档对象
         /// </summary>
         /// <param name="identity">文档标识</param>
-        protected virtual Task<TDocument> FindAsync(string identity)
+        protected virtual async Task<TDocument> FindAsync(string identity)
         {
-            return this._documentStore.FindAsync<TDocument>(identity);
+            return await this._documentStore.FindAsync<TDocument>(identity);
         }
     }
     /// <summary>
