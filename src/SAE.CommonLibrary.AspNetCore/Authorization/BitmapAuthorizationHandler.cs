@@ -77,7 +77,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
 
             var index = this._bitmapEndpointStorage.GetIndex(ctx);
             string code = string.Empty;
-            if (index > 0)
+            if (context.User.Identity.IsAuthenticated && index > 0)
             {
                 var claims = context.User.FindAll(Constants.BitmapAuthorize.Claim) ?? Enumerable.Empty<Claim>();
 

@@ -8,7 +8,7 @@ using SAE.CommonLibrary.Test;
 
 namespace SAE.CommonLibrary.AspNetCore.Test.Controllers
 {
-    [ApiController]
+
     [Route("/noauth/api/[controller]")]
     public class StudentController : Controller
     {

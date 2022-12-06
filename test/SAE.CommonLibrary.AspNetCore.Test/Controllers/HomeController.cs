@@ -1,17 +1,17 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SAE.CommonLibrary.AspNetCore.Test.Controllers
 {
     [ApiController]
     [Route("auth/api/[controller]")]
-    public class HomeController:Controller
+    public class HomeController : Controller
     {
         [HttpGet]
-        public  object Index()
+        public object Index()
         {
             return new { value = $"{nameof(HomeController)}_{nameof(Index)}" };
         }
@@ -32,9 +32,11 @@ namespace SAE.CommonLibrary.AspNetCore.Test.Controllers
             return new { value = $"{nameof(HomeController)}_{nameof(Delete)}" };
         }
         [HttpGet("~/auth/[controller]/{action}")]
+        [HttpPost("~/auth/{controller}/custom/test")]
         public object Custom()
         {
             return new { value = $"{nameof(HomeController)}_{nameof(Custom)}" };
         }
+
     }
 }

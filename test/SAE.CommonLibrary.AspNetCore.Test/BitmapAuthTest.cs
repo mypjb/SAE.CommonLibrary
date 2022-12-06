@@ -82,13 +82,13 @@ namespace SAE.CommonLibrary.AspNetCore.Test
 
             foreach (var descriptor in pathDescriptors.Where(s => s.Path.StartsWith("noauth")))
             {
-                var httpResponse = await this._client.GetAsync($"/account/login?path={HttpUtility.UrlEncode(descriptor.Path + "/noauth")}&method={descriptor.Method}");
+                // var httpResponse = await this._client.GetAsync($"/account/login?path={HttpUtility.UrlEncode(descriptor.Path + "/noauth")}&method={descriptor.Method}");
 
-                var cookies = httpResponse.Headers.GetValues(HeaderNames.SetCookie);
+                // var cookies = httpResponse.Headers.GetValues(HeaderNames.SetCookie);
 
                 var req = new HttpRequestMessage(new HttpMethod(descriptor.Method), descriptor.Path);
 
-                req.Headers.Add(HeaderNames.Cookie, cookies);
+                // req.Headers.Add(HeaderNames.Cookie, cookies);
 
                 var rep = await this._client.SendAsync(req);
                 if (rep.IsSuccessStatusCode)

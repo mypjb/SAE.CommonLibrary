@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using SAE.CommonLibrary.AspNetCore.Authorization;
 using SAE.CommonLibrary.Extension;
@@ -29,17 +33,17 @@ namespace SAE.CommonLibrary.AspNetCore.Routing
     /// <inheritdoc/>
     internal class PathDescriptorProvider : IPathDescriptorProvider
     {
-        private readonly IApiDescriptionGroupCollectionProvider _provider;
+        private readonly IServiceProvider serviceProvider;
         private readonly ILogging _logging;
         private IList<IPathDescriptor> pathDescriptors;
         /// <summary>
         /// 创建一个新的对象
         /// </summary>
-        /// <param name="provider">api提供者</param>
+        /// <param name="serviceProvider"></param>
         /// <param name="logging"></param>
-        public PathDescriptorProvider(IApiDescriptionGroupCollectionProvider provider, ILogging<PathDescriptorProvider> logging)
+        public PathDescriptorProvider(IServiceProvider serviceProvider, ILogging<PathDescriptorProvider> logging)
         {
-            this._provider = provider;
+            this.serviceProvider = serviceProvider;
             this._logging = logging;
             this.Scan();
         }
@@ -54,42 +58,73 @@ namespace SAE.CommonLibrary.AspNetCore.Routing
         {
             this.pathDescriptors = new List<IPathDescriptor>();
             this._logging.Info("准备扫描本地路径");
-            foreach (var group in this._provider.ApiDescriptionGroups.Items
-                                                .SelectMany(group => group.Items)
-                                                .Where(s => !s.GetType().IsDefined(typeof(ObsoleteAttribute), false)))
+
+            var actionDescriptorCollectionProvider = serviceProvider.GetService<IActionDescriptorCollectionProvider>();
+
+            if (actionDescriptorCollectionProvider == null)
             {
-                //var groupName = group.GroupName;
-                var name = group.ActionDescriptor.DisplayName;
-                //if (groupName.IsNullOrWhiteSpace())
-                //{
-                //    if (!name.IsNullOrWhiteSpace() &&
-                //        name.EndsWith(')'))
-                //    {
-                //        groupName = name.TrimEnd(')');
-                //        var index = groupName.LastIndexOf("(");
-                //        groupName = groupName.Substring(index + 1);
-                //        name = name.Substring(0, index);
-                //    }
-                //    else
-                //    {
-                //        groupName = "default";
-                //    }
-                //}
-                var url = group.RelativePath;
-                foreach (var kv in group.ActionDescriptor.RouteValues)
+                var apiDescriptionGroupCollectionProvider = serviceProvider.GetService<IApiDescriptionGroupCollectionProvider>();
+                foreach (var group in apiDescriptionGroupCollectionProvider.ApiDescriptionGroups.Items
+                                                    .SelectMany(group => group.Items)
+                                                    .Where(s => !s.GetType().IsDefined(typeof(ObsoleteAttribute), false)))
                 {
-                    url = url.Replace($"{{{kv.Key}}}", kv.Value, StringComparison.OrdinalIgnoreCase);
+                    var name = group.ActionDescriptor.DisplayName;
+
+                    var url = group.RelativePath;
+                    foreach (var kv in group.ActionDescriptor.RouteValues)
+                    {
+                        url = url.Replace($"{{{kv.Key}}}", kv.Value, StringComparison.OrdinalIgnoreCase);
+                    }
+                    pathDescriptors.Add(new PathDescriptor(name,
+                                                           group.HttpMethod,
+                                                           url,
+                                                           string.Empty));
                 }
-                pathDescriptors.Add(new PathDescriptor(name,
-                                                       group.HttpMethod,
-                                                       url,
-                                                       string.Empty));
             }
+            else
+            {
+                foreach (var action in actionDescriptorCollectionProvider.ActionDescriptors.Items)
+                {
+                    var methods = new List<string>();
+                    if (action.ActionConstraints != null)
+                    {
+                        foreach (var actionConstraint in action.ActionConstraints.OfType<HttpMethodActionConstraint>())
+                        {
+                            foreach (var method in actionConstraint.HttpMethods)
+                            {
+                                if (!methods.Any(s => s.Equals(method, StringComparison.OrdinalIgnoreCase)))
+                                {
+                                    methods.Add(method);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        methods.Add("");
+                    }
+
+                    foreach (var method in methods)
+                    {
+                        var url = action.AttributeRouteInfo.Template.StartsWith('/') ? action.AttributeRouteInfo.Template : $"/{action.AttributeRouteInfo.Template}";
+                        foreach (var kv in action.RouteValues)
+                        {
+                            url = url.Replace($"{{{kv.Key}}}", kv.Value, StringComparison.OrdinalIgnoreCase);
+                        }
+                        pathDescriptors.Add(new PathDescriptor(action.DisplayName,
+                                                               method,
+                                                               url,
+                                                               string.Empty));
+                    }
+
+                }
+            }
+
             this.pathDescriptors = this.pathDescriptors
-                                      .OrderBy(s => s.Group)
-                                      .ThenBy(s => s.Path)
-                                      .ThenBy(s => s.Method)
-                                      .ToList();
+                                       .OrderBy(s => s.Group)
+                                       .ThenBy(s => s.Path)
+                                       .ThenBy(s => s.Method)
+                                       .ToList();
 
 
             this.pathDescriptors.ForEach((s, i) =>

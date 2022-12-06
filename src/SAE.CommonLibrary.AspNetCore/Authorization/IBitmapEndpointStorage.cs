@@ -94,7 +94,8 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
             var key = $"{path}{Constants.BitmapAuthorize.Separator}{method}".ToLower();
 
             var bitmapEndpoint = this.BitmapEndpoints.FirstOrDefault(s => s.Path.Equals(path, StringComparison.OrdinalIgnoreCase) &&
-                                                                     s.Method.Equals(method, StringComparison.OrdinalIgnoreCase));
+                                                                     (s.Method.Equals(method, StringComparison.OrdinalIgnoreCase) ||
+                                                                     s.Method.IsNullOrWhiteSpace()));
 
             if (bitmapEndpoint == null)
             {
