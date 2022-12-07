@@ -136,6 +136,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
             {
                 var routeEndpoint = (RouteEndpoint)endpoint;
                 path = routeEndpoint.RoutePattern.RawText;
+                path = path.StartsWith('/') ? path : $"/{path}";
                 foreach (var kv in routeEndpoint.RoutePattern.RequiredValues)
                 {
                     path = path.Replace($"{{{kv.Key}}}", kv.Value?.ToString(), StringComparison.OrdinalIgnoreCase);

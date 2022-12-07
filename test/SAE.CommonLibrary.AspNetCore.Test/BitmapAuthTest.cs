@@ -45,6 +45,23 @@ namespace SAE.CommonLibrary.AspNetCore.Test
             builder.AddLocalBitmapEndpointProvider();
         }
 
+        protected override void Configure(IServiceProvider serviceProvider)
+        {
+            var bitmapEndpointProvider = serviceProvider.GetService<IBitmapEndpointProvider>();
+            if (bitmapEndpointProvider is LocalBitmapEndpointProvider)
+            {
+                var bitmapEndpoints = bitmapEndpointProvider.ListAsync()
+                                                            .GetAwaiter()
+                                                            .GetResult();
+                foreach (var bitmapEndpoint in bitmapEndpoints.Where(s => s.Path.StartsWith("/noauth")))
+                {
+                    bitmapEndpoint.Index = 0;
+                }
+            }
+
+            base.Configure(serviceProvider);
+        }
+
         [Fact]
         public async Task<IEnumerable<IPathDescriptor>> RouterScanningTest()
         {
@@ -60,7 +77,7 @@ namespace SAE.CommonLibrary.AspNetCore.Test
         {
             var pathDescriptors = await this.RouterScanningTest();
 
-            foreach (var descriptor in pathDescriptors.Where(s => s.Path.StartsWith("auth")))
+            foreach (var descriptor in pathDescriptors.Where(s => s.Path.StartsWith("/auth")))
             {
                 var httpResponse = await this._client.GetAsync($"/account/login?path={HttpUtility.UrlEncode(descriptor.Path)}&method={descriptor.Method}");
 
@@ -80,7 +97,7 @@ namespace SAE.CommonLibrary.AspNetCore.Test
                 Assert.Equal(System.Net.HttpStatusCode.OK, rep.StatusCode);
             }
 
-            foreach (var descriptor in pathDescriptors.Where(s => s.Path.StartsWith("noauth")))
+            foreach (var descriptor in pathDescriptors.Where(s => s.Path.StartsWith("/noauth")))
             {
                 // var httpResponse = await this._client.GetAsync($"/account/login?path={HttpUtility.UrlEncode(descriptor.Path + "/noauth")}&method={descriptor.Method}");
 
@@ -91,11 +108,8 @@ namespace SAE.CommonLibrary.AspNetCore.Test
                 // req.Headers.Add(HeaderNames.Cookie, cookies);
 
                 var rep = await this._client.SendAsync(req);
-                if (rep.IsSuccessStatusCode)
-                {
-                    this.WriteLine(rep.Headers);
-                }
-                Assert.Equal(System.Net.HttpStatusCode.Found, rep.StatusCode);
+              
+                Assert.Equal(System.Net.HttpStatusCode.OK, rep.StatusCode);
             }
 
 

@@ -155,7 +155,11 @@ namespace Microsoft.Extensions.DependencyInjection
                     .AddDefaultScope()
                     .AddSAEMemoryDistributedCache();
 
-            services.AddSingleton<IAuthorizationHandler, BitmapAuthorizationHandler>();
+            if (!services.IsRegister<IAuthorizationHandler, BitmapAuthorizationHandler>())
+            {
+                services.AddSingleton<IAuthorizationHandler, BitmapAuthorizationHandler>();
+            }
+
             services.TryAddSingleton<IBitmapAuthorization, BitmapAuthorization>();
             services.TryAddSingleton<IBitmapEndpointStorage, BitmapEndpointStorage>();
             services.AddOptions<List<BitmapAuthorizationDescriptor>>()
@@ -165,12 +169,16 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 var policy = new AuthorizationPolicyBuilder()
                                     .AddRequirements(new BitmapAuthorizationRequirement())
-                                    .Combine(options.DefaultPolicy)
+                                    // .Combine(options.DefaultPolicy)
                                     .Build();
 
                 if (policyName.IsNullOrWhiteSpace())
                 {
-                    options.DefaultPolicy = policy;
+                    if (options.DefaultPolicy.Requirements != null &&
+                        !options.DefaultPolicy.Requirements.OfType<BitmapAuthorizationRequirement>().Any())
+                    {
+                        options.DefaultPolicy = policy;
+                    }
                 }
                 else
                 {
@@ -228,7 +236,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             app.UseAuthentication()
                .UseAuthorization();
-               
+
             return app;
         }
 

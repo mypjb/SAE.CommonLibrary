@@ -58,7 +58,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         }
         public virtual Task<IEnumerable<BitmapEndpoint>> ListAsync()
         {
-            return Task.FromResult<IEnumerable<BitmapEndpoint>>(this.BitmapEndpoints);
+            return Task.FromResult(this.BitmapEndpoints);
         }
     }
 }

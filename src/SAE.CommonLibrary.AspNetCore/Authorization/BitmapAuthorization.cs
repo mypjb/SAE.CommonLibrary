@@ -34,7 +34,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         {
             var authorize = false;
 
-            if (index >= 0 && !code.IsNullOrWhiteSpace())
+            if (index >= 0 && !string.IsNullOrEmpty(code))
             {
                 var bitIndex = (int)Math.Ceiling(index * 1.0 / Constants.BitmapAuthorize.MaxPow) - 1;
 
@@ -83,7 +83,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
                 }
             }
 
-            return code.IsNullOrWhiteSpace() ? string.Empty : code;
+            return string.IsNullOrEmpty(code) ? string.Empty : code;
         }
 
         public virtual string GenerateCode(IEnumerable<int> authBits)
