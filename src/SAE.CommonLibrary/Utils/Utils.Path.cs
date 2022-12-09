@@ -16,7 +16,7 @@ namespace SAE.CommonLibrary
         public class Path
         {
             /// <summary>
-            /// 将<paramref name="paths"/>和<seealso cref="Constant.Path.Config"/>组合成路径
+            /// 将<paramref name="paths"/>和<seealso cref="Constants.Path.Config"/>组合成路径
             /// </summary>
             /// <param name="paths">路径列表</param>
             /// <returns></returns>
@@ -24,7 +24,7 @@ namespace SAE.CommonLibrary
             {
                 List<string> pathList = new List<string>();
 
-                pathList.Add(Constant.Path.Config);
+                pathList.Add(Constants.Path.Config);
                 if (paths != null)
                 {
                     pathList.AddRange(paths);
@@ -33,7 +33,7 @@ namespace SAE.CommonLibrary
                 return System.IO.Path.Combine(pathList.ToArray());
             }
             /// <summary>
-            /// 将<paramref name="paths"/>和<seealso cref="Constant.Path."/>组合成路径
+            /// 将<paramref name="paths"/>和<seealso cref="Constants.Path."/>组合成路径
             /// </summary>
             /// <param name="paths">路径列表</param>
             /// <returns></returns>
@@ -41,7 +41,7 @@ namespace SAE.CommonLibrary
             {
                 List<string> pathList = new List<string>();
 
-                pathList.Add(Constant.Path.Root);
+                pathList.Add(Constants.Path.Root);
                 if (paths != null)
                 {
                     pathList.AddRange(paths);

@@ -43,7 +43,7 @@ namespace SAE.CommonLibrary.Database.Test
                       .ForEach(s =>
                       {
                           var count = this.GetDbCount(s);
-                          var prefix = $"{Constant.Scope}:{s}:";
+                          var prefix = $"{Constants.Scope}:{s}:";
                           Enumerable.Range(0, count + 1)
                                     .ForEach(p =>
                                     {
@@ -52,10 +52,10 @@ namespace SAE.CommonLibrary.Database.Test
                                         if (max > s && count == p)
                                         {
                                             var databaseName = $"test_{Guid.NewGuid():N}";
-                                            dict[$"{key}:{nameof(DBConnectOptions.ConnectionString)}"] = $"Data Source={Constants.DBConnection.MYSQL.Server};Database={databaseName};User ID={Constants.DBConnection.MYSQL.UId};Password={Constants.DBConnection.MYSQL.Password};pooling=true;port=3306;sslmode=none;CharSet=utf8;allowPublicKeyRetrieval=true";
+                                            dict[$"{key}:{nameof(DBConnectOptions.ConnectionString)}"] = $"Data Source={SAE.CommonLibrary.Test.Constants.DBConnection.MYSQL.Server};Database={databaseName};User ID={SAE.CommonLibrary.Test.Constants.DBConnection.MYSQL.UId};Password={SAE.CommonLibrary.Test.Constants.DBConnection.MYSQL.Password};pooling=true;port=3306;sslmode=none;CharSet=utf8;allowPublicKeyRetrieval=true";
                                             dict[$"{key}:{nameof(DBConnectOptions.Provider)}"] = "mysql";
                                             dict[$"{key}:{nameof(DBConnectOptions.InitialCommand)}"] = $"CREATE DATABASE {databaseName}";
-                                            dict[$"{key}:{nameof(DBConnectOptions.InitialConnectionString)}"] = $"Data Source={Constants.DBConnection.MYSQL.Server};User ID={Constants.DBConnection.MYSQL.UId};Password={Constants.DBConnection.MYSQL.Password};pooling=true;port=3306;sslmode=none;CharSet=utf8;allowPublicKeyRetrieval=true"; ;
+                                            dict[$"{key}:{nameof(DBConnectOptions.InitialConnectionString)}"] = $"Data Source={SAE.CommonLibrary.Test.Constants.DBConnection.MYSQL.Server};User ID={SAE.CommonLibrary.Test.Constants.DBConnection.MYSQL.UId};Password={SAE.CommonLibrary.Test.Constants.DBConnection.MYSQL.Password};pooling=true;port=3306;sslmode=none;CharSet=utf8;allowPublicKeyRetrieval=true"; ;
                                             dict[$"{key}:{nameof(DBConnectOptions.InitialDetectionCommand)}"] = $"SELECT count(1) FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = '{databaseName}'";
                                         }
                                         else
@@ -111,7 +111,7 @@ namespace SAE.CommonLibrary.Database.Test
 
                                 using (var conn = this._connectionFactory.Get(count.ToString()))
                                 {
-                                    var key = $"{Constant.Scope}:{s}:{DBConnectOptions.Option}:{count}";
+                                    var key = $"{Constants.Scope}:{s}:{DBConnectOptions.Option}:{count}";
                                     var dBConnectOptions = this._configuration.GetSection(key).Get<DBConnectOptions>();
                                     conn.Open();
                                     using (var command = conn.CreateCommand())

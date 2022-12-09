@@ -5,55 +5,55 @@ using System.Text;
 namespace SAE.CommonLibrary.Configuration
 {
     /// <summary>
-    /// configuration Constants
+    /// 配置源的常量
     /// </summary>
-    public class Constant
+    public class Constants
     {
         /// <summary>
-        /// config const
+        /// 配置
         /// </summary>
         public class Config
         {
             /// <summary>
-            /// root directory key
+            /// 根目录key
             /// </summary>
             public const string RootDirectoryKey = "SAE:CONFIG:ROOT";
             /// <summary>
-            /// default root directory
+            /// 默认根目录
             /// </summary>
             public const string DefaultRootDirectory = "Config";
             /// <summary>
-            /// option key
+            /// 配置key
             /// </summary>
             public const string OptionKey = "SAE:CONFIG";
         }
 
         /// <summary>
-        /// file separator 
+        /// 文件分割符
         /// </summary>
         public const string FileSeparator = ".";
         /// <summary>
-        /// config separator
+        /// 配置分割符
         /// </summary>
         public const char ConfigSeparator = ':';
         /// <summary>
-        /// configuraion section separator
+        /// 配置节分割符
         /// </summary>
         public const char ConfigurationSectionSeparator = '.';
         /// <summary>
-        /// json suffix
+        /// json后缀
         /// </summary>
         public const string JsonSuffix = ".json";
         /// <summary>
-        /// default poll interval
+        /// 配置文件默认轮询时间
         /// </summary>
         public const int DefaultPollInterval = 60;
         /// <summary>
-        /// default client timeout
+        /// 客户端默认超时时间
         /// </summary>
         public const int DefaultClientTimeout = 1000 * 3;
         /// <summary>
-        /// default next request header name
+        /// 下一次请求头默认名称
         /// </summary>
         public const string DefaultNextRequestHeaderName = "Config-Next";
     }

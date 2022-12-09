@@ -13,12 +13,12 @@ using SAE.CommonLibrary.Scope;
 namespace Microsoft.Extensions.DependencyInjection
 {
     /// <summary>
-    /// 
+    /// 配置依赖管理
     /// </summary>
     public static class ConfigurationMicrosoftDependencyInjectionExtension
     {
         /// <summary>
-        /// add options manage
+        /// 添加配置管理
         /// </summary>
         /// <typeparam name="TOptions"></typeparam>
         /// <typeparam name="TService"></typeparam>
@@ -28,7 +28,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
         /// <summary>
-        /// add <see cref="IOptions{TOptions}"/>
+        /// 添加配置 <see cref="IOptions{TOptions}"/>
         /// </summary>
         /// <typeparam name="TOptions"></typeparam>
         /// <typeparam name="TService"></typeparam>
@@ -39,7 +39,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// from <see cref="IConfiguration"/> binding
+        /// 使用<see cref="IConfiguration"/>进行配置绑定
         /// </summary>
         /// <typeparam name="TOptions"></typeparam>
         /// <param name="optionsBuilder"></param>
@@ -50,7 +50,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// use <paramref name="key"/> bind <see cref="IConfiguration"/>
+        /// 将<see cref="IConfiguration"/>的<paramref name="key"/>绑定到配置
         /// </summary>
         /// <typeparam name="TOptions"></typeparam>
         /// <param name="optionsBuilder"></param>
@@ -98,8 +98,8 @@ namespace Microsoft.Extensions.DependencyInjection
             return optionsBuilder;
         }
 
-        // <summary>
-        /// find <see cref="IConfiguration"/> 
+        /// <summary>
+        /// 查找配置 <see cref="IConfiguration"/> 
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>

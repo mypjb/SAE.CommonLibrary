@@ -6,7 +6,7 @@ using SAE.CommonLibrary.Extension.Middleware;
 namespace SAE.CommonLibrary.Configuration
 {
     /// <summary>
-    /// sae source options
+    /// <see cref="SAEConfigurationSource"/>配置
     /// </summary>
     public class SAEOptions
     {
@@ -16,35 +16,40 @@ namespace SAE.CommonLibrary.Configuration
         public SAEOptions()
         {
             this.Client = new HttpClient();
-            this.Client.Timeout = TimeSpan.FromMilliseconds(Constant.DefaultClientTimeout);
-            this.PollInterval = Constant.DefaultPollInterval;
-            this.NextRequestHeaderName = Constant.DefaultNextRequestHeaderName;
+            this.Client.Timeout = TimeSpan.FromMilliseconds(Constants.DefaultClientTimeout);
+            this.PollInterval = Constants.DefaultPollInterval;
+            this.NextRequestHeaderName = Constants.DefaultNextRequestHeaderName;
         }
         /// <summary>
-        /// path to the persisted configuration file
+        /// 文件名称
         /// </summary>
         /// <value></value>
         public string FileName { get; set; }
         /// <summary>
-        /// remote configuration address
+        /// 完整路径
+        /// </summary>
+        /// <value></value>
+        public string FullPath { get; set; }
+        /// <summary>
+        /// 远程配置数据地址
         /// </summary>
         /// <value></value>
         public string Url { get; set; }
         /// <summary>
-        /// configure the rotation training time（unit seconds）
+        /// 配置文件轮询时间单位秒(默认: <see cref="Constants.DefaultPollInterval"/>)
         /// </summary>
         /// <value></value>
         public int PollInterval { get; set; }
         /// <summary>
-        /// remote configuration auth configuration
+        /// 远程授权配置
         /// </summary>
         /// <value></value>
         public OAuthOptions OAuth { get; set; }
         /// <summary>
-        /// configuration section
+        /// 配置节
         /// </summary>
         /// <remarks>
-        /// if set, the configuration from the remote is wrapped in the outermost layer. Multiple layers can be used with "."
+        /// 如果设置了，来自远程的配置将被包装在最外层。多层可以用"."分割
         /// </remarks>
         /// <example>
         /// <code>
@@ -54,12 +59,12 @@ namespace SAE.CommonLibrary.Configuration
         ///     Url="http://xxx.xxx"
         /// }
         /// 
-        /// // remote configuration:
+        /// // 远程配置:
         /// // {"connectionStrings":"xxxxx","provider":"sql"}
         /// 
         /// var root = this.ConfigurationBuilder(env).AddRemoteSource(options).Build();
         /// 
-        /// // the configuration has the following structure:
+        /// // 配置结构如下所示:
         /// //{"test":{"cf":{"connectionStrings":"xxxxx","provider":"sql"}}}
         /// 
         /// root.GetSection("test:cf").GetValue<![CDATA[<DbConfiguration>]]>();
@@ -68,12 +73,12 @@ namespace SAE.CommonLibrary.Configuration
         /// </example>
         public string ConfigurationSection { get; set; }
         /// <summary>
-        /// when the remote request is successful, this parameter is used to specify the access address to get the next remote request from the response header
+        /// 当远程请求成功时，此参数用于指定从响应报头获取下一个远程请求的访问地址(默认：<see cref="Constant.DefaultNextRequestHeaderName"/>)
         /// </summary>
         public string NextRequestHeaderName { get; set; }
         private HttpClient client;
         /// <summary>
-        /// send remote request client 
+        /// 用于发送远程请求的<see cref="HttpClient"/>
         /// </summary>
         /// <value></value>
         public HttpClient Client
@@ -87,7 +92,7 @@ namespace SAE.CommonLibrary.Configuration
             }
         }
         /// <summary>
-        /// check options
+        /// 检查配置
         /// </summary>
         internal void Check()
         {

@@ -9,7 +9,7 @@ namespace SAE.CommonLibrary
     /// <summary>
     /// system constant
     /// </summary>
-    public partial class Constant
+    public partial class Constants
     {
         /// <summary>
         /// default encoding

@@ -7,9 +7,10 @@ using Microsoft.Extensions.Options;
 namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
 {
     /// <summary>
-    /// <inheritdoc/>
+    /// 多租户默认配置项
     /// </summary>
     /// <typeparam name="TOptions"></typeparam>
+    /// <inheritdoc/>
     public class MultiTenantUnnamedOptionsManager<TOptions> : IOptions<TOptions> where TOptions : class
     {
         public readonly IOptionsMonitor<TOptions> _monitor;

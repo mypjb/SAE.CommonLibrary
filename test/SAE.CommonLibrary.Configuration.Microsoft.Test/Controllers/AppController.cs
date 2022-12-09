@@ -27,7 +27,7 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test.Controllers
             }
 
             var nextUrl = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.Path}?{nameof(version)}={this._options.Version}";
-            this.Response.Headers.Add(Constant.DefaultNextRequestHeaderName, nextUrl);
+            this.Response.Headers.Add(Constants.DefaultNextRequestHeaderName, nextUrl);
             return this.Content(this._options.Data, "application/json");
         }
         [HttpPost]

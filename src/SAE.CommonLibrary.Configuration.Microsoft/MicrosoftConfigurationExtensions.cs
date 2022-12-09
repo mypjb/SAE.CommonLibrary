@@ -1,13 +1,13 @@
-﻿using Microsoft.Extensions.Hosting;
-using SAE.CommonLibrary;
-using SAE.CommonLibrary.Configuration;
-using SAE.CommonLibrary.Extension;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using Constant = SAE.CommonLibrary.Configuration.Constant;
+using Microsoft.Extensions.Hosting;
+using SAE.CommonLibrary;
+using SAE.CommonLibrary.Configuration;
+using SAE.CommonLibrary.Extension;
+using Constants = SAE.CommonLibrary.Configuration.Constants;
 
 namespace Microsoft.Extensions.Configuration
 {
@@ -17,7 +17,7 @@ namespace Microsoft.Extensions.Configuration
     public static class MicrosoftConfigurationExtensions
     {
         /// <summary>
-        ///  add remote configuration source
+        ///  添加SAE远程配置源
         /// </summary>
         /// <param name="configurationBuilder"></param>
         /// <returns></returns>
@@ -27,7 +27,7 @@ namespace Microsoft.Extensions.Configuration
         }
 
         /// <summary>
-        /// add remote configuration source
+        /// 添加SAE远程配置源
         /// </summary>
         /// <param name="configurationBuilder"></param>
         /// <param name="options"></param>
@@ -40,7 +40,7 @@ namespace Microsoft.Extensions.Configuration
             });
         }
         /// <summary>
-        /// add remote configuration source
+        /// 添加SAE远程配置源
         /// </summary>
         /// <param name="configurationBuilder"></param>
         /// <param name="action"></param>
@@ -49,7 +49,7 @@ namespace Microsoft.Extensions.Configuration
         {
             var configuration = configurationBuilder.Build();
 
-            var section = configuration.GetSection(Constant.Config.OptionKey);
+            var section = configuration.GetSection(Constants.Config.OptionKey);
 
             SAEOptions option;
 
@@ -61,26 +61,43 @@ namespace Microsoft.Extensions.Configuration
             {
                 option = new SAEOptions();
             }
-            if (option.FileName.IsNullOrWhiteSpace())
+
+            if (option.FullPath.IsNullOrWhiteSpace())
             {
                 var applicationName = configuration.GetSection(HostDefaults.ApplicationKey).Value;
 
+                applicationName = applicationName.IsNullOrWhiteSpace() ? Guid.NewGuid().ToString("N") : applicationName;
+
                 var env = configuration.GetSection(HostDefaults.EnvironmentKey).Value;
 
-                var root = configuration.GetSection(Constant.Config.RootDirectoryKey)?.Value;
+                var root = configuration.GetSection(Constants.Config.RootDirectoryKey)?.Value;
 
-                root = root.IsNullOrWhiteSpace() ? Constant.Config.DefaultRootDirectory : root;
+                root = root.IsNullOrWhiteSpace() ? Constants.Config.DefaultRootDirectory : root;
 
-                if (env.IsNullOrWhiteSpace())
+                if (option.FileName.IsNullOrWhiteSpace())
                 {
-                    option.FileName = Path.Combine(root, $"{applicationName}{Constant.JsonSuffix}");
+                    if (env.IsNullOrWhiteSpace())
+                    {
+                        option.FullPath = Path.Combine(root, $"{applicationName}{Constants.JsonSuffix}");
+                    }
+                    else
+                    {
+                        option.FullPath = Path.Combine(root, $"{applicationName}.{env}{Constants.JsonSuffix}");
+                    }
+
                 }
                 else
                 {
-                    option.FileName = Path.Combine(root, $"{applicationName}.{env}{Constant.JsonSuffix}");
+                    option.FullPath = Path.Combine(root, option.FileName);
                 }
-                
             }
+
+            if (option.FileName.IsNullOrWhiteSpace())
+            {
+                option.FileName = Path.GetFileName(option.FullPath);
+            }
+
+
             //setting oauth
             if (option.OAuth != null && option.OAuth.Check())
             {
@@ -88,17 +105,20 @@ namespace Microsoft.Extensions.Configuration
             }
 
             action.Invoke(option);
+
+            Console.WriteLine($"远程配置信息：{option.ToJsonString()}");
             option.Check();
 
-            if (!configuration.GetSection(Constant.Config.RootDirectoryKey).Exists())
+            if (!configuration.GetSection(Constants.Config.RootDirectoryKey).Exists())
             {
-                configurationBuilder.AddInMemoryCollection(new Dictionary<string, string> { { Constant.Config.RootDirectoryKey, Path.GetDirectoryName(option.FileName) } });
+                Console.WriteLine($"未找到根目录'{Constants.Config.RootDirectoryKey}'配置节，自动设置默认根目录");
+                configurationBuilder.AddInMemoryCollection(new Dictionary<string, string> { { Constants.Config.RootDirectoryKey, Path.GetDirectoryName(option.FullPath) } });
             }
 
             return configurationBuilder.Add(new SAEConfigurationSource(option));
         }
         /// <summary>
-        /// add remote configuration source
+        /// 添加SAE远程配置源
         /// </summary>
         /// <param name="configurationBuilder"></param>
         /// <param name="url"></param>
@@ -112,7 +132,7 @@ namespace Microsoft.Extensions.Configuration
         }
 
         /// <summary>
-        /// scan <see cref="Constant.DefaultConfigDirectory"/> all <see cref="Constant.JsonSuffix"/> file
+        /// 扫描 <see cref="Constants.Config.DefaultRootDirectory"/> 目录所有 <see cref="Constants.JsonSuffix"/> 后缀的文件
         /// </summary>
         /// <param name="configurationBuilder"></param>
         /// <returns></returns>
@@ -121,10 +141,10 @@ namespace Microsoft.Extensions.Configuration
             return configurationBuilder.AddJsonFileDirectory(null);
         }
         /// <summary>
-        /// scan <paramref name="path"/> all <see cref="Constant.JsonSuffix"/> file
+        /// 扫描 <paramref name="path"/>目录所有 <see cref="Constants.JsonSuffix"/> 后缀的文件
         /// </summary>
         /// <param name="configurationBuilder"></param>
-        /// <param name="path">json file directory</param>
+        /// <param name="path">json文件目录</param>
         /// <returns></returns>
         public static IConfigurationBuilder AddJsonFileDirectory(this IConfigurationBuilder configurationBuilder, string path)
         {
@@ -136,10 +156,10 @@ namespace Microsoft.Extensions.Configuration
 
             if (path.IsNullOrWhiteSpace())
             {
-                var section = env.IsNullOrWhiteSpace() ? configuration.GetSection(Constant.Config.RootDirectoryKey) :
-                                                         configuration.GetSection($"{env}{Constant.ConfigSeparator}{Constant.Config.RootDirectoryKey}");
+                var section = env.IsNullOrWhiteSpace() ? configuration.GetSection(Constants.Config.RootDirectoryKey) :
+                                                         configuration.GetSection($"{env}{Constants.ConfigSeparator}{Constants.Config.RootDirectoryKey}");
 
-                path = section.Value.IsNullOrWhiteSpace() ? Constant.Config.DefaultRootDirectory : section.Value;
+                path = section.Value.IsNullOrWhiteSpace() ? Constants.Config.DefaultRootDirectory : section.Value;
             }
 
             var applicationDirectory = Path.Combine(path, applicationName);
@@ -152,18 +172,18 @@ namespace Microsoft.Extensions.Configuration
             {
                 if (!Directory.Exists(path))
                 {
-                    throw new SAEException($"Not exist directory '{path}' '{applicationDirectory}'.There is at least one of them");
+                    throw new SAEException($"目录 '{path}' '{applicationDirectory}' 至少得有一个存在");
                 }
             }
 
-            var paths = Directory.GetFiles(path, $"*{Constant.JsonSuffix}", SearchOption.TopDirectoryOnly)
+            var paths = Directory.GetFiles(path, $"*{Constants.JsonSuffix}", SearchOption.TopDirectoryOnly)
                                  .OrderBy(s => s)
                                  .ToList();
 
             var files = paths.Select(s =>
             {
                 var fileName = Path.GetFileNameWithoutExtension(s);
-                var fileSeparatorIndex = fileName.LastIndexOf(Constant.FileSeparator);
+                var fileSeparatorIndex = fileName.LastIndexOf(Constants.FileSeparator);
                 if (fileSeparatorIndex != -1)
                 {
                     fileName = fileName.Substring(0, fileSeparatorIndex);
@@ -174,8 +194,8 @@ namespace Microsoft.Extensions.Configuration
 
             foreach (var file in files)
             {
-                var originFile = Path.Combine(path, $"{file}{Constant.JsonSuffix}");
-                
+                var originFile = Path.Combine(path, $"{file}{Constants.JsonSuffix}");
+
                 if (File.Exists(originFile))
                 {
                     configurationBuilder.AddJsonFile(originFile, true, true);
@@ -183,7 +203,7 @@ namespace Microsoft.Extensions.Configuration
 
                 if (!env.IsNullOrWhiteSpace())
                 {
-                    var envFile = Path.Combine(path, $"{file}{Constant.FileSeparator}{env}{Constant.JsonSuffix}");
+                    var envFile = Path.Combine(path, $"{file}{Constants.FileSeparator}{env}{Constants.JsonSuffix}");
                     if (File.Exists(envFile))
                     {
                         configurationBuilder.AddJsonFile(envFile, true, true);
@@ -191,7 +211,7 @@ namespace Microsoft.Extensions.Configuration
                 }
             }
 
-            configurationBuilder.AddInMemoryCollection(new Dictionary<string, string> { { Constant.Config.RootDirectoryKey, path } });
+            configurationBuilder.AddInMemoryCollection(new Dictionary<string, string> { { Constants.Config.RootDirectoryKey, path } });
 
             return configurationBuilder;
         }

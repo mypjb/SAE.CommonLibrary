@@ -8,7 +8,7 @@ namespace SAE.CommonLibrary
     /// <summary>
     /// 常量对象
     /// </summary>
-    public partial class Constant
+    public partial class Constants
     {
         /// <summary>
         /// path constant

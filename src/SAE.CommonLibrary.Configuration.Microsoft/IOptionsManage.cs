@@ -9,31 +9,32 @@ using SAE.CommonLibrary.Logging;
 namespace SAE.CommonLibrary.Configuration.Microsoft
 {
     /// <summary>
-    /// options manage
+    /// 配置管理
     /// </summary>
-    /// <typeparam name="TOptions">options class</typeparam>
-    /// <typeparam name="TService">options setting service class</typeparam>
+    /// <typeparam name="TOptions"></typeparam>
+    /// <typeparam name="TService"></typeparam>
     public interface IOptionsManage<TOptions, TService> where TOptions : class where TService : class
     {
         /// <summary>
-        /// get current service
+        /// 获得当前服务
         /// </summary>
         TService Get();
         /// <summary>
-        /// options change event
+        /// 配置更改
         /// </summary>
         event Action<TOptions, TService> OnChange;
         /// <summary>
-        /// confiure service
+        /// 配置服务
         /// </summary>
         event Func<TOptions, TService> OnConfigure;
     }
 
     /// <summary>
-    /// <inheritdoc/>
+    /// <see cref="IOptionsManage{TOptions, TService}"/>默认实现
     /// </summary>
     /// <typeparam name="TOptions"></typeparam>
     /// <typeparam name="TService"></typeparam>
+    /// <inheritdoc/>
     public class OptionsManager<TOptions, TService> : IOptionsManage<TOptions, TService> where TOptions : class where TService : class
     {
         private readonly IOptionsMonitor<TOptions> _monitor;
@@ -49,41 +50,47 @@ namespace SAE.CommonLibrary.Configuration.Microsoft
         }
 
         /// <summary>
-        /// configure <see cref="TService"/>
+        /// 配置初始化时触发的函数
         /// </summary>
         /// <param name="options"></param>
         private TService Configure(TOptions options)
         {
-            this._logging.Info($"config change");
+            this._logging.Info($"配置变更");
             return this.OnConfigure.Invoke(options);
         }
         /// <summary>
-        /// options change function
+        /// 配置更改时触发的私有函数
         /// </summary>
         /// <param name="options"></param>
         private void Change(TOptions options)
         {
             var dict = this._cache.ToArray();
-            this._logging.Info($"clear config count({dict.Length})");
+            this._logging.Info($"清理配置数量({dict.Length})");
             this._cache.Clear();
-            this._logging.Info("clear config ok");
+            this._logging.Info("配置清理完成");
             if (this.OnChange == null)
                 return;
 
-            this._logging.Info("start exec onChange event");
+            this._logging.Info("开始执行配置变更事件");
             foreach (var kv in dict)
             {
+                this._logging.Debug($"开始执行'{kv.Key}'的变更事件");
                 this.OnChange.Invoke(kv.Key, kv.Value);
             }
-            this._logging.Info("onChange exec end");
+            this._logging.Info("配置变更事件执行完毕");
         }
-
+        /// <summary>
+        /// 配置变更事件
+        /// </summary>
         public event Action<TOptions, TService> OnChange;
+        /// <summary>
+        /// 配置初始化事件
+        /// </summary>
         public event Func<TOptions, TService> OnConfigure;
 
 
         /// <summary>
-        /// get <typeparamref name="TService"/>
+        /// 获得服务
         /// </summary>
         public TService Get()
         {
@@ -91,11 +98,11 @@ namespace SAE.CommonLibrary.Configuration.Microsoft
 
             if (options == null)
             {
-                this._logging.Warn("The current options does not exist");
+                this._logging.Warn("当前配置项不存在");
                 return null;
             }
 
-            this._logging.Debug("Look up the options from the cache");
+            this._logging.Debug("从缓存中查找配置项");
 
             return this._cache.GetOrAdd(options, this.Configure);
         }

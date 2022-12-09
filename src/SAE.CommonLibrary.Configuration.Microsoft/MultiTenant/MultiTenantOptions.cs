@@ -6,40 +6,40 @@ using System.Threading.Tasks;
 namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
 {
     /// <summary>
-    /// multitenant options
+    /// 多租户配置
     /// </summary>
     public class MultiTenantOptions
     {
         /// <summary>
-        /// configuration key
+        /// 配置key
         /// </summary>
         public const string Options = "multitenant:options";
     }
     /// <summary>
-    /// multi tenant options
+    /// 多租户配置
     /// </summary>
     public class MultiTenantOptions<TOptions> where TOptions : class
     {
 
         /// <summary>
-        /// multi tenant options
+        /// 创建一个新的对象
         /// </summary>
         public MultiTenantOptions()
         {
-            this.ConfigurationNodeName = SAE.CommonLibrary.Constant.Scope;
+            this.ConfigurationNodeName = SAE.CommonLibrary.Constants.Scope;
         }
         /// <summary>
-        /// configuration node name
+        /// 配置节点的名称
         /// </summary>
         /// <value></value>
         public string ConfigurationNodeName { get; set; }
         /// <summary>
-        /// options key
+        /// 配置Key
         /// </summary>
         /// <value></value>
         public string Key { get; set; }
         /// <summary>
-        /// options name
+        /// 配置名
         /// </summary>
         /// <value></value>
         public string Name { get; set; }

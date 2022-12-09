@@ -41,7 +41,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
                 if (code.Length > bitIndex)
                 {
                     var bit = Convert.ToUInt16(code[bitIndex]);
-                    //将00000001向前推进 index % Constant.BitmapAuthorize.MaxPow 个位
+                    //将00000001向前推进 index % Constants.BitmapAuthorize.MaxPow 个位
                     var bitPosition = index % Constants.BitmapAuthorize.MaxPow;
 
                     var permissionBit = 1 << ((bitPosition == 0 ? Constants.BitmapAuthorize.MaxPow : bitPosition) - 1);

@@ -54,10 +54,10 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
 
             var mulitTenantData = new Dictionary<string, object>
             {
-              {SAE.CommonLibrary.Constant.Scope,data}
+              {SAE.CommonLibrary.Constants.Scope,data}
             };
 
-            var filePath = Path.Combine(SAE.CommonLibrary.Constant.Path.Config, "test.MulitTenan.json");
+            var filePath = Path.Combine(SAE.CommonLibrary.Constants.Path.Config, "test.MulitTenan.json");
 
             File.WriteAllText(filePath, mulitTenantData.ToJsonString());
 

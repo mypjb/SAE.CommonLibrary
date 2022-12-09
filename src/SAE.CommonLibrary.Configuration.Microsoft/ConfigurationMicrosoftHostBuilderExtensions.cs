@@ -6,12 +6,12 @@ using System;
 namespace Microsoft.Extensions.Hosting
 {
     /// <summary>
-    /// 
+    /// 添加配置源
     /// </summary>
     public static class ConfigurationMicrosoftHostBuilderExtensions
     {
         /// <summary>
-        /// add sae configuration source
+        /// 添加sae远程配置源
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="action"></param>
@@ -23,7 +23,10 @@ namespace Microsoft.Extensions.Hosting
                 conf.AddRemoteSource(action);
             });
         }
-
+        /// <summary>
+        /// 添加sae远程配置源
+        /// </summary>
+        /// <param name="builder"></param>
         public static IHostBuilder ConfigureRemoteSource(this IHostBuilder builder)
         {
             return builder.ConfigureAppConfiguration((ctx, conf) =>
@@ -33,7 +36,7 @@ namespace Microsoft.Extensions.Hosting
         }
 
         /// <summary>
-        /// add remote configuration source
+        /// 添加sae远程配置源
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="options"></param>
@@ -46,7 +49,7 @@ namespace Microsoft.Extensions.Hosting
             });
         }
         /// <summary>
-        /// add remote configuration source
+        /// 添加sae远程配置源
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="url"></param>
@@ -59,7 +62,7 @@ namespace Microsoft.Extensions.Hosting
             });
         }
         /// <summary>
-        /// add <seealso cref="MicrosoftConfigurationExtensions.DefaultConfigDirectory"/>  directory As a configuration source
+        /// 使用<see cref="MicrosoftConfigurationExtensions.DefaultConfigDirectory"/>文件夹到配置源
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
@@ -68,10 +71,10 @@ namespace Microsoft.Extensions.Hosting
             return builder.ConfigureJsonFileDirectorySource(null);
         }
         /// <summary>
-        /// add <paramref name="path"/>  directory As a configuration source
+        /// 添加<paramref name="path"/>路径到配置源
         /// </summary>
         /// <param name="builder"></param>
-        /// <param name="path">json file directory</param>
+        /// <param name="path">json文件目录</param>
         /// <returns></returns>
         public static IHostBuilder ConfigureJsonFileDirectorySource(this IHostBuilder builder,string path)
         {

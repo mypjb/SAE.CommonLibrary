@@ -13,6 +13,7 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
 
     /// <inheritdoc/>
     /// <summary>
+    /// 多租户配置监控器
     /// </summary>
     /// <typeparam name="TOptions"></typeparam>
     public class MultiTenantOptionsMonitor<TOptions> : OptionsMonitor<TOptions> where TOptions : class
@@ -67,7 +68,7 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
 
             if (!scope.Name.IsNullOrWhiteSpace())
             {
-                cacheKey = name.IsNullOrWhiteSpace() ? scope.Name : $"{scope.Name}{Constant.ConfigSeparator}{name}";
+                cacheKey = name.IsNullOrWhiteSpace() ? scope.Name : $"{scope.Name}{Constants.ConfigSeparator}{name}";
                 this._logging.Debug($"find '{cacheKey}' options name");
             }
             else

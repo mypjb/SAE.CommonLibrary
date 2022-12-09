@@ -70,7 +70,7 @@ namespace SAE.CommonLibrary.Extension
         /// <returns></returns>
         public static IEnumerable<byte> ToBytes(this string input, Encoding encoding = null)
         {
-            return input.IsNullOrWhiteSpace() ? new byte[0] : (encoding ?? Constant.Encoding).GetBytes(input);
+            return input.IsNullOrWhiteSpace() ? new byte[0] : (encoding ?? Constants.Encoding).GetBytes(input);
         }
 
         /// <summary>

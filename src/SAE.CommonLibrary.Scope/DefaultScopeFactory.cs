@@ -42,7 +42,7 @@ namespace SAE.CommonLibrary.Scope
         {
             if (this._asyncLocal.Value == null)
             {
-                this._asyncLocal.Value = new DefaultScope(Constant.Default);
+                this._asyncLocal.Value = new DefaultScope(Constants.Default);
             }
             return this._asyncLocal.Value;
         }

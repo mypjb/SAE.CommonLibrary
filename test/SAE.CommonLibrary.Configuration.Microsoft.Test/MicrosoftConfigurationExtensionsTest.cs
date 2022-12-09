@@ -76,7 +76,7 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
             };
 
             var root = this.GetConfigurationBuilder(env)
-                           .AddInMemoryCollection(new[] { new KeyValuePair<string, string>(Constant.Config.RootDirectoryKey, Path.Combine(Constant.Config.DefaultRootDirectory, nameof(Remote), env)) })
+                           .AddInMemoryCollection(new[] { new KeyValuePair<string, string>(Constants.Config.RootDirectoryKey, Path.Combine(Constants.Config.DefaultRootDirectory, nameof(Remote), env)) })
                            .AddRemoteSource(remoteOptions)
                            .Build();
 
@@ -128,11 +128,11 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
             };
 
             var root = this.GetConfigurationBuilder(env)
-                           .AddInMemoryCollection(new[] { new KeyValuePair<string, string>(Constant.Config.RootDirectoryKey, Path.Combine(Constant.Config.DefaultRootDirectory, nameof(CustomRemoteNode), env)) })
+                           .AddInMemoryCollection(new[] { new KeyValuePair<string, string>(Constants.Config.RootDirectoryKey, Path.Combine(Constants.Config.DefaultRootDirectory, nameof(CustomRemoteNode), env)) })
                            .AddRemoteSource(remoteOptions)
                            .Build();
 
-            var key = $"{remoteOptions.ConfigurationSection.Replace(Constant.ConfigurationSectionSeparator, ':')}:{DBConnectOptions.Option}";
+            var key = $"{remoteOptions.ConfigurationSection.Replace(Constants.ConfigurationSectionSeparator, ':')}:{DBConnectOptions.Option}";
             var configurationSection = root.GetSection(key);
 
             var options = configurationSection.Get<DBConnectOptions>();
@@ -169,7 +169,7 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
             };
 
             var root = this.GetConfigurationBuilder(env)
-                           .AddInMemoryCollection(new[] { new KeyValuePair<string, string>(Constant.Config.RootDirectoryKey, Path.Combine(Constant.Config.DefaultRootDirectory, nameof(Remote), env)) })
+                           .AddInMemoryCollection(new[] { new KeyValuePair<string, string>(Constants.Config.RootDirectoryKey, Path.Combine(Constants.Config.DefaultRootDirectory, nameof(Remote), env)) })
                            .AddRemoteSource(remoteOptions)
                            .Build();
 

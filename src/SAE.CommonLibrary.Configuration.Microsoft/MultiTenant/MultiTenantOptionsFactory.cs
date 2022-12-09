@@ -11,9 +11,10 @@ using SAE.CommonLibrary.Scope;
 namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
 {
     /// <summary>
-    /// <inheritdoc/>
+    /// 多租户配置工厂
     /// </summary>
     /// <typeparam name="TOptions"></typeparam>
+    /// <inheritdoc/>
     public class MultiTenantOptionsFactory<TOptions> : OptionsFactory<TOptions>, IOptionsFactory<TOptions> where TOptions : class
     {
         private readonly IScopeFactory _scopeFactory;
@@ -86,9 +87,9 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
             {
                 this._logging.Info($"scope : {scope.Name}");
 
-                var end = options.Key.IsNullOrWhiteSpace() ? string.Empty : $"{Constant.ConfigSeparator}{options.Key}";
+                var end = options.Key.IsNullOrWhiteSpace() ? string.Empty : $"{Constants.ConfigSeparator}{options.Key}";
 
-                var key = $"{options.ConfigurationNodeName}{Constant.ConfigSeparator}{scope.Name}{end}";
+                var key = $"{options.ConfigurationNodeName}{Constants.ConfigSeparator}{scope.Name}{end}";
 
                 this._logging.Info($"get configuration key: {key}");
 

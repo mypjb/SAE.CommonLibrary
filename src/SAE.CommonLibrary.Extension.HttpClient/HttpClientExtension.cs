@@ -92,7 +92,7 @@ namespace SAE.CommonLibrary.Extension
         {
             if (string.IsNullOrWhiteSpace(value)) return request;
 
-            var content = new StringContent(value, Constant.Encoding, mediaType);
+            var content = new StringContent(value, SAE.CommonLibrary.Constants.Encoding, mediaType);
 
             return request.AddContent(content: content);
         }
