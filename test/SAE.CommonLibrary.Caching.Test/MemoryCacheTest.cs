@@ -88,7 +88,7 @@ namespace SAE.CommonLibrary.Cache.Test
         }
 
         [Fact]
-        public virtual async Task Deleteattern()
+        public virtual async Task DeletePattern()
         {
             var student = await this.Add();
 

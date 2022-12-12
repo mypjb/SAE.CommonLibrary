@@ -18,10 +18,6 @@ namespace SAE.CommonLibrary.Cache.Test
             services.AddRedisCache();
         }
 
-        [Fact]
-        public override async Task Deleteattern()
-        {
-            await base.Deleteattern();
-        }
+       
     }
 }
