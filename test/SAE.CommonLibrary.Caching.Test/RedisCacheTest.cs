@@ -1,4 +1,6 @@
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace SAE.CommonLibrary.Cache.Test
@@ -16,5 +18,10 @@ namespace SAE.CommonLibrary.Cache.Test
             services.AddRedisCache();
         }
 
+        [Fact]
+        public override async Task Deleteattern()
+        {
+            await base.Deleteattern();
+        }
     }
 }

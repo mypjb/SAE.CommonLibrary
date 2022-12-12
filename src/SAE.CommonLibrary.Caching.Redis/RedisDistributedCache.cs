@@ -189,7 +189,7 @@ namespace SAE.CommonLibrary.Caching.Redis
             {
                 this._logging.Debug($"batch delete keys");
                 await db.KeyDeleteAsync(keys.Select(key => (RedisKey)key).ToArray());
-                var result = keys.Select(s => true).ToArray();
+                result = keys.Select(s => true).ToArray();
             });
             return result;
         }

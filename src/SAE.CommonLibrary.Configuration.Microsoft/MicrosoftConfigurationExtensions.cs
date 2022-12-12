@@ -40,25 +40,39 @@ namespace Microsoft.Extensions.Configuration
             });
         }
         /// <summary>
-        /// 添加SAE远程配置源
+        /// 添加SAE远程配置源,并从<see cref="Constants.Config.OptionKey"/>获取<see cref="SAEOptions"/>
         /// </summary>
         /// <param name="configurationBuilder"></param>
-        /// <param name="action"></param>
-        /// <returns></returns>
+        /// <param name="action">初始化配置</param>
         public static IConfigurationBuilder AddRemoteSource(this IConfigurationBuilder configurationBuilder, Action<SAEOptions> action)
         {
+            return configurationBuilder.AddRemoteSource(null, action);
+        }
+        /// <summary>
+        /// 添加SAE远程配置源，并从<paramref name="configurationSection"/>获取<see cref="SAEOptions"/>
+        /// </summary>
+        /// <param name="configurationBuilder"></param>
+        /// <param name="configurationSection">配置子节点名称</param>
+        /// <param name="action">初始化配置</param>
+        /// <returns></returns>
+        public static IConfigurationBuilder AddRemoteSource(this IConfigurationBuilder configurationBuilder, string configurationSection, Action<SAEOptions> action)
+        {
+            configurationSection = configurationSection.IsNullOrWhiteSpace() ? Constants.Config.OptionKey : configurationSection;
+
             var configuration = configurationBuilder.Build();
 
-            var section = configuration.GetSection(Constants.Config.OptionKey);
+            var section = configuration.GetSection(configurationSection);
 
             SAEOptions option;
 
             if (section.Exists())
             {
+                Console.WriteLine($"找到'{configurationSection}'配置节!");
                 option = section.Get<SAEOptions>();
             }
             else
             {
+                Console.WriteLine($"所提供的配置上下文不存在配置节'{configurationSection}'");
                 option = new SAEOptions();
             }
 
@@ -104,7 +118,7 @@ namespace Microsoft.Extensions.Configuration
                 option.Client = option.Client.UseOAuth(option.OAuth);
             }
 
-            action.Invoke(option);
+            action?.Invoke(option);
 
             Console.WriteLine($"远程配置信息：{option.ToJsonString()}");
             option.Check();
@@ -118,17 +132,14 @@ namespace Microsoft.Extensions.Configuration
             return configurationBuilder.Add(new SAEConfigurationSource(option));
         }
         /// <summary>
-        /// 添加SAE远程配置源
+        /// 添加SAE远程配置源，并从<paramref name="configurationSection"/>获取<see cref="SAEOptions"/>
         /// </summary>
         /// <param name="configurationBuilder"></param>
-        /// <param name="url"></param>
+        /// <param name="configurationSection">配置子节点名称</param>
         /// <returns></returns>
-        public static IConfigurationBuilder AddRemoteSource(this IConfigurationBuilder configurationBuilder, string url)
+        public static IConfigurationBuilder AddRemoteSource(this IConfigurationBuilder configurationBuilder, string configurationSection)
         {
-            return configurationBuilder.AddRemoteSource(option =>
-            {
-                option.Url = url;
-            });
+            return configurationBuilder.AddRemoteSource(configurationSection, _ => { });
         }
 
         /// <summary>

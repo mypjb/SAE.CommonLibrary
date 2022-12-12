@@ -1,12 +1,12 @@
-using Microsoft.Extensions.DependencyInjection;
-using SAE.CommonLibrary.Caching;
-using SAE.CommonLibrary.Extension;
-using SAE.CommonLibrary.Test;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using SAE.CommonLibrary.Caching;
+using SAE.CommonLibrary.Extension;
+using SAE.CommonLibrary.Test;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -73,7 +73,7 @@ namespace SAE.CommonLibrary.Cache.Test
         public async Task Delete()
         {
             var student = await this.Add();
-            
+
             Xunit.Assert.True(_distributedCache.Delete(student.Name));
             Xunit.Assert.Null(_distributedCache.Get<Student>(student.Name));
         }
@@ -86,6 +86,16 @@ namespace SAE.CommonLibrary.Cache.Test
             var students = await this._distributedCache.GetAsync<Student>(keys);
             Xunit.Assert.True(students.Count(s => s != null) == 0);
         }
+
+        [Fact]
+        public virtual async Task Deleteattern()
+        {
+            var student = await this.Add();
+
+            Xunit.Assert.True(await _distributedCache.DeletePatternAsync($"^{student.Name[..(student.Name.Length / 2)]}"));
+            Xunit.Assert.Null(_distributedCache.Get<Student>(student.Name));
+        }
+
         [Fact]
         public async Task Clear()
         {

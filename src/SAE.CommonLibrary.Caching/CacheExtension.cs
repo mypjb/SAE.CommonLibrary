@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using SAE.CommonLibrary.Extension;
 
@@ -379,7 +381,44 @@ namespace SAE.CommonLibrary.Caching
         {
             return cache.DeleteAsync(keys).GetAwaiter().GetResult();
         }
+        /// <summary>
+        /// 采用正则表达式的方式进行删除
+        /// </summary>
+        /// <param name="cache"></param>
+        /// <param name="pattern">正则表达式</param>
+        public static bool DeletePattern(this ICache cache, string pattern)
+        {
+            return cache.DeletePatternAsync(pattern).GetAwaiter().GetResult();
+        }
+        /// <summary>
+        /// 采用正则表达式的方式进行删除
+        /// </summary>
+        /// <param name="cache"></param>
+        /// <param name="pattern">正则表达式</param>
+        public static async Task<bool> DeletePatternAsync(this ICache cache, string pattern)
+        {
+            if (string.IsNullOrWhiteSpace(pattern))
+            {
+                return false;
+            }
+            
+            var keys = await cache.GetKeysAsync();
 
+            var regex = new Regex(pattern);
+
+            keys = keys.Where(s => regex.IsMatch(s)).ToArray();
+
+            if (keys.Any())
+            {
+                var bools = await cache.DeleteAsync(keys);
+
+                return bools.All(s => s);
+            }
+            else
+            {
+                return true;
+            }
+        }
         #endregion
 
         #region ICache Get
