@@ -38,6 +38,14 @@ namespace SAE.CommonLibrary.Extension
         {
             return Utils.Security.MD5(bytes, @short);
         }
+        /// <summary>
+        /// 将<paramref name="bytes"/>转换成MD5
+        /// </summary>
+        /// <param name="bytes">字节集合</param>
+        public static string ToBase64(this IEnumerable<byte> bytes)
+        {
+            return Utils.Security.Base64(bytes);
+        }
         #endregion
     }
 }

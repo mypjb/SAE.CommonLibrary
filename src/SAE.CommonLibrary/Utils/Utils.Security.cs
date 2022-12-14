@@ -1,10 +1,10 @@
-﻿using SAE.CommonLibrary.Extension;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using SAE.CommonLibrary.Extension;
 
 namespace SAE.CommonLibrary
 {
@@ -86,6 +86,14 @@ namespace SAE.CommonLibrary
                 stream.Position = position;
 
                 return md5Str;
+            }
+            /// <summary>
+            /// 转换成base64
+            /// </summary>
+            /// <param name="bytes"></param>
+            public static string Base64(IEnumerable<byte> bytes)
+            {
+                return Convert.ToBase64String(bytes.ToArray());
             }
         }
     }
