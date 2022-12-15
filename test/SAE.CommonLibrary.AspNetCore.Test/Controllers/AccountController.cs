@@ -78,7 +78,7 @@ namespace SAE.CommonLibrary.AspNetCore.Test.Controllers
 
             identity.AddClaim(new Claim(ClaimTypes.Name, "pjb"));
             identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, Guid.Empty.ToString("N")));
-            identity.AddClaim(new Claim(Constants.BitmapAuthorize.Administrator, "1"));
+            identity.AddClaim(new Claim(Constants.BitmapAuthorize.Administrator, string.Empty));
 
             var claimsPrincipal = new ClaimsPrincipal(identity);
 

@@ -117,7 +117,7 @@ namespace SAE.CommonLibrary.AspNetCore.Test
 
             var adminCookies = adminRep.Headers.GetValues(HeaderNames.SetCookie);
 
-            foreach (var descriptor in pathDescriptors.Where(s => s.Path.StartsWith("noauth") || s.Path.StartsWith("auth")))
+            foreach (var descriptor in pathDescriptors.Where(s => s.Path.StartsWith("/noauth") || s.Path.StartsWith("/auth")))
             {
                 var req = new HttpRequestMessage(new HttpMethod(descriptor.Method), descriptor.Path);
 

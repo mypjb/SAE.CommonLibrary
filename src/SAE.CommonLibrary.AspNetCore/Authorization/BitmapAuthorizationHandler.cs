@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using SAE.CommonLibrary.Caching;
 using SAE.CommonLibrary.Extension;
 using SAE.CommonLibrary.Logging;
+using SAE.CommonLibrary.Scope;
 
 namespace SAE.CommonLibrary.AspNetCore.Authorization
 {
@@ -27,6 +28,8 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         private readonly ILogging _logging;
         private readonly ICache _cache;
         private readonly IOptionsSnapshot<List<BitmapAuthorizationDescriptor>> _optionsSnapshot;
+        private readonly IScopeFactory _scopeFactory;
+
         /// <summary>
         /// 创建一个新的对象
         /// </summary>
@@ -36,12 +39,14 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         /// <param name="logging">日志记录器</param>
         /// <param name="cache">内部缓存</param>
         /// <param name="optionsSnapshot">配置</param>
+        /// <param name="scopeFactory">区域工厂</param>
         public BitmapAuthorizationHandler(IHttpContextAccessor httpContextAccessor,
                                           IBitmapEndpointStorage bitmapEndpointStorage,
                                           IBitmapAuthorization bitmapAuthorization,
                                           ILogging<BitmapAuthorization> logging,
                                           IDistributedCache cache,
-                                          IOptionsSnapshot<List<BitmapAuthorizationDescriptor>> optionsSnapshot)
+                                          IOptionsSnapshot<List<BitmapAuthorizationDescriptor>> optionsSnapshot,
+                                          IScopeFactory scopeFactory)
         {
             this._httpContextAccessor = httpContextAccessor;
             this._bitmapEndpointStorage = bitmapEndpointStorage;
@@ -49,6 +54,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
             this._logging = logging;
             this._cache = cache;
             this._optionsSnapshot = optionsSnapshot;
+            this._scopeFactory = scopeFactory;
         }
         /// <summary>
         /// 验证当前认证标识是否和符合位图授权标准
@@ -56,9 +62,13 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         /// <param name="context">验证上下文</param>
         /// <param name="requirement">授权需求</param>
         /// <returns></returns>
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, BitmapAuthorizationRequirement requirement)
+        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, BitmapAuthorizationRequirement requirement)
         {
-            if (!context.User.FindFirst(Constants.BitmapAuthorize.Administrator)?.Value.IsNullOrWhiteSpace() ?? false)//是否是超管
+            var scope = await this._scopeFactory.GetAsync();
+            var scopeName = scope.Name;
+            var claims = context.User.FindAll(Constants.BitmapAuthorize.Administrator);
+            if (claims.Any() && 
+                claims.Any(s => string.Equals(s.Value, scopeName, StringComparison.OrdinalIgnoreCase)))//是否是超管
             {
                 context.Succeed(requirement);
             }
@@ -66,9 +76,6 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
             {
                 this.AuthorizeCore(context, requirement);
             }
-
-
-            return Task.CompletedTask;
         }
 
         protected virtual void AuthorizeCore(AuthorizationHandlerContext context, BitmapAuthorizationRequirement requirement)
