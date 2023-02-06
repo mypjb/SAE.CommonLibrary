@@ -11,6 +11,11 @@ namespace SAE.CommonLibrary.Extension
     /// </summary>
     public static partial class UtilityExtension
     {
+        /// <summary>
+        /// 转换成http状态码
+        /// </summary>
+        /// <param name="errorOutput"></param>
+        /// <returns></returns>
 
         public static int ToHttpStatusCode(this ErrorOutput errorOutput)
         {
@@ -57,7 +62,13 @@ namespace SAE.CommonLibrary.Extension
             return enumerable;
         }
 
-
+        /// <summary>
+        /// 循环<paramref name="enumerable"/>集合,并挨个执行<paramref name="delegate"/>函数
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="enumerable"></param>
+        /// <param name="delegate"></param>
+        /// <returns></returns>
         public static async Task<IEnumerable<T>> ForEachAsync<T>(this IEnumerable<T> enumerable, Func<T, Task> @delegate)
         {
             if (enumerable != null)
@@ -69,7 +80,13 @@ namespace SAE.CommonLibrary.Extension
             }
             return enumerable;
         }
-
+        /// <summary>
+        /// 循环<paramref name="enumerable"/>集合,并挨个执行<paramref name="delegate"/>函数
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="enumerable"></param>
+        /// <param name="delegate"></param>
+        /// <returns></returns>
         public static async Task<IEnumerable<T>> ForEachAsync<T>(this IEnumerable<T> enumerable, Func<T, int, Task> @delegate)
         {
             if (enumerable != null)

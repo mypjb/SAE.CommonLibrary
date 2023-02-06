@@ -16,7 +16,7 @@ namespace SAE.CommonLibrary
         public class Security
         {
             /// <summary>
-            /// MD5加密
+            /// <c>md5</c>加密
             /// </summary>
             /// <param name="input"></param>
             /// <param name="short"></param>
@@ -39,7 +39,12 @@ namespace SAE.CommonLibrary
                     return strResult.Replace("-", "");
                 }
             }
-
+            /// <summary>
+            /// <c>md5</c>加密
+            /// </summary>
+            /// <param name="bytes"></param>
+            /// <param name="short"></param>
+            /// <returns></returns>
             public static string MD5(IEnumerable<byte> bytes, bool @short = false)
             {
                 if (bytes == null || !bytes.Any()) return string.Empty;
@@ -59,7 +64,12 @@ namespace SAE.CommonLibrary
                     return strResult.Replace("-", "");
                 }
             }
-
+            /// <summary>
+            /// <c>md5</c>加密
+            /// </summary>
+            /// <param name="stream"></param>
+            /// <param name="short"></param>
+            /// <returns></returns>
             public static string MD5(Stream stream, bool @short = false)
             {
                 if (stream == null) return string.Empty;
@@ -88,7 +98,7 @@ namespace SAE.CommonLibrary
                 return md5Str;
             }
             /// <summary>
-            /// 转换成base64
+            /// 转换成<c>base64</c>
             /// </summary>
             /// <param name="bytes"></param>
             public static string Base64(IEnumerable<byte> bytes)

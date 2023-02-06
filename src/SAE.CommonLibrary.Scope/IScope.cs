@@ -3,12 +3,12 @@ using System;
 namespace SAE.CommonLibrary.Scope
 {
     /// <summary>
-    /// scope identity interface
+    /// 区域标识接口
     /// </summary>
     public interface IScope:IDisposable
     {
         /// <summary>
-        /// Scope name
+        /// 区域的名称
         /// </summary>
         string Name { get;}
     }

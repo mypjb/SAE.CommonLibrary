@@ -74,7 +74,7 @@ namespace SAE.CommonLibrary.Extension
         }
 
         /// <summary>
-        /// We append <paramref name="object"/> to <paramref name="target"/>
+        /// 将对象<paramref name="object"/>附加到<paramref name="target"/>
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="target"></param>

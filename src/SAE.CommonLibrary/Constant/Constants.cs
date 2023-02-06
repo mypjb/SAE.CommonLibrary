@@ -7,30 +7,30 @@ namespace SAE.CommonLibrary
 {
     
     /// <summary>
-    /// system constant
+    /// 系统常量
     /// </summary>
     public partial class Constants
     {
         /// <summary>
-        /// default encoding
+        /// 默认编码
         /// </summary>
         public static Encoding Encoding = Encoding.UTF8;
 
         /// <summary>
-        /// time zone generator
+        /// 时区
         /// </summary>
         public static Func<DateTime> TimeZoneGenerator = () => DateTime.UtcNow;
 
         /// <summary>
-        /// default name
+        /// 默认名称
         /// </summary>
         public const string Default = "";
         /// <summary>
-        /// scope default configuration scope
+        /// 默认区域配置
         /// </summary>
         public const string Scope = nameof(Scope);
         /// <summary>
-        /// default Time zone utc
+        /// 默认时区
         /// </summary>
         public static DateTime DefaultTimeZone
         {

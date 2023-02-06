@@ -8,7 +8,7 @@ namespace SAE.CommonLibrary.Extension
     {
         #region IsNullOrWhiteSpace
         /// <summary>
-        /// <see cref="IAssert{TAssert}.Current"/>Consists of empty nulls or a series of spaces
+        /// <see cref="IAssert{TAssert}.Current"/>由空零或一系列空格组成
         /// </summary>
         /// <param name="assert"></param>
         /// <returns></returns>
@@ -18,7 +18,7 @@ namespace SAE.CommonLibrary.Extension
         }
 
         /// <summary>
-        /// <see cref="IAssert{TAssert}.Current"/>Consists of empty nulls or a series of spaces
+        /// <see cref="IAssert{TAssert}.Current"/>由空零或一系列空格组成
         /// </summary>
         /// <param name="assert"></param>
         /// <param name="message"></param>
@@ -36,7 +36,7 @@ namespace SAE.CommonLibrary.Extension
         #region NotNullOrWhiteSpace
 
         /// <summary>
-        /// <see cref="IAssert{TAssert}.Current"/>Not null or a string of spaces
+        /// <see cref="IAssert{TAssert}.Current"/>不为空或空字符串
         /// </summary>
         /// <param name="assert"></param>
         /// <returns></returns>
@@ -46,7 +46,7 @@ namespace SAE.CommonLibrary.Extension
         }
 
         /// <summary>
-        /// <see cref="IAssert{TAssert}.Current"/>Not null or a string of spaces
+        /// <see cref="IAssert{TAssert}.Current"/>不为空或空字符串
         /// </summary>
         /// <param name="assert"></param>
         /// <param name="message"></param>
@@ -114,7 +114,7 @@ namespace SAE.CommonLibrary.Extension
 
         #region Null
         /// <summary>
-        /// <see cref="IAssert{TAssert}.Current"/> is null
+        /// <see cref="IAssert{TAssert}.Current"/>为<em>null</em>
         /// </summary>
         /// <param name="assert"></param>
         /// <returns></returns>
@@ -124,7 +124,7 @@ namespace SAE.CommonLibrary.Extension
         }
 
         /// <summary>
-        /// <see cref="IAssert{TAssert}.Current"/> is null
+        /// <see cref="IAssert{TAssert}.Current"/>为<em>null</em>
         /// </summary>
         /// <param name="assert"></param>
         /// <param name="message"></param>
@@ -143,7 +143,7 @@ namespace SAE.CommonLibrary.Extension
         #region NotNull
 
         /// <summary>
-        /// <see cref="IAssert{TAssert}.Current"/> Cannot be null
+        /// <see cref="IAssert{TAssert}.Current"/>不为<em>null</em>
         /// </summary>
         /// <param name="assert"></param>
         /// <returns></returns>
@@ -153,7 +153,7 @@ namespace SAE.CommonLibrary.Extension
         }
 
         /// <summary>
-        /// <see cref="IAssert{TAssert}.Current"/>Cannot be null
+        /// <see cref="IAssert{TAssert}.Current"/>不为<em>null</em>
         /// </summary>
         /// <param name="assert"></param>
         /// <param name="message"></param>
@@ -170,7 +170,7 @@ namespace SAE.CommonLibrary.Extension
 
         #region Then
         /// <summary>
-        /// 
+        /// 传入一个委托继续进行断言
         /// </summary>
         /// <param name="assert"></param>
         /// <param name="delegate"></param>
@@ -187,7 +187,7 @@ namespace SAE.CommonLibrary.Extension
         #region Any
 
         /// <summary>
-        /// <see cref="IAssert{TAssert}.Current"/>
+        /// <see cref="IAssert{TAssert}.Current"/>集合中是否有满足条件的项
         /// </summary>
         /// <param name="assert"></param>
         /// <returns></returns>
@@ -200,7 +200,7 @@ namespace SAE.CommonLibrary.Extension
         }
 
         /// <summary>
-        /// <see cref="IAssert{TAssert}.Current"/>
+        /// <see cref="IAssert{TAssert}.Current"/>集合中没有满足条件的项
         /// </summary>
         /// <param name="assert"></param>
         /// <returns></returns>

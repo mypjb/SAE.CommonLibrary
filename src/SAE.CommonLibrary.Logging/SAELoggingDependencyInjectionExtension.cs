@@ -6,12 +6,12 @@ using SAE.CommonLibrary.Logging;
 namespace Microsoft.Extensions.DependencyInjection
 {
     /// <summary>
-    /// logging extension
+    /// 日志记录器依赖注入
     /// </summary>
     public static class SAELoggingDependencyInjectionExtension
     {
         /// <summary>
-        /// add <paramref name="loggingFactory"/> imp
+        /// 添加<see cref="ILoggingFactory"/>实现
         /// </summary>
         /// <param name="serviceCollection"></param>
         /// <returns></returns>
@@ -32,7 +32,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// add empty logger
+        /// 添加空的日志记录工厂
         /// </summary>
         /// <param name="serviceCollection"></param>
         /// <returns></returns>
@@ -42,7 +42,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return serviceCollection;
         }
         /// <summary>
-        /// <see cref="EmptyLoggingFactory"/> is register?
+        /// 是否注册了<see cref="EmptyLoggingFactory"/>
         /// </summary>
         /// <param name="services"></param>
         public static bool IsAddEmptyLoggingFactory(this IServiceCollection services)

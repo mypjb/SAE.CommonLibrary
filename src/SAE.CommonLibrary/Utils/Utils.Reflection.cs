@@ -10,6 +10,9 @@ namespace SAE.CommonLibrary
 {
     public partial class Utils
     {
+        /// <summary>
+        /// 反射
+        /// </summary>
         public class Reflection
         {
             private static ConcurrentDictionary<Type, ConcurrentDictionary<string, MemberInfo>> concurrentDictionary = new ConcurrentDictionary<Type, ConcurrentDictionary<string, MemberInfo>>();
@@ -20,7 +23,7 @@ namespace SAE.CommonLibrary
                     return new ConcurrentDictionary<string, MemberInfo>();
                 });
             }
-
+            
             private static string GetKey(string name, BindingFlags flags, params Type[] types)
             {
                 StringBuilder sb = new StringBuilder(name);

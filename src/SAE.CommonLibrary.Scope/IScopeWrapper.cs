@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 namespace SAE.CommonLibrary.Scope
 {
     /// <summary>
-    /// scope service wrapper
+    /// 区域服务包装器
     /// </summary>
     /// <typeparam name="TService"></typeparam>
     [Obsolete("this interface is in preview stage")]
     public interface IScopeWrapper<TService> where TService : class
     {
         /// <summary>
-        /// get scope
+        /// 获得当前区域
         /// <param name="key"> cache key</param>
-        /// <param name="constructor"><typeparamref name="TService"/> constructor</param>>
+        /// <param name="constructor"><typeparamref name="TService"/>构造服务</param>>
         /// </summary>
         TService GetService(string key, Func<TService> constructor);
 
         /// <summary>
-        /// clear
+        /// 清理
         /// </summary>
         void Clear();
     }

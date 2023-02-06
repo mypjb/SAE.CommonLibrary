@@ -11,16 +11,16 @@ namespace SAE.CommonLibrary
     public partial class Constants
     {
         /// <summary>
-        /// path constant
+        /// 路径常量
         /// </summary>
         public class Path
         {
             /// <summary>
-            /// root directory
+            /// 根目录
             /// </summary>
             public static string Root = AppContext.BaseDirectory;
             /// <summary>
-            /// config file path
+            /// 配置文件路径
             /// </summary>
             public static string Config = Utils.Path.Root(nameof(Config));
         }

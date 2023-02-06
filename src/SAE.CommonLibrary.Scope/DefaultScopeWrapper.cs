@@ -8,10 +8,10 @@ using Microsoft.Extensions.DependencyInjection;
 namespace SAE.CommonLibrary.Scope
 {
     /// <summary>
-    /// <inheritdoc/>
-    /// <seealso cref="IScopeWrapper{TService}"/> default implement
+    /// <see cref="IScopeWrapper{TService}"/>默认实现
     /// </summary>
     /// <typeparam name="TService"></typeparam>
+    /// <inheritdoc/>
     public class DefaultScopeWrapper<TService> : IScopeWrapper<TService> where TService : class
     {
         private readonly ConcurrentDictionary<string, TService> _cache;
