@@ -55,7 +55,7 @@ namespace SAE.CommonLibrary.AspNetCore
             /// <summary>
             /// 授权声明名词
             /// </summary>
-            public const string Claim = "roles";
+            public const string Claim = "role";
             /// <summary>
             /// 授权组分割符
             /// </summary>
