@@ -19,6 +19,7 @@ namespace SAE.CommonLibrary.Configuration
     public class SAEConfigurationSource : NewtonsoftJsonStreamConfigurationSource
     {
         private readonly SAEOptions options;
+        private IConfigurationProvider provider;
         /// <summary>
         /// 创建一额新的 <see cref="SAEConfigurationSource"/>
         /// </summary>
@@ -27,15 +28,21 @@ namespace SAE.CommonLibrary.Configuration
         {
             this.options = options;
         }
+      
         /// <summary>
         /// 构造配置提供程序
         /// </summary>
         /// <param name="builder"></param>
         public override IConfigurationProvider Build(IConfigurationBuilder builder)
         {
-            return new SAEConfigurationProvider(options, this);
+            if (this.provider == null)
+            {
+                this.provider = new SAEConfigurationProvider(options, this);
+            }
+            return this.provider;
         }
     }
+
     /// <summary>
     /// SAE 配置提供者
     /// </summary>
@@ -111,7 +118,8 @@ namespace SAE.CommonLibrary.Configuration
                 var json = await rep.Content.ReadAsStringAsync();
 
                 var sections = this._options.ConfigurationSection
-                                            .Split(Constants.ConfigurationSectionSeparator, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                                            .Split(Constants.ConfigurationSectionSeparator, 
+                                                   StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
                                             .ToArray();
 
                 this._logging?.Info($"包装配置:'{this._options.ConfigurationSection}'");

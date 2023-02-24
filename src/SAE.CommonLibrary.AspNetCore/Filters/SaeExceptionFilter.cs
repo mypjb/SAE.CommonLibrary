@@ -11,14 +11,14 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
     /// <summary>
     /// 异常筛选器，这里只记录错误，不作其他处理。
     /// </summary>
-    public class SaeExceptionFilter : IOrderedFilter, IAsyncExceptionFilter
+    public class SAEExceptionFilter : IOrderedFilter, IAsyncExceptionFilter
     {
         private readonly ILogging<SAEException> _logging;
         /// <summary>
         /// 创建一个新的对象
         /// </summary>
         /// <param name="logging"></param>
-        public SaeExceptionFilter(ILogging<SAEException> logging)
+        public SAEExceptionFilter(ILogging<SAEException> logging)
         {
             this.Order = FilterScope.First;
             this._logging = logging;
