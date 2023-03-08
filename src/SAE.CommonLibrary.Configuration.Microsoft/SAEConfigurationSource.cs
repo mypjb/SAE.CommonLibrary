@@ -28,17 +28,34 @@ namespace SAE.CommonLibrary.Configuration
         {
             this.options = options;
         }
-      
         /// <summary>
         /// 构造配置提供程序
         /// </summary>
         /// <param name="builder"></param>
         public override IConfigurationProvider Build(IConfigurationBuilder builder)
         {
-            if (this.provider == null)
+            this.provider ??= new SAEConfigurationProvider(options, this);
+            this.provider.Load();
+
+            var nodeName = this.options.IncludeEndpointConfiguration;
+
+            if (!this.options.ConfigurationSection.IsNullOrWhiteSpace())
             {
-                this.provider = new SAEConfigurationProvider(options, this);
+                nodeName = $"{nodeName}{Constants.ConfigSeparator}{this.options.ConfigurationSection}";
             }
+
+            var childKeys = this.provider.GetChildKeys(Enumerable.Empty<string>(), nodeName);
+
+            if (childKeys != null && childKeys.Any())
+            {
+                foreach (var childKey in childKeys)
+                {
+                    var op = new SAEOptions(this.options);
+                    
+                    builder.Add(new SAEConfigurationSource(op));
+                }
+            }
+
             return this.provider;
         }
     }
@@ -118,7 +135,7 @@ namespace SAE.CommonLibrary.Configuration
                 var json = await rep.Content.ReadAsStringAsync();
 
                 var sections = this._options.ConfigurationSection
-                                            .Split(Constants.ConfigurationSectionSeparator, 
+                                            .Split(Constants.ConfigurationSectionSeparator,
                                                    StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
                                             .ToArray();
 

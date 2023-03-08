@@ -248,6 +248,10 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
 
     public class DBConnectOptions
     {
+        public DBConnectOptions()
+        {
+            this.Customs = new[] { "1", "2", "3" };
+        }
         public const string Option = "database";
         /// <summary>
         /// connection name
@@ -261,5 +265,6 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
         /// connection string
         /// </summary>
         public string ConnectionString { get; set; }
+        public string[] Customs { get; set; }
     }
 }

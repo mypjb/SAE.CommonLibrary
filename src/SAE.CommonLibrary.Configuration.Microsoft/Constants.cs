@@ -18,6 +18,11 @@ namespace SAE.CommonLibrary.Configuration
             /// 根目录key
             /// </summary>
             public const string RootDirectoryKey = "SAE:CONFIG:ROOT";
+
+            /// <summary>
+            /// 包含远程的配置节
+            /// </summary>
+            public const string IncludeEndpointConfiguration= "SAE:CONFIG:INCLUDE";
             /// <summary>
             /// 默认根目录
             /// </summary>
