@@ -48,15 +48,23 @@ namespace SAE.CommonLibrary.Configuration
 
             if (childKeys != null && childKeys.Any())
             {
+                var configurationBuilder = new ConfigurationBuilder();
+                configurationBuilder.AddConfiguration(new ConfigurationRoot(new[] { this.provider }));
                 foreach (var childKey in childKeys)
                 {
-                    var op = new SAEOptions(this.options);
-                    
-                    builder.Add(new SAEConfigurationSource(op));
+                    configurationBuilder.Add(new SAEConfigurationSource(new SAEOptions(this.options)));
                 }
+                var source = new ChainedConfigurationSource()
+                {
+                    Configuration = configurationBuilder.Build()
+                };
+                return source.Build(configurationBuilder);
+            }
+            else
+            {
+                return this.provider;
             }
 
-            return this.provider;
         }
     }
 
