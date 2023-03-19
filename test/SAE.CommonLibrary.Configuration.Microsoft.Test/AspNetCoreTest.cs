@@ -29,7 +29,9 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
             {
                 services.AddHttpContextAccessor();
                 services.AddControllers();
-                services.AddSingleton<Options>();
+                services.AddSingleton<Options>()
+                        .AddSingleton<T1Options>()
+                        .AddSingleton<T2Options>();
                 services.AddSingleton<OfflineOptions>();
             }
 
@@ -39,7 +41,6 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
                 app.UseDeveloperExceptionPage();
 
                 app.UseRouting();
-
 
                 app.UseEndpoints(endpoints =>
                 {

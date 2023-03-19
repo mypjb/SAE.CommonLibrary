@@ -9,7 +9,7 @@ namespace SAE.CommonLibrary.Configuration
     /// <summary>
     /// <see cref="SAEConfigurationSource"/>配置
     /// </summary>
-    public class SAEOptions : System.ICloneable
+    public class SAEOptions
     {
         /// <summary>
         /// new <see cref="SAEOptions"/>

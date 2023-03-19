@@ -12,7 +12,9 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test.Controllers
     [Route("app/offlineconfig")]
     public class AppOfflineController : AppController
     {
-        public AppOfflineController(OfflineOptions options) : base(options)
+        public AppOfflineController(OfflineOptions options,
+        T1Options t1Options,
+        T2Options t2Options) : base(options,t1Options,t2Options)
         {
         }
 

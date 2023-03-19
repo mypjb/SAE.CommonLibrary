@@ -61,18 +61,41 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
                 Provider = this.GetRandom(),
             };
 
+            var includeNode = "Include";
+
+            var host = $"{this._client.BaseAddress.Scheme}://{this._client.BaseAddress.Host}";
             var dic = new Dictionary<string, object>
             {
-                {DBConnectOptions.Option,databaseOption }
+                {DBConnectOptions.Option,databaseOption },
+                {
+                    includeNode,new Dictionary<string,string>
+                    {
+                        {"t1",$"{host}{ConfigPath}/t1"},
+                        {"t2",$"{host}{ConfigPath}/t2"}
+                    }
+                }
+            };
+
+            var dic1 = new Dictionary<string, string>
+            {
+                {"t1",this.GetRandom() }
+            };
+
+            var dic2 = new Dictionary<string, string>
+            {
+                {"t2",this.GetRandom() }
             };
 
             await this.SetConfigAsync(ConfigPath, dic);
+            await this.SetConfigAsync($"{ConfigPath}/t1", dic1);
+            await this.SetConfigAsync($"{ConfigPath}/t2", dic2);
 
             var remoteOptions = new SAEOptions
             {
                 Url = ConfigPath,
                 Client = this._client,
-                PollInterval = PollInterval
+                PollInterval = PollInterval,
+                IncludeEndpointConfiguration = includeNode
             };
 
             var root = this.GetConfigurationBuilder(env)
@@ -86,18 +109,25 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
 
             this.Eq(databaseOption, options);
 
+            Assert.Equal(dic1["t1"], root.GetSection("t1").Get<string>());
+            Assert.Equal(dic2["t2"], root.GetSection("t2").Get<string>());
 
             databaseOption.Provider = this.GetRandom();
             databaseOption.ConnectionString = this.GetRandom();
 
+            dic1["t1"] = this.GetRandom();
+            dic2["t2"] = this.GetRandom();
             await this.SetConfigAsync(ConfigPath, dic);
+            await this.SetConfigAsync($"{ConfigPath}/t1", dic1);
+            await this.SetConfigAsync($"{ConfigPath}/t2", dic2);
 
             Thread.Sleep((int)(remoteOptions.PollInterval * 1200));
 
             options = configurationSection.Get<DBConnectOptions>();
 
             this.Eq(databaseOption, options);
-
+            Assert.Equal(dic1["t1"], root.GetSection("t1").Get<string>());
+            Assert.Equal(dic2["t2"], root.GetSection("t2").Get<string>());
         }
 
         [Theory]
@@ -138,7 +168,6 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
             var options = configurationSection.Get<DBConnectOptions>();
 
             this.Eq(databaseOption, options);
-
 
             databaseOption.Provider = this.GetRandom();
             databaseOption.ConnectionString = this.GetRandom();

@@ -39,31 +39,48 @@ namespace SAE.CommonLibrary.Configuration
 
             var nodeName = this.options.IncludeEndpointConfiguration;
 
-            if (!this.options.ConfigurationSection.IsNullOrWhiteSpace())
+            if (!nodeName.IsNullOrWhiteSpace())
             {
-                nodeName = $"{nodeName}{Constants.ConfigSeparator}{this.options.ConfigurationSection}";
-            }
-
-            var childKeys = this.provider.GetChildKeys(Enumerable.Empty<string>(), nodeName);
-
-            if (childKeys != null && childKeys.Any())
-            {
-                var configurationBuilder = new ConfigurationBuilder();
-                configurationBuilder.AddConfiguration(new ConfigurationRoot(new[] { this.provider }));
-                foreach (var childKey in childKeys)
+                if (!this.options.ConfigurationSection.IsNullOrWhiteSpace())
                 {
-                    configurationBuilder.Add(new SAEConfigurationSource(new SAEOptions(this.options)));
+                    nodeName = $"{this.options.ConfigurationSection}{Constants.ConfigSeparator}{nodeName}";
                 }
-                var source = new ChainedConfigurationSource()
+
+                var childKeys = this.provider.GetChildKeys(Enumerable.Empty<string>(), nodeName);
+
+                if (childKeys != null && childKeys.Any())
                 {
-                    Configuration = configurationBuilder.Build()
-                };
-                return source.Build(configurationBuilder);
+
+                    var configurationBuilder = new ConfigurationBuilder();
+
+                    configurationBuilder.AddConfiguration(new ConfigurationRoot(new[] { this.provider }));
+
+                    foreach (var childKey in childKeys)
+                    {
+                        var childOption = new SAEOptions(this.options);
+                        childOption.FullPath = Path.Combine(Path.GetDirectoryName(this.options.FullPath), $"{childKey}{Path.GetExtension(this.options.FullPath)}");
+                        childOption.FileName = Path.GetFileName(childOption.FullPath);
+                        this.provider.TryGet($"{nodeName}:{childKey}", out var url);
+                        childOption.Url = url;
+
+                        if (childOption.FileName.Equals(options.FileName))
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine($"子集配置的文件名称({childOption.FileName})与父级({this.options.FileName})冲突，请更改后重新启动系统进行加载！");
+                            Console.ResetColor();
+                            continue;
+                        }
+                        configurationBuilder.Add(new SAEConfigurationSource(childOption));
+                    }
+                    var source = new ChainedConfigurationSource()
+                    {
+                        Configuration = configurationBuilder.Build()
+                    };
+                    return source.Build(configurationBuilder);
+                }
             }
-            else
-            {
-                return this.provider;
-            }
+
+            return this.provider;
 
         }
     }
@@ -102,6 +119,15 @@ namespace SAE.CommonLibrary.Configuration
                 this.OnReload();
                 logging?.Info("重新加载配置");
             }
+        }
+
+        public override void Load()
+        {
+            if (this.Source.Stream.Position > 0)
+            {
+                this.Source.Stream.Position = 0;
+            }
+            this.Load(this.Source.Stream);
         }
 
         /// <summary>
