@@ -4,7 +4,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="IdentityServer4" Version="4.1.2" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
 		<PackageReference Include="xunit" Version="2.4.2" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -20,7 +20,7 @@
 		<ProjectReference Include="..\..\src\SAE.CommonLibrary.Extension.HttpClient\SAE.CommonLibrary.Extension.HttpClient.csproj" />
 		<ProjectReference Include="..\..\src\SAE.CommonLibrary.Logging.NLog\SAE.CommonLibrary.Logging.NLog.csproj" />
 		<ProjectReference Include="..\SAE.CommonLibrary.Test\SAE.CommonLibrary.Test.csproj" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.4" />
 	</ItemGroup>
 
 </Project>
