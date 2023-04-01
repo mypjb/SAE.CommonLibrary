@@ -22,7 +22,7 @@ namespace SAE.CommonLibrary.Configuration
             /// <summary>
             /// 包含远程的配置节
             /// </summary>
-            public const string IncludeEndpointConfiguration= "SAE:CONFIG:INCLUDE";
+            public const string IncludeEndpointConfiguration = "SAE:CONFIG:INCLUDE";
             /// <summary>
             /// 默认根目录
             /// </summary>
@@ -31,6 +31,27 @@ namespace SAE.CommonLibrary.Configuration
             /// 配置key
             /// </summary>
             public const string OptionKey = "SAE:CONFIG";
+            /// <summary>
+            /// 包含配置
+            /// </summary>
+            public class Include
+            {
+                /// <summary>
+                /// 文件名称
+                /// </summary>
+                /// <value></value>
+                public const string Name = nameof(Name);
+                /// <summary>
+                /// 请求地址
+                /// </summary>
+                /// <value></value>
+                public const string Url = nameof(Url);
+                /// <summary>
+                /// 节点名称
+                /// </summary>
+                /// <value></value>
+                public const string NodeName = nameof(NodeName);
+            }
         }
 
         /// <summary>

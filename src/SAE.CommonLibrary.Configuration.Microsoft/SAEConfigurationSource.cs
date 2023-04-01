@@ -46,31 +46,52 @@ namespace SAE.CommonLibrary.Configuration
                     nodeName = $"{this.options.ConfigurationSection}{Constants.ConfigSeparator}{nodeName}";
                 }
 
-                var childKeys = this.provider.GetChildKeys(Enumerable.Empty<string>(), nodeName);
+                var indexChildKeys = this.provider.GetChildKeys(Enumerable.Empty<string>(), nodeName);
 
-                if (childKeys != null && childKeys.Any())
+                if (indexChildKeys != null && indexChildKeys.Any())
                 {
-
+                    indexChildKeys = indexChildKeys.Distinct().ToArray();
                     var configurationBuilder = new ConfigurationBuilder();
 
                     configurationBuilder.AddConfiguration(new ConfigurationRoot(new[] { this.provider }));
-
-                    foreach (var childKey in childKeys)
+                    foreach (var indexChildKey in indexChildKeys)
                     {
-                        var childOption = new SAEOptions(this.options);
-                        childOption.FullPath = Path.Combine(Path.GetDirectoryName(this.options.FullPath), $"{childKey}{Path.GetExtension(this.options.FullPath)}");
-                        childOption.FileName = Path.GetFileName(childOption.FullPath);
-                        this.provider.TryGet($"{nodeName}:{childKey}", out var url);
-                        childOption.Url = url;
+                        var key = $"{nodeName}{Constants.ConfigSeparator}{indexChildKey}{Constants.ConfigSeparator}";
 
-                        if (childOption.FileName.Equals(options.FileName))
+                        if (this.provider.TryGet($"{key}{Constants.Config.Include.Name}", out var includeName) &&
+                            this.provider.TryGet($"{key}{Constants.Config.Include.Url}", out var includeUrl))
                         {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine($"子集配置的文件名称({childOption.FileName})与父级({this.options.FileName})冲突，请更改后重新启动系统进行加载！");
-                            Console.ResetColor();
-                            continue;
+
+                            var childOption = new SAEOptions(this.options);
+
+                            var rootFileName = Path.GetFileNameWithoutExtension(this.options.FullPath);
+
+                            var rootFileIndex = rootFileName.LastIndexOf('.');
+
+                            if (rootFileIndex != -1 && rootFileIndex < rootFileName.Length)
+                            {
+                                includeName = $"{includeName}{rootFileName.Substring(rootFileIndex)}";
+                            }
+
+                            childOption.FullPath = Path.Combine(Path.GetDirectoryName(this.options.FullPath), $"{includeName}{Path.GetExtension(this.options.FullPath)}");
+
+                            childOption.FileName = Path.GetFileName(childOption.FullPath);
+                            childOption.Url = includeUrl;
+
+                            if (this.provider.TryGet($"{key}{Constants.Config.Include.NodeName}", out var includeNodeName))
+                            {
+                                childOption.ConfigurationSection = includeNodeName;
+                            }
+
+                            if (childOption.FileName.Equals(options.FileName))
+                            {
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.WriteLine($"子集配置的文件名称({childOption.FileName})与父级({this.options.FileName})冲突，请更改后重新启动系统进行加载！");
+                                Console.ResetColor();
+                                continue;
+                            }
+                            configurationBuilder.Add(new SAEConfigurationSource(childOption));
                         }
-                        configurationBuilder.Add(new SAEConfigurationSource(childOption));
                     }
                     var source = new ChainedConfigurationSource()
                     {

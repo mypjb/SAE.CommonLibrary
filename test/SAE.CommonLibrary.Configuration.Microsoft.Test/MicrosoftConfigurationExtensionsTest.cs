@@ -64,14 +64,27 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
             var includeNode = "Include";
 
             var host = $"{this._client.BaseAddress.Scheme}://{this._client.BaseAddress.Host}";
+
+            var customNode = "custom";
             var dic = new Dictionary<string, object>
             {
                 {DBConnectOptions.Option,databaseOption },
                 {
-                    includeNode,new Dictionary<string,string>
+                    includeNode,new object[]
                     {
-                        {"t1",$"{host}{ConfigPath}/t1"},
-                        {"t2",$"{host}{ConfigPath}/t2"}
+                        new {
+                            name="t1",
+                            url=$"{host}{ConfigPath}/t1"
+                        },
+                        new {
+                            name="t2",
+                            url=$"{host}{ConfigPath}/t2"
+                        },
+                        new {
+                            name="t3",
+                            url=$"{host}{ConfigPath}/t2",
+                            nodeName=customNode
+                        }
                     }
                 }
             };
@@ -111,6 +124,7 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
 
             Assert.Equal(dic1["t1"], root.GetSection("t1").Get<string>());
             Assert.Equal(dic2["t2"], root.GetSection("t2").Get<string>());
+            Assert.Equal(dic2["t2"], root.GetSection($"{customNode}:t2").Get<string>());
 
             databaseOption.Provider = this.GetRandom();
             databaseOption.ConnectionString = this.GetRandom();
@@ -128,6 +142,7 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
             this.Eq(databaseOption, options);
             Assert.Equal(dic1["t1"], root.GetSection("t1").Get<string>());
             Assert.Equal(dic2["t2"], root.GetSection("t2").Get<string>());
+            Assert.Equal(dic2["t2"], root.GetSection($"{customNode}:t2").Get<string>());
         }
 
         [Theory]
