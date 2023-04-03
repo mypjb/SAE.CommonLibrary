@@ -41,19 +41,19 @@
                 "method": "post",
                 "path": "/noauth/api/student",
                 "name": "sae.commonlibrary.aspnetcore.test.controllers.studentcontroller.add (sae.commonlibrary.aspnetcore.test)",
-                "index": 0
+                "index": -1
             },
             {
                 "method": "put",
                 "path": "/noauth/api/student",
                 "name": "sae.commonlibrary.aspnetcore.test.controllers.studentcontroller.edit (sae.commonlibrary.aspnetcore.test)",
-                "index": 0
+                "index": -1
             },
             {
                 "method": "get",
                 "path": "/noauth/api/student/display/{id}",
                 "name": "sae.commonlibrary.aspnetcore.test.controllers.studentcontroller.display (sae.commonlibrary.aspnetcore.test)",
-                "index": 0
+                "index": -1
             }
         ]
     }

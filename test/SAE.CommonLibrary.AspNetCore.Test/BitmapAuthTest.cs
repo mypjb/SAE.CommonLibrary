@@ -55,7 +55,7 @@ namespace SAE.CommonLibrary.AspNetCore.Test
                                                             .GetResult();
                 foreach (var bitmapEndpoint in bitmapEndpoints.Where(s => s.Path.StartsWith("/noauth")))
                 {
-                    bitmapEndpoint.Index = 0;
+                    bitmapEndpoint.Index = -1;
                 }
             }
 

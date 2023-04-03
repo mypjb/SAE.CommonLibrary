@@ -67,7 +67,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
             var scope = await this._scopeFactory.GetAsync();
             var scopeName = scope.Name;
             var claims = context.User.FindAll(Constants.BitmapAuthorize.Administrator);
-            if (claims.Any() && 
+            if (claims.Any() &&
                 claims.Any(s => string.Equals(s.Value, scopeName, StringComparison.OrdinalIgnoreCase)))//是否是超管
             {
                 context.Succeed(requirement);
@@ -101,10 +101,15 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
                     }
                 }
             }
-            else if (index == 0)
+            else if (context.User.Identity.IsAuthenticated && index == 0)
             {
                 this._logging.Info("索引为0,默认授权访问");
                 //index not exist default auth
+                context.Succeed(requirement);
+            }
+            else if (index == -1)
+            {
+                this._logging.Info("索引为-1，无需认证可以直接访问!");
                 context.Succeed(requirement);
             }
 
