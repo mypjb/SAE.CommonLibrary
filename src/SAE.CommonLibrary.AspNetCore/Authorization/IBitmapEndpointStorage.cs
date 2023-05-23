@@ -63,13 +63,15 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         private readonly ILogging _logging;
         private readonly IBitmapEndpointProvider _bitmapEndpointProvider;
         /// <summary>
-        /// 
+        /// 从提供者当中获取位图端点
         /// </summary>
         /// <value></value>
-        protected IEnumerable<BitmapEndpoint> BitmapEndpoints
+        protected IEnumerable<BitmapEndpoint> GetBitmapEndpoints()
         {
-            get => this._bitmapEndpointProvider.ListAsync().GetAwaiter().GetResult();
+            return this._bitmapEndpointProvider.ListAsync().GetAwaiter().GetResult() ??
+                        Enumerable.Empty<BitmapEndpoint>();
         }
+
         /// <summary>
         /// 创建一个新的对象
         /// </summary>
@@ -84,7 +86,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
 
         public int Count()
         {
-            return this.BitmapEndpoints.Count();
+            return this.GetBitmapEndpoints().Count();
         }
 
         public int GetIndex(string path, string method)
@@ -93,7 +95,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
 
             var key = $"{path}{Constants.BitmapAuthorize.Separator}{method}".ToLower();
 
-            var bitmapEndpoint = this.BitmapEndpoints.FirstOrDefault(s => s.Path.Equals(path, StringComparison.OrdinalIgnoreCase) &&
+            var bitmapEndpoint = this.GetBitmapEndpoints().FirstOrDefault(s => s.Path.Equals(path, StringComparison.OrdinalIgnoreCase) &&
                                                                      (s.Method.Equals(method, StringComparison.OrdinalIgnoreCase) ||
                                                                      s.Method.IsNullOrWhiteSpace()));
 
