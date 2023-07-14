@@ -1,5 +1,7 @@
 # SAE.CommonLibrary
-General class library
+通用类库
 
-# Status Code
-Resource Not Exist 404
+## RoadMap
+
+ - 分表分库
+   分表分库应该在高层进行区分，而非底层，高层据有更高层次的业务逻辑，请求越到底层，和业务越脱钩（底层通常具有通用性）。
