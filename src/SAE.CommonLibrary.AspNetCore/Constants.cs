@@ -13,7 +13,7 @@ namespace SAE.CommonLibrary.AspNetCore
     /// <summary>
     /// 常量集
     /// </summary>
-    public class Constants
+    public partial class Constants
     {
         /// <summary>
         /// cors常量

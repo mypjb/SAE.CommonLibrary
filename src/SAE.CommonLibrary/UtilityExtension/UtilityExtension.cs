@@ -100,5 +100,10 @@ namespace SAE.CommonLibrary.Extension
             return enumerable;
         }
 
+        public static long Timestamp(this DateTime dateTime)
+        {
+            return Utils.Timestamp(dateTime);
+        }
+
     }
 }
