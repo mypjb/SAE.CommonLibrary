@@ -99,8 +99,15 @@ namespace SAE.CommonLibrary.Extension
             }
             return enumerable;
         }
-
-        public static long Timestamp(this DateTime dateTime)
+        /// <summary>
+        /// 获得时间戳
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns> <summary>
+        /// 
+        /// </summary>
+        /// <param name="dateTime"></param>
+        public static long ToTimestamp(this DateTime dateTime)
         {
             return Utils.Timestamp(dateTime);
         }

@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,8 +26,34 @@ namespace SAE.CommonLibrary.Extension
                 throw new ArgumentNullException(nameof(request));
 
             if (request.Headers != null)
-                return request.Headers["X-Requested-With"] == "XMLHttpRequest";
+                return request.Headers[HeaderNames.XRequestedWith] == "XMLHttpRequest";
             return false;
         }
+
+        /// <summary>
+        /// 获得客户端IP
+        /// </summary>
+        public static string GetClientIP(this HttpRequest request)
+        {
+            var ip = string.Empty;
+            if (request.Headers.TryGetValue("X-Real-IP", out var realIP))
+            {
+                ip = realIP.ToString();
+            }
+            else if (request.Headers.TryGetValue("X-Forwarded-For", out var forwarded))
+            {
+                ip = forwarded.ToString()
+                              .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                              .First();
+            }
+            else
+            {
+                ip = IPAddress.Loopback.ToString();;
+            }
+
+            return ip;
+        }
+
+        
     }
 }

@@ -16,6 +16,7 @@
     <ProjectReference Include="..\..\src\SAE.CommonLibrary.AspNetCore\SAE.CommonLibrary.AspNetCore.csproj" />
     <ProjectReference Include="..\..\src\SAE.CommonLibrary.ObjectMapper.TinyMapper\SAE.CommonLibrary.ObjectMapper.TinyMapper.csproj" />
     <ProjectReference Include="..\SAE.CommonLibrary.Test\SAE.CommonLibrary.Test.csproj" />
+    <ProjectReference Include="..\..\src\SAE.CommonLibrary.Abstract\SAE.CommonLibrary.Abstract.csproj" />
   </ItemGroup>
 
 </Project>

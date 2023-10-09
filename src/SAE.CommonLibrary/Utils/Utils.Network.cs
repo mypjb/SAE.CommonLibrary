@@ -1,13 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.NetworkInformation;
 using System.Text;
 
 namespace SAE.CommonLibrary
 {
     public partial class Utils
     {
+        /// <summary>
+        /// 网络
+        /// </summary>
         public class Network
         {
+
+            /// <summary>
+            /// 获得服务端地址
+            /// </summary>
+            public static string GetServerIP()
+            {
+                var networks = NetworkInterface.GetAllNetworkInterfaces();
+                foreach (var network in networks)
+                {
+                    var address = network.GetIPProperties()
+                                        .UnicastAddresses
+                                        .Where(s => (s.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork ||
+                                                    s.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6) &&
+                                                    !IPAddress.IsLoopback(s.Address))
+                                        .FirstOrDefault()
+                                        ?.Address;
+
+                    if (address != null)
+                    {
+                        return address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6 ?
+                                                        address.MapToIPv6().ToString() :
+                                                        address.MapToIPv4().ToString();
+                    }
+                }
+                return IPAddress.Loopback.ToString();
+            }
+
             /// <summary>
             /// 判断IP地址是否为内网IP地址
             /// </summary>
@@ -60,6 +93,6 @@ namespace SAE.CommonLibrary
                 return (userIp >= begin) && (userIp <= end);
             }
         }
-        
+
     }
 }
