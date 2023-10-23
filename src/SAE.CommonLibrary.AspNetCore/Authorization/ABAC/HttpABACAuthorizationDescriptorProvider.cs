@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata;
-using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using SAE.CommonLibrary.Abstract.Decorator;
 using SAE.CommonLibrary.Extension;
 
 namespace SAE.CommonLibrary.AspNetCore.Authorization.ABAC
@@ -13,7 +12,6 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization.ABAC
     {
         public HttpABACAuthorizationDescriptorProvider()
         {
-
         }
 
         public Task<IABACAuthorizationDescriptor> GetAsync()
@@ -104,10 +102,11 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization.ABAC
     }
 
     /// <summary>
-    /// 
+    /// 装饰器上下文
     /// </summary>
-    public class RuleContext
+    public class RuleContext : DecoratorContext
     {
+        private Queue<object> _queue { get; }
         private IDictionary<string, string> _store;
         /// <summary>
         /// 
@@ -116,234 +115,202 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization.ABAC
         public RuleContext(IDictionary<string, string> dict)
         {
             this._store = dict;
+            this._queue = new Queue<object>();
         }
         public string Get(string key)
         {
             this._store.TryGetValue(key, out string val);
             return val;
         }
+        /// <summary>
+        /// 入队
+        /// </summary>
+        /// <param name="o"></param>
+        /// <summary>
+        public void Enqueue(object o)
+        {
+            this._queue.Enqueue(o);
+        }
+        /// <summary>
+        /// 出队
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public T Dequeue<T>()
+        {
+            Assert.Build(this._queue.Any())
+                  .True("队列已清空。");
+            return (T)this._queue.Dequeue();
+        }
     }
     /// <summary>
-    /// 
+    /// 逻辑操作符装饰器
     /// </summary> 
-    public abstract class RuleDecorator
+    public class OperatorRuleDecorator : IDecorator<RuleContext>
     {
-        private RuleDecorator Decorator;
-        /// <summary>
-        /// ctor
-        /// </summary>
-        public RuleDecorator()
-        {
-
-        }
-        /// <summary>
-        /// ctor
-        /// </summary>
-        /// <param name="operator"></param>
-        /// <param name="decorator"></param>
-        public RuleDecorator(LogicalOperator @operator, RuleDecorator decorator)
+        public OperatorRuleDecorator(LogicalOperator @operator)
         {
             this.Operator = @operator;
-            decorator.Set(this);
         }
-
-        /// <summary>
-        /// operator
-        /// </summary>
-        /// <value></value>
-        public LogicalOperator Operator { get; private set; }
-        /// <summary>
-        /// 设置<see cref="Decorator"/>
-        /// </summary>
-        /// <param name="decorator"></param>
-        public void Set(RuleDecorator decorator)
+        private LogicalOperator Operator { get; }
+        public async Task DecorateAsync(RuleContext context)
         {
-            this.Decorator = decorator;
-            this.Operator = decorator.Operator;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ctx"></param>
-        public virtual bool Execute(RuleContext ctx)
-        {
-            var left = this.ExecuteCore(ctx);
-
-            if (this.Decorator != null)
+            var left = context.Dequeue<bool>();
+            var result = false;
+            if (this.Operator == LogicalOperator.Not)
             {
+                result = !left;
+            }
+            else if (this.Operator == LogicalOperator.None)
+            {
+                result = left;
+            }
+            else
+            {
+                var right = context.Dequeue<bool>();
+
                 switch (this.Operator)
                 {
                     case LogicalOperator.And:
                         {
-                            if (left)
-                            {
-                                left = this.Decorator.Execute(ctx);
-                            }
+                            result = left && right;
                             break;
                         }
                     case LogicalOperator.Or:
                         {
-                            if (!left)
-                            {
-                                left = this.Decorator.Execute(ctx);
-                            }
-                            break;
-                        }
-                    case LogicalOperator.Not:
-                        {
-                            left = !left;
+                            result = left || right;
                             break;
                         }
                 }
             }
-            return left;
+
+            if (result)
+            {
+                context.Success();
+            }
+
         }
-        /// <summary>
-        /// execute core
-        /// </summary>
-        /// <param name="ctx"></param>
-        protected abstract bool ExecuteCore(RuleContext ctx);
     }
 
-    /// <summary>
-    /// 空的装饰器
-    /// </summary>
-    public class EmptyRuleDecorator : RuleDecorator
-    {
-        protected override bool ExecuteCore(RuleContext ctx)
-        {
-            return false;
-        }
-    }
 
     /// <summary>
     /// 属性装饰器
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <inheritdoc/>
-    public abstract class PropertyRuleDecorator<T> : RuleDecorator
+    public class PropertyRuleDecorator<T> : IDecorator<RuleContext>
     {
         /// <summary>
         /// ctor
         /// </summary>
-        protected PropertyRuleDecorator()
+        protected PropertyRuleDecorator(string propertyName)
         {
-        }
-        /// <summary>
-        /// ctor
-        /// </summary>
-        /// <param name="operator"></param>
-        /// <param name="decorator"></param>
-        protected PropertyRuleDecorator(LogicalOperator @operator, RuleDecorator decorator) : base(@operator, decorator)
-        {
+            this.PropertyName = propertyName;
         }
         /// <summary>
         /// 属性名称
         /// </summary>
-        public string PropertyName { get; protected set; }
-        /// <summary>
-        /// 属性值
-        /// </summary>
-        public T Value { get; protected set; }
+        public string PropertyName { get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ctx"></param>
-        protected virtual T Get(RuleContext ctx)
+        public async Task DecorateAsync(RuleContext context)
         {
-            var val = ctx.Get(this.PropertyName);
-            return string.IsNullOrWhiteSpace(val) ? default(T) : val.ToObject<T>();
+            var val = context.Get(this.PropertyName);
+            var value = string.IsNullOrWhiteSpace(val) ? default(T) : val.ToObject<T>();
+            context.Enqueue(value);
+        }
+    }
+    /// <summary>
+    /// 常量装饰器
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class ConstantRuleDecorator<T> : IDecorator<RuleContext>
+    {
+        public ConstantRuleDecorator(T value)
+        {
+            this.Value = value;
+        }
+        public T Value { get; }
+
+        public async Task DecorateAsync(RuleContext context)
+        {
+            context.Enqueue(this.Value);
         }
     }
 
-
     /// <summary>
-    /// 
+    /// 一元操作符装饰器
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <inheritdoc/>
-    public class BinaryRuleDecorator<T> : PropertyRuleDecorator<T> where T : IComparable, IEquatable<T>
+    public class BinaryRuleDecorator<T> : IDecorator<RuleContext> where T : IComparable, IEquatable<T>
     {
         /// <summary>
         /// 
         /// </summary>
         /// <value></value>
-        public RelationalOperator RelationalOperator { get; }
+        public RelationalOperator Operator { get; }
         /// <summary>
         /// 
         /// </summary>
-        public BinaryRuleDecorator()
+        public BinaryRuleDecorator(RelationalOperator @operator)
         {
-
+            this.Operator = @operator;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="operator"></param>
-        /// <param name="decorator"></param>
-        public BinaryRuleDecorator(LogicalOperator @operator, RuleDecorator decorator) : base(@operator, decorator)
+        public async Task DecorateAsync(RuleContext context)
         {
-        }
-
-        protected override bool ExecuteCore(RuleContext ctx)
-        {
-            var right = this.Get(ctx);
-
-            var result = false;
-
-            switch (this.RelationalOperator)
+            var left = context.Dequeue<T>();
+            var right = context.Dequeue<T>();
+            bool result = false;
+            switch (this.Operator)
             {
                 case RelationalOperator.GreaterThan:
                     {
-                        result = Value.CompareTo(right) > 0;
+                        result = left.CompareTo(right) > 0;
                         break;
                     }
                 case RelationalOperator.LessThan:
                     {
-                        result = Value.CompareTo(right) < 0;
+                        result = right.CompareTo(right) < 0;
                         break;
                     }
                 case RelationalOperator.Equal:
                     {
-                        result = Value.CompareTo(right) == 0;
+                        result = right.CompareTo(right) == 0;
                         break;
                     }
                 case RelationalOperator.NotEqual:
                     {
-                        result = Value.CompareTo(right) != 0;
+                        result = right.CompareTo(right) != 0;
                         break;
                     }
                 case RelationalOperator.GreaterThanOrEqual:
                     {
-                        result = Value.CompareTo(right) >= 0;
+                        result = right.CompareTo(right) >= 0;
                         break;
                     }
                 case RelationalOperator.LessThanOrEqual:
                     {
-                        result = Value.CompareTo(right) <= 0;
+                        result = right.CompareTo(right) <= 0;
                         break;
                     }
                 case RelationalOperator.Include:
                     {
-                        var left = this.Value?.ToString();
+                        var leftString = left?.ToString();
                         var r = right?.ToString();
-                        result = left == null || r == null ? false : left.IndexOf(r) != -1;
+                        result = leftString == null || r == null ? false : leftString.IndexOf(r) != -1;
                         break;
                     }
                 case RelationalOperator.Regex:
                     {
-                        var left = this.Value?.ToString();
+                        var leftString = left?.ToString();
                         var r = right?.ToString() ?? string.Empty;
-                        result = string.IsNullOrWhiteSpace(left) ? false : Regex.Match(left, r).Success;
+                        result = string.IsNullOrWhiteSpace(leftString) ? false : Regex.Match(leftString, r).Success;
                         break;
                     }
             }
-            return result;
+
+            context.Enqueue(result);
         }
 
     }
-
-
 }

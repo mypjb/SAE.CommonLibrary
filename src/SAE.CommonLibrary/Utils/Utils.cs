@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
@@ -42,6 +45,29 @@ namespace SAE.CommonLibrary
         public static long Timestamp(DateTime dateTime)
         {
             return new DateTimeOffset(dateTime.ToUniversalTime()).ToUnixTimeSeconds();
+        }
+        /// <summary>
+        /// 将集合进行切片，并逐个处理，缓和系统负载。常用与sql或API请求中的批量处理。
+        /// ps:可将串行扩展为并行提高工作效率，但是会提高系统负载。
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="funcTask"></param>
+        /// <param name="chunkSize"></param>
+        /// <typeparam name="T"></typeparam>
+        public static async Task SliceAsync<T>(IEnumerable<T> array, Func<IEnumerable<T>, Task> funcTask, int chunkSize = 1000)
+        {
+            if (array == null) return;
+            var index = 0;
+            var count = array.Count();
+            while (count > index)
+            {
+                if (count - index < chunkSize)
+                {
+                    chunkSize = count - index;
+                }
+                await funcTask(array.Skip(index).Take(chunkSize).ToArray());
+                index += chunkSize;
+            };
         }
     }
 }

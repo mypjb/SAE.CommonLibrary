@@ -147,37 +147,36 @@ namespace SAE.CommonLibrary.AspNetCore.Test
             
         }
 
-        protected abstract Task HandleCoreAsync(ExpressionResolverContext context)；
+        protected abstract Task HandleCoreAsync(ExpressionResolverContext context);
     }
 
-    public class NumberExpressionResolverResponsibility : IResponsibility<ExpressionResolverContext>
+    public class NumberExpressionResolverResponsibility : ExpressionResolverResponsibility
     {
-
-        public Task HandleAsync(ExpressionResolverContext context)
+        protected override Task HandleCoreAsync(ExpressionResolverContext context)
         {
             throw new NotImplementedException();
         }
     }
 
-    public class StringExpressionResolverResponsibility : IResponsibility<ExpressionResolverContext>
+    public class StringExpressionResolverResponsibility : ExpressionResolverResponsibility
     {
-        public Task HandleAsync(ExpressionResolverContext context)
+        protected override Task HandleCoreAsync(ExpressionResolverContext context)
         {
             throw new NotImplementedException();
         }
     }
 
-    public class BoolExpressionResolverResponsibility : IResponsibility<ExpressionResolverContext>
+    public class BoolExpressionResolverResponsibility : ExpressionResolverResponsibility
     {
-        public Task HandleAsync(ExpressionResolverContext context)
+        protected override Task HandleCoreAsync(ExpressionResolverContext context)
         {
             throw new NotImplementedException();
         }
     }
 
-    public class DateTimeExpressionResolverResponsibility : IResponsibility<ExpressionResolverContext>
+    public class DateTimeExpressionResolverResponsibility : ExpressionResolverResponsibility
     {
-        public Task HandleAsync(ExpressionResolverContext context)
+        protected override Task HandleCoreAsync(ExpressionResolverContext context)
         {
             throw new NotImplementedException();
         }
