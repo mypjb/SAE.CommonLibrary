@@ -1,21 +1,26 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Security.Principal;
 using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
 {
     /// <summary>
-    /// 授权上下文
+    /// 逻辑运算符
     /// </summary>
-    public class AuthorizeContext
+    public enum LogicalOperator
     {
         /// <summary>
-        /// 用户信息（请求信息）
+        /// 空
         /// </summary>
-        /// <value></value>
-        public ClaimsPrincipal Principal { get; set; }
+        None,
+        /// <summary>
+        /// 逻辑与
+        /// </summary>
+        And,
+        /// <summary>
+        /// 逻辑或
+        /// </summary>
+        Or
     }
 }
