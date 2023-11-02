@@ -6,42 +6,53 @@ using SAE.CommonLibrary.Abstract.Decorator;
 
 namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
 {
+    /// <inheritdoc/>
     /// <summary>
     /// 逻辑操作符装饰器
     /// </summary> 
     public class OperatorRuleDecorator : IDecorator<RuleContext>
     {
-        public OperatorRuleDecorator(LogicalOperator @operator)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="operators"></param>
+        public OperatorRuleDecorator(IEnumerable<LogicalOperator> operators)
         {
-            this.Operator = @operator;
+            this.Operators = operators;
         }
-        protected LogicalOperator Operator { get; }
+        /// <summary>
+        /// 逻辑操作符集合
+        /// </summary>
+        /// <value></value>
+        protected IEnumerable<LogicalOperator> Operators { get; }
         public async Task DecorateAsync(RuleContext context)
         {
-            var left = context.Dequeue<bool>();
-            var result = false;
-            
-            if (this.Operator == LogicalOperator.None)
+            var result = context.Dequeue<bool>(); ;
+
+            if (this.Operators.Any())
             {
-                result = left;
+                var operatorCount = this.Operators.Count();
+                for (var i = 0; i < operatorCount; i++)
+                {
+                    var @operator = this.Operators.ElementAt(i);
+                    var right = context.Dequeue<bool>();
+                    if (@operator == LogicalOperator.And)
+                    {
+                        result = result && right;
+                    }
+                    else
+                    {
+                        result = result || right;
+                        if (result)
+                        {
+                            break;
+                        }
+                    }
+                }
             }
             else
             {
-                var right = context.Dequeue<bool>();
-
-                switch (this.Operator)
-                {
-                    case LogicalOperator.And:
-                        {
-                            result = left && right;
-                            break;
-                        }
-                    case LogicalOperator.Or:
-                        {
-                            result = left || right;
-                            break;
-                        }
-                }
+                result = context.Dequeue<bool>();
             }
 
             if (result)

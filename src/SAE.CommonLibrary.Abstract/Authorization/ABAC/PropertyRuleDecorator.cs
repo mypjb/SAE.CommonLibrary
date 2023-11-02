@@ -17,7 +17,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// <summary>
         /// ctor
         /// </summary>
-        protected PropertyRuleDecorator(string propertyName)
+        public PropertyRuleDecorator(string propertyName)
         {
             this.PropertyName = propertyName;
         }

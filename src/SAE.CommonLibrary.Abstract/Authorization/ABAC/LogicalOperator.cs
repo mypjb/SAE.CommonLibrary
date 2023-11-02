@@ -11,10 +11,6 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
     public enum LogicalOperator
     {
         /// <summary>
-        /// 空
-        /// </summary>
-        None,
-        /// <summary>
         /// 逻辑与
         /// </summary>
         And,

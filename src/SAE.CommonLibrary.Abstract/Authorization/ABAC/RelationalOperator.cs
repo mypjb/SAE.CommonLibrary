@@ -11,6 +11,10 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
     public enum RelationalOperator
     {
         /// <summary>
+        /// 空
+        /// </summary>
+        None,
+        /// <summary>
         /// 大于
         /// </summary>
         GreaterThan,
