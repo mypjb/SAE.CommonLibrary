@@ -50,27 +50,27 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
                         }
                     case RelationalOperator.LessThan:
                         {
-                            result = right.CompareTo(right) < 0;
+                            result = left.CompareTo(right) < 0;
                             break;
                         }
                     case RelationalOperator.Equal:
                         {
-                            result = right.CompareTo(right) == 0;
+                            result = left.CompareTo(right) == 0;
                             break;
                         }
                     case RelationalOperator.NotEqual:
                         {
-                            result = right.CompareTo(right) != 0;
+                            result = left.CompareTo(right) != 0;
                             break;
                         }
                     case RelationalOperator.GreaterThanOrEqual:
                         {
-                            result = right.CompareTo(right) >= 0;
+                            result = left.CompareTo(right) >= 0;
                             break;
                         }
                     case RelationalOperator.LessThanOrEqual:
                         {
-                            result = right.CompareTo(right) <= 0;
+                            result = left.CompareTo(right) <= 0;
                             break;
                         }
                     case RelationalOperator.Include:

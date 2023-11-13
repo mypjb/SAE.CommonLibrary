@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Abstract.Decorator
 {
-    public sealed class ProxyDecorator<TContext> : AbstractDecorator<TContext>, IDecorator<TContext> where TContext : DecoratorContext
+    public sealed class ProxyDecorator<TContext> : AbstractDecorator<TContext> where TContext : DecoratorContext
     {
         private readonly IDecorator<TContext> _proxy;
 
@@ -14,10 +14,11 @@ namespace SAE.CommonLibrary.Abstract.Decorator
             this._proxy = decorator;
         }
 
-        async Task IDecorator<TContext>.DecorateAsync(TContext context)
+        public async override Task DecorateAsync(TContext context)
         {
             await this._proxy.DecorateAsync(context);
             await base.DecorateAsync(context);
         }
+
     }
 }

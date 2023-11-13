@@ -32,10 +32,51 @@ namespace SAE.CommonLibrary.AspNetCore.Test
         }
 
         [Theory]
-        [InlineData("18 >= $age || 'student' != $role || 'pjb' == $name")]
-        public async Task AuthAsync(string arg)
+        [InlineData("18 <= $age || 'student' != $role || 'pjb' == $name",
+                    "{age:'19',role:'student',name:'mypjb'}")]
+        [InlineData("18 <= $age || 'student' != $role || 'pjb' == $name",
+                    "{age:'17',role:'admin',name:'mypjb'}")]
+        [InlineData("18 <= $age || 'student' != $role || 'pjb' == $name",
+                    "{age:'16',role:'student',name:'pjb'}")]
+        [InlineData("18 <= $age && 'student' != $role || 'pjb' == $name",
+                    "{age:'99',role:'teacher',name:'mypjb'}")]
+        [InlineData("18 <= $age || 'student' != $role && 'pjb' == $name",
+                    "{age:'19',role:'student',name:'mypjb'}")]
+        [InlineData("18 <= $age || 'student' != $role && 'pjb' == $name",
+                    "{age:'10',role:'teacher',name:'pjb'}")]
+        public async Task AuthOkAsync(string arg, string ctxJson)
         {
+            var ctxDict = ctxJson.ToObject<Dictionary<string, string>>();
+
             var decorator = this._ruleDecoratorBuilder.Build(arg);
+
+            var ctx = new RuleContext(ctxDict);
+
+            await decorator.DecorateAsync(ctx);
+
+            Xunit.Assert.True(ctx.Complete);
+        }
+
+        [Theory]
+        [InlineData("18 <= $age || 'student' != $role || 'pjb' == $name",
+                    "{age:'17',role:'student',name:'mypjb'}")]
+        [InlineData("18 <= $age && 'student' != $role || 'pjb' == $name",
+                    "{age:'99',role:'student',name:'pjb'}")]
+        [InlineData("18 <= $age || 'student' != $role && 'pjb' == $name",
+                    "{age:'17',role:'student',name:'mypjb'}")]
+        [InlineData("18 <= $age || 'student' != $role && 'pjb' == $name",
+                    "{age:'10',role:'student',name:'pjb'}")]
+        public async Task AuthFailAsync(string arg, string ctxJson)
+        {
+            var ctxDict = ctxJson.ToObject<Dictionary<string, string>>();
+
+            var decorator = this._ruleDecoratorBuilder.Build(arg);
+
+            var ctx = new RuleContext(ctxDict);
+
+            await decorator.DecorateAsync(ctx);
+
+            Xunit.Assert.False(ctx.Complete);
         }
     }
 }

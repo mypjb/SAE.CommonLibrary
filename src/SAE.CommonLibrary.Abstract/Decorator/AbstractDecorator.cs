@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Abstract.Decorator
 {
-    public abstract class AbstractDecorator<TContext> where TContext : DecoratorContext
+    public abstract class AbstractDecorator<TContext> : IDecorator<TContext> where TContext : DecoratorContext
     {
         private AbstractDecorator<TContext> decorator;
         public AbstractDecorator()
@@ -16,7 +16,7 @@ namespace SAE.CommonLibrary.Abstract.Decorator
         public virtual void Add(IDecorator<TContext> decorator)
         {
             var abstractDecorator = decorator is AbstractDecorator<TContext> ?
-                                    decorator as AbstractDecorator<TContext> :
+                                    (AbstractDecorator<TContext>)decorator :
                                     new ProxyDecorator<TContext>(decorator);
             if (this.decorator == null)
             {
@@ -24,7 +24,7 @@ namespace SAE.CommonLibrary.Abstract.Decorator
             }
             else
             {
-                this.decorator.Add(abstractDecorator as IDecorator<TContext>);
+                this.decorator.Add(abstractDecorator);
             }
         }
 

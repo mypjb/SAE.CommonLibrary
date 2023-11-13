@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -21,29 +22,40 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
             {
                 var expressions = this.ParseRelationalOperator(nodeExpression);
 
-                var relationalOperator = this.ConvertRelationalOperator(expressions[0]);
-                if (relationalOperator == RelationalOperator.None)
+                var tuple = this.ConvertDecorators(expressions);
+                if (tuple == null)
                 {
                     return null;
                 }
-                if (relationalOperator == RelationalOperator.Not)
-                {
-                    if (expression.Length != 2)
-                    {
-                        return null;
-                    }
-
-                    this.ConvertDecoratorsCore<bool>(new[] { expressions[1] });
-                }
-                else
-                {
-                    this.ConvertDecorators(expressions.Skip(1).ToArray());
-                }
+                relationalOperatorDecorators.Add(tuple.Item1);
+                propertyDecorators.AddRange(tuple.Item2);
             }
 
             var operatorRuleDecorator = new OperatorRuleDecorator(logicalOperators);
 
-            return null;
+
+            ProxyDecorator<RuleContext> rootDecorator = null;
+
+            foreach (var property in propertyDecorators)
+            {
+                if (rootDecorator == null)
+                {
+                    rootDecorator = new ProxyDecorator<RuleContext>(property);
+                }
+                else
+                {
+                    rootDecorator.Add(property);
+                }
+            }
+
+            foreach (var relationalOperator in relationalOperatorDecorators)
+            {
+                rootDecorator.Add(relationalOperator);
+            }
+
+            rootDecorator.Add(operatorRuleDecorator);
+
+            return rootDecorator;
         }
 
         /// <summary>
@@ -131,9 +143,14 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
                         relationalOperator = RelationalOperator.Equal;
                         break;
                     }
-                case "!":
+                case "!=":
                     {
                         relationalOperator = RelationalOperator.NotEqual;
+                        break;
+                    }
+                case "!":
+                    {
+                        relationalOperator = RelationalOperator.Not;
                         break;
                     }
                 case "in":
@@ -184,40 +201,73 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// 构建值装饰器
         /// </summary>
         /// <param name="expressions"></param>
-        protected virtual IDecorator<RuleContext>[] ConvertDecorators(string[] expressions)
+        protected virtual Tuple<IDecorator<RuleContext>, IDecorator<RuleContext>[]> ConvertDecorators(string[] expressions)
         {
+            var relationalOperator = this.ConvertRelationalOperator(expressions[0]);
+
+
+            expressions = expressions.Skip(1).ToArray();
+
             var constantExp = expressions.FirstOrDefault(s => !s.StartsWith(Constants.PropertyPrefix));
 
             IDecorator<RuleContext>[] decorates;
+            IDecorator<RuleContext> relationalOperatorDecorator;
 
-            if (constantExp == null || Regex.IsMatch(constantExp, Constants.Regex.StringPattern))
+            if (relationalOperator == RelationalOperator.None)
             {
-                decorates = this.ConvertDecoratorsCore<string>(expressions);
+                return null;
             }
-            else if (Regex.IsMatch(constantExp, Constants.Regex.FloatPattern))
-            {
-                decorates = this.ConvertDecoratorsCore<float>(expressions);
-            }
-            else if (Regex.IsMatch(constantExp, Constants.Regex.DateTimePattern))
-            {
-                decorates = this.ConvertDecoratorsCore<DateTime>(expressions);
-            }
-            else if (Regex.IsMatch(constantExp, Constants.Regex.TimeSpanPattern))
-            {
-                decorates = this.ConvertDecoratorsCore<TimeSpan>(expressions);
-            }
-            else if (Regex.IsMatch(constantExp, Constants.Regex.BoolPattern))
+            else if (relationalOperator == RelationalOperator.Not)
             {
                 decorates = this.ConvertDecoratorsCore<bool>(expressions);
+                relationalOperatorDecorator = this.RelationalOperatorBuild<bool>(relationalOperator);
             }
             else
             {
-                decorates = Array.Empty<IDecorator<RuleContext>>();
+                if (constantExp == null || Regex.IsMatch(constantExp, Constants.Regex.StringPattern))
+                {
+                    for (var i = 0; i < expressions.Length; i++)
+                    {
+                        var exp = expressions[i];
+                        if (Regex.IsMatch(exp, Constants.Regex.StringPattern))
+                        {
+                            expressions[i] = exp.Substring(1, exp.Length - 2);
+                        }
+                    }
+                    decorates = this.ConvertDecoratorsCore<string>(expressions);
+                    relationalOperatorDecorator = this.RelationalOperatorBuild<string>(relationalOperator);
+                }
+                else if (Regex.IsMatch(constantExp, Constants.Regex.FloatPattern))
+                {
+                    decorates = this.ConvertDecoratorsCore<float>(expressions);
+                    relationalOperatorDecorator = this.RelationalOperatorBuild<float>(relationalOperator);
+                }
+                else if (Regex.IsMatch(constantExp, Constants.Regex.DateTimePattern))
+                {
+                    decorates = this.ConvertDecoratorsCore<DateTime>(expressions);
+                    relationalOperatorDecorator = this.RelationalOperatorBuild<DateTime>(relationalOperator);
+                }
+                else if (Regex.IsMatch(constantExp, Constants.Regex.TimeSpanPattern))
+                {
+                    decorates = this.ConvertDecoratorsCore<TimeSpan>(expressions);
+                    relationalOperatorDecorator = this.RelationalOperatorBuild<TimeSpan>(relationalOperator);
+                }
+                else if (Regex.IsMatch(constantExp, Constants.Regex.BoolPattern))
+                {
+                    decorates = this.ConvertDecoratorsCore<bool>(expressions);
+                    relationalOperatorDecorator = this.RelationalOperatorBuild<bool>(relationalOperator);
+                }
+                else
+                {
+                    decorates = Array.Empty<IDecorator<RuleContext>>();
+                    relationalOperatorDecorator = null;
+                }
             }
 
-
-            return decorates;
+            return new Tuple<IDecorator<RuleContext>, IDecorator<RuleContext>[]>(relationalOperatorDecorator, decorates);
         }
+
+
         /// <summary>
         /// 构建值装饰器核心
         /// </summary>
@@ -252,6 +302,16 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         protected virtual IDecorator<RuleContext> ConstantBuild<T>(T constant)
         {
             return new ConstantRuleDecorator<T>(constant);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="operator"></param>
+        /// <typeparam name="T"></typeparam>
+        protected virtual IDecorator<RuleContext> RelationalOperatorBuild<T>(RelationalOperator @operator) where T : IComparable, IEquatable<T>
+        {
+            return new BinaryRuleDecorator<T>(@operator);
         }
     }
 }

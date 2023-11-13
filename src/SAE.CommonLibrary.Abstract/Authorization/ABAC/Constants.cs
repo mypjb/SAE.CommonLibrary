@@ -28,25 +28,25 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
             /// <summary>
             /// float格式
             /// </summary>
-            public const string FloatPattern = "^\\d[\\d\\.]*";
+            public const string FloatPattern = "^\\d[\\d\\.]*$";
             /// <summary>
             /// 日期正则 yyyy-MM-dd hh:mm:ss
             /// </summary>
             /// <value></value>
-            public const string DateTimePattern = "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}";
+            public const string DateTimePattern = "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$";
             /// <summary>
             /// hh:mm:ss 时间格式
             /// </summary>
             /// <value></value>
-            public const string TimeSpanPattern = "\\d{2,}:\\d{2}:\\d{2}";
+            public const string TimeSpanPattern = "^\\d{2,}:\\d{2}:\\d{2}$";
             /// <summary>
             /// Bool格式
             /// </summary>
-            public const string BoolPattern = "$(true)|(false)^";
+            public const string BoolPattern = "^(true)|(false)$";
             /// <summary>
             /// 字符格式
             /// </summary>
-            public const string StringPattern = "$\".*\"^";
+            public const string StringPattern = "^(\".*\")|('.*')$";
         }
     }
 }

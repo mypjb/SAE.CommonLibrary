@@ -39,6 +39,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
                     if (@operator == LogicalOperator.And)
                     {
                         result = result && right;
+                        break;
                     }
                     else
                     {
