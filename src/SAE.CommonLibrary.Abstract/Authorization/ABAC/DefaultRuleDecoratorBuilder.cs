@@ -9,8 +9,13 @@ using SAE.CommonLibrary.Extension;
 
 namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
 {
+    /// <inheritdoc/>
+    /// <summary>
+    /// <see cref="IRuleDecoratorBuilder"/>默认实现
+    /// </summary>
     public class DefaultRuleDecoratorBuilder : IRuleDecoratorBuilder
     {
+
         public virtual IDecorator<RuleContext> Build(string expression)
         {
             var (logicalOperators, nodeExpressions) = this.ParseLogicalOperator(expression);
@@ -67,7 +72,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
             var count = 0;
             var start = 0;
 
-            var matchCollection = Regex.Matches(expression, Constants.LogicalOperator);
+            var matchCollection = Regex.Matches(expression, Constants.Regex.LogicalOperatorPattern);
 
             var logicalOperators = new LogicalOperator[matchCollection.Count];
 
@@ -179,23 +184,37 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// <param name="expression"></param>
         protected virtual string[] ParseRelationalOperator(string expression)
         {
-            var operatorMatch = Regex.Match(expression, Constants.RelationalOperator);
+            string[] exps;
+
+            var operatorMatch = Regex.Match(expression, Constants.Regex.RelationalOperatorPattern);
 
             if (operatorMatch.Success)
             {
-                if (operatorMatch.Index == 0)
+                exps = new string[2];
+                exps[0] = expression.Substring(0, operatorMatch.Length).Trim();
+                exps[exps.Length - 1] = expression.Substring(operatorMatch.Length).Trim();
+            }
+            else
+            {
+                var valuePattern = Regex.Match(expression, Constants.Regex.ValuePattern);
+                exps = new string[3];
+                exps[1] = valuePattern.Value;
+                expression = expression.Substring(valuePattern.Length).Trim();
+                operatorMatch = Regex.Match(expression, Constants.Regex.RelationalOperatorPattern);
+
+                if (operatorMatch.Success)
                 {
-                    return new string[] { operatorMatch.Value, expression.Substring(operatorMatch.Index + operatorMatch.Length).Trim() };
+                    exps[0] = expression.Substring(0, operatorMatch.Length).Trim();
+                    exps[exps.Length - 1] = expression.Substring(operatorMatch.Length).Trim();
                 }
                 else
                 {
-                    var left = expression.Substring(0, operatorMatch.Index).Trim();
-                    var right = expression.Substring(operatorMatch.Index + operatorMatch.Length).Trim();
-                    return new string[] { operatorMatch.Value, left, right };
+                    exps = new string[0];
                 }
             }
 
-            return Array.Empty<string>();
+
+            return exps;
         }
         /// <summary>
         /// 构建值装饰器
@@ -205,10 +224,9 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         {
             var relationalOperator = this.ConvertRelationalOperator(expressions[0]);
 
-
             expressions = expressions.Skip(1).ToArray();
 
-            var constantExp = expressions.FirstOrDefault(s => !s.StartsWith(Constants.PropertyPrefix));
+            var constantExp = expressions.FirstOrDefault(s => !Regex.IsMatch(s, Constants.Regex.PropertyPattern));
 
             IDecorator<RuleContext>[] decorates;
             IDecorator<RuleContext> relationalOperatorDecorator;
@@ -279,9 +297,10 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
             for (var i = 0; i < expressions.Length; i++)
             {
                 var exp = expressions[i];
-                decorates[i] = exp.StartsWith(Constants.PropertyPrefix) ?
-                                    this.PropertyBuild<T>(exp) :
-                                    this.ConstantBuild(exp.ToObject<T>());
+                var match = Regex.Match(exp, Constants.Regex.PropertyPattern);
+                decorates[i] = match.Success ?
+                                this.PropertyBuild<T>(match.Groups[1].Value) :
+                                this.ConstantBuild(exp.ToObject<T>());
             }
             return decorates;
         }
@@ -292,7 +311,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// <typeparam name="T"></typeparam>
         protected virtual IDecorator<RuleContext> PropertyBuild<T>(string propertyName)
         {
-            return new PropertyRuleDecorator<T>(propertyName.Substring(1));
+            return new PropertyRuleDecorator<T>(propertyName);
         }
         /// <summary>
         /// 获得常量

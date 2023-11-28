@@ -44,6 +44,15 @@ namespace SAE.CommonLibrary.AspNetCore.Test
                     "{age:'19',role:'student',name:'mypjb'}")]
         [InlineData("18 <= $age || 'student' != $role && 'pjb' == $name",
                     "{age:'10',role:'teacher',name:'pjb'}")]
+        [InlineData("!$ok || !$fail", "{ok:false,fail:true}")]
+        [InlineData("!$ok || !$fail", "{ok:true,fail:false}")]
+        [InlineData("!$ok || !$fail", "{ok:0,fail:1}")]
+        [InlineData("!$ok || !$fail", "{ok:1,fail:0}")]
+        [InlineData("!$ok || !$fail", "{ok:99,fail:0}")]
+        [InlineData("!true || $text in 'pjb'", "{text:'my pjb name'}")]
+        [InlineData("!false && $text in 'jb'", "{text:'my pjb name'}")]
+        [InlineData("!false && $text regex 'jb'", "{text:'my pjb name'}")]
+        [InlineData("!false && $text regex '^my[\\s\\w]+18$'", "{text:'my name is pjb age 18'}")]
         public async Task AuthOkAsync(string arg, string ctxJson)
         {
             var ctxDict = ctxJson.ToObject<Dictionary<string, string>>();
@@ -66,6 +75,13 @@ namespace SAE.CommonLibrary.AspNetCore.Test
                     "{age:'17',role:'student',name:'mypjb'}")]
         [InlineData("18 <= $age || 'student' != $role && 'pjb' == $name",
                     "{age:'10',role:'student',name:'pjb'}")]
+        [InlineData("!$ok || !$fail", "{ok:true,fail:true}")]
+        [InlineData("!$ok || !$fail", "{ok:1,fail:1}")]
+        [InlineData("!$ok || !$fail", "{ok:99,fail:47}")]
+        [InlineData("!true || $text in 'jb'", "{text:'my pj name'}")]
+        [InlineData("!true && $text in 'jb'", "{text:'my pjb name'}")]
+        [InlineData("!true && $text regex 'jb'", "{text:'my pjb name'}")]
+        [InlineData("!true && $text regex '^my[\\s\\w]+18$'", "{text:'my name is pjb age 18'}")]
         public async Task AuthFailAsync(string arg, string ctxJson)
         {
             var ctxDict = ctxJson.ToObject<Dictionary<string, string>>();
