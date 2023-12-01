@@ -7,13 +7,13 @@ using SAE.CommonLibrary.AspNetCore.Routing;
 using SAE.CommonLibrary.Extension;
 using SAE.CommonLibrary.Logging;
 
-namespace SAE.CommonLibrary.AspNetCore.Authorization
+namespace SAE.CommonLibrary.AspNetCore.Authorization.Bitmap
 {
     /// <inheritdoc/>
     /// <summary>
     /// 抽象的端点提供程序
     /// </summary>
-    public abstract class AbstractBitmapEndpointProvider : IBitmapEndpointProvider
+    public abstract class AbstractEndpointProvider : IEndpointProvider
     {
         /// <summary>
         /// 日志记录器
@@ -23,18 +23,18 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         /// 创建一个新的对象
         /// </summary>
         /// <param name="logging">日志记录器</param>
-        public AbstractBitmapEndpointProvider(ILogging<AbstractBitmapEndpointProvider> logging)
+        public AbstractEndpointProvider(ILogging<AbstractEndpointProvider> logging)
         {
             this._logging = logging;
-            this.BitmapEndpoints = Array.Empty<BitmapEndpoint>();
+            this.Endpoints = Array.Empty<Endpoint>();
         }
-        private IEnumerable<BitmapEndpoint> bitmapEndpoints;
+        private IEnumerable<Endpoint> endpoints;
         /// <summary>
         /// 当存在为0的索引时将会重新计算索引
         /// </summary>
-        protected IEnumerable<BitmapEndpoint> BitmapEndpoints
+        protected IEnumerable<Endpoint> Endpoints
         {
-            get => this.bitmapEndpoints;
+            get => this.endpoints;
             set
             {
                 if (value == null) return;
@@ -53,12 +53,12 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
                     }
                 }
 
-                this.bitmapEndpoints = descriptors;
+                this.endpoints = descriptors;
             }
         }
-        public virtual Task<IEnumerable<BitmapEndpoint>> ListAsync()
+        public virtual Task<IEnumerable<Endpoint>> ListAsync()
         {
-            return Task.FromResult(this.BitmapEndpoints);
+            return Task.FromResult(this.Endpoints);
         }
     }
 }

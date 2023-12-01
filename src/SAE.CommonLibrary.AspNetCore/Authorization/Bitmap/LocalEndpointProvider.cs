@@ -7,12 +7,12 @@ using SAE.CommonLibrary.AspNetCore.Routing;
 using SAE.CommonLibrary.Extension;
 using SAE.CommonLibrary.Logging;
 
-namespace SAE.CommonLibrary.AspNetCore.Authorization
+namespace SAE.CommonLibrary.AspNetCore.Authorization.Bitmap
 {
     /// <summary>
     /// 端点本地存储器
     /// </summary>
-    public class LocalBitmapEndpointProvider : AbstractBitmapEndpointProvider, IBitmapEndpointProvider
+    public class LocalEndpointProvider : AbstractEndpointProvider, IEndpointProvider
     {
         /// <summary>
         /// 创建一个新的对象
@@ -20,11 +20,11 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         /// <param name="logging">日志</param>
         /// <param name="provider">提供器</param>
 
-        public LocalBitmapEndpointProvider(ILogging<LocalBitmapEndpointProvider> logging, IPathDescriptorProvider provider) : base(logging)
+        public LocalEndpointProvider(ILogging<LocalEndpointProvider> logging, IPathDescriptorProvider provider) : base(logging)
         {
-            this.BitmapEndpoints = provider.GetDescriptors().Select((desc, index) =>
+            this.Endpoints = provider.GetDescriptors().Select((desc, index) =>
             {
-                return new BitmapEndpoint
+                return new Endpoint
                 {
                     Name = desc.Name,
                     Index = desc.Index,

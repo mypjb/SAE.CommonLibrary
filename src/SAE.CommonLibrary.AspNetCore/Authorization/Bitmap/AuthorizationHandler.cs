@@ -14,43 +14,43 @@ using SAE.CommonLibrary.Extension;
 using SAE.CommonLibrary.Logging;
 using SAE.CommonLibrary.Scope;
 
-namespace SAE.CommonLibrary.AspNetCore.Authorization
+namespace SAE.CommonLibrary.AspNetCore.Authorization.Bitmap
 {
     /// <summary>
     /// 位图授权处理程序
     /// </summary>
     /// <inheritdoc/>
-    public class BitmapAuthorizationHandler : AuthorizationHandler<BitmapAuthorizationRequirement>
+    public class AuthorizationHandler : AuthorizationHandler<BitmapAuthorizationRequirement>
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IBitmapEndpointStorage _bitmapEndpointStorage;
-        private readonly IBitmapAuthorization _bitmapAuthorization;
+        private readonly IEndpointStorage _endpointStorage;
+        private readonly IAuthorization _authorization;
         private readonly ILogging _logging;
         private readonly ICache _cache;
-        private readonly IOptionsSnapshot<List<BitmapAuthorizationDescriptor>> _optionsSnapshot;
+        private readonly IOptionsSnapshot<List<AuthorizationDescriptor>> _optionsSnapshot;
         private readonly IScopeFactory _scopeFactory;
 
         /// <summary>
         /// 创建一个新的对象
         /// </summary>
         /// <param name="httpContextAccessor">请求上下文</param>
-        /// <param name="bitmapEndpointStorage">端点存储器</param>
-        /// <param name="bitmapAuthorization">位图授权规则对象</param>
+        /// <param name="endpointStorage">端点存储器</param>
+        /// <param name="authorization">位图授权规则对象</param>
         /// <param name="logging">日志记录器</param>
         /// <param name="cache">内部缓存</param>
         /// <param name="optionsSnapshot">配置</param>
         /// <param name="scopeFactory">区域工厂</param>
-        public BitmapAuthorizationHandler(IHttpContextAccessor httpContextAccessor,
-                                          IBitmapEndpointStorage bitmapEndpointStorage,
-                                          IBitmapAuthorization bitmapAuthorization,
-                                          ILogging<BitmapAuthorization> logging,
-                                          IDistributedCache cache,
-                                          IOptionsSnapshot<List<BitmapAuthorizationDescriptor>> optionsSnapshot,
-                                          IScopeFactory scopeFactory)
+        public AuthorizationHandler(IHttpContextAccessor httpContextAccessor,
+                                    IEndpointStorage endpointStorage,
+                                    IAuthorization authorization,
+                                    ILogging<AuthorizationHandler> logging,
+                                    IDistributedCache cache,
+                                    IOptionsSnapshot<List<AuthorizationDescriptor>> optionsSnapshot,
+                                    IScopeFactory scopeFactory)
         {
             this._httpContextAccessor = httpContextAccessor;
-            this._bitmapEndpointStorage = bitmapEndpointStorage;
-            this._bitmapAuthorization = bitmapAuthorization;
+            this._endpointStorage = endpointStorage;
+            this._authorization = authorization;
             this._logging = logging;
             this._cache = cache;
             this._optionsSnapshot = optionsSnapshot;
@@ -82,19 +82,19 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         {
             var ctx = this._httpContextAccessor.HttpContext;
 
-            var index = this._bitmapEndpointStorage.GetIndex(ctx);
+            var index = this._endpointStorage.GetIndex(ctx);
             string code = string.Empty;
             if (context.User.Identity.IsAuthenticated && index > 0)
             {
                 var claims = context.User.FindAll(Constants.BitmapAuthorize.Claim) ?? Enumerable.Empty<Claim>();
 
-                code = this._bitmapAuthorization.FindCode(claims);
+                code = this._authorization.FindCode(claims);
 
                 var bitmapAuthorizations = this.GetAuthorizeDescriptor(code);
 
                 foreach (var bitmapAuthorization in bitmapAuthorizations)
                 {
-                    if (this._bitmapAuthorization.Authorize(bitmapAuthorization.Code, index))
+                    if (this._authorization.Authorize(bitmapAuthorization.Code, index))
                     {
                         context.Succeed(requirement);
                         break;
@@ -130,7 +130,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         /// </summary>
         /// <param name="code">授权码</param>
         /// <param name="num">当前重试次数</param>
-        protected virtual IEnumerable<BitmapAuthorizationDescriptor> GetAuthorizeDescriptor(string code, int num = 0)
+        protected virtual IEnumerable<AuthorizationDescriptor> GetAuthorizeDescriptor(string code, int num = 0)
         {
             var cacheKey = $"{Constants.BitmapAuthorize.Caching.AuthorizeCode}{code.ToMd5()}";
 
@@ -140,7 +140,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
 
             var indexs = this._cache.GetOrAdd<int[]>(cacheKey, () =>
             {
-                return descriptors.Where(s => this._bitmapAuthorization.Authorize(code, s.Index))
+                return descriptors.Where(s => this._authorization.Authorize(code, s.Index))
                                    .Select(s => s.Index)
                                    .ToArray();
             }, Constants.BitmapAuthorize.Caching.AuthorizeCodeTime);
@@ -161,7 +161,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
                 if (num >= Constants.BitmapAuthorize.MaxFindNum)
                 {
                     this._logging.Error($"查找授权码失败，并超过了最大次数'{Constants.BitmapAuthorize.MaxFindNum}'！{message}");
-                    return Enumerable.Empty<BitmapAuthorizationDescriptor>();
+                    return Enumerable.Empty<AuthorizationDescriptor>();
                 }
                 else
                 {

@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using SAE.CommonLibrary.AspNetCore.Routing;
 using SAE.CommonLibrary.Extension;
 
-namespace SAE.CommonLibrary.AspNetCore.Authorization
+namespace SAE.CommonLibrary.AspNetCore.Authorization.Bitmap
 {
     /// <summary>
     /// 远程端点配置
     /// </summary>
-    public class RemoteBitmapEndpointOptions
+    public class RemoteEndpointOptions
     {
         /// <summary>
         /// 配置节
@@ -27,18 +27,18 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
     /// 远程端点提供程序
     /// </summary>
     /// <inheritdoc/>
-    public class RemoteBitmapEndpointProvider : IBitmapEndpointProvider
+    public class RemoteEndpointProvider : IEndpointProvider
     {
-        private readonly RemoteBitmapEndpointOptions _options;
+        private readonly RemoteEndpointOptions _options;
         /// <summary>
         /// 创建一个新的对象
         /// </summary>
         /// <param name="options"></param>
-        public RemoteBitmapEndpointProvider(RemoteBitmapEndpointOptions options)
+        public RemoteEndpointProvider(RemoteEndpointOptions options)
         {
             this._options = options;
         }
-        public async Task<IEnumerable<BitmapEndpoint>> ListAsync()
+        public async Task<IEnumerable<Endpoint>> ListAsync()
         {
             var client = new HttpClient();
 
@@ -46,7 +46,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
 
             var responseMessage = await client.SendAsync(requestMessage);
 
-            return await responseMessage.AsAsync<IEnumerable<BitmapEndpoint>>();
+            return await responseMessage.AsAsync<IEnumerable<Endpoint>>();
         }
     }
 }

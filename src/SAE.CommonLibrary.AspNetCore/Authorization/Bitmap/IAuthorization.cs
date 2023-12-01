@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;
 
-namespace SAE.CommonLibrary.AspNetCore.Authorization
+namespace SAE.CommonLibrary.AspNetCore.Authorization.Bitmap
 {
     /// <summary>
     /// 基于位图的授权规则
     /// </summary>
-    public interface IBitmapAuthorization
+    public interface IAuthorization
     {
         /// <summary>
         /// 根据<paramref name="authBits"/>生成授权码

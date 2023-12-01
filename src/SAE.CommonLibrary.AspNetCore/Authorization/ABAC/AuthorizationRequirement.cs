@@ -9,7 +9,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
     /// <summary>
     /// ABAC授权Requirement
     /// </summary>
-    public class ABACAuthorizationRequirement:IAuthorizationRequirement
+    public class AuthorizationRequirement:IAuthorizationRequirement
     {
         
     }

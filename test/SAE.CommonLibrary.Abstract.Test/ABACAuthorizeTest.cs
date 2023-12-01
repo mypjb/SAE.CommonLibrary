@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using SAE.CommonLibrary.Abstract.Authorization.ABAC;
 using SAE.CommonLibrary.Abstract.Responsibility;
-using SAE.CommonLibrary.AspNetCore.Authorization.ABAC;
 using SAE.CommonLibrary.Extension;
 using SAE.CommonLibrary.Test;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace SAE.CommonLibrary.AspNetCore.Test
+namespace SAE.CommonLibrary.Abstract.Test
 {
     public class ABACAuthorizeTest : BaseTest
     {

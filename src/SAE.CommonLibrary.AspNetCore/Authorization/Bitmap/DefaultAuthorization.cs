@@ -8,12 +8,12 @@ using SAE.CommonLibrary.Extension;
 using SAE.CommonLibrary.Logging;
 using SAE.CommonLibrary.Scope;
 
-namespace SAE.CommonLibrary.AspNetCore.Authorization
+namespace SAE.CommonLibrary.AspNetCore.Authorization.Bitmap
 {
     /// <summary>
-    /// 默认的<see cref="IBitmapAuthorization"/>实现
+    /// 默认的<see cref="IAuthorization"/>实现
     /// </summary>
-    public class BitmapAuthorization : IBitmapAuthorization
+    public class DefaultAuthorization : IAuthorization
     {
         private readonly ILogging _logging;
         private readonly IScopeFactory _scopeFactory;
@@ -22,8 +22,8 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         /// </summary>
         /// <param name="logging">日志记录器</param>
         /// <param name="scopeFactory">区域工厂</param>
-        public BitmapAuthorization(
-            ILogging<BitmapAuthorization> logging,
+        public DefaultAuthorization(
+            ILogging<DefaultAuthorization> logging,
             IScopeFactory scopeFactory)
         {
             this._logging = logging;

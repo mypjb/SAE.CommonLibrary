@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using SAE.CommonLibrary.AspNetCore.Authorization;
+using SAE.CommonLibrary.AspNetCore.Authorization.Bitmap;
 using SAE.CommonLibrary.Extension;
 
 namespace SAE.CommonLibrary.AspNetCore.Test.Controllers
@@ -19,13 +20,13 @@ namespace SAE.CommonLibrary.AspNetCore.Test.Controllers
 
     public class AccountController : Controller
     {
-        private readonly IBitmapEndpointStorage _bitmapEndpointStorage;
-        private readonly IBitmapAuthorization _bitmapAuthorization;
-        private readonly IOptionsSnapshot<List<BitmapAuthorizationDescriptor>> _options;
+        private readonly IEndpointStorage _bitmapEndpointStorage;
+        private readonly IAuthorization _bitmapAuthorization;
+        private readonly IOptionsSnapshot<List<AuthorizationDescriptor>> _options;
 
-        public AccountController(IBitmapEndpointStorage bitmapEndpointStorage,
-                                 IBitmapAuthorization bitmapAuthorization,
-                                 IOptionsSnapshot<List<BitmapAuthorizationDescriptor>> options)
+        public AccountController(IEndpointStorage bitmapEndpointStorage,
+                                 IAuthorization bitmapAuthorization,
+                                 IOptionsSnapshot<List<AuthorizationDescriptor>> options)
         {
             this._bitmapEndpointStorage = bitmapEndpointStorage;
             this._bitmapAuthorization = bitmapAuthorization;
@@ -44,7 +45,7 @@ namespace SAE.CommonLibrary.AspNetCore.Test.Controllers
 
             if (descriptor == null)
             {
-                descriptor = new BitmapAuthorizationDescriptor
+                descriptor = new AuthorizationDescriptor
                 {
                     Index = descriptors.Count + 1,
                     Name = $"role_{descriptors.Count}",

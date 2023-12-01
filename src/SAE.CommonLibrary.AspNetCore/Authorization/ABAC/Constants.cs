@@ -7,11 +7,22 @@ namespace SAE.CommonLibrary.AspNetCore
 {
     public partial class Constants
     {
+        public class Request
+        {
+            /// <summary>
+            /// 结尾符
+            /// </summary>
+            public const char EndingSymbol = '/';
+        }
         /// <summary>
         /// ABAC 授权
         /// </summary>
         public class ABAC
         {
+            /// <summary>
+            /// 应用名称
+            /// </summary>
+            public const string AppName = "app_name";
             /// <summary>
             /// 请求路径
             /// </summary>

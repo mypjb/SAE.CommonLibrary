@@ -4,12 +4,12 @@ using System.Linq;
 using System.Runtime.Intrinsics.X86;
 using System.Threading.Tasks;
 
-namespace SAE.CommonLibrary.AspNetCore.Authorization
+namespace SAE.CommonLibrary.AspNetCore.Authorization.Bitmap
 {
     /// <summary>
     /// bitmap 授权描述符
     /// </summary>
-    public class BitmapAuthorizationDescriptor
+    public class AuthorizationDescriptor
     {
         /// <summary>
         /// 配置节

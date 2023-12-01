@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using SAE.CommonLibrary.AspNetCore.Authorization;
+using SAE.CommonLibrary.AspNetCore.Authorization.Bitmap;
 using SAE.CommonLibrary.Extension;
 using SAE.CommonLibrary.Test;
 using Xunit;
@@ -15,15 +16,15 @@ namespace SAE.CommonLibrary.AspNetCore.Test
 {
     public class AuthorizationTest : BaseTest
     {
-        private readonly IBitmapAuthorization _authorization;
+        private readonly IAuthorization _authorization;
 
         public AuthorizationTest(ITestOutputHelper output) : base(output)
         {
-            this._authorization = this._serviceProvider.GetService<IBitmapAuthorization>();
+            this._authorization = this._serviceProvider.GetService<IAuthorization>();
         }
         protected override void ConfigureServices(IServiceCollection services)
         {
-            services.TryAddSingleton<IBitmapAuthorization, BitmapAuthorization>();
+            services.TryAddSingleton<IAuthorization, DefaultAuthorization>();
             services.AddDefaultScope()
                     .AddNlogLogger();
             base.ConfigureServices(services);

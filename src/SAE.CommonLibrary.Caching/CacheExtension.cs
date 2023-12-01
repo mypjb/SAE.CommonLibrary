@@ -9,11 +9,13 @@ using SAE.CommonLibrary.Extension;
 
 namespace SAE.CommonLibrary.Caching
 {
+    /// <summary>
+    /// <see cref="ICache"/>扩展
+    /// </summary>
     public static class CacheExtension
     {
-        #region Add
 
-        #region Sync
+
         /// <summary>
         /// 根据<paramref name="description"/>添加缓存
         /// </summary>
@@ -194,9 +196,6 @@ namespace SAE.CommonLibrary.Caching
                         .GetAwaiter()
                         .GetResult();
         }
-        #endregion
-
-        #region Async
         /// <summary>
         /// 添加<paramref name="key"/>的缓存<paramref name="value"/>
         /// </summary>
@@ -355,12 +354,19 @@ namespace SAE.CommonLibrary.Caching
         {
             return cache.AddAsync(TimeSpan.FromSeconds(second), pairs);
         }
-        #endregion
+        
 
+        /// <summary>
+        /// 清理缓存
+        /// </summary>
+        /// <param name="cache"></param>
+        public static void Clear(this ICache cache)
+        {
+            cache.ClearAsync()
+                 .GetAwaiter()
+                 .GetResult();
+        }
 
-        #endregion
-
-        #region Delete
         /// <summary>
         /// 通过<paramref name="key"/>移除缓存
         /// </summary>
@@ -401,7 +407,7 @@ namespace SAE.CommonLibrary.Caching
             {
                 return false;
             }
-            
+
             var keys = await cache.GetKeysAsync();
 
             var regex = new Regex(pattern);
@@ -419,11 +425,7 @@ namespace SAE.CommonLibrary.Caching
                 return true;
             }
         }
-        #endregion
 
-        #region ICache Get
-
-        #region Sync
         /// <summary>
         /// 根据<paramref name="key"/>获得缓存
         /// </summary>
@@ -463,7 +465,7 @@ namespace SAE.CommonLibrary.Caching
             {
                 return Task.FromResult(valueFactory.Invoke());
             }).GetAwaiter()
-               .GetResult();
+              .GetResult();
         }
         /// <summary>
         /// 根据<paramref name="key"/>获得缓存,如果缓存不存在
@@ -558,40 +560,7 @@ namespace SAE.CommonLibrary.Caching
                 return Task.FromResult(valueFactory.Invoke());
             }).GetAwaiter().GetResult();
         }
-        #endregion
-
-        ///// <summary>
-        ///// 根据<paramref name="key"/>获得缓存
-        ///// </summary>
-        ///// <typeparam name="T"></typeparam>
-        ///// <param name="cache"></param>
-        ///// <param name="key"></param>
-        ///// <returns></returns>
-        //public static async Task<T> GetAsync<T>(this ICache cache, string key)
-        //{
-        //    var json = (await cache.GetAsync(key))?.ToString();
-        //    if (json.IsNullOrWhiteSpace()) return default(T);
-        //    return json.ToObject<T>();
-        //}
-
-        //public static async Task<IEnumerable<T>> GetAsync<T>(this ICache cache, IEnumerable<string> keys)
-        //{
-        //    List<T> ts = new List<T>();
-        //    var results = await cache.GetAsync(keys);
-        //    foreach (object result in results)
-        //    {
-        //        if (string.IsNullOrWhiteSpace(result?.ToString()))
-        //        {
-        //            ts.Add(default);
-        //        }
-        //        else
-        //        {
-        //            ts.Add(result.ToString().ToObject<T>());
-        //        }
-        //    }
-        //    return ts;
-        //}
-
+        
         /// <summary>
         /// 根据<paramref name="key"/>获得缓存,如果缓存不存在
         /// 则通过<paramref name="valueFactory"/>添加
@@ -712,8 +681,6 @@ namespace SAE.CommonLibrary.Caching
 
             return value;
         }
-
-
-        #endregion
+        
     }
 }

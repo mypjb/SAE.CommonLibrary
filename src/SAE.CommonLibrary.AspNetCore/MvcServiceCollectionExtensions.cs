@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using SAE.CommonLibrary;
 using SAE.CommonLibrary.AspNetCore;
 using SAE.CommonLibrary.AspNetCore.Authorization;
+using SAE.CommonLibrary.AspNetCore.Authorization.Bitmap;
 using SAE.CommonLibrary.AspNetCore.Filters;
 using SAE.CommonLibrary.AspNetCore.Routing;
 using SAE.CommonLibrary.Extension;
@@ -155,15 +156,15 @@ namespace Microsoft.Extensions.DependencyInjection
                     .AddDefaultScope()
                     .AddSAEMemoryDistributedCache();
 
-            if (!services.IsRegister<IAuthorizationHandler, BitmapAuthorizationHandler>())
+            if (!services.IsRegister<IAuthorizationHandler, AuthorizationHandler>())
             {
-                services.AddSingleton<IAuthorizationHandler, BitmapAuthorizationHandler>();
+                services.AddSingleton<IAuthorizationHandler, AuthorizationHandler>();
             }
 
-            services.TryAddSingleton<IBitmapAuthorization, BitmapAuthorization>();
-            services.TryAddSingleton<IBitmapEndpointStorage, BitmapEndpointStorage>();
-            services.AddOptions<List<BitmapAuthorizationDescriptor>>()
-                    .Bind(BitmapAuthorizationDescriptor.Option);
+            services.TryAddSingleton<IAuthorization, DefaultAuthorization>();
+            services.TryAddSingleton<IEndpointStorage, EndpointStorage>();
+            services.AddOptions<List<AuthorizationDescriptor>>()
+                    .Bind(AuthorizationDescriptor.Option);
 
             services.PostConfigure<AuthorizationOptions>(options =>
             {
@@ -195,7 +196,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static BitmapAuthorizationBuilder AddLocalBitmapEndpointProvider(this BitmapAuthorizationBuilder builder)
         {
-            builder.Services.TryAddSingleton<IBitmapEndpointProvider, LocalBitmapEndpointProvider>();
+            builder.Services.TryAddSingleton<IEndpointProvider, LocalEndpointProvider>();
             return builder;
         }
 
@@ -206,10 +207,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static BitmapAuthorizationBuilder AddRemoteBitmapEndpointProvider(this BitmapAuthorizationBuilder builder)
         {
-            builder.Services.AddOptions<RemoteBitmapEndpointOptions>()
-                            .Bind(RemoteBitmapEndpointOptions.Option);
+            builder.Services.AddOptions<RemoteEndpointOptions>()
+                            .Bind(RemoteEndpointOptions.Option);
 
-            builder.Services.TryAddSingleton<IBitmapEndpointProvider, RemoteBitmapEndpointProvider>();
+            builder.Services.TryAddSingleton<IEndpointProvider, RemoteEndpointProvider>();
             return builder;
         }
 
@@ -223,7 +224,7 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.Services.AddOptions<ConfigurationEndpointOptions>()
                             .Bind(ConfigurationEndpointOptions.Option);
 
-            builder.Services.TryAddSingleton<IBitmapEndpointProvider, ConfigurationBitmapEndpointProvider>();
+            builder.Services.TryAddSingleton<IEndpointProvider, ConfigurationEndpointProvider>();
             return builder;
         }
 

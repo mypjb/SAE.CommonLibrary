@@ -8,11 +8,9 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.AspNetCore.Mvc.Cors;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Net.Http.Headers;
-using SAE.CommonLibrary.AspNetCore.Authorization;
+using SAE.CommonLibrary.AspNetCore.Authorization.Bitmap;
 using SAE.CommonLibrary.AspNetCore.Routing;
 using SAE.CommonLibrary.Extension;
 using SAE.CommonLibrary.Test;
@@ -24,7 +22,7 @@ namespace SAE.CommonLibrary.AspNetCore.Test
 {
     public class BitmapAuthTest : HostTest
     {
-        private readonly List<BitmapAuthorizationDescriptor> _bitmaps = new List<BitmapAuthorizationDescriptor>();
+        private readonly List<AuthorizationDescriptor> _bitmaps = new List<AuthorizationDescriptor>();
         public BitmapAuthTest(ITestOutputHelper output) : base(output)
         {
         }
@@ -47,8 +45,8 @@ namespace SAE.CommonLibrary.AspNetCore.Test
 
         protected override void Configure(IServiceProvider serviceProvider)
         {
-            var bitmapEndpointProvider = serviceProvider.GetService<IBitmapEndpointProvider>();
-            if (bitmapEndpointProvider is LocalBitmapEndpointProvider)
+            var bitmapEndpointProvider = serviceProvider.GetService<IEndpointProvider>();
+            if (bitmapEndpointProvider is LocalEndpointProvider)
             {
                 var bitmapEndpoints = bitmapEndpointProvider.ListAsync()
                                                             .GetAwaiter()

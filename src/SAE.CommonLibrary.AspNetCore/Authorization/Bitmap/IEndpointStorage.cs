@@ -12,12 +12,12 @@ using Microsoft.Extensions.Logging;
 using SAE.CommonLibrary.Extension;
 using SAE.CommonLibrary.Logging;
 
-namespace SAE.CommonLibrary.AspNetCore.Authorization
+namespace SAE.CommonLibrary.AspNetCore.Authorization.Bitmap
 {
     /// <summary>
     /// 端点存储器
     /// </summary>
-    public interface IBitmapEndpointStorage
+    public interface IEndpointStorage
     {
         /// <summary>
         /// 根据<paramref name="path"/>获取当前终结点索引
@@ -35,7 +35,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
     /// <summary>
     /// 位图端点
     /// </summary>
-    public class BitmapEndpoint
+    public class Endpoint
     {
         /// <summary>
         /// 索引，从1开始。
@@ -55,33 +55,33 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
         public string Method { get; set; }
     }
     /// <summary>
-    /// <see cref="IBitmapEndpointStorage"/> 默认实现
+    /// <see cref="IEndpointStorage"/> 默认实现
     /// </summary>
     /// <inheritdoc/>
-    public class BitmapEndpointStorage : IBitmapEndpointStorage
+    public class EndpointStorage : IEndpointStorage
     {
         private readonly ILogging _logging;
-        private readonly IBitmapEndpointProvider _bitmapEndpointProvider;
+        private readonly IEndpointProvider _endpointProvider;
         /// <summary>
         /// 从提供者当中获取位图端点
         /// </summary>
         /// <value></value>
-        protected IEnumerable<BitmapEndpoint> GetBitmapEndpoints()
+        protected IEnumerable<Endpoint> GetBitmapEndpoints()
         {
-            return this._bitmapEndpointProvider.ListAsync().GetAwaiter().GetResult() ??
-                        Enumerable.Empty<BitmapEndpoint>();
+            return this._endpointProvider.ListAsync().GetAwaiter().GetResult() ??
+                        Enumerable.Empty<Endpoint>();
         }
 
         /// <summary>
         /// 创建一个新的对象
         /// </summary>
         /// <param name="logging"></param>
-        /// <param name="bitmapEndpointProvider"></param>
-        public BitmapEndpointStorage(ILogging<BitmapEndpointStorage> logging,
-                                     IBitmapEndpointProvider bitmapEndpointProvider)
+        /// <param name="endpointProvider"></param>
+        public EndpointStorage(ILogging<EndpointStorage> logging,
+                               IEndpointProvider endpointProvider)
         {
             this._logging = logging;
-            this._bitmapEndpointProvider = bitmapEndpointProvider;
+            this._endpointProvider = endpointProvider;
         }
 
         public int Count()
@@ -115,15 +115,15 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization
     /// <summary>
     /// 端点存储扩展类
     /// </summary>
-    public static class BitmapEndpointStorageExtension
+    public static class EndpointStorageExtension
     {
         /// <summary>
-        /// 依据<paramref name="context"/>从<see cref="IBitmapEndpointStorage"/>查询索引s
+        /// 依据<paramref name="context"/>从<see cref="IEndpointStorage"/>查询索引s
         /// </summary>
         /// <param name="storage">存储类</param>
         /// <param name="context">请求上下文</param>
         /// <returns></returns>
-        public static int GetIndex(this IBitmapEndpointStorage storage, HttpContext context)
+        public static int GetIndex(this IEndpointStorage storage, HttpContext context)
         {
             if (context == null)
             {

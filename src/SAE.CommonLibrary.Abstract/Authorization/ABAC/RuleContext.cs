@@ -12,6 +12,9 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
     /// </summary>
     public class RuleContext : DecoratorContext
     {
+        internal RuleContext() : this(new Dictionary<string, string>())
+        {
+        }
         private Queue<object> _queue { get; }
         private IDictionary<string, string> _store;
         /// <summary>
@@ -23,6 +26,27 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
             this._store = dict;
             this._queue = new Queue<object>();
         }
+        /// <summary>
+        /// 合并<paramref name="context"/>
+        /// </summary>
+        /// <param name="context"></param>
+        public void Merge(RuleContext context)
+        {
+            this.Merge(context._store);
+        }
+        /// <summary>
+        /// 合并<paramref name="dict"/>
+        /// </summary>
+        /// <param name="dict"></param>
+        public void Merge(IDictionary<string, string> dict)
+        {
+            if (dict == null) return;
+            foreach (var kv in dict)
+            {
+                this._store[kv.Key.ToLower()] = kv.Value;
+            }
+        }
+
         public string Get(string key)
         {
             this._store.TryGetValue(key, out string val);
@@ -46,6 +70,10 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
             Assert.Build(this._queue.Any())
                   .True("队列已清空。");
             return (T)this._queue.Dequeue();
+        }
+        public override string ToString()
+        {
+            return this._store.ToJsonString();
         }
     }
 }
