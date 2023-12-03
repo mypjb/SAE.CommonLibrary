@@ -19,60 +19,32 @@ namespace SAE.CommonLibrary.Caching.Redis
     /// </summary>
     public class RedisDistributedCache : IDistributedCache
     {
-        private readonly IOptionsManage<RedisOptions, Tuple<IDatabase, IConnectionMultiplexer>> _optionsManage;
+        private readonly IOptionsMonitor<RedisOptions> _optionsMonitor;
         private readonly ILogging _logging;
         /// <summary>
         /// ctor
         /// </summary>
-        /// <param name="optionsManage"></param>
+        /// <param name="optionsMonitor"></param>
         /// <param name="logging"></param>
-        public RedisDistributedCache(IOptionsManage<RedisOptions, Tuple<IDatabase, IConnectionMultiplexer>> optionsManage, ILogging<RedisDistributedCache> logging)
+        public RedisDistributedCache(IOptionsMonitor<RedisOptions> optionsMonitor, ILogging<RedisDistributedCache> logging)
         {
-            this._optionsManage = optionsManage;
+            this._optionsMonitor = optionsMonitor;
             this._logging = logging;
-            this._optionsManage.OnChange+=this.DisposeConnection;
-            this._optionsManage.OnConfigure+=this.Configure;
-        }
-
-        private void DisposeConnection(RedisOptions options, Tuple<IDatabase, IConnectionMultiplexer> tuple)
-        {
-            var connect=tuple.Item2;
-            try
-                {
-                    var message = $"dispose connection {connect.Configuration}";
-                    this._logging.Info($"begin {message}");
-                    connect.Dispose();
-                    this._logging.Info($"end {message}");
-                }
-                catch (Exception ex)
-                {
-                    this._logging.Error(ex, "exception occurred while cleaning up old links");
-                }
-        }
-
-        private Tuple<IDatabase, IConnectionMultiplexer> Configure(RedisOptions options)
-        {
-            var connectMessage = $"connect:'{options.Connection}',db:'{options.DB}'";
-
-            this._logging.Info($"initial {connectMessage}");
-
-            var connectionMultiplexer = ConnectionMultiplexer.Connect(options.Connection);
-
-            return Tuple.Create<IDatabase, IConnectionMultiplexer>(connectionMultiplexer.GetDatabase(options.DB), connectionMultiplexer);
-
         }
 
         private async Task DatabaseOperation(Func<IDatabase, Task> databaseOperation, [CallerMemberName] string methodNmae = null)
         {
-            var tuple = this._optionsManage.Get();
+            var options = this._optionsMonitor.CurrentValue;
 
-            if (tuple.Item2.IsConnected)
+            var database = options.GetDatabase();
+
+            if (database.Multiplexer.IsConnected)
             {
-                await databaseOperation(tuple.Item1);
+                await databaseOperation(database);
             }
             else
             {
-                this._logging.Error($"{methodNmae} => redis connection fail");
+                this._logging.Error($"{methodNmae} => redis connection fail:{database.Database}");
             }
         }
         public async Task<bool> AddAsync<T>(CacheDescription<T> description)

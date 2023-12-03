@@ -17,26 +17,27 @@ namespace Microsoft.Extensions.DependencyInjection
     /// </summary>
     public static class ConfigurationMicrosoftDependencyInjectionExtension
     {
-        /// <summary>
-        /// 添加配置管理
-        /// </summary>
-        /// <typeparam name="TOptions"></typeparam>
-        /// <typeparam name="TService"></typeparam>
-        public static IServiceCollection AddOptionsManage<TOptions, TService>(this IServiceCollection services) where TOptions : class where TService : class
-        {
-            services.AddTransient<IOptionsManage<TOptions, TService>, OptionsManager<TOptions, TService>>();
-            return services;
-        }
-        /// <summary>
-        /// 添加配置 <see cref="IOptions{TOptions}"/>
-        /// </summary>
-        /// <typeparam name="TOptions"></typeparam>
-        /// <typeparam name="TService"></typeparam>
-        public static OptionsBuilder<TOptions> ConfigureService<TOptions, TService>(this OptionsBuilder<TOptions> optionsBuilder) where TOptions : class where TService : class
-        {
-            optionsBuilder.Services.AddOptionsManage<TOptions, TService>();
-            return optionsBuilder;
-        }
+        
+        // /// <summary>
+        // /// 添加配置管理
+        // /// </summary>
+        // /// <typeparam name="TOptions"></typeparam>
+        // /// <typeparam name="TService"></typeparam>
+        // public static IServiceCollection AddOptionsManage<TOptions, TService>(this IServiceCollection services) where TOptions : class where TService : class
+        // {
+        //     services.AddTransient<IOptionsManage<TOptions, TService>, OptionsManager<TOptions, TService>>();
+        //     return services;
+        // }
+        // /// <summary>
+        // /// 添加配置 <see cref="IOptions{TOptions}"/>
+        // /// </summary>
+        // /// <typeparam name="TOptions"></typeparam>
+        // /// <typeparam name="TService"></typeparam>
+        // public static OptionsBuilder<TOptions> ConfigureService<TOptions, TService>(this OptionsBuilder<TOptions> optionsBuilder) where TOptions : class where TService : class
+        // {
+        //     optionsBuilder.Services.AddOptionsManage<TOptions, TService>();
+        //     return optionsBuilder;
+        // }
 
         /// <summary>
         /// 使用<see cref="IConfiguration"/>进行配置绑定

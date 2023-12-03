@@ -34,8 +34,7 @@ namespace Microsoft.Extensions.DependencyInjection
             serviceCollection.TryAddSingleton<IStorage, MongoDBStorage>();
             serviceCollection.AddDefaultLogger();
             serviceCollection.AddOptions<MongoDBOptions>()
-                             .Bind(MongoDBOptions.Option)
-                             .ConfigureService<MongoDBOptions, IMongoDatabase>();
+                             .Bind(MongoDBOptions.Option);
             return new StorageOptions(serviceCollection);
         }
 

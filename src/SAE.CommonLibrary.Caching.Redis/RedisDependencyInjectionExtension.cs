@@ -16,8 +16,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddRedisCache(this IServiceCollection serviceDescriptors)
         {
             serviceDescriptors.AddOptions<RedisOptions>()
-                              .Bind(RedisOptions.Option)
-                              .ConfigureService<RedisOptions, Tuple<IDatabase, IConnectionMultiplexer>>();
+                              .Bind(RedisOptions.Option);
             serviceDescriptors.AddDefaultLogger();
             serviceDescriptors.AddSingleton<IDistributedCache, RedisDistributedCache>();
 

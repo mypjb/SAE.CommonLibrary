@@ -19,43 +19,37 @@ namespace SAE.CommonLibrary.Data.MongoDB
     /// </summary>
     public class MongoDBStorage : IStorage
     {
+        private const string IdName = "_id";
         #region Private Member
-        private readonly Type _stringType = typeof(string);
-        private readonly IDictionary<Type, Delegate> _idDelegateStorage = new Dictionary<Type, Delegate>();
         private readonly ILogging _logging;
         private readonly IMetadataProvider _descriptionProvider;
-        private readonly IOptionsManage<MongoDBOptions, IMongoDatabase> _optionsManage;
+        private readonly IOptionsMonitor<MongoDBOptions> _optionsMonitor;
         #endregion
 
-        #region Ctor
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="config"></param>
-        /// <param name="log"></param>
-        public MongoDBStorage(IOptionsManage<MongoDBOptions, IMongoDatabase> optionsManage,
+        /// <param name="optionsMonitor"></param>
+        /// <param name="logging"></param>
+        /// <param name="descriptionProvider"></param>
+        public MongoDBStorage(IOptionsMonitor<MongoDBOptions> optionsMonitor,
                               ILogging<MongoDBStorage> logging,
                               IMetadataProvider descriptionProvider)
         {
             this._logging = logging;
             this._descriptionProvider = descriptionProvider;
-            this._optionsManage = optionsManage;
-            this._optionsManage.OnConfigure += this.Configure;
+            this._optionsMonitor = optionsMonitor;
         }
-        #endregion
-        private IMongoDatabase Configure(MongoDBOptions options)
-        {
-            this._logging.Debug($"Connection={options.Connection},DB={options.DB}");
-            var clientSettings = MongoClientSettings.FromConnectionString(options.Connection);
-            clientSettings.LinqProvider = LinqProvider.V3;
-            var client = new MongoClient(clientSettings);
-            return client.GetDatabase(options.DB);
-        }
-
+        /// <summary>
+        /// 获得mongodb里的一个`collection`.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
         private IMongoCollection<T> GetCollection<T>() where T : class
         {
-            var mongoDatabase = this._optionsManage.Get();
+            var options = this._optionsMonitor.CurrentValue;
+            var mongoDatabase = options.GetDatabase();
             var description = this._descriptionProvider.Get<T>();
+            this._logging.Debug($"访问数据库：{options.DB}中的{description.Name}表");
             return mongoDatabase.GetCollection<T>(description.Name);
         }
 
@@ -70,7 +64,7 @@ namespace SAE.CommonLibrary.Data.MongoDB
 
             var id = this._descriptionProvider.Get<T>().IdentiyFactory.Invoke(model);
 
-            var query = new QueryDocument("_id", BsonValue.Create(id));
+            var query = new QueryDocument(IdName, BsonValue.Create(id));
 
             var collection = this.GetCollection<T>();
 
@@ -83,7 +77,7 @@ namespace SAE.CommonLibrary.Data.MongoDB
         {
             if (id == null) return;
 
-            var query = new QueryDocument("_id", BsonValue.Create(id));
+            var query = new QueryDocument(IdName, BsonValue.Create(id));
 
             var collection = this.GetCollection<T>();
 
@@ -100,7 +94,7 @@ namespace SAE.CommonLibrary.Data.MongoDB
 
             var id = this._descriptionProvider.Get<T>().IdentiyFactory.Invoke(model);
 
-            var query = new QueryDocument("_id", BsonValue.Create(id));
+            var query = new QueryDocument(IdName, BsonValue.Create(id));
 
             await this.GetCollection<T>()
                       .ReplaceOneAsync(query, model, new ReplaceOptions { IsUpsert = true });

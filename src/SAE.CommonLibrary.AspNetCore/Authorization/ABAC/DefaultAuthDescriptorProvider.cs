@@ -33,8 +33,8 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization.ABAC
 
         private void SetAuthDescriptor(AuthOptions options)
         {
-            this._logging.Info("加载ABAC授权规则！");
             this.authDescriptors = options?.Descriptors ?? new AuthDescriptor[0];
+            this._logging.Info($"加载ABAC授权规则：{this.authDescriptors.Count()}条");
             this._logging.Info("清空缓存信息。");
             this._memoryCache.Clear();
         }

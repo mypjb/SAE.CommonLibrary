@@ -39,9 +39,6 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
                                          IScopeFactory scopeFactory,
                                          ILogging<MultiTenantOptionsMonitor<TOptions>> logging) : base(factory, sources, cache)
         {
-
-
-
             this._factory = factory;
             this._cache = cache;
             this._scopeFactory = scopeFactory;
