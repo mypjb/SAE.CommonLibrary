@@ -49,6 +49,9 @@
 		<None Update="Config\bitmapAuth.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Update="Config\ABACAuth.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 	<ProjectExtensions>

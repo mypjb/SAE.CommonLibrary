@@ -24,6 +24,10 @@ namespace SAE.CommonLibrary.AspNetCore
             /// </summary>
             public const string AppName = "app_name";
             /// <summary>
+            /// 认证通过属性
+            /// </summary>
+            public const string Authentication = "auth";
+            /// <summary>
             /// 请求路径
             /// </summary>
             public const string Path = "path";

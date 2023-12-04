@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using SAE.CommonLibrary.Abstract.Authorization.ABAC;
 using SAE.CommonLibrary.Extension;
 using SAE.CommonLibrary.Logging;
@@ -12,13 +13,12 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization.ABAC
     /// <summary>
     /// ABAC授权认证的实现
     /// </summary>
-    public class AuthorizationHandler : AuthorizationHandler<AuthorizationRequirement>
+    public class AuthorizationHandler : AuthorizationHandler<ABACAuthorizationRequirement>
     {
         private readonly ILogging _logging;
         private readonly IRuleContextFactory _ruleContextFactory;
         private readonly IRuleDecoratorBuilder _ruleDecoratorBuilder;
         private readonly IAuthDescriptorProvider _authDescriptorProvider;
-
 
         /// <summary>
         /// ctor
@@ -27,6 +27,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization.ABAC
         /// <param name="ruleContextFactory"></param>
         /// <param name="ruleDecoratorBuilder"></param>
         /// <param name="authDescriptorProvider"></param>
+        /// <param name="httpContextAccessor"></param>
         public AuthorizationHandler(ILogging<AuthorizationHandler> logging,
                                     IRuleContextFactory ruleContextFactory,
                                     IRuleDecoratorBuilder ruleDecoratorBuilder,
@@ -38,19 +39,19 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization.ABAC
             this._authDescriptorProvider = authDescriptorProvider;
         }
 
-        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, AuthorizationRequirement requirement)
+        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context,ABACAuthorizationRequirement requirement)
         {
             var authDescriptor = await this._authDescriptorProvider.GetAsync();
 
-            if (!context.User.Identity.IsAuthenticated)
-            {
-                this._logging.Info($"用户尚未认证!");
-                return;
-            }
-
             if (authDescriptor == null)
             {
-                this._logging.Info("本次请求尚未匹配授权符，采用默认规则进行授权。");
+                this._logging.Info($"本次请求尚未匹配授权符，采用默认规则进行授权。");
+                if (!context.User.Identity.IsAuthenticated)
+                {
+                    this._logging.Info($"授权失败！在默认授权情况下，用户必须经过认证，才会授予访问权限。");
+                    return;
+                }
+                this._logging.Info("采用默认策略，授权成功!");
             }
             else
             {

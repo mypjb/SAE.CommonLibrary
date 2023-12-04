@@ -8,9 +8,9 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization.ABAC
     public class AuthOptions
     {
         /// <summary>
-        /// 
+        /// 配置节
         /// </summary>
-        public const string Option = Constants.BitmapAuthorize.Option + ":abac";
+        public const string Option = Constants.Authorize.Option + ":abac";
         /// <summary>
         /// 授权描述符
         /// </summary>

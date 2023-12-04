@@ -36,14 +36,20 @@ namespace SAE.CommonLibrary.AspNetCore
             public const string DefaultPath = "/.routes";
         }
         /// <summary>
-        /// 位图授权相关常量
+        /// 授权
         /// </summary>
-        public class BitmapAuthorize
+        public class Authorize
         {
             /// <summary>
             /// 配置节根
             /// </summary>
             public const string Option = "auth";
+        }
+        /// <summary>
+        /// 位图授权相关常量
+        /// </summary>
+        public class BitmapAuthorize
+        {
             /// <summary>
             /// 初始化索引
             /// </summary>

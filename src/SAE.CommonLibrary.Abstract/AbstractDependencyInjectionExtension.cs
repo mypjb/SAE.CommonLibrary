@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+using SAE.CommonLibrary.Abstract.Authorization.ABAC;
 using SAE.CommonLibrary.Abstract.Builder;
 using SAE.CommonLibrary.Abstract.Mediator;
 using SAE.CommonLibrary.Abstract.Responsibility;
@@ -108,7 +109,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <typeparam name="TContext"></typeparam>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static IServiceCollection AddResponsibility<TContext,TResponsibility>(this IServiceCollection services)
+        public static IServiceCollection AddResponsibility<TContext, TResponsibility>(this IServiceCollection services)
             where TResponsibility : class, IResponsibility<TContext>
             where TContext : ResponsibilityContext
         {
@@ -125,12 +126,35 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services"></param>
         /// <param name="responsibility"></param>
         /// <returns></returns>
-        public static IServiceCollection AddResponsibility<TContext, TResponsibility>(this IServiceCollection services,TResponsibility responsibility)
+        public static IServiceCollection AddResponsibility<TContext, TResponsibility>(this IServiceCollection services, TResponsibility responsibility)
             where TResponsibility : class, IResponsibility<TContext>
             where TContext : ResponsibilityContext
         {
             services.AddSingleton<IResponsibility<TContext>>(responsibility)
                     .AddResponsibilityProvider<TContext>();
+            return services;
+        }
+        /// <summary>
+        /// 添加ABAC授权
+        /// </summary>
+        /// <param name="services"></param>
+        public static IServiceCollection AddABACAuthorization(this IServiceCollection services)
+        {
+            services.TryAddSingleton<IRuleDecoratorBuilder, DefaultRuleDecoratorBuilder>();
+            services.TryAddSingleton<IRuleContextFactory, DefaultRuleContextFactory>();
+            services.AddDefaultLogger();
+            return services;
+        }
+        /// <summary>
+        /// 添加ABAC<see cref="IRuleContextProvider"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public static IServiceCollection AddABACRuleContextProvider<T>(this IServiceCollection services) where T : class, IRuleContextProvider
+        {
+            if (!services.IsRegister<IRuleContextProvider, T>())
+            {
+                services.AddSingleton<IRuleContextProvider, T>();
+            }
             return services;
         }
     }

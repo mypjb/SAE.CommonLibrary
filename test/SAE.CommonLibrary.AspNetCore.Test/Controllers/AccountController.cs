@@ -17,7 +17,7 @@ using SAE.CommonLibrary.Extension;
 namespace SAE.CommonLibrary.AspNetCore.Test.Controllers
 {
     [Route("[controller]/[action]")]
-
+    [AllowAnonymous]
     public class AccountController : Controller
     {
         private readonly IEndpointStorage _bitmapEndpointStorage;
@@ -32,7 +32,7 @@ namespace SAE.CommonLibrary.AspNetCore.Test.Controllers
             this._bitmapAuthorization = bitmapAuthorization;
             this._options = options;
         }
-        [AllowAnonymous]
+
         public IActionResult Login(string path, string method)
         {
             var index = this._bitmapEndpointStorage.GetIndex(path, method);
@@ -71,7 +71,7 @@ namespace SAE.CommonLibrary.AspNetCore.Test.Controllers
         }
 
 
-        [AllowAnonymous]
+
         public IActionResult AdminLogin()
         {
 

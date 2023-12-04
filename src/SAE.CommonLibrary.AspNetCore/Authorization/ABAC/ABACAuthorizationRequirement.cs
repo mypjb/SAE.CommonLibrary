@@ -4,12 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
-namespace SAE.CommonLibrary.AspNetCore.Authorization
+namespace SAE.CommonLibrary.AspNetCore.Authorization.ABAC
 {
     /// <summary>
     /// ABAC授权Requirement
     /// </summary>
-    public class AuthorizationRequirement:IAuthorizationRequirement
+    public class ABACAuthorizationRequirement:IAuthorizationRequirement
     {
         
     }

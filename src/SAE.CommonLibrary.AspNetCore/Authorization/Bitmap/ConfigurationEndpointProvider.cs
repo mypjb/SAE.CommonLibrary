@@ -20,7 +20,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization.Bitmap
         /// <summary>
         /// 配置节
         /// </summary>
-        public const string Option = Constants.BitmapAuthorize.Option;
+        public const string Option = Constants.Authorize.Option;
         /// <summary>
         /// 路径描述
         /// </summary>

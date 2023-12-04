@@ -14,11 +14,13 @@ using SAE.CommonLibrary.AspNetCore.Filters;
 using SAE.CommonLibrary.AspNetCore.Routing;
 using SAE.CommonLibrary.Extension;
 using Constants = SAE.CommonLibrary.AspNetCore.Constants;
+using ABAC = SAE.CommonLibrary.AspNetCore.Authorization.ABAC;
+using Bitmap = SAE.CommonLibrary.AspNetCore.Authorization.Bitmap;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     /// <summary>
-    /// <see cref="IBitmapAuthorization"/>授权构造器
+    /// <see cref="IAuthorization"/>授权构造器
     /// </summary>
     public class BitmapAuthorizationBuilder
     {
@@ -102,6 +104,52 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
         /// <summary>
+        /// 添加ABAC授权上下文
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="policyName">策略名称</param>
+        public static IServiceCollection AddABACAuthorizationWeb(this IServiceCollection services, string policyName = null)
+        {
+            services.AddABACAuthorization();
+
+            services.AddSAEMemoryCache();
+
+            services.AddOptions<ABAC.AuthOptions>()
+                    .Bind(ABAC.AuthOptions.Option);
+
+            if (!services.IsRegister<IAuthorizationHandler, ABAC.AuthorizationHandler>())
+            {
+                services.AddSingleton<IAuthorizationHandler, ABAC.AuthorizationHandler>();
+            }
+            services.AddABACRuleContextProvider<ABAC.HttpRuleContextProvider>();
+
+            services.TryAddSingleton<ABAC.IAuthDescriptorProvider, ABAC.DefaultABACAuthDescriptorProvider>();
+
+            services.PostConfigure<AuthorizationOptions>(options =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                                    .AddRequirements(new ABAC.ABACAuthorizationRequirement())
+                                    // .Combine(options.DefaultPolicy)
+                                    .Build();
+
+                if (policyName.IsNullOrWhiteSpace())
+                {
+                    if (options.DefaultPolicy.Requirements != null &&
+                        !options.DefaultPolicy.Requirements.OfType<ABAC.ABACAuthorizationRequirement>().Any())
+                    {
+                        options.DefaultPolicy = policy;
+                    }
+                }
+                else
+                {
+                    options.AddPolicy(policyName, policy);
+                }
+            });
+
+            return services;
+        }
+
+        /// <summary>
         /// 使用默认<see cref="Constants.Route.DefaultPath"/>配置路由扫描中间件
         /// </summary>
         /// <param name="app"></param>
@@ -156,9 +204,9 @@ namespace Microsoft.Extensions.DependencyInjection
                     .AddDefaultScope()
                     .AddSAEMemoryDistributedCache();
 
-            if (!services.IsRegister<IAuthorizationHandler, AuthorizationHandler>())
+            if (!services.IsRegister<IAuthorizationHandler, Bitmap.AuthorizationHandler>())
             {
-                services.AddSingleton<IAuthorizationHandler, AuthorizationHandler>();
+                services.AddSingleton<IAuthorizationHandler, Bitmap.AuthorizationHandler>();
             }
 
             services.TryAddSingleton<IAuthorization, DefaultAuthorization>();
@@ -234,6 +282,18 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="app"></param>
         /// <returns></returns>
         public static IApplicationBuilder UseBitmapAuthorization(this IApplicationBuilder app)
+        {
+            app.UseAuthentication()
+               .UseAuthorization();
+
+            return app;
+        }
+
+        /// <summary>
+        /// 配置ABACWeb授权策略
+        /// </summary>
+        /// <param name="app"></param>
+        public static IApplicationBuilder UseABACAuthorizationWeb(this IApplicationBuilder app)
         {
             app.UseAuthentication()
                .UseAuthorization();

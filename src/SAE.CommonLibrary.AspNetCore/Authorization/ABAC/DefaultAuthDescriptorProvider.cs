@@ -43,8 +43,8 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization.ABAC
             var ctx = this._httpContextAccessor.HttpContext;
 
             string path = ctx.Request.Path == Constants.Request.EndingSymbol.ToString() ?
-                         ctx.Request.Path :
-                         ctx.Request.Path.ToString().TrimEnd(Constants.Request.EndingSymbol);
+                          ctx.Request.Path :
+                          ctx.Request.Path.ToString().TrimEnd(Constants.Request.EndingSymbol);
 
             var key = $"{ctx.Request.Method}:{path}".ToLower();
 
@@ -56,6 +56,15 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization.ABAC
                 return this.authDescriptors.FirstOrDefault(s => s.Path == path &&
                                                            s.Method.IndexOf(ctx.Request.Method, StringComparison.OrdinalIgnoreCase) != -1);
             });
+
+            if (authDescriptor == null)
+            {
+                this._logging.Info($"未找到授权描述符：{key}");
+            }
+            else
+            {
+                this._logging.Info($"已找到授权描述符：{key}");
+            }
 
             return authDescriptor;
         }
