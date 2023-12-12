@@ -46,10 +46,13 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
                 this._store[kv.Key.ToLower()] = kv.Value;
             }
         }
-
+        /// <summary>
+        /// 获得value
+        /// </summary>
+        /// <param name="key">键值</param>
         public string Get(string key)
         {
-            this._store.TryGetValue(key, out string val);
+            this._store.TryGetValue(key.ToLower(), out string val);
             return val;
         }
         /// <summary>
@@ -71,6 +74,9 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
                   .True("队列已清空。");
             return (T)this._queue.Dequeue();
         }
+        /// <summary>
+        /// 以字符串的形式进行显示
+        /// </summary>
         public override string ToString()
         {
             return this._store.ToJsonString();

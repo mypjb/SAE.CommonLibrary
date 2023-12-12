@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using SAE.CommonLibrary.Abstract.Decorator;
 using SAE.CommonLibrary.Extension;
 using SAE.CommonLibrary.Logging;
@@ -17,10 +18,13 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
     public class DefaultRuleDecoratorBuilder : IRuleDecoratorBuilder
     {
         private readonly ILogging _logging;
+        private readonly IServiceProvider _serviceProvider;
 
-        public DefaultRuleDecoratorBuilder(ILogging<DefaultRuleDecoratorBuilder> logging)
+        public DefaultRuleDecoratorBuilder(ILogging<DefaultRuleDecoratorBuilder> logging,
+                                           IServiceProvider serviceProvider)
         {
             this._logging = logging;
+            this._serviceProvider = serviceProvider;
         }
         public virtual IDecorator<RuleContext> Build(string expression)
         {
@@ -84,7 +88,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
 
             this._logging.Info($"表达式'{expression}',存在{propertyDecorators.Count}个属性、{relationalOperatorDecorators.Count}个关系符、{logicalOperators.Length}个逻辑符");
 
-            return rootDecorator;
+            return (IDecorator<RuleContext>)rootDecorator ?? new DefaultRuleDecorator();
         }
 
         /// <summary>
@@ -335,7 +339,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
                 var match = Regex.Match(exp, Constants.Regex.PropertyPattern);
                 decorates[i] = match.Success ?
                                 this.PropertyBuild<T>(match.Groups[1].Value) :
-                                this.ConstantBuild(exp.ToObject<T>());
+                                this.ConstantBuild<T>(exp);
             }
             return decorates;
         }
@@ -346,16 +350,17 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// <typeparam name="T"></typeparam>
         protected virtual IDecorator<RuleContext> PropertyBuild<T>(string propertyName)
         {
-            return new PropertyRuleDecorator<T>(propertyName);
+            return new PropertyRuleDecorator<T>(propertyName, this._serviceProvider.GetService<IPropertyConvertor<T>>());
         }
         /// <summary>
         /// 获得常量
         /// </summary>
         /// <param name="constant"></param>
         /// <typeparam name="T"></typeparam>
-        protected virtual IDecorator<RuleContext> ConstantBuild<T>(T constant)
+        protected virtual IDecorator<RuleContext> ConstantBuild<T>(string constant)
         {
-            return new ConstantRuleDecorator<T>(constant);
+            var propertyConvertor = this._serviceProvider.GetService<IPropertyConvertor<T>>();
+            return new ConstantRuleDecorator<T>(propertyConvertor.Convert(constant));
         }
 
         /// <summary>

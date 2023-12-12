@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
@@ -50,12 +51,23 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization.ABAC
 
             this._logging.Info($"查找授权描述符：{key}");
 
-            var authDescriptor = await this._memoryCache.GetOrAddAsync<AuthDescriptor>(key, async () =>
+            var authDescriptor = await this._memoryCache.GetAsync<AuthDescriptor>(key);
+
+            if (authDescriptor == null)
             {
-                this._logging.Info($"缓存尚未命中，重新进行初始化操作，并加入缓存:{key}");
-                return this.authDescriptors.FirstOrDefault(s => s.Path == path &&
-                                                           s.Method.IndexOf(ctx.Request.Method, StringComparison.OrdinalIgnoreCase) != -1);
-            });
+                authDescriptor = this.authDescriptors.FirstOrDefault(s => s.Path == path &&
+                                                                     s.Method.IndexOf(ctx.Request.Method, StringComparison.OrdinalIgnoreCase) != -1);
+                if (authDescriptor == null)
+                {
+                    authDescriptor = this.authDescriptors.FirstOrDefault(s => Regex.IsMatch(path, s.Path) &&
+                                                                         s.Method.IndexOf(ctx.Request.Method, StringComparison.OrdinalIgnoreCase) != -1);
+                }
+                else
+                {
+                    this._logging.Info($"缓存尚未命中，重新进行初始化操作，并加入缓存:{key}");
+                    await this._memoryCache.AddAsync(key, CacheTime.TenMinutes, authDescriptor);
+                }
+            }
 
             if (authDescriptor == null)
             {

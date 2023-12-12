@@ -4,6 +4,7 @@ using SAE.CommonLibrary.Abstract.Builder;
 using SAE.CommonLibrary.Abstract.Mediator;
 using SAE.CommonLibrary.Abstract.Responsibility;
 using SAE.CommonLibrary.Extension;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -142,7 +143,15 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.TryAddSingleton<IRuleDecoratorBuilder, DefaultRuleDecoratorBuilder>();
             services.TryAddSingleton<IRuleContextFactory, DefaultRuleContextFactory>();
+
+            services.TryAddSingleton<IPropertyConvertor<bool>, DefaultPropertyConvertor>();
+            services.TryAddSingleton<IPropertyConvertor<float>, DefaultPropertyConvertor>();
+            services.TryAddSingleton<IPropertyConvertor<DateTime>, DefaultPropertyConvertor>();
+            services.TryAddSingleton<IPropertyConvertor<TimeSpan>, DefaultPropertyConvertor>();
+            services.TryAddSingleton<IPropertyConvertor<string>, DefaultPropertyConvertor>();
+
             services.AddDefaultLogger();
+            
             return services;
         }
         /// <summary>

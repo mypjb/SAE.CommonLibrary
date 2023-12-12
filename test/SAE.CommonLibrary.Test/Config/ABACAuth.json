@@ -6,55 +6,55 @@
                     "method": "delete",
                     "path": "/auth/api/home",
                     "name": "sae.commonlibrary.aspnetcore.test.controllers.homecontroller.delete (sae.commonlibrary.aspnetcore.test)",
-                    "Rule": "auth==true && $name = 'pjb'"
+                    "Rule": "$auth==true && $name == 'pjb'"
                 },
                 {
                     "method": "get",
                     "path": "/auth/api/home",
                     "name": "sae.commonlibrary.aspnetcore.test.controllers.homecontroller.Rule (sae.commonlibrary.aspnetcore.test)",
-                    "Rule": "auth!=true && $birthDate < 1995-01-01 01:00:00"
+                    "Rule": "$auth!=false && $birthDate < 1995-01-01 01:00:00"
                 },
                 {
                     "method": "post",
                     "path": "/auth/api/home",
                     "name": "sae.commonlibrary.aspnetcore.test.controllers.homecontroller.add (sae.commonlibrary.aspnetcore.test)",
-                    "Rule": "auth==true && $role regex \"^admin$\" && 1995-01-01 01:00:00 > $birthDate"
+                    "Rule": "$auth==true && $role regex \"^admin$\" && 1995-01-01 01:00:00 > $birthDate"
                 },
                 {
                     "method": "put",
                     "path": "/auth/api/home",
                     "name": "sae.commonlibrary.aspnetcore.test.controllers.homecontroller.edit (sae.commonlibrary.aspnetcore.test)",
-                    "Rule": "auth==true && $gender regex '^((man)\\|(woman))$' && $birthDate <= 1995-01-01 01:00:00"
+                    "Rule": "$auth==true && $gender regex '^((man)\\|(woman))$' && $birthDate <= 1995-01-01 01:00:00"
                 },
                 {
                     "method": "get",
                     "path": "/auth/home/custom",
                     "name": "sae.commonlibrary.aspnetcore.test.controllers.homecontroller.custom (sae.commonlibrary.aspnetcore.test)",
-                    "Rule": "auth==true && $scope in 'ap' && 1995-01-01 01:00:00 >= $birthDate"
+                    "Rule": "$auth==true && $scope in 'ap' && 1995-01-01 01:00:00 >= $birthDate"
                 },
                 {
                     "method": "post",
                     "path": "/auth/home/custom/test",
                     "name": "sae.commonlibrary.aspnetcore.test.controllers.homecontroller.custom (sae.commonlibrary.aspnetcore.test)",
-                    "Rule": "auth==true && $name = 'pjb' && $scope == 'man' && $birthDate >= 1994-02-28 01:00:00 && $role == \"admin\""
+                    "Rule": "$auth==true && $name == 'pjb' && $scope == 'man' && $birthDate >= 1994-02-28 01:00:00 && $role == \"admin\""
                 },
                 {
                     "method": "post",
                     "path": "/noauth/api/student",
                     "name": "sae.commonlibrary.aspnetcore.test.controllers.studentcontroller.add (sae.commonlibrary.aspnetcore.test)",
-                    "Rule": "!auth"
+                    "Rule": "!$auth"
                 },
                 {
                     "method": "put",
                     "path": "/noauth/api/student",
                     "name": "sae.commonlibrary.aspnetcore.test.controllers.studentcontroller.edit (sae.commonlibrary.aspnetcore.test)",
-                    "Rule": "!auth"
+                    "Rule": "!$auth"
                 },
                 {
                     "method": "get",
-                    "path": "/noauth/api/student/display/{id}",
+                    "path": "/noauth/api/student/display/[\\w]+",
                     "name": "sae.commonlibrary.aspnetcore.test.controllers.studentcontroller.display (sae.commonlibrary.aspnetcore.test)",
-                    "Rule": "!auth"
+                    "Rule": "!$auth"
                 }
             ]
         }

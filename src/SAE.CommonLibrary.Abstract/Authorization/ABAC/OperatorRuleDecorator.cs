@@ -27,7 +27,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         protected IEnumerable<LogicalOperator> Operators { get; }
         public async Task DecorateAsync(RuleContext context)
         {
-            var result = context.Dequeue<bool>(); ;
+            var result = context.Dequeue<bool>();
 
             if (this.Operators.Any())
             {
@@ -50,10 +50,6 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
                         }
                     }
                 }
-            }
-            else
-            {
-                result = context.Dequeue<bool>();
             }
 
             if (result)

@@ -44,6 +44,7 @@ namespace SAE.CommonLibrary.AspNetCore.Test
 
             foreach (var descriptor in authDescriptors)
             {
+                this.WriteLine($"访问：{descriptor.Method} -> {descriptor.Path}");
                 var req = new HttpRequestMessage(new HttpMethod(descriptor.Method), descriptor.Path);
 
                 req.Headers.Add(HeaderNames.Cookie, cookies);
@@ -60,7 +61,15 @@ namespace SAE.CommonLibrary.AspNetCore.Test
 
             foreach (var descriptor in noAuthDescriptors)
             {
-                var req = new HttpRequestMessage(new HttpMethod(descriptor.Method), descriptor.Path);
+                this.WriteLine($"访问：{descriptor.Method} -> {descriptor.Path}");
+                var path = descriptor.Path;
+
+                if (path.IndexOf('}') != -1 || path.IndexOf(']') != -1)
+                {
+                    path = $"{path.Substring(0, path.LastIndexOf('/') + 1)}{this.GetRandom()}";
+                }
+
+                var req = new HttpRequestMessage(new HttpMethod(descriptor.Method), path);
 
                 var rep = await this._client.SendAsync(req);
 

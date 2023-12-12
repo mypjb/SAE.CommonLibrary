@@ -53,11 +53,11 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
             /// <summary>
             /// 属性格式
             /// </summary>
-            public const string PropertyPattern = @"^\$([^\s]+)$";
+            public const string PropertyPattern = @"^\$([\w-]+)$";
             /// <summary>
             /// 值格式
             /// </summary>
-            public const string ValuePattern = @"^((\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})|(\d{2,}:\d{2}:\d{2})|(\d[\d\.]*)|(true)|(false)|(\$[^\s]+)|(('(?:\\'|[^'])*')|(""(?:\\""|[^""])*"")))";
+            public const string ValuePattern = @"^((\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})|(\d{2,}:\d{2}:\d{2})|(\d[\d\.]*)|(true)|(false)|(\$[\w-]+)|(('(?:\\'|[^'])*')|(""(?:\\""|[^""])*"")))";
         }
     }
 }

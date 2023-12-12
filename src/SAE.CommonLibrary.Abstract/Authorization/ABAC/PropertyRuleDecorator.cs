@@ -14,12 +14,15 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
     /// <inheritdoc/>
     public class PropertyRuleDecorator<T> : IDecorator<RuleContext>
     {
+        private readonly IPropertyConvertor<T> _propertyConvertor;
+
         /// <summary>
         /// ctor
         /// </summary>
-        public PropertyRuleDecorator(string propertyName)
+        public PropertyRuleDecorator(string propertyName, IPropertyConvertor<T> propertyConvertor)
         {
             this.PropertyName = propertyName;
+            this._propertyConvertor = propertyConvertor;
         }
         /// <summary>
         /// 属性名称
@@ -29,7 +32,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         public async Task DecorateAsync(RuleContext context)
         {
             var val = context.Get(this.PropertyName);
-            var value = string.IsNullOrWhiteSpace(val) ? default(T) : val.ToObject<T>();
+            var value = this._propertyConvertor.Convert(val);
             context.Enqueue(value);
         }
     }
