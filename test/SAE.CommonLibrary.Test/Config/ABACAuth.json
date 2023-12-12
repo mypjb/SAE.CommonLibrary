@@ -42,19 +42,19 @@
                     "method": "post",
                     "path": "/noauth/api/student",
                     "name": "sae.commonlibrary.aspnetcore.test.controllers.studentcontroller.add (sae.commonlibrary.aspnetcore.test)",
-                    "Rule": "!$auth"
+                    "Rule": "!$auth && $client_ip == '127.0.0.1' && $scheme in 'http' && $scheme regex '^https?$'"
                 },
                 {
                     "method": "put",
                     "path": "/noauth/api/student",
                     "name": "sae.commonlibrary.aspnetcore.test.controllers.studentcontroller.edit (sae.commonlibrary.aspnetcore.test)",
-                    "Rule": "!$auth"
+                    "Rule": "$client_ip == '127.0.0.1' && $scheme in 'http' && $scheme regex '^https?$'"
                 },
                 {
                     "method": "get",
                     "path": "/noauth/api/student/display/[\\w]+",
                     "name": "sae.commonlibrary.aspnetcore.test.controllers.studentcontroller.display (sae.commonlibrary.aspnetcore.test)",
-                    "Rule": "!$auth"
+                    "Rule": "$host == \"localhost\""
                 }
             ]
         }
