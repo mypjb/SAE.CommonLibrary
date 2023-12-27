@@ -43,7 +43,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization.ABAC
 
             var url = ctx.Request.GetDisplayUrl();
             this._logging.Info($"准备获取ABAC认证上下文：{url}");
-            
+
             var dict = new Dictionary<string, string>();
 
             dict[Constants.ABAC.Authentication] = ctx.User.Identity.IsAuthenticated.ToString();
@@ -73,7 +73,8 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization.ABAC
                 var claims = ctx.User.Claims;
                 foreach (var claim in claims)
                 {
-                    dict[claim.Type.ToLower()] = claim.Value;
+                    var key = $"{Constants.ABAC.User}.{claim.Type.ToLower()}";
+                    dict[key] = claim.Value;
                 }
             }
 

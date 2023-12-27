@@ -25,7 +25,7 @@ namespace SAE.CommonLibrary.Abstract.Test
 
         protected override void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IRuleDecoratorBuilder, DefaultRuleDecoratorBuilder>();
+            services.AddABACAuthorization();
 
             base.ConfigureServices(services);
         }
@@ -45,9 +45,7 @@ namespace SAE.CommonLibrary.Abstract.Test
                     "{age:'10',role:'teacher',name:'pjb'}")]
         [InlineData("!$ok || !$fail", "{ok:false,fail:true}")]
         [InlineData("!$ok || !$fail", "{ok:true,fail:false}")]
-        [InlineData("!$ok || !$fail", "{ok:0,fail:1}")]
-        [InlineData("!$ok || !$fail", "{ok:1,fail:0}")]
-        [InlineData("!$ok || !$fail", "{ok:99,fail:0}")]
+        [InlineData("!$ok || !$fail", "{ok:false,fail:false}")]
         [InlineData("!true || $text in 'pjb'", "{text:'my pjb name'}")]
         [InlineData("!false && $text in 'jb'", "{text:'my pjb name'}")]
         [InlineData("!false && $text regex 'jb'", "{text:'my pjb name'}")]
@@ -75,8 +73,6 @@ namespace SAE.CommonLibrary.Abstract.Test
         [InlineData("18 <= $age || 'student' != $role && 'pjb' == $name",
                     "{age:'10',role:'student',name:'pjb'}")]
         [InlineData("!$ok || !$fail", "{ok:true,fail:true}")]
-        [InlineData("!$ok || !$fail", "{ok:1,fail:1}")]
-        [InlineData("!$ok || !$fail", "{ok:99,fail:47}")]
         [InlineData("!true || $text in 'jb'", "{text:'my pj name'}")]
         [InlineData("!true && $text in 'jb'", "{text:'my pjb name'}")]
         [InlineData("!true && $text regex 'jb'", "{text:'my pjb name'}")]

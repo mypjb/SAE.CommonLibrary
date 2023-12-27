@@ -5,7 +5,7 @@ base_dir=$(cd $(dirname $0) && pwd)
 
 app_key=${1:-"111111"}
 
-nuget_source=${2:-"http://nuget.lass.net/v3/index.json"}
+nuget_source=${2:-"https://nuget.mirror.lass.net/v3/index.json"}
 
 release_dir=${3:-"nupkgs"}
 
