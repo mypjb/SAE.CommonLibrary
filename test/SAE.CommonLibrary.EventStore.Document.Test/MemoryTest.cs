@@ -37,9 +37,6 @@ namespace SAE.CommonLibrary.EventStore.Document.Test
             base.ConfigureServices(services);
         }
 
-
-
-        [Fact]
         public virtual async Task<User> Register()
         {
             var user = new User();

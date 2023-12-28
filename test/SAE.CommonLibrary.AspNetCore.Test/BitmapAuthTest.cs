@@ -60,7 +60,6 @@ namespace SAE.CommonLibrary.AspNetCore.Test
             base.Configure(serviceProvider);
         }
 
-        [Fact]
         public async Task<IEnumerable<IPathDescriptor>> RouterScanningTest()
         {
             var httpResponseMessage = await this._client.GetAsync(Constants.Route.DefaultPath);

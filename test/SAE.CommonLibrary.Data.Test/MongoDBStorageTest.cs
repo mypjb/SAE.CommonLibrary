@@ -45,7 +45,6 @@ namespace SAE.CommonLibrary.Data.Test
 
         }
 
-        [Fact]
         public async Task<ClassGrade> Add()
         {
             var classGrade = new ClassGrade();

@@ -26,7 +26,6 @@ namespace SAE.CommonLibrary.Cache.Test
             services.AddSAEMemoryDistributedCache();
         }
 
-        [Fact]
         public async Task<Student> Add()
         {
             var student = new Student();
@@ -39,7 +38,7 @@ namespace SAE.CommonLibrary.Cache.Test
             Xunit.Assert.Equal(student.Sex, value.Sex);
             return student;
         }
-        [Fact]
+        
         public async Task<IEnumerable<string>> Adds()
         {
             Dictionary<string, Student> dic = new Dictionary<string, Student>();
