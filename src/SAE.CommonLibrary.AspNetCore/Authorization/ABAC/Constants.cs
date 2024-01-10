@@ -7,6 +7,9 @@ namespace SAE.CommonLibrary.AspNetCore
 {
     public partial class Constants
     {
+        /// <summary>
+        /// 请求
+        /// </summary>
         public class Request
         {
             /// <summary>

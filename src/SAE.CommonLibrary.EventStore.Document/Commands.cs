@@ -14,7 +14,22 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// <typeparam name="TDot"></typeparam>
         public class Find<TDot>
         {
+            /// <summary>
+            /// 标识
+            /// </summary>
+            /// <value></value>
             public string Id { get; set; }
+        }
+        /// <summary>
+        /// 查找多个
+        /// </summary>
+        /// <typeparam name="TDto"></typeparam>
+        public class Finds<TDto>
+        {
+            /// <summary>
+            /// 标识集合
+            /// </summary>
+            public IEnumerable<string> Ids { get; set; }
         }
         /// <summary>
         /// 列出列表
@@ -30,6 +45,10 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// <typeparam name="T"></typeparam>
         public class Delete<T>
         {
+            /// <summary>
+            /// 标识
+            /// </summary>
+            /// <value></value>
             public string Id { get; set; }
         }
         /// <summary>
@@ -38,8 +57,11 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// <typeparam name="T"></typeparam>
         public class BatchDelete<T>
         {
+            /// <summary>
+            /// 标识集合
+            /// </summary>
+            /// <value></value>
             public IEnumerable<string> Ids { get; set; }
         }
     }
-   
 }

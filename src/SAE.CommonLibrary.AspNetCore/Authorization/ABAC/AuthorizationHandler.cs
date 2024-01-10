@@ -27,7 +27,6 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization.ABAC
         /// <param name="ruleContextFactory"></param>
         /// <param name="ruleDecoratorBuilder"></param>
         /// <param name="authDescriptorProvider"></param>
-        /// <param name="httpContextAccessor"></param>
         public AuthorizationHandler(ILogging<AuthorizationHandler> logging,
                                     IRuleContextFactory ruleContextFactory,
                                     IRuleDecoratorBuilder ruleDecoratorBuilder,

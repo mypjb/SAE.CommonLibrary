@@ -46,6 +46,11 @@ namespace SAE.CommonLibrary.Configuration
         /// <value></value>
         public string FullPath { get; set; }
         /// <summary>
+        /// 备用地址
+        /// </summary>
+        /// <value></value>
+        public string FullPathBackup{get;set;}
+        /// <summary>
         /// 远程配置数据地址
         /// </summary>
         /// <value></value>

@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using SAE.CommonLibrary.Extension;
 
 namespace SAE.CommonLibrary.EventStore.Document
 {
@@ -35,6 +36,8 @@ namespace SAE.CommonLibrary.EventStore.Document
         protected virtual async Task UpdateAsync(string identity, Action<TDocument> updateAction)
         {
             var document = await this._documentStore.FindAsync<TDocument>(identity);
+            Assert.Build(document)
+                  .NotNull();
             updateAction(document);
             await this._documentStore.SaveAsync(document);
         }
@@ -88,6 +91,8 @@ namespace SAE.CommonLibrary.EventStore.Document
         protected virtual async Task UpdateAsync<TDocument>(string identity, Action<TDocument> updateAction) where TDocument : IDocument, new()
         {
             var document = await this._documentStore.FindAsync<TDocument>(identity);
+            Assert.Build(document)
+                  .NotNull();
             updateAction(document);
             await this._documentStore.SaveAsync(document);
         }

@@ -249,12 +249,18 @@ namespace SAE.CommonLibrary.Configuration
         /// <returns></returns>
         protected async Task LoadFileAsync(Exception exception = null)
         {
-            if (!File.Exists(this._options.FullPath))
+            var fileName = this._options.FullPath;
+            if (!File.Exists(fileName))
             {
-                throw new FileNotFoundException($"从远程'{this._options.Url}'拉取配置失败,并且无法从本地'{this._options.FullPath}'获取文件配置", exception);
+                if (string.IsNullOrWhiteSpace(this._options.FullPathBackup) || !File.Exists(this._options.FullPathBackup))
+                {
+                    throw new FileNotFoundException($"从远程'{this._options.Url}'拉取配置失败,并且无法从本地'{this._options.FullPath}{(string.IsNullOrWhiteSpace(this._options.FullPathBackup) ? string.Empty : $":{this._options.FullPathBackup}")}'获取文件配置", exception);
+                }
+
+                fileName = this._options.FullPathBackup;
             }
             var stream = new MemoryStream();
-            using (var fs = new FileStream(this._options.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 await fs.CopyToAsync(stream);
                 stream.Position = 0;

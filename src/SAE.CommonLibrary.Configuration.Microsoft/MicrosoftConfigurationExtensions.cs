@@ -78,9 +78,7 @@ namespace Microsoft.Extensions.Configuration
 
             if (option.FullPath.IsNullOrWhiteSpace())
             {
-                var applicationName = configuration.GetSection(HostDefaults.ApplicationKey).Value;
-
-                applicationName = applicationName.IsNullOrWhiteSpace() ? Guid.NewGuid().ToString("N") : applicationName;
+                string applicationName;
 
                 var env = configuration.GetSection(HostDefaults.EnvironmentKey).Value;
 
@@ -90,19 +88,22 @@ namespace Microsoft.Extensions.Configuration
 
                 if (option.FileName.IsNullOrWhiteSpace())
                 {
-                    if (env.IsNullOrWhiteSpace())
-                    {
-                        option.FullPath = Path.Combine(root, $"{applicationName}{Constants.JsonSuffix}");
-                    }
-                    else
-                    {
-                        option.FullPath = Path.Combine(root, $"{applicationName}.{env}{Constants.JsonSuffix}");
-                    }
-
+                    applicationName = configuration.GetSection(HostDefaults.ApplicationKey).Value;
+                    applicationName = applicationName.IsNullOrWhiteSpace() ? Guid.NewGuid().ToString("N") : applicationName;
                 }
                 else
                 {
-                    option.FullPath = Path.Combine(root, option.FileName);
+                    applicationName = option.FileName;
+                }
+
+                if (env.IsNullOrWhiteSpace())
+                {
+                    option.FullPath = Path.Combine(root, $"{applicationName}{Constants.JsonSuffix}");
+                }
+                else
+                {
+                    option.FullPath = Path.Combine(root, $"{applicationName}.{env}{Constants.JsonSuffix}");
+                    option.FullPathBackup = Path.Combine(root, $"{applicationName}{Constants.JsonSuffix}");
                 }
             }
 
