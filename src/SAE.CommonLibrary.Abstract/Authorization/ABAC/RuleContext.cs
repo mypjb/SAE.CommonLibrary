@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using SAE.CommonLibrary.Abstract.Decorator;
 using SAE.CommonLibrary.Extension;
@@ -40,7 +41,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// <param name="dict"></param>
         public void Merge(IDictionary<string, string> dict)
         {
-            if (dict == null) return;
+            if (dict == null || dict.Count == 0) return;
             foreach (var kv in dict)
             {
                 this._store[kv.Key.ToLower()] = kv.Value;
@@ -79,7 +80,13 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// </summary>
         public override string ToString()
         {
-            return this._store.ToJsonString();
+            var sb = new StringBuilder();
+
+            foreach (var kv in this._store.OrderBy(s => s.Key))
+            {
+                sb.Append(kv.Key).Append(":").Append(kv.Value);
+            }
+            return sb.ToString();
         }
     }
 }

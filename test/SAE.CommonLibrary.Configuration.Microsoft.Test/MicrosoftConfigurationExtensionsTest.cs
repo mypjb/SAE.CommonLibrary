@@ -177,7 +177,7 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
                            .AddRemoteSource(remoteOptions)
                            .Build();
 
-            var key = $"{remoteOptions.ConfigurationSection.Replace(Constants.ConfigurationSectionSeparator, ':')}:{DBConnectOptions.Option}";
+            var key = $"{remoteOptions.ConfigurationSection.Replace(Constants.ConfigurationSectionSeparator, ":")}:{DBConnectOptions.Option}";
             var configurationSection = root.GetSection(key);
 
             var options = configurationSection.Get<DBConnectOptions>();

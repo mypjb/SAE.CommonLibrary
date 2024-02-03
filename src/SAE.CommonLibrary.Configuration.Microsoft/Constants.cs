@@ -17,12 +17,12 @@ namespace SAE.CommonLibrary.Configuration
             /// <summary>
             /// 根目录key
             /// </summary>
-            public const string RootDirectoryKey = "SAE:CONFIG:ROOT";
+            public const string RootDirectoryKey = "SAE"+Constants.ConfigSeparator+"CONFIG"+Constants.ConfigSeparator+"ROOT";
 
             /// <summary>
             /// 包含远程的配置节
             /// </summary>
-            public const string IncludeEndpointConfiguration = "SAE:CONFIG:INCLUDE";
+            public const string IncludeEndpointConfiguration = "SAE"+Constants.ConfigSeparator+"CONFIG"+Constants.ConfigSeparator+"INCLUDE";
             /// <summary>
             /// 默认根目录
             /// </summary>
@@ -30,7 +30,7 @@ namespace SAE.CommonLibrary.Configuration
             /// <summary>
             /// 配置key
             /// </summary>
-            public const string OptionKey = "SAE:CONFIG";
+            public const string OptionKey = "SAE"+Constants.ConfigSeparator+"CONFIG";
             /// <summary>
             /// 包含配置
             /// </summary>
@@ -61,11 +61,11 @@ namespace SAE.CommonLibrary.Configuration
         /// <summary>
         /// 配置分割符
         /// </summary>
-        public const char ConfigSeparator = ':';
+        public const string ConfigSeparator = ":";
         /// <summary>
         /// 配置节分割符
         /// </summary>
-        public const char ConfigurationSectionSeparator = '.';
+        public const string ConfigurationSectionSeparator = ".";
         /// <summary>
         /// json后缀
         /// </summary>

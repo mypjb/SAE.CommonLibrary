@@ -13,74 +13,32 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization.ABAC
     /// <summary>
     /// ABAC授权认证的实现
     /// </summary>
+    /// <inheritdoc/>
     public class AuthorizationHandler : AuthorizationHandler<ABACAuthorizationRequirement>
     {
         private readonly ILogging _logging;
-        private readonly IRuleContextFactory _ruleContextFactory;
-        private readonly IRuleDecoratorBuilder _ruleDecoratorBuilder;
-        private readonly IAuthDescriptorProvider _authDescriptorProvider;
+        private readonly IAuthorizeService _authorizeService;
 
         /// <summary>
         /// ctor
         /// </summary>
         /// <param name="logging"></param>
-        /// <param name="ruleContextFactory"></param>
-        /// <param name="ruleDecoratorBuilder"></param>
-        /// <param name="authDescriptorProvider"></param>
+        /// <param name="authorizeService"></param>
         public AuthorizationHandler(ILogging<AuthorizationHandler> logging,
-                                    IRuleContextFactory ruleContextFactory,
-                                    IRuleDecoratorBuilder ruleDecoratorBuilder,
-                                    IAuthDescriptorProvider authDescriptorProvider)
+                                    IAuthorizeService authorizeService)
         {
             this._logging = logging;
-            this._ruleContextFactory = ruleContextFactory;
-            this._ruleDecoratorBuilder = ruleDecoratorBuilder;
-            this._authDescriptorProvider = authDescriptorProvider;
+            this._authorizeService = authorizeService;
         }
 
-        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context,ABACAuthorizationRequirement requirement)
+        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, ABACAuthorizationRequirement requirement)
         {
-            var authDescriptor = await this._authDescriptorProvider.GetAsync();
-
-            if (authDescriptor == null)
+            this._logging.Info("准备进入ABAC授权管道");
+            if (await _authorizeService.AuthAsync())
             {
-                this._logging.Info($"本次请求尚未匹配授权符，采用默认规则进行授权。");
-                if (!context.User.Identity.IsAuthenticated)
-                {
-                    this._logging.Info($"授权失败！在默认授权情况下，用户必须经过认证，才会授予访问权限。");
-                    return;
-                }
-                this._logging.Info("采用默认策略，授权成功!");
+                //授权成功
+                context.Succeed(requirement);
             }
-            else
-            {
-                var authDescriptorJson = $"{authDescriptor.ToJsonString()}";
-                this._logging.Debug($"已找到授权规则：{authDescriptorJson}");
-
-                var ruleContext = await this._ruleContextFactory.GetAsync();
-
-                var ruleContextString = ruleContext.ToString();
-
-                this._logging.Debug($"授权上下文：{ruleContextString}");
-
-                var ruleDecorator = this._ruleDecoratorBuilder.Build(authDescriptor.Rule);
-
-                await ruleDecorator.DecorateAsync(ruleContext);
-
-                this._logging.Info($"授权信息：{nameof(ruleContext)}:{ruleContextString},{nameof(authDescriptor)}:{authDescriptorJson}");
-
-                var path = $"{authDescriptor.Method}:{authDescriptor.Path}";
-
-                if (!ruleContext.Complete)
-                {
-                    this._logging.Info($"授权失败:{path}");
-                    return;
-                }
-
-                this._logging.Info($"授权成功:{path}");
-            }
-
-            context.Succeed(requirement);
         }
     }
 }

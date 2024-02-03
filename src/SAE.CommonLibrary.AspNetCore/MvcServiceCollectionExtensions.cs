@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -7,15 +6,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using SAE.CommonLibrary;
-using SAE.CommonLibrary.AspNetCore;
-using SAE.CommonLibrary.AspNetCore.Authorization;
-using SAE.CommonLibrary.AspNetCore.Authorization.Bitmap;
 using SAE.CommonLibrary.AspNetCore.Filters;
 using SAE.CommonLibrary.AspNetCore.Routing;
 using SAE.CommonLibrary.Extension;
 using Constants = SAE.CommonLibrary.AspNetCore.Constants;
 using ABAC = SAE.CommonLibrary.AspNetCore.Authorization.ABAC;
-using Bitmap = SAE.CommonLibrary.AspNetCore.Authorization.Bitmap;
+using SAE.CommonLibrary.AspNetCore.Authorization.ABAC;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -110,20 +106,32 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="policyName">策略名称</param>
         public static IServiceCollection AddABACAuthorizationWeb(this IServiceCollection services, string policyName = null)
         {
-            services.AddABACAuthorization();
-
             services.AddSAEMemoryCache();
 
-            services.AddOptions<ABAC.AuthOptions>()
-                    .Bind(ABAC.AuthOptions.Option);
+            services.AddOptions<ABAC.AspNetCoreAuthDescriptor[]>()
+                    .Bind(Constants.Authorize.ABAC.AuthDescriptors);
+            
+            services.AddOptions<SAE.CommonLibrary.Abstract.Authorization.ABAC.AuthorizationPolicy[]>()
+                    .Bind(Constants.Authorize.ABAC.Policies);
 
             if (!services.IsRegister<IAuthorizationHandler, ABAC.AuthorizationHandler>())
             {
                 services.AddSingleton<IAuthorizationHandler, ABAC.AuthorizationHandler>();
             }
-            services.AddABACRuleContextProvider<ABAC.HttpRuleContextProvider>();
 
-            services.TryAddSingleton<ABAC.IAuthDescriptorProvider, ABAC.DefaultABACAuthDescriptorProvider>();
+            if (!services.IsRegister<IHttpRuleContextAppend, ABAC.HttpRuleContextAppend>())
+            {
+                services.AddSingleton<IHttpRuleContextAppend, ABAC.HttpRuleContextAppend>();
+            }
+
+            if (!services.IsRegister<IHttpRuleContextAppend, ABAC.UserHttpRuleContextAppend>())
+            {
+                services.AddSingleton<IHttpRuleContextAppend, ABAC.UserHttpRuleContextAppend>();
+            }
+
+            services.AddABACAuthorization()
+                    .AddRuleContextProvider<ABAC.HttpRuleContextProvider>()
+                    .AddAuthorizeService<ABAC.AspNetCoreAuthorizeService>();
 
             services.PostConfigure<AuthorizationOptions>(options =>
             {
@@ -187,105 +195,6 @@ namespace Microsoft.Extensions.DependencyInjection
                      await context.Response.WriteAsync(body.ToJsonString());
                  });
              });
-            return app;
-        }
-
-        /// <summary>
-        /// 添加基于位图的授权策略
-        /// </summary>
-        /// <param name="services"></param>
-        /// <param name="policyName">若<paramref name="policyName"/>为空，则注册为默认的授权策略</param>
-        /// <returns></returns>
-        public static BitmapAuthorizationBuilder AddBitmapAuthorization(this IServiceCollection services, string policyName = null)
-        {
-            services.AddDefaultLogger()
-                    .AddHttpContextAccessor()
-                    .AddRoutingScanning()
-                    .AddDefaultScope()
-                    .AddSAEMemoryDistributedCache();
-
-            if (!services.IsRegister<IAuthorizationHandler, Bitmap.AuthorizationHandler>())
-            {
-                services.AddSingleton<IAuthorizationHandler, Bitmap.AuthorizationHandler>();
-            }
-
-            services.TryAddSingleton<IAuthorization, DefaultAuthorization>();
-            services.TryAddSingleton<IEndpointStorage, EndpointStorage>();
-            services.AddOptions<List<AuthorizationDescriptor>>()
-                    .Bind(AuthorizationDescriptor.Option);
-
-            services.PostConfigure<AuthorizationOptions>(options =>
-            {
-                var policy = new AuthorizationPolicyBuilder()
-                                    .AddRequirements(new BitmapAuthorizationRequirement())
-                                    // .Combine(options.DefaultPolicy)
-                                    .Build();
-
-                if (policyName.IsNullOrWhiteSpace())
-                {
-                    if (options.DefaultPolicy.Requirements != null &&
-                        !options.DefaultPolicy.Requirements.OfType<BitmapAuthorizationRequirement>().Any())
-                    {
-                        options.DefaultPolicy = policy;
-                    }
-                }
-                else
-                {
-                    options.AddPolicy(policyName, policy);
-                }
-            });
-
-            return new BitmapAuthorizationBuilder(services);
-        }
-        /// <summary>
-        /// 添加本地位图终端配置
-        /// </summary>
-        /// <param name="builder"></param>
-        /// <returns></returns>
-        public static BitmapAuthorizationBuilder AddLocalBitmapEndpointProvider(this BitmapAuthorizationBuilder builder)
-        {
-            builder.Services.TryAddSingleton<IEndpointProvider, LocalEndpointProvider>();
-            return builder;
-        }
-
-        /// <summary>
-        /// 添加远程位图终端配置
-        /// </summary>
-        /// <param name="builder"></param>
-        /// <returns></returns>
-        public static BitmapAuthorizationBuilder AddRemoteBitmapEndpointProvider(this BitmapAuthorizationBuilder builder)
-        {
-            builder.Services.AddOptions<RemoteEndpointOptions>()
-                            .Bind(RemoteEndpointOptions.Option);
-
-            builder.Services.TryAddSingleton<IEndpointProvider, RemoteEndpointProvider>();
-            return builder;
-        }
-
-        /// <summary>
-        /// 使用默认
-        /// </summary>
-        /// <param name="builder"></param>
-        /// <returns></returns>
-        public static BitmapAuthorizationBuilder AddConfigurationProvider(this BitmapAuthorizationBuilder builder)
-        {
-            builder.Services.AddOptions<ConfigurationEndpointOptions>()
-                            .Bind(ConfigurationEndpointOptions.Option);
-
-            builder.Services.TryAddSingleton<IEndpointProvider, ConfigurationEndpointProvider>();
-            return builder;
-        }
-
-        /// <summary>
-        /// 配置基于位图的授权策略
-        /// </summary>
-        /// <param name="app"></param>
-        /// <returns></returns>
-        public static IApplicationBuilder UseBitmapAuthorization(this IApplicationBuilder app)
-        {
-            app.UseAuthentication()
-               .UseAuthorization();
-
             return app;
         }
 

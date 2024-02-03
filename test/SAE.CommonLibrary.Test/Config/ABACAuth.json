@@ -1,60 +1,103 @@
 {
     "auth": {
         "abac": {
+            "policies": [
+                {
+                    "id": "1",
+                    "name": "auth ok",
+                    "rule": "$user.auth==true && $user.name == 'pjb'"
+                },
+                {
+                    "id": "2",
+                    "name": "not auth and berthDate < 1995-01-01 01:00:00",
+                    "rule": "$user.auth!=false && $user.birthDate < 1995-01-01 01:00:00"
+                },
+                {
+                    "id": "3",
+                    "name": "/auth/api/home",
+                    "rule": "$user.auth==true && $user.role regex \"^admin$\" && 1995-01-01 01:00:00 > $user.birthDate"
+                },
+                {
+                    "id": "4",
+                    "name": "/auth/api/home",
+                    "rule": "$user.auth==true && $user.gender regex '^((man)\\|(woman))$' && $user.birthDate <= 1995-01-01 01:00:00"
+                },
+                {
+                    "id": "5",
+                    "name": "/auth/home/custom",
+                    "rule": "$user.auth==true && $user.scope in 'ap' && 1995-01-01 01:00:00 >= $user.birthDate"
+                },
+                {
+                    "id": "post",
+                    "name": "/auth/home/custom/test",
+                    "rule": "$user.auth==true && $user.name == 'pjb' && $user.scope == 'man' && $user.birthDate >= 1994-02-28 01:00:00 && $user.role == \"admin\""
+                },
+                {
+                    "id": "6",
+                    "name": "/noauth/api/student",
+                    "rule": "!$user.auth && $client.ip == '127.0.0.1' && $request.scheme in 'http' && $request.scheme regex '^https?$'"
+                },
+                {
+                    "id": "7",
+                    "name": "/noauth/api/student",
+                    "rule": "$client.ip == '127.0.0.1' && $request.scheme in 'http' && $request.scheme regex '^https?$'"
+                },
+                {
+                    "id": "8",
+                    "name": "/noauth/api/student/display/[\\w]+",
+                    "rule": "$request.host == \"localhost\""
+                },
+                {
+                    "id": "8",
+                    "name": "/noauth/api/student/display/[\\w]+",
+                    "rule": "user.name == 'admin'"
+                }
+            ],
             "descriptors": [
                 {
                     "method": "delete",
                     "path": "/auth/api/home",
-                    "name": "sae.commonlibrary.aspnetcore.test.controllers.homecontroller.delete (sae.commonlibrary.aspnetcore.test)",
-                    "Rule": "$user.auth==true && $user.name == 'pjb'"
+                    "policyIds": [1,8]
                 },
                 {
                     "method": "get",
                     "path": "/auth/api/home",
-                    "name": "sae.commonlibrary.aspnetcore.test.controllers.homecontroller.Rule (sae.commonlibrary.aspnetcore.test)",
-                    "Rule": "$user.auth!=false && $user.birthDate < 1995-01-01 01:00:00"
+                    "policyIds": [2,8]
                 },
                 {
                     "method": "post",
                     "path": "/auth/api/home",
-                    "name": "sae.commonlibrary.aspnetcore.test.controllers.homecontroller.add (sae.commonlibrary.aspnetcore.test)",
-                    "Rule": "$user.auth==true && $user.role regex \"^admin$\" && 1995-01-01 01:00:00 > $user.birthDate"
+                    "policyIds": [3,8]
                 },
                 {
                     "method": "put",
                     "path": "/auth/api/home",
-                    "name": "sae.commonlibrary.aspnetcore.test.controllers.homecontroller.edit (sae.commonlibrary.aspnetcore.test)",
-                    "Rule": "$user.auth==true && $user.gender regex '^((man)\\|(woman))$' && $user.birthDate <= 1995-01-01 01:00:00"
+                    "policyIds": [4,8]
                 },
                 {
                     "method": "get",
                     "path": "/auth/home/custom",
-                    "name": "sae.commonlibrary.aspnetcore.test.controllers.homecontroller.custom (sae.commonlibrary.aspnetcore.test)",
-                    "Rule": "$user.auth==true && $user.scope in 'ap' && 1995-01-01 01:00:00 >= $user.birthDate"
+                    "policyIds": [5,8]
                 },
                 {
                     "method": "post",
                     "path": "/auth/home/custom/test",
-                    "name": "sae.commonlibrary.aspnetcore.test.controllers.homecontroller.custom (sae.commonlibrary.aspnetcore.test)",
-                    "Rule": "$user.auth==true && $user.name == 'pjb' && $user.scope == 'man' && $user.birthDate >= 1994-02-28 01:00:00 && $user.role == \"admin\""
+                    "policyIds": [6,8]
                 },
                 {
                     "method": "post",
                     "path": "/noauth/api/student",
-                    "name": "sae.commonlibrary.aspnetcore.test.controllers.studentcontroller.add (sae.commonlibrary.aspnetcore.test)",
-                    "Rule": "!$user.auth && $client.ip == '127.0.0.1' && $request.scheme in 'http' && $request.scheme regex '^https?$'"
+                    "policyIds": [7,8]
                 },
                 {
                     "method": "put",
                     "path": "/noauth/api/student",
-                    "name": "sae.commonlibrary.aspnetcore.test.controllers.studentcontroller.edit (sae.commonlibrary.aspnetcore.test)",
-                    "Rule": "$client.ip == '127.0.0.1' && $request.scheme in 'http' && $request.scheme regex '^https?$'"
+                    "policyIds": [8,8]
                 },
                 {
                     "method": "get",
                     "path": "/noauth/api/student/display/[\\w]+",
-                    "name": "sae.commonlibrary.aspnetcore.test.controllers.studentcontroller.display (sae.commonlibrary.aspnetcore.test)",
-                    "Rule": "$request.host == \"localhost\""
+                    "policyIds": [9,8]
                 }
             ]
         }

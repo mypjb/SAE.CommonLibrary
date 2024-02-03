@@ -11,18 +11,24 @@ using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class AbstractDependencyInjectionExtension
     {
 
         /// <summary>
-        /// add <seealso cref="IMediator"/>
+        /// 添加 <seealso cref="IMediator"/>实现
         /// </summary>
         /// <param name="services"></param>
+        /// <param name="assemblies">实现了<see cref="ICommandHandler{TCommand}"/>和<see cref="ICommandHandler{TCommand, TResponse}"/>接口的程序集</param>
         /// <returns></returns>
         public static IMediatorBuilder AddMediator(this IServiceCollection services, params Assembly[] assemblies)
         {
             if (assemblies == null || !assemblies.Any()) assemblies = new Assembly[] { Assembly.GetCallingAssembly() };
+#pragma warning disable CS0618 // Type or member is obsolete
             var mediatorHandler = typeof(IMediatorHandler);
+#pragma warning restore CS0618 // Type or member is obsolete
 
             var descriptors = new List<CommandHandlerDescriptor>();
 
@@ -55,10 +61,10 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// add <seealso cref="IBuilder"/>
+        /// 添加<seealso cref="IBuilder"/>实现
         /// </summary>
         /// <param name="services"></param>
-        /// <param name="assemblies"></param>
+        /// <param name="assemblies">实现了<see cref="IBuilder"/>接口的程序集</param>
         /// <returns></returns>
         public static IServiceCollection AddBuilder(this IServiceCollection services, params Assembly[] assemblies)
         {
@@ -66,8 +72,9 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.TryAddSingleton<IDirector, Director>();
 
+#pragma warning disable CS0618 // Type or member is obsolete
             var builderType = typeof(IBuilder);
-
+#pragma warning restore CS0618 // Type or member is obsolete
 
             foreach (var assembly in assemblies)
             {
@@ -92,9 +99,9 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
         /// <summary>
-        /// add <seealso cref="IResponsibilityProvider{TResponsibilityContext}"/>
+        /// 添加<seealso cref="IResponsibilityProvider{TResponsibilityContext}"/>实现
         /// </summary>
-        /// <typeparam name="TContext"></typeparam>
+        /// <typeparam name="TContext">上下文</typeparam>
         /// <param name="services"></param>
         /// <returns></returns>
         public static IServiceCollection AddResponsibilityProvider<TContext>(this IServiceCollection services) where TContext : ResponsibilityContext
@@ -104,10 +111,10 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// add <seealso cref="IResponsibility{TContext}"/>
+        /// 添加<seealso cref="IResponsibility{TContext}"/>实现
         /// </summary>
-        /// <typeparam name="TResponsibility"></typeparam>
-        /// <typeparam name="TContext"></typeparam>
+        /// <typeparam name="TContext">上下文</typeparam>
+        /// <typeparam name="TResponsibility">具体实现的链条</typeparam>
         /// <param name="services"></param>
         /// <returns></returns>
         public static IServiceCollection AddResponsibility<TContext, TResponsibility>(this IServiceCollection services)
@@ -120,10 +127,10 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// add <seealso cref="IResponsibility{TContext}"/>
+        /// 添加<seealso cref="IResponsibility{TContext}"/>实现
         /// </summary>
-        /// <typeparam name="TContext"></typeparam>
-        /// <typeparam name="TResponsibility"></typeparam>
+        /// <typeparam name="TContext">上下文</typeparam>
+        /// <typeparam name="TResponsibility">具体实现的链条</typeparam>
         /// <param name="services"></param>
         /// <param name="responsibility"></param>
         /// <returns></returns>
@@ -135,36 +142,62 @@ namespace Microsoft.Extensions.DependencyInjection
                     .AddResponsibilityProvider<TContext>();
             return services;
         }
+
         /// <summary>
-        /// 添加ABAC授权
+        /// 添加基于ABAC授权
         /// </summary>
         /// <param name="services"></param>
-        public static IServiceCollection AddABACAuthorization(this IServiceCollection services)
+        /// <remarks>
+        /// <para>
+        /// 除此之外，您应当使用<seealso cref="AddRuleContextProvider{TRuleContextProvider}(ABACDependencyInjectionBuilder)"/>和
+        /// <seealso cref="AddAuthorizeService{TAuthorizeService}(ABACDependencyInjectionBuilder)"/>注册默认的依赖服务。
+        /// </para>
+        /// <para>该服务实现分别实现<seealso cref="IRuleContextProvider"/>和<seealso cref="IAuthorizeService"/>接口。
+        /// </para>
+        /// </remarks>
+        public static ABACDependencyInjectionBuilder AddABACAuthorization(this IServiceCollection services)
         {
             services.TryAddSingleton<IRuleDecoratorBuilder, DefaultRuleDecoratorBuilder>();
             services.TryAddSingleton<IRuleContextFactory, DefaultRuleContextFactory>();
-
             services.TryAddSingleton<IPropertyConvertor<bool>, DefaultPropertyConvertor>();
             services.TryAddSingleton<IPropertyConvertor<float>, DefaultPropertyConvertor>();
             services.TryAddSingleton<IPropertyConvertor<DateTime>, DefaultPropertyConvertor>();
             services.TryAddSingleton<IPropertyConvertor<TimeSpan>, DefaultPropertyConvertor>();
             services.TryAddSingleton<IPropertyConvertor<string>, DefaultPropertyConvertor>();
+            services.AddDefaultLogger()
+                    .AddSAEMemoryCache();
 
-            services.AddDefaultLogger();
-            
-            return services;
+            return new ABACDependencyInjectionBuilder(services);
         }
+
         /// <summary>
-        /// 添加ABAC<see cref="IRuleContextProvider"/>
+        /// 添加ABAC<seealso cref="IRuleContextProvider"/>
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        public static IServiceCollection AddABACRuleContextProvider<T>(this IServiceCollection services) where T : class, IRuleContextProvider
+        /// <typeparam name="TRuleContextProvider">
+        /// <seealso cref="IRuleContextProvider"/>实现
+        /// </typeparam>
+        public static ABACDependencyInjectionBuilder AddRuleContextProvider<TRuleContextProvider>(this ABACDependencyInjectionBuilder builder) where TRuleContextProvider : class, IRuleContextProvider
         {
-            if (!services.IsRegister<IRuleContextProvider, T>())
+            if (!builder.Services.IsRegister<IRuleContextProvider, TRuleContextProvider>())
             {
-                services.AddSingleton<IRuleContextProvider, T>();
+                builder.Services.AddSingleton<IRuleContextProvider, TRuleContextProvider>();
             }
-            return services;
+            return builder;
+        }
+
+        /// <summary>
+        /// 添加ABAC<seealso cref="IAuthorizeService"/>
+        /// </summary>
+        /// <typeparam name="TAuthorizeService">
+        /// <seealso cref="IAuthorizeService"/>实现
+        /// </typeparam>
+        public static ABACDependencyInjectionBuilder AddAuthorizeService<TAuthorizeService>(this ABACDependencyInjectionBuilder builder) where TAuthorizeService : class, IAuthorizeService
+        {
+            if (!builder.Services.IsRegister<IAuthorizeService, TAuthorizeService>())
+            {
+                builder.Services.AddSingleton<IAuthorizeService, TAuthorizeService>();
+            }
+            return builder;
         }
     }
 }

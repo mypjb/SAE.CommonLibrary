@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
+using SAE.CommonLibrary.Abstract.Authorization.ABAC;
 using SAE.CommonLibrary.AspNetCore.Authorization.ABAC;
 using SAE.CommonLibrary.Test;
 using Xunit;
@@ -19,11 +20,11 @@ namespace SAE.CommonLibrary.AspNetCore.Test
 {
     public class ABACAuthorizationTest : HostTest
     {
-        private readonly IOptionsMonitor<AuthOptions> _optionsMonitor;
+        private readonly IOptionsMonitor<AspNetCoreAuthDescriptor[]> _optionsMonitor;
 
         public ABACAuthorizationTest(ITestOutputHelper output) : base(output)
         {
-            this._optionsMonitor = this._serviceProvider.GetService<IOptionsMonitor<AuthOptions>>();
+            this._optionsMonitor = this._serviceProvider.GetService<IOptionsMonitor<AspNetCoreAuthDescriptor[]>>();
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -34,7 +35,7 @@ namespace SAE.CommonLibrary.AspNetCore.Test
         [Fact]
         public async Task Success()
         {
-            var descriptors = _optionsMonitor.CurrentValue.Descriptors;
+            var descriptors = _optionsMonitor.CurrentValue;
 
             var authDescriptors = descriptors.Where(s => s.Path.StartsWith("/auth")).ToArray();
             var noAuthDescriptors = descriptors.Where(s => s.Path.StartsWith("/noauth")).ToArray();
@@ -86,7 +87,7 @@ namespace SAE.CommonLibrary.AspNetCore.Test
         [Fact]
         public async Task Fail()
         {
-            var descriptors = _optionsMonitor.CurrentValue.Descriptors;
+            var descriptors = _optionsMonitor.CurrentValue;
 
             var authDescriptors = descriptors.Where(s => s.Path.StartsWith("/auth")).ToArray();
             var noAuthDescriptors = descriptors.Where(s => s.Path.StartsWith("/noauth")).ToArray();

@@ -7,11 +7,11 @@ namespace SAE.CommonLibrary.Abstract.Decorator
     public class DecoratorContext
     {
         /// <summary>
-        /// 提前完成该
+        /// 手动调用<see cref="Success"/>函数，返回true,否则false
         /// </summary>
         public bool Complete { get; protected set; }
         /// <summary>
-        /// 提前完成
+        /// 成功
         /// </summary>
         public virtual void Success()
         {

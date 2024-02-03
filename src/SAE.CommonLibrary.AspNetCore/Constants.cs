@@ -44,6 +44,22 @@ namespace SAE.CommonLibrary.AspNetCore
             /// 配置节根
             /// </summary>
             public const string Option = "auth";
+
+            public class ABAC
+            {
+                /// <summary>
+                /// 配置节
+                /// </summary>
+                public const string Option = Authorize.Option + Configuration.Constants.ConfigSeparator + "abac";
+                /// <summary>
+                /// 策略
+                /// </summary>
+                public const string Policies = Option + Configuration.Constants.ConfigSeparator + "policies";
+                /// <summary>
+                /// 授权描述符
+                /// </summary>
+                public const string AuthDescriptors = Option + Configuration.Constants.ConfigSeparator + "descriptors";
+            }
         }
         /// <summary>
         /// 位图授权相关常量
