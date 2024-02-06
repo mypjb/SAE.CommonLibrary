@@ -161,85 +161,86 @@ namespace SAE.CommonLibrary.Configuration
 
             logging?.Debug($"从'{this._options.Url}'拉取配置");
 
-            var rep = await this._options.Client.GetAsync(this._options.Url);
-
-            if (rep.StatusCode == System.Net.HttpStatusCode.NotModified)
+            using (var rep = await this._options.Client.GetAsync(this._options.Url))
             {
-                logging?.Debug("配置尚未更改，跳过后续步骤");
-                return false;
-            }
 
-            rep.EnsureSuccessStatusCode();
-            logging?.Info("从远程拉取到最新配置");
-            IEnumerable<string> values;
-
-            if (rep.Headers.TryGetValues(this._options.NextRequestHeaderName, out values))
-            {
-                this._options.Url = values.First();
-                logging?.Info($"设置下一次拉取请求为'{this._options.Url}'");
-            }
-            else
-            {
-                logging?.Warn($"没有从响应中获得下一次请求地址'{this._options.NextRequestHeaderName}'");
-            }
-
-            logging?.Info($"设置配置源二进制流");
-
-            if (!this._options.ConfigurationSection.IsNullOrWhiteSpace())
-            {
-                var json = await rep.Content.ReadAsStringAsync();
-
-                var sections = this._options.ConfigurationSection
-                                            .Split(Constants.ConfigurationSectionSeparator,
-                                                   StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-                                            .ToArray();
-
-                this._logging?.Info($"包装配置:'{this._options.ConfigurationSection}'");
-
-                var jsonBuilder = new StringBuilder();
-
-                foreach (var section in sections)
+                if (rep.StatusCode == System.Net.HttpStatusCode.NotModified)
                 {
-                    jsonBuilder.Append("{\"")
-                               .Append(section.Trim())
-                               .Append("\":");
+                    logging?.Debug("配置尚未更改，跳过后续步骤");
+                    return false;
                 }
 
-                jsonBuilder.Append(json);
+                rep.EnsureSuccessStatusCode();
+                logging?.Info("从远程拉取到最新配置");
+                IEnumerable<string> values;
 
-                foreach (var _ in sections)
+                if (rep.Headers.TryGetValues(this._options.NextRequestHeaderName, out values))
                 {
-                    jsonBuilder.Append('}');
+                    this._options.Url = values.First();
+                    logging?.Info($"设置下一次拉取请求为'{this._options.Url}'");
+                }
+                else
+                {
+                    logging?.Warn($"没有从响应中获得下一次请求地址'{this._options.NextRequestHeaderName}'");
                 }
 
-                var jsonData = jsonBuilder.ToString();
+                logging?.Info($"设置配置源二进制流");
 
-                this._logging?.Debug($"拉取到的json数据：\r\n{jsonData}");
+                if (!this._options.ConfigurationSection.IsNullOrWhiteSpace())
+                {
+                    var json = await rep.Content.ReadAsStringAsync();
 
-                this.Source.Stream = new MemoryStream(SAE.CommonLibrary.Constants.Encoding.GetBytes(jsonData));
+                    var sections = this._options.ConfigurationSection
+                                                .Split(Constants.ConfigurationSectionSeparator,
+                                                       StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                                                .ToArray();
+
+                    this._logging?.Info($"包装配置:'{this._options.ConfigurationSection}'");
+
+                    var jsonBuilder = new StringBuilder();
+
+                    foreach (var section in sections)
+                    {
+                        jsonBuilder.Append("{\"")
+                                   .Append(section.Trim())
+                                   .Append("\":");
+                    }
+
+                    jsonBuilder.Append(json);
+
+                    foreach (var _ in sections)
+                    {
+                        jsonBuilder.Append('}');
+                    }
+
+                    var jsonData = jsonBuilder.ToString();
+
+                    this._logging?.Debug($"拉取到的json数据：\r\n{jsonData}");
+
+                    await this.SetSourceAsync(new MemoryStream(SAE.CommonLibrary.Constants.Encoding.GetBytes(jsonData)));
+                }
+                else
+                {
+                    await this.SetSourceAsync(new MemoryStream(await rep.Content.ReadAsByteArrayAsync()));
+                }
+
+                logging?.Info($"持久化配置到'{this._options.FullPath}'");
+
+                var configDirectory = Path.GetDirectoryName(this._options.FullPath);
+
+                if (!Directory.Exists(configDirectory))
+                {
+                    this._logging?.Warn($"配置目录不存在'{configDirectory}',自动创建它");
+                    Directory.CreateDirectory(configDirectory);
+                }
+
+                using (var fileStream = new FileStream(this._options.FullPath, FileMode.Create, FileAccess.Write, FileShare.Read))
+                {
+                    this.Source.Stream.Position = 0;
+                    await this.Source.Stream.CopyToAsync(fileStream);
+                    this.Source.Stream.Position = 0;
+                }
             }
-            else
-            {
-                this.Source.Stream = await rep.Content.ReadAsStreamAsync();
-            }
-
-            logging?.Info($"持久化配置到'{this._options.FullPath}'");
-
-            var configDirectory = Path.GetDirectoryName(this._options.FullPath);
-
-            if (!Directory.Exists(configDirectory))
-            {
-                this._logging?.Warn($"配置目录不存在'{configDirectory}',自动创建它");
-                Directory.CreateDirectory(configDirectory);
-            }
-
-            using (var fileStream = new FileStream(this._options.FullPath, FileMode.Create, FileAccess.Write, FileShare.Read))
-            {
-                this.Source.Stream.Position = 0;
-                await this.Source.Stream.CopyToAsync(fileStream);
-                this.Source.Stream.Position = 0;
-            }
-
             return true;
 
         }
@@ -266,7 +267,29 @@ namespace SAE.CommonLibrary.Configuration
                 stream.Position = 0;
             }
 
+            await this.SetSourceAsync(stream);
+        }
+
+        /// <summary>
+        /// 设置源
+        /// </summary>
+        /// <param name="stream"></param>
+        protected async Task SetSourceAsync(Stream stream)
+        {
+            var oldStream = this.Source.Stream;
             this.Source.Stream = stream;
+            try
+            {
+                if (oldStream != null)
+                {
+                    this._logging.Debug("将旧配置流进行释放");
+                    await oldStream.DisposeAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                this._logging.Warn("旧配置流行释放失败，这可能该流被提前释放导致的", ex);
+            }
         }
 
         /// <summary>

@@ -13,7 +13,11 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
     /// <inheritdoc/>
     public class MultiTenantUnnamedOptionsManager<TOptions> : IOptions<TOptions> where TOptions : class
     {
-        public readonly IOptionsMonitor<TOptions> _monitor;
+        private readonly IOptionsMonitor<TOptions> _monitor;
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="monitor"></param>
         public MultiTenantUnnamedOptionsManager(IOptionsMonitor<TOptions> monitor)
         {
             this._monitor = monitor;

@@ -12,27 +12,10 @@ using SAE.CommonLibrary.Extension;
 using Constants = SAE.CommonLibrary.AspNetCore.Constants;
 using ABAC = SAE.CommonLibrary.AspNetCore.Authorization.ABAC;
 using SAE.CommonLibrary.AspNetCore.Authorization.ABAC;
+using System.Collections.Generic;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    /// <summary>
-    /// <see cref="IAuthorization"/>授权构造器
-    /// </summary>
-    public class BitmapAuthorizationBuilder
-    {
-        /// <summary>
-        /// 依赖注册服务
-        /// </summary>
-        internal readonly IServiceCollection Services;
-        /// <summary>
-        /// 创建一个新的对象
-        /// </summary>
-        /// <param name="services"></param>
-        internal BitmapAuthorizationBuilder(IServiceCollection services)
-        {
-            this.Services = services;
-        }
-    }
     /// <summary>
     /// MVC注册扩展程序
     /// </summary>
@@ -108,10 +91,10 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddSAEMemoryCache();
 
-            services.AddOptions<ABAC.AspNetCoreAuthDescriptor[]>()
+            services.AddOptions<List<ABAC.AspNetCoreAuthDescriptor>>()
                     .Bind(Constants.Authorize.ABAC.AuthDescriptors);
             
-            services.AddOptions<SAE.CommonLibrary.Abstract.Authorization.ABAC.AuthorizationPolicy[]>()
+            services.AddOptions<List<SAE.CommonLibrary.Abstract.Authorization.ABAC.AuthorizationPolicy>>()
                     .Bind(Constants.Authorize.ABAC.Policies);
 
             if (!services.IsRegister<IAuthorizationHandler, ABAC.AuthorizationHandler>())

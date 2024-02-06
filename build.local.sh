@@ -3,7 +3,7 @@ set -o errexit
 
 base_dir=$(cd $(dirname $0) && pwd)
 
-release_dir=${3:-"${HOME}/.nuget/locals/"}
+release_dir=${1:-"${HOME}/.nuget/locals/"}
 
 dotnet build -c release
 

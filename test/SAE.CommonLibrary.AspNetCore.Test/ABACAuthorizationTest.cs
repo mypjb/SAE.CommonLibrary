@@ -20,11 +20,11 @@ namespace SAE.CommonLibrary.AspNetCore.Test
 {
     public class ABACAuthorizationTest : HostTest
     {
-        private readonly IOptionsMonitor<AspNetCoreAuthDescriptor[]> _optionsMonitor;
+        private readonly IOptionsMonitor<List<AspNetCoreAuthDescriptor>> _optionsMonitor;
 
         public ABACAuthorizationTest(ITestOutputHelper output) : base(output)
         {
-            this._optionsMonitor = this._serviceProvider.GetService<IOptionsMonitor<AspNetCoreAuthDescriptor[]>>();
+            this._optionsMonitor = this._serviceProvider.GetService<IOptionsMonitor<List<AspNetCoreAuthDescriptor>>>();
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)

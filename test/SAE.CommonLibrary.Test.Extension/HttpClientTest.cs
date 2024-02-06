@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 using System.Threading;
 using Xunit.Abstractions;
 using SAE.CommonLibrary.Extension.Middleware;
+using System.IO;
+using System.Text;
 
 namespace SAE.CommonLibrary.Test.Extension
 {
@@ -72,39 +74,9 @@ namespace SAE.CommonLibrary.Test.Extension
             var httpResponse = await client.GetAsync("/api");
             this.WriteLine(await httpResponse.Content.ReadAsStringAsync());
             httpResponse.EnsureSuccessStatusCode();
-            //var httpResponse2 = await client.GetAsync("/api");
-            //this.WriteLine(await httpResponse2.Content.ReadAsStringAsync());
-            //httpResponse.EnsureSuccessStatusCode();
-        }
-        [Theory]
-        [InlineData(10009, "202109231632399319633", "http://www.mymooc.net.cn/web/pay/pay_return.aspx?id=1148&userId=804351")]
-        [InlineData(10009, "202109231632363123252", "http://www.mymooc.net.cn/web/pay/pay_return.aspx?id=1147&userId=804351")]
-        public async Task Test(int siteId,string orderSn,string url)
-        {
-            var client = new HttpClient().UseOAuth(new OAuthOptions
-            {
-                AppId = "867e904f46aa419384a9abfe915b36a5",
-                AppSecret = "73ce5fb29e2e46d7ae0bdb2f53e572c0",
-                Authority = "http://sso.nerc-edu.com",
-                Scope = "api"
-            });
-            var requestMessage = new HttpRequestMessage(HttpMethod.Post, "http://publish.service.gkfz.net/publish");
-
-            requestMessage.AddJsonContent(new
-            {
-                Id = "fz.payment.callback",
-                Type = 1,
-                Data = new
-                {
-                    OrderSn = orderSn,
-                    Url = url,
-                    SiteId = siteId
-                }
-            });
-
-            var responseMessage = await client.SendAsync(requestMessage);
-            this.WriteLine(await responseMessage.Content.ReadAsStringAsync());
-            responseMessage.EnsureSuccessStatusCode();
+            var httpResponse2 = await client.GetAsync("/api");
+            this.WriteLine(await httpResponse2.Content.ReadAsStringAsync());
+            httpResponse.EnsureSuccessStatusCode();
         }
         //[Fact]
         //public async Task Test()

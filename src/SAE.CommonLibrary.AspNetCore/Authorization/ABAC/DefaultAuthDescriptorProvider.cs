@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
@@ -17,8 +18,8 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization.ABAC
         private readonly IHttpContextAccessor _httpContextAccessor;
 
 
-        public AspNetCoreAuthorizeService(IOptionsMonitor<AuthorizationPolicy[]> authorizationPoliciesOptionsMonitor,
-                                          IOptionsMonitor<AspNetCoreAuthDescriptor[]> authDescriptorsOptionsMonitor,
+        public AspNetCoreAuthorizeService(IOptionsMonitor<List<AuthorizationPolicy>> authorizationPoliciesOptionsMonitor,
+                                          IOptionsMonitor<List<AspNetCoreAuthDescriptor>> authDescriptorsOptionsMonitor,
                                           IMemoryCache memoryCache,
                                           IRuleContextFactory ruleContextFactory,
                                           IRuleDecoratorBuilder ruleDecoratorBuilder,

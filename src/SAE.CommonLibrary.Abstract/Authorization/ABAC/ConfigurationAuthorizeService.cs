@@ -18,11 +18,11 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// <summary>
         /// 授权策略集
         /// </summary>
-        protected readonly IOptionsMonitor<AuthorizationPolicy[]> _authorizationPoliciesOptionsMonitor;
+        protected readonly IOptionsMonitor<List<AuthorizationPolicy>> _authorizationPoliciesOptionsMonitor;
         /// <summary>
         /// 授权描述集
         /// </summary>
-        protected readonly IOptionsMonitor<TAuthDescriptor[]> _authDescriptorsOptionsMonitor;
+        protected readonly IOptionsMonitor<List<TAuthDescriptor>> _authDescriptorsOptionsMonitor;
         /// <summary>
         /// 缓存
         /// </summary>
@@ -49,8 +49,8 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// <param name="ruleContextFactory">规则上下文</param>
         /// <param name="ruleDecoratorBuilder">规则构建对象</param>
         /// <param name="logging">日志记录器</param>
-        public ConfigurationAuthorizeService(IOptionsMonitor<AuthorizationPolicy[]> authorizationPoliciesOptionsMonitor,
-                                             IOptionsMonitor<TAuthDescriptor[]> authDescriptorsOptionsMonitor,
+        public ConfigurationAuthorizeService(IOptionsMonitor<List<AuthorizationPolicy>> authorizationPoliciesOptionsMonitor,
+                                             IOptionsMonitor<List<TAuthDescriptor>> authDescriptorsOptionsMonitor,
                                              IMemoryCache memoryCache,
                                              IRuleContextFactory ruleContextFactory,
                                              IRuleDecoratorBuilder ruleDecoratorBuilder,
@@ -157,11 +157,11 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
 
         public virtual async Task<AuthDescriptor> GetAuthDescriptorAsync()
         {
-            var authDescriptors = this._authDescriptorsOptionsMonitor.CurrentValue ?? new TAuthDescriptor[0];
+            var authDescriptors = this._authDescriptorsOptionsMonitor.CurrentValue ?? new List<TAuthDescriptor>();
 
-            if (authDescriptors.Length > 0)
+            if (authDescriptors.Count > 0)
             {
-                this._logging.Warn($"找到授权描述符集合:{authDescriptors.Length}");
+                this._logging.Warn($"找到授权描述符集合:{authDescriptors.Count}");
 
                 var key = await this.GetAuthDescriptorKeyAsync();
 
@@ -178,7 +178,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
 
         public virtual Task<AuthorizationPolicy[]> GetAuthorizationPoliciesAsync()
         {
-            return Task.FromResult(this._authorizationPoliciesOptionsMonitor.CurrentValue ?? new AuthorizationPolicy[0]);
+            return Task.FromResult(this._authorizationPoliciesOptionsMonitor.CurrentValue?.ToArray() ?? new AuthorizationPolicy[0]);
         }
         /// <summary>
         /// 获得<see cref="AuthDescriptor"/>唯一标识:<see cref="AuthDescriptor.Key"/>
@@ -201,7 +201,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// <param name="authDescriptors">
         /// 描述符集合
         /// </param>
-        protected virtual Task<AuthDescriptor> FindAuthDescriptorCoreAsync(string key, AuthDescriptor[] authDescriptors)
+        protected virtual Task<AuthDescriptor> FindAuthDescriptorCoreAsync(string key, IEnumerable<AuthDescriptor> authDescriptors)
         {
             var authDescriptor = authDescriptors.FirstOrDefault(s => s.Key.Equals(key, StringComparison.OrdinalIgnoreCase));
 
