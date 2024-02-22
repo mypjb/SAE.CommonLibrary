@@ -77,13 +77,8 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
             this._logging.Info($"{options.ToJsonString()}");
 
             var scope = this._scopeFactory.Get();
-            
-            if (scope.Name.IsNullOrWhiteSpace())
-            {
-                this._logging.Info("scope is null");
-                return base.CreateInstance(name);
-            }
-            else
+
+            if (!scope.Name.IsNullOrWhiteSpace())
             {
                 this._logging.Info($"scope : {scope.Name}");
 
@@ -101,8 +96,25 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
                     return configuration.Get<TOptions>();
                 }
                 this._logging.Warn($"not find: {key}");
-                return base.CreateInstance(name);
             }
+            else
+            {
+                this._logging.Info("not exist scope");
+            }
+
+            if (!options.Key.IsNullOrWhiteSpace())
+            {
+                var configurationSection = this._configuration.GetSection(options.Key);
+                if (configurationSection.Exists())
+                {
+                    this._logging.Info($"find configuration: {options.Key}");
+                    return configurationSection.Get<TOptions>();
+                }
+            }
+
+            this._logging.Warn($"not match configuration:{options.Key}-{name}");
+
+            return base.CreateInstance(name);
         }
     }
 }

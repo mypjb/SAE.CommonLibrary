@@ -18,6 +18,7 @@
     <ProjectReference Include="..\..\src\SAE.CommonLibrary.Logging.NLog\SAE.CommonLibrary.Logging.NLog.csproj" />
     <ProjectReference Include="..\..\src\SAE.CommonLibrary\SAE.CommonLibrary.csproj" />
     <ProjectReference Include="..\SAE.CommonLibrary.Test\SAE.CommonLibrary.Test.csproj" />
+    <ProjectReference Include="..\..\src\SAE.CommonLibrary.Database\SAE.CommonLibrary.Database.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -17,7 +17,7 @@ namespace Microsoft.Extensions.DependencyInjection
     /// </summary>
     public static class ConfigurationMicrosoftDependencyInjectionExtension
     {
-        
+
         // /// <summary>
         // /// 添加配置管理
         // /// </summary>
@@ -70,12 +70,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 return new ConfigurationChangeTokenSource<TOptions>(configurationName, configuration.GetSection(key));
             });
 
-            services.AddSingleton<IConfigureOptions<TOptions>>(provider =>
-            {
-                var configuration = provider.GetService<IConfiguration>();
-                return new NamedConfigureFromConfigurationOptions<TOptions>(configurationName, configuration.GetSection(key), _ => { });
-            });
-
             if (services.IsRegister<IScopeFactory>())
             {
                 var configuration = services.FindConfiguration();
@@ -93,6 +87,14 @@ namespace Microsoft.Extensions.DependencyInjection
                 services.TryAddSingleton<IOptionsSnapshot<TOptions>, MultiTenantOptionsManager<TOptions>>();
                 services.TryAddSingleton<IOptionsMonitor<TOptions>, MultiTenantOptionsMonitor<TOptions>>();
                 services.TryAddSingleton<IOptionsFactory<TOptions>, MultiTenantOptionsFactory<TOptions>>();
+            }
+            else
+            {
+                services.AddSingleton<IConfigureOptions<TOptions>>(provider =>
+                {
+                    var configuration = provider.GetService<IConfiguration>();
+                    return new NamedConfigureFromConfigurationOptions<TOptions>(configurationName, configuration.GetSection(key), _ => { });
+                });
             }
 
 

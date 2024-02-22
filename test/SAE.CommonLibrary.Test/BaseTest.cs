@@ -51,7 +51,6 @@ namespace SAE.CommonLibrary.Test
             this.ConfigureEnvironment(configurationBuilder);
             this.ConfigureConfiguration(configurationBuilder);
 
-
             this._configuration = configurationBuilder.Build();
             services.AddSingleton<IConfiguration>(this._configuration);
             services.AddOptions();

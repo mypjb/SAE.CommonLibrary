@@ -29,7 +29,7 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
         }
         protected override void ConfigureEnvironment(IConfigurationBuilder configurationBuilder, string environmentName = "Development")
         {
-            base.ConfigureEnvironment(configurationBuilder, "MulitTenan");
+            base.ConfigureEnvironment(configurationBuilder, "MulitTenant");
         }
         private string GenericTenantConfiguration(int add)
         {
@@ -57,7 +57,7 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
               {SAE.CommonLibrary.Constants.Scope,data}
             };
 
-            var filePath = Path.Combine(SAE.CommonLibrary.Constants.Path.Config, "test.MulitTenan.json");
+            var filePath = Path.Combine(SAE.CommonLibrary.Constants.Path.Config, "test.MulitTenant.json");
 
             File.WriteAllText(filePath, mulitTenantData.ToJsonString());
 
@@ -81,9 +81,12 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
                         s.Version++;
                     });
 
+            services.AddOptions<DBConnectOptions>()
+                    .Bind(DBConnectOptions.Option);
+
             base.ConfigureServices(services);
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -98,6 +101,8 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
             var option = this._serviceProvider.GetService<IOptions<Options>>();
             var snapshot = this._serviceProvider.GetService<IOptionsSnapshot<Options>>();
             var monitor = this._serviceProvider.GetService<IOptionsMonitor<Options>>();
+            var dBConnect = this._serviceProvider.GetService<IOptions<DBConnectOptions>>().Value;
+            
             scopes.AsParallel()
                   .ForAll(s =>
             {
@@ -107,6 +112,11 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
                     Assert.Equal(option.Value, monitor.CurrentValue);
                     Assert.Equal((option.Value.Version - 1).ToString(), s);
                     this.WriteLine(option.Value);
+                    var dBConnectOptions = this._serviceProvider.GetService<IOptions<DBConnectOptions>>();
+                    Assert.Equal(dBConnect.Name,dBConnectOptions.Value.Name);
+                    Assert.Equal(dBConnect.ConnectionString,dBConnectOptions.Value.ConnectionString);
+                    Assert.Equal(dBConnect.Provider,dBConnectOptions.Value.Provider);
+                    Assert.Equal(dBConnect.Customs,dBConnectOptions.Value.Customs);
                 }
             });
 
@@ -123,8 +133,14 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.Test
                     Assert.Equal(option.Value, snapshot.Value);
                     Assert.Equal(option.Value, monitor.CurrentValue);
                     Assert.Equal((option.Value.Version - 2).ToString(), s);
+                    var dBConnectOptions = this._serviceProvider.GetService<IOptions<DBConnectOptions>>();
+                    Assert.Equal(dBConnect.Name,dBConnectOptions.Value.Name);
+                    Assert.Equal(dBConnect.ConnectionString,dBConnectOptions.Value.ConnectionString);
+                    Assert.Equal(dBConnect.Provider,dBConnectOptions.Value.Provider);
+                    Assert.Equal(dBConnect.Customs,dBConnectOptions.Value.Customs);
                 }
             });
+            this.WriteLine(dBConnect);
         }
     }
 }
