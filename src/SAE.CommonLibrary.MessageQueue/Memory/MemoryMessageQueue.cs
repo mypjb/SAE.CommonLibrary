@@ -28,7 +28,7 @@ namespace SAE.CommonLibrary.MessageQueue.Memory
             return this.HandlerCoreAsync(identity, message);
         }
 
-        public Task SubscibeAsync<TMessage>(string identity, Func<TMessage, Task> @delegate) where TMessage : class
+        public Task SubscribeAsync<TMessage>(string identity, Func<TMessage, Task> @delegate) where TMessage : class
         {
             this._logging.Info($"订阅事件'{identity}' => {@delegate.Method.ToString()}");
             return this.MappingAsync(identity, @delegate);

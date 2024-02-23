@@ -29,17 +29,17 @@ namespace SAE.CommonLibrary.MessageQueue.Test
         }
 
         [Fact]
-        public async Task PubshSubscibeTest()
+        public async Task PublishAndSubscribeTest()
         {
             var @event = new AccumulationEvent
             {
                 Message = this.GetRandom()
             };
-            await this._messageQueue.SubscibeAsync<AccumulationEvent>();
+            await this._messageQueue.SubscribeAsync<AccumulationEvent>();
             await this._messageQueue.PublishAsync(@event);
             Thread.Sleep(1000 * 3);
             Assert.Equal(1, this._options.Count);
-            await this._messageQueue.SubscibeAsync<AccumulationEvent>(e =>
+            await this._messageQueue.SubscribeAsync<AccumulationEvent>(e =>
             {
                 this._options.Count += 2;
                 return Task.CompletedTask;
@@ -48,7 +48,7 @@ namespace SAE.CommonLibrary.MessageQueue.Test
             Thread.Sleep(1000 * 3);
             Assert.Equal(3, this._options.Count);
             var identity = "3";
-            await this._messageQueue.SubscibeAsync<AccumulationEvent>(identity, e =>
+            await this._messageQueue.SubscribeAsync<AccumulationEvent>(identity, e =>
             {
                 this._options.Count += 3;
                 return Task.CompletedTask;

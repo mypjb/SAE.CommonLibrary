@@ -61,9 +61,9 @@ namespace SAE.CommonLibrary.MessageQueue
         /// <param name="messageQueue"></param>
         /// <param name="delegate">订阅处理程序</param>
         /// <returns></returns>
-        public static void Subscibe<TMessage>(this IMessageQueue messageQueue, Func<TMessage, Task> @delegate) where TMessage : class
+        public static void Subscribe<TMessage>(this IMessageQueue messageQueue, Func<TMessage, Task> @delegate) where TMessage : class
         {
-            messageQueue.SubscibeAsync(@delegate)
+            messageQueue.SubscribeAsync(@delegate)
                         .GetAwaiter()
                         .GetResult();
         }
@@ -72,9 +72,9 @@ namespace SAE.CommonLibrary.MessageQueue
         /// 使用<typeparamref name="TMessage"/>类型作为订阅identity
         /// </summary>
         /// <typeparam name="TMessage"></typeparam>
-        public static void Subscibe<TMessage>(this IMessageQueue messageQueue) where TMessage : class
+        public static void Subscribe<TMessage>(this IMessageQueue messageQueue) where TMessage : class
         {
-            messageQueue.SubscibeAsync<TMessage>()
+            messageQueue.SubscribeAsync<TMessage>()
                         .GetAwaiter()
                         .GetResult();
         }
@@ -86,11 +86,11 @@ namespace SAE.CommonLibrary.MessageQueue
         /// <param name="messageQueue"></param>
         /// <param name="delegate">订阅处理程序</param>
         /// <returns></returns>
-        public static async Task SubscibeAsync<TMessage>(this IMessageQueue messageQueue, Func<TMessage, Task> @delegate) where TMessage : class
+        public static async Task SubscribeAsync<TMessage>(this IMessageQueue messageQueue, Func<TMessage, Task> @delegate) where TMessage : class
         {
             var identity = Utils.Get<TMessage>();
             await messageQueue.MappingAsync(identity, @delegate);
-            await messageQueue.SubscibeAsync(identity, @delegate);
+            await messageQueue.SubscribeAsync(identity, @delegate);
         }
 
         /// <summary>
@@ -98,10 +98,10 @@ namespace SAE.CommonLibrary.MessageQueue
         /// </summary>
         /// <typeparam name="TMessage"></typeparam>
         /// <param name="messageQueue"></param>
-        public static async Task SubscibeAsync<TMessage>(this IMessageQueue messageQueue) where TMessage : class
+        public static async Task SubscribeAsync<TMessage>(this IMessageQueue messageQueue) where TMessage : class
         {
             var identity = Utils.Get<TMessage>();
-            await messageQueue.SubscibeAsync<TMessage>(message =>
+            await messageQueue.SubscribeAsync<TMessage>(message =>
             {
                 var logging = ServiceFacade.GetService<ILogging<TMessage>>();
                 var handler = ServiceFacade.GetService<IHandler<TMessage>>();
