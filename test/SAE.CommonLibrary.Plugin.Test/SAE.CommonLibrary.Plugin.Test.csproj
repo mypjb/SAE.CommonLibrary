@@ -20,5 +20,12 @@
 		<ProjectReference Include="..\Plugins\SAE.CommonLibrary.Plugin.Constant\SAE.CommonLibrary.Plugin.Constant.csproj" />
 		<ProjectReference Include="..\SAE.CommonLibrary.Test\SAE.CommonLibrary.Test.csproj" />
 	</ItemGroup>
-
+	<ItemGroup>
+		<None Update="tempkey.jwk">
+				<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			</None>
+			<None Update="tempkey.rsa">
+				<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			</None>
+	</ItemGroup>
 </Project>

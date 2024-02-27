@@ -16,6 +16,9 @@ using System.Threading.Tasks;
 namespace SAE.CommonLibrary.Extension
 {
 
+    /// <summary>
+    /// 
+    /// </summary>
     public static partial class HttpClientExtension
     {
         internal static Func<ILogging> LoggerRecord { get; set; }
@@ -26,7 +29,7 @@ namespace SAE.CommonLibrary.Extension
         /// <param name="httpClient"></param>
         /// <param name="record"></param>
         /// <returns></returns>
-        public static HttpClient UseLoggin(this HttpClient httpClient, Func<ILogging> record)
+        public static HttpClient UseLogging(this HttpClient httpClient, Func<ILogging> record)
         {
             LoggerRecord = record;
             return httpClient;
@@ -300,6 +303,12 @@ namespace SAE.CommonLibrary.Extension
         {
             return httpClient.Use(new ExceptionMiddleware(handler));
         }
+        /// <summary>
+        /// 使用默认错误处理程序
+        /// </summary>
+        /// <param name="httpClient"></param>
+        /// <returns></returns>
+        /// <exception cref="SAEException"></exception>
         public static HttpClient UseDefaultExceptionHandler(this HttpClient httpClient)
         {
             httpClient.UseExceptionHandler(async response =>
@@ -341,12 +350,18 @@ namespace SAE.CommonLibrary.Extension
         #endregion
 
         #region HttpClient
-
+        /// <summary>
+        /// 分段下载文件
+        /// </summary>
+        /// <param name="httpClient"></param>
+        /// <param name="httpRequestMessage"></param>
+        /// <param name="chunkSize"></param>
+        /// <returns></returns>
         public static async Task<Stream> DownloadAsync(this HttpClient httpClient,
                                                        HttpRequestMessage httpRequestMessage,
                                                        long chunkSize = ChunkStreamContent.DefaultChunkSize)
         {
-            ///第一次嗅探请求
+            //第一次嗅探请求
             httpRequestMessage.Headers.Range = new System.Net.Http.Headers.RangeHeaderValue(0, 0);
 
             var responseMessage = await httpClient.SendAsync(httpRequestMessage);

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Xml;
@@ -79,6 +81,13 @@ namespace SAE.CommonLibrary.Test.Extension
                 Xunit.Assert.False(IPAddress.Parse(address).IsInnerIP());
             }
 
+        }
+
+        [Fact]
+        public void PathTest()
+        {
+            var path = Path.Combine(AppContext.BaseDirectory, string.Empty);
+            this.WriteLine($"{AppContext.BaseDirectory}-{path}");
         }
     }
 }

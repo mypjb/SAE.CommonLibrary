@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <PackageReference Include="IdentityServer4" Version="4.1.2" />
   </ItemGroup>
@@ -6,5 +6,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\SAE.CommonLibrary.Plugin.AspNetCore\SAE.CommonLibrary.Plugin.AspNetCore.csproj" />
   </ItemGroup>
-
+  <ItemGroup>
+    <None Update="package.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

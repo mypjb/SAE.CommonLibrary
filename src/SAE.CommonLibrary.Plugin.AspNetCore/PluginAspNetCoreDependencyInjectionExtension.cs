@@ -13,13 +13,16 @@ using SAE.CommonLibrary.Extension;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class PluginAspNetCoreDependencyInjectionExtension
     {
 
         /// <summary>
         /// 添加插件管理(web)
         /// </summary>
-        /// <param name="serviceDescriptors"></param>
+        /// <param name="services"></param>
         /// <returns></returns>
         public static IServiceCollection AddPluginManage(this IServiceCollection services)
         {
@@ -29,7 +32,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// 添加插件管理(web)
         /// </summary>
-        /// <param name="serviceDescriptors"></param>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
         /// <returns></returns>
         public static IServiceCollection AddPluginManage(this IServiceCollection services, IConfiguration configuration)
         {
@@ -39,7 +43,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// 添加插件管理(web)
         /// </summary>
-        /// <param name="serviceDescriptors"></param>
+        /// <param name="services"></param>
         /// <returns></returns>
         public static IServiceCollection AddPluginManage(this IServiceCollection services, PluginOptions options)
         {
@@ -85,7 +89,7 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 logging.Warn("Not loading any plugins");
             }
-            
+
 
             foreach (WebPlugin webPlugin in pluginManage.Plugins.Where(s => s.Status).OfType<WebPlugin>())
             {

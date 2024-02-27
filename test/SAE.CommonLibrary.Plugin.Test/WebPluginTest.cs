@@ -1,8 +1,12 @@
 using IdentityModel.Client;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.Net.Http.Headers;
 using SAE.CommonLibrary.Extension;
 using SAE.CommonLibrary.Logging;
 using SAE.CommonLibrary.Plugin.Constant;
@@ -19,21 +23,29 @@ namespace SAE.CommonLibrary.Plugin.Test
 {
     public class WebPluginTest : HostTest
     {
-        public static Func<HttpMessageHandler> Handler;
-        public WebPluginTest(ITestOutputHelper output) : base(output,PluginConstant.Host)
+        public static Func<HttpClient> Client;
+        public WebPluginTest(ITestOutputHelper output) : base(output, PluginConstant.Host)
         {
-            this._client.UseLoggin(()=>
+            this._client.UseLogging(() =>
             {
                 return this._serviceProvider.GetService<ILogging<WebPluginTest>>();
             });
-            Handler = () => new ProxyMessageHandler(this._client);
+
+            Client = () => new HttpClient(new ProxyMessageHandler(this._client));
         }
 
 
         [Fact]
         public async Task Test()
         {
-            var disco = await this._client.GetDiscoveryDocumentAsync(PluginConstant.Host);
+            var disco = await this._client.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
+            {
+                Address = PluginConstant.Host,
+                Policy = new DiscoveryPolicy
+                {
+                    RequireHttps = false
+                }
+            });
 
             Assert.False(disco.IsError, disco.Error);
 
@@ -77,56 +89,88 @@ namespace SAE.CommonLibrary.Plugin.Test
         {
             this._httpClient = httpClient;
         }
-        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            return _httpClient.SendAsync(request, cancellationToken);
+            var auth = this._httpClient.DefaultRequestHeaders.Authorization;
+
+            if (auth != null)
+            {
+                this._httpClient.DefaultRequestHeaders.Authorization = null;
+            }
+
+            var rep = await _httpClient.SendAsync(request.Clone(), cancellationToken);
+
+            if (auth != null)
+            {
+                this._httpClient.DefaultRequestHeaders.Authorization = auth;
+            }
+            return rep;
         }
     }
 
     public class Startup
     {
-        private readonly Func<HttpMessageHandler> _handler;
-
         public Startup()
         {
-            this._handler =()=>
-            {
-                return WebPluginTest.Handler.Invoke();
-            };
-            
         }
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddNlogLogger();
-            services.AddPluginManage(new PluginOptions
+            services.AddLogging(s =>
             {
-                Path= "../../../../Plugins/dest"
-            });
-            services.PostConfigureAll<JwtBearerOptions>(options =>
-            {
-                if (this._handler.Invoke() == null)
-                {
-                    throw new Exception("Handler not exist");
-                }
-                options.BackchannelHttpHandler = this._handler.Invoke();
+                s.SetMinimumLevel(LogLevel.Debug);
             });
             services.AddControllersWithViews();
+            services.AddNlogLogger();
+
+            services.PostConfigureAll<JwtBearerOptions>(options =>
+                        {
+                            if (WebPluginTest.Client.Invoke() == null)
+                            {
+                                throw new Exception("Handler not exist");
+                            }
+                            options.Backchannel = WebPluginTest.Client.Invoke();
+                        });
+
+            services.AddPluginManage(new PluginOptions
+            {
+                Path = "../../../../Plugins/dest"
+            });
+
+            services.PostConfigure<AuthenticationOptions>(s =>
+            {
+                s.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                s.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                s.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
             app.UseDeveloperExceptionPage();
 
             app.UseRouting();
 
+            app.Use(async (ctx, next) =>
+            {
+                // var schemeProvider = ctx.RequestServices.GetService<IAuthenticationSchemeProvider>();
+                // var schemes = await schemeProvider.GetAllSchemesAsync();
+                // var scheme = await schemeProvider.GetDefaultAuthenticateSchemeAsync();
+                var user = ctx.User;
+                await next.Invoke();
+                var t = user;
+            });
+
             app.UsePluginManage();
+
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
             });
-            
+
         }
     }
 }

@@ -54,7 +54,7 @@ namespace SAE.CommonLibrary.Test.Extension
                               .Build();
             apiHost.Start();
             return apiHost.GetTestClient()
-                          .UseLoggin(() =>
+                          .UseLogging(() =>
                           {
                               return apiHost.Services.GetService<ILogging<HttpClientTest>>();
                           })

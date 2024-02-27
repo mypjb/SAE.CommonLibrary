@@ -1,0 +1,835 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SAE.CommonLibrary</name>
+    </assembly>
+    <members>
+        <member name="T:SAE.CommonLibrary.Extension.Assert">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.Assert.Build``1(``0,System.String)">
+            <summary>
+            构建一个<see cref="T:SAE.CommonLibrary.IAssert`1"/>对象
+            </summary>
+            <typeparam name="TAssert"></typeparam>
+            <param name="assert"></param>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SAE.CommonLibrary.Extension.UtilityExtension">
+            <summary>
+            通用函数扩展
+            </summary>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.IsNullOrWhiteSpace(SAE.CommonLibrary.IAssert{System.String})">
+            <summary>
+            <see cref="P:SAE.CommonLibrary.IAssert`1.Current"/>由空零或一系列空格组成
+            </summary>
+            <param name="assert"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.IsNullOrWhiteSpace(SAE.CommonLibrary.IAssert{System.String},System.String)">
+            <summary>
+            <see cref="P:SAE.CommonLibrary.IAssert`1.Current"/>由空零或一系列空格组成
+            </summary>
+            <param name="assert"></param>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.NotNullOrWhiteSpace(SAE.CommonLibrary.IAssert{System.String})">
+            <summary>
+            <see cref="P:SAE.CommonLibrary.IAssert`1.Current"/>不为空或空字符串
+            </summary>
+            <param name="assert"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.NotNullOrWhiteSpace(SAE.CommonLibrary.IAssert{System.String},System.String)">
+            <summary>
+            <see cref="P:SAE.CommonLibrary.IAssert`1.Current"/>不为空或空字符串
+            </summary>
+            <param name="assert"></param>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.True(SAE.CommonLibrary.IAssert{System.Boolean})">
+            <summary>
+            <see cref="P:SAE.CommonLibrary.IAssert`1.Current"/> is <see cref="F:System.Boolean.TrueString"/>
+            </summary>
+            <param name="assert"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.True(SAE.CommonLibrary.IAssert{System.Boolean},System.String)">
+            <summary>
+            <see cref="P:SAE.CommonLibrary.IAssert`1.Current"/> is <see cref="F:System.Boolean.TrueString"/>
+            </summary>
+            <param name="assert"></param>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.False(SAE.CommonLibrary.IAssert{System.Boolean})">
+            <summary>
+            <see cref="P:SAE.CommonLibrary.IAssert`1.Current"/> is <see cref="F:System.Boolean.FalseString"/>
+            </summary>
+            <param name="assert"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.False(SAE.CommonLibrary.IAssert{System.Boolean},System.String)">
+            <summary>
+            <see cref="P:SAE.CommonLibrary.IAssert`1.Current"/> is <see cref="F:System.Boolean.FalseString"/>
+            </summary>
+            <param name="assert"></param>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.Null``1(SAE.CommonLibrary.IAssert{``0})">
+            <summary>
+            <see cref="P:SAE.CommonLibrary.IAssert`1.Current"/>为<em>null</em>
+            </summary>
+            <param name="assert"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.Null``1(SAE.CommonLibrary.IAssert{``0},System.String)">
+            <summary>
+            <see cref="P:SAE.CommonLibrary.IAssert`1.Current"/>为<em>null</em>
+            </summary>
+            <param name="assert"></param>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.NotNull``1(SAE.CommonLibrary.IAssert{``0})">
+            <summary>
+            <see cref="P:SAE.CommonLibrary.IAssert`1.Current"/>不为<em>null</em>
+            </summary>
+            <param name="assert"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.NotNull``1(SAE.CommonLibrary.IAssert{``0},System.String)">
+            <summary>
+            <see cref="P:SAE.CommonLibrary.IAssert`1.Current"/>不为<em>null</em>
+            </summary>
+            <param name="assert"></param>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.Then``2(SAE.CommonLibrary.IAssert{``0},System.Func{``0,``1},System.String)">
+            <summary>
+            传入一个委托继续进行断言
+            </summary>
+            <param name="assert"></param>
+            <param name="delegate"></param>
+            <param name="name"></param>
+            <typeparam name="TAssert"></typeparam>
+            <typeparam name="TThen"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.Any``1(SAE.CommonLibrary.IAssert{System.Collections.Generic.IEnumerable{``0}},System.Func{``0,System.Boolean},System.String)">
+            <summary>
+            <see cref="P:SAE.CommonLibrary.IAssert`1.Current"/>集合中是否有满足条件的项
+            </summary>
+            <param name="assert"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.NotAny``1(SAE.CommonLibrary.IAssert{System.Collections.Generic.IEnumerable{``0}},System.Func{``0,System.Boolean},System.String)">
+            <summary>
+            <see cref="P:SAE.CommonLibrary.IAssert`1.Current"/>集合中没有满足条件的项
+            </summary>
+            <param name="assert"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.EnumTo``1(System.String)">
+            <summary>
+            将对象<paramref name="input"/>转换成<typeparamref name="TEnum"/>
+            </summary>
+            <typeparam name="TEnum"></typeparam>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.EnumTo``1(System.Int32)">
+            <summary>
+            将对象<paramref name="input"/>转换成<typeparamref name="TEnum"/>
+            </summary>
+            <typeparam name="TEnum"></typeparam>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.GetDetail(System.Enum)">
+            <summary>
+            get <paramref name="enum"/> detail
+            </summary>
+            <param name="enum"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.ToBytes(System.String,System.Text.Encoding)">
+            <summary>
+            将<paramref name="input"/>按照<paramref name="encoding"/>编码转换成<seealso cref="!:IEnumerable&lt;byte&gt;"/>
+            </summary>
+            <param name="input"></param>
+            <param name="encoding"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.Extend``1(``0,``0)">
+            <summary>
+            将对象<paramref name="object"/>附加到<paramref name="target"/>
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="target"></param>
+            <param name="object"></param>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.JsonExtend``1(``0,System.String)">
+            <summary>
+            使用<paramref name="json"/> 的值填充现有对象实例。
+            </summary>
+            <param name="json">json字符串</param>
+            <param name="target">要进行填充的对象</param>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.ToHttpStatusCode(SAE.CommonLibrary.ErrorOutput)">
+            <summary>
+            转换成http状态码
+            </summary>
+            <param name="errorOutput"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0})">
+            <summary>
+            循环<paramref name="enumerable"/>集合,并挨个执行<paramref name="action"/>函数
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="enumerable"></param>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0,System.Int32})">
+            <summary>
+            循环<paramref name="enumerable"/>集合,并挨个执行<paramref name="action"/>函数
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="enumerable"></param>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.ForEachAsync``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Threading.Tasks.Task})">
+            <summary>
+            循环<paramref name="enumerable"/>集合,并挨个执行<paramref name="delegate"/>函数
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="enumerable"></param>
+            <param name="delegate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.ForEachAsync``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Int32,System.Threading.Tasks.Task})">
+            <summary>
+            循环<paramref name="enumerable"/>集合,并挨个执行<paramref name="delegate"/>函数
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="enumerable"></param>
+            <param name="delegate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.ToTimestamp(System.DateTime)">
+            <summary>
+            获得时间戳
+            </summary>
+            <param name="dateTime"></param>
+            <returns></returns> <summary>
+            
+            </summary>
+            <param name="dateTime"></param>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.IsNullOrWhiteSpace(System.String)">
+            <summary>
+            如果<paramref name="str"/>为null或空字符串或一连串空的字符串则返回<seealso cref="F:System.Boolean.TrueString"/>
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.IsNull(System.Object)">
+            <summary>
+            判断<paramref name="object"/>是否为Null
+            </summary>
+            <param name="object"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.IsNotNull(System.Object)">
+            <summary>
+            判断<paramref name="object"/>是否不为Null
+            </summary>
+            <param name="object"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.IsInnerIP(System.Net.IPAddress)">
+            <summary>
+            判断<paramref name="address"/>是否为内网Ip
+            </summary>
+            <param name="address"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.ExistFile(System.String)">
+            <summary>
+            文件是否存在
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.ExistDirectory(System.String)">
+            <summary>
+            文件夹是否存在
+            </summary>
+            <param name="fileFullName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.CreateDirectory(System.String)">
+            <summary>
+            创建目录并返回路径
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.GetAssignableFrom(System.Reflection.Assembly,System.Type)">
+            <summary>
+            从程序集中检索所有继承自<paramref name="type"/>的对象
+            </summary>
+            <param name="assembly"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.GetAssignableFrom``1(System.Reflection.Assembly)">
+            <summary>
+            从程序集中检索所有继承自<typeparamref name="T"/>的对象
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="assembly"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.GetIdentity(System.Type)">
+            <summary>
+            获得类型的<paramref name="type"/>标识
+            </summary>
+            <remarks>
+            该函数使用类型的完全限定名,经过<c>md5</c>运算所得
+            </remarks>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.ToMd5(System.String,System.Boolean)">
+            <summary>
+            将<paramref name="str"/>转换成MD5
+            </summary>
+            <param name="str">输入字符</param>
+            <param name="short">true16位MD5,否则32位MD5</param>
+            <returns>返回加密后的字符</returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.ToMd5(System.IO.Stream,System.Boolean)">
+            <summary>
+            将<paramref name="stream"/>转换成MD5
+            </summary>
+            <param name="stream">文件流</param>
+            <param name="short">true16位MD5,否则32位MD5</param>
+            <returns>返回加密后的字符</returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.ToMd5(System.Collections.Generic.IEnumerable{System.Byte},System.Boolean)">
+            <summary>
+            将<paramref name="bytes"/>转换成MD5
+            </summary>
+            <param name="bytes">字节集合</param>
+            <param name="short">true16位MD5,否则32位MD5</param>
+            <returns>返回加密后的字符</returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.ToBase64(System.Collections.Generic.IEnumerable{System.Byte})">
+            <summary>
+            将<paramref name="bytes"/>转换成MD5
+            </summary>
+            <param name="bytes">字节集合</param>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.ToJsonString(System.Object)">
+            <summary>
+            将对象转换成Json字符串
+            </summary>
+            <param name="object"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.ToObject(System.String,System.Type)">
+            <summary>
+            将<paramref name="json"/>转换成<paramref name="type"/>
+            </summary>
+            <param name="json"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.ToObject``1(System.String)">
+            <summary>
+            将<paramref name="json"/>转换成<typeparamref name="T"/>
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="json"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.ToXml(System.String)">
+            <summary>
+            将<paramref name="json"/>序列化为<seealso cref="T:System.Xml.Linq.XDocument"/>
+            </summary>
+            <param name="json"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.ToXml(System.Object)">
+            <summary>
+            将<paramref name="object"/>序列化为<seealso cref="T:System.Xml.Linq.XDocument"/>
+            </summary>
+            <param name="object"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.ToObject(System.Xml.XmlDocument,System.Type)">
+            <summary>
+            xml反序列化
+            </summary>
+            <param name="document">xml对象</param>
+            <param name="type">反序列类型</param>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.ToObject(System.Xml.Linq.XDocument,System.Type)">
+            <summary>
+            xml反序列化
+            </summary>
+            <param name="document">xml对象</param>
+            <param name="type">反序列类型</param>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.ToObject``1(System.Xml.XmlDocument)">
+            <summary>
+            xml反序列化
+            </summary>
+            <typeparam name="T">反序列类型</typeparam>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.UtilityExtension.ToObject``1(System.Xml.Linq.XDocument)">
+            <summary>
+            xml反序列化
+            </summary>
+            <typeparam name="T">反序列类型</typeparam>
+        </member>
+        <member name="P:SAE.CommonLibrary.IAssert`1.Name">
+            <summary>
+            要验证的参数名
+            </summary>
+        </member>
+        <member name="T:SAE.CommonLibrary.Constants">
+            <summary>
+            系统常量
+            </summary>
+            <summary>
+            常量对象
+            </summary>
+        </member>
+        <member name="F:SAE.CommonLibrary.Constants.Encoding">
+            <summary>
+            默认编码
+            </summary>
+        </member>
+        <member name="F:SAE.CommonLibrary.Constants.TimeZoneGenerator">
+            <summary>
+            时区
+            </summary>
+        </member>
+        <member name="F:SAE.CommonLibrary.Constants.Default">
+            <summary>
+            默认名称
+            </summary>
+        </member>
+        <member name="F:SAE.CommonLibrary.Constants.Scope">
+            <summary>
+            默认区域配置
+            </summary>
+        </member>
+        <member name="P:SAE.CommonLibrary.Constants.DefaultTimeZone">
+            <summary>
+            默认时区
+            </summary>
+        </member>
+        <member name="T:SAE.CommonLibrary.Constants.Path">
+            <summary>
+            路径常量
+            </summary>
+        </member>
+        <member name="F:SAE.CommonLibrary.Constants.Path.Root">
+            <summary>
+            根目录
+            </summary>
+        </member>
+        <member name="F:SAE.CommonLibrary.Constants.Path.Config">
+            <summary>
+            配置文件路径
+            </summary>
+        </member>
+        <member name="T:SAE.CommonLibrary.ErrorOutput">
+            <summary>
+            error output
+            </summary>
+        </member>
+        <member name="M:SAE.CommonLibrary.ErrorOutput.#ctor(SAE.CommonLibrary.StatusCodes)">
+            <summary>
+            
+            </summary>
+            <param name="code"></param>
+        </member>
+        <member name="M:SAE.CommonLibrary.ErrorOutput.#ctor(SAE.CommonLibrary.StatusCodes,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="code"></param>
+            <param name="message"></param>
+        </member>
+        <member name="M:SAE.CommonLibrary.ErrorOutput.#ctor(System.Exception)">
+            <summary>
+            
+            </summary>
+            <param name="exception"></param>
+        </member>
+        <member name="M:SAE.CommonLibrary.ErrorOutput.#ctor(SAE.CommonLibrary.SAEException)">
+            <summary>
+            
+            </summary>
+            <param name="exception"></param>
+        </member>
+        <member name="M:SAE.CommonLibrary.ErrorOutput.#ctor(SAE.CommonLibrary.StatusCodes,System.Exception)">
+            <summary>
+            
+            </summary>
+            <param name="code"></param>
+            <param name="exception"></param>
+        </member>
+        <member name="P:SAE.CommonLibrary.ErrorOutput.StatusCode">
+            <summary>
+            error status code 
+            </summary>
+        </member>
+        <member name="P:SAE.CommonLibrary.ErrorOutput.Message">
+            <summary>
+            error detaild
+            </summary>
+        </member>
+        <member name="T:SAE.CommonLibrary.SAEException">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:SAE.CommonLibrary.SAEException.Code">
+            <summary>
+            错误码
+            </summary>
+        </member>
+        <member name="M:SAE.CommonLibrary.SAEException.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:SAE.CommonLibrary.SAEException.#ctor(SAE.CommonLibrary.StatusCodes)">
+            <summary>
+            
+            </summary>
+            <param name="code"></param>
+        </member>
+        <member name="M:SAE.CommonLibrary.SAEException.#ctor(SAE.CommonLibrary.StatusCodes,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="code"></param>
+            <param name="message"></param>
+        </member>
+        <member name="M:SAE.CommonLibrary.SAEException.#ctor(SAE.CommonLibrary.ErrorOutput)">
+            <summary>
+            
+            </summary>
+            <param name="response"></param>
+        </member>
+        <member name="M:SAE.CommonLibrary.SAEException.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:SAE.CommonLibrary.SAEException.#ctor(System.String,System.Exception)">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="M:SAE.CommonLibrary.SAEException.#ctor(SAE.CommonLibrary.StatusCodes,System.Exception)">
+            <summary>
+            
+            </summary>
+            <param name="code"></param>
+            <param name="exception"></param>
+        </member>
+        <member name="M:SAE.CommonLibrary.SAEException.#ctor(SAE.CommonLibrary.StatusCodes,System.String,System.Exception)">
+            <summary>
+            
+            </summary>
+            <param name="code"></param>
+            <param name="message"></param>
+            <param name="exception"></param>
+        </member>
+        <member name="T:SAE.CommonLibrary.StatusCodes">
+            <summary>
+            状态码
+            </summary>
+        </member>
+        <member name="F:SAE.CommonLibrary.StatusCodes.Success">
+            <summary>
+            成功
+            </summary>
+        </member>
+        <member name="F:SAE.CommonLibrary.StatusCodes.Unknown">
+            <summary>
+            未知的异常
+            </summary>
+        </member>
+        <member name="F:SAE.CommonLibrary.StatusCodes.AccountOrPassword">
+            <summary>
+            账号或密码错误
+            </summary>
+        </member>
+        <member name="F:SAE.CommonLibrary.StatusCodes.RequestInvalid">
+            <summary>
+            请求无效
+            </summary>
+        </member>
+        <member name="F:SAE.CommonLibrary.StatusCodes.ParamesterInvalid">
+            <summary>
+            参数无效
+            </summary>
+        </member>
+        <member name="F:SAE.CommonLibrary.StatusCodes.ResourcesExist">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:SAE.CommonLibrary.StatusCodes.ResourcesVersion">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:SAE.CommonLibrary.StatusCodes.ResourcesNotExist">
+            <summary>
+            资源不存在
+            </summary>
+        </member>
+        <member name="T:SAE.CommonLibrary.Utils">
+            <summary>
+            工具类
+            </summary>
+            <summary>
+            工具类
+            </summary>
+        </member>
+        <member name="M:SAE.CommonLibrary.Utils.GenerateId">
+            <summary>
+            生成有序的Guid
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Utils.Timestamp">
+            <summary>
+            返回时间戳
+            </summary>
+        </member>
+        <member name="M:SAE.CommonLibrary.Utils.Timestamp(System.DateTime)">
+            <summary>
+            返回时间戳
+            </summary>
+            <param name="dateTime"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Utils.SliceAsync``1(System.Collections.Generic.IEnumerable{``0},System.Func{System.Collections.Generic.IEnumerable{``0},System.Threading.Tasks.Task},System.Int32)">
+            <summary>
+            将集合进行切片，并逐个处理，缓和系统负载。常用与sql或API请求中的批量处理。
+            ps:可将串行扩展为并行提高工作效率，但是会提高系统负载。
+            </summary>
+            <param name="array"></param>
+            <param name="funcTask"></param>
+            <param name="chunkSize"></param>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:SAE.CommonLibrary.Utils.Network">
+            <summary>
+            网络
+            </summary>
+        </member>
+        <member name="M:SAE.CommonLibrary.Utils.Network.GetServerIP">
+            <summary>
+            获得服务端地址
+            </summary>
+        </member>
+        <member name="M:SAE.CommonLibrary.Utils.Network.IsInnerIP(System.String)">
+            <summary>
+            判断IP地址是否为内网IP地址
+            </summary>
+            <param name="ipAddress">IP地址字符串</param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Utils.Network.GetIpNum(System.String)">
+            <summary>
+            把IP地址转换为Long型数字
+            </summary>
+            <param name="ipAddress">IP地址字符串</param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Utils.Network.IsInner(System.Int64,System.Int64,System.Int64)">
+            <summary>
+            判断用户IP地址转换为Long型后是否在内网IP地址所在范围
+            </summary>
+            <param name="userIp"></param>
+            <param name="begin"></param>
+            <param name="end"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SAE.CommonLibrary.Utils.Path">
+            <summary>
+            路径组合
+            </summary>
+        </member>
+        <member name="M:SAE.CommonLibrary.Utils.Path.Config(System.String[])">
+            <summary>
+            将<paramref name="paths"/>和<seealso cref="F:SAE.CommonLibrary.Constants.Path.Config"/>组合成路径
+            </summary>
+            <param name="paths">路径列表</param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Utils.Path.Root(System.String[])">
+            <summary>
+            将<paramref name="paths"/>和<seealso cref="!:Constants.Path."/>组合成路径
+            </summary>
+            <param name="paths">路径列表</param>
+            <returns></returns>
+        </member>
+        <member name="T:SAE.CommonLibrary.Utils.Reflection">
+            <summary>
+            反射
+            </summary>
+        </member>
+        <member name="M:SAE.CommonLibrary.Utils.Reflection.GetMemberInfo``1(System.String,System.Reflection.BindingFlags)">
+            <summary>
+            获得<seealso cref="T:System.Reflection.MemberInfo"/>
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="name"></param>
+            <param name="flags"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Utils.Reflection.GetFieldInfo``1(System.String,System.Reflection.BindingFlags)">
+            <summary>
+            获得<seealso cref="T:System.Reflection.FieldInfo"/>
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="name"></param>
+            <param name="flags"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Utils.Reflection.GetMethodInfo``1(System.String,System.Reflection.BindingFlags,System.Type[])">
+            <summary>
+            获得<seealso cref="T:System.Reflection.MethodInfo"/>
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="name"></param>
+            <param name="flags"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Utils.Reflection.GetPropertyInfo``1(System.String,System.Reflection.BindingFlags)">
+            <summary>
+            获得<seealso cref="T:System.Reflection.PropertyInfo"/>
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="name"></param>
+            <param name="flags"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SAE.CommonLibrary.Utils.Security">
+            <summary>
+            安全
+            </summary>
+        </member>
+        <member name="M:SAE.CommonLibrary.Utils.Security.MD5(System.String,System.Boolean)">
+            <summary>
+            <c>md5</c>加密
+            </summary>
+            <param name="input"></param>
+            <param name="short"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Utils.Security.MD5(System.Collections.Generic.IEnumerable{System.Byte},System.Boolean)">
+            <summary>
+            <c>md5</c>加密
+            </summary>
+            <param name="bytes"></param>
+            <param name="short"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Utils.Security.MD5(System.IO.Stream,System.Boolean)">
+            <summary>
+            <c>md5</c>加密
+            </summary>
+            <param name="stream"></param>
+            <param name="short"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Utils.Security.Base64(System.Collections.Generic.IEnumerable{System.Byte})">
+            <summary>
+            转换成<c>base64</c>
+            </summary>
+            <param name="bytes"></param>
+        </member>
+        <member name="T:SAE.CommonLibrary.Utils.Serialize">
+            <summary>
+            序列化
+            </summary>
+        </member>
+        <member name="M:SAE.CommonLibrary.Utils.Serialize.Json(System.Object)">
+            <summary>
+            Json序列化
+            </summary>
+            <param name="object"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Utils.Serialize.Xml(System.Object)">
+            <summary>
+            将<paramref name="object"/>序列化为<seealso cref="T:System.Xml.Linq.XDocument"/>
+            </summary>
+            <param name="object"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Utils.Serialize.Xml(System.String)">
+            <summary>
+            将<paramref name="json"/>序列化为<seealso cref="T:System.Xml.Linq.XDocument"/>
+            </summary>
+            <param name="json"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SAE.CommonLibrary.Utils.Deserialize">
+            <summary>
+            反序列化
+            </summary>
+        </member>
+        <member name="M:SAE.CommonLibrary.Utils.Deserialize.Json(System.String,System.Type)">
+            <summary>
+            Json反序列化
+            </summary>
+            <param name="json">json字符串</param>
+            <param name="type">反序列化的类型</param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Utils.Deserialize.PopulateObject(System.String,System.Object)">
+            <summary>
+            使用<paramref name="json"/> 的值填充现有对象实例。
+            </summary>
+            <param name="json">json字符串</param>
+            <param name="object">要填充的对象</param>
+        </member>
+        <member name="M:SAE.CommonLibrary.Utils.Deserialize.Xml(System.Xml.Linq.XDocument,System.Type)">
+            <summary>
+            将<paramref name="document"/>,返序列化为<paramref name="type"/>对象
+            </summary>
+            <param name="document"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

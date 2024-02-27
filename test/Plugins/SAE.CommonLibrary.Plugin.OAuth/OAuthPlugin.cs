@@ -9,6 +9,9 @@ using System;
 using SAE.CommonLibrary.Plugin.Constant;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Threading.Tasks;
+using Microsoft.IdentityModel.Protocols;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace SAE.CommonLibrary.Plugin.OAuth
 {
@@ -24,8 +27,10 @@ namespace SAE.CommonLibrary.Plugin.OAuth
         {
             services.Configure<MvcOptions>(options =>
             {
-                options.Filters.Add(new AuthorizeFilter(new[] { new AuthorizeAttribute()}));
+                options.Filters.Add(new AuthorizeFilter(new[] { new AuthorizeAttribute() }));
             });
+            
+            
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
                     {
@@ -36,7 +41,7 @@ namespace SAE.CommonLibrary.Plugin.OAuth
                             ValidateAudience = false
                         };
                     });
-           
+            services.AddAuthorization();
         }
     }
 }

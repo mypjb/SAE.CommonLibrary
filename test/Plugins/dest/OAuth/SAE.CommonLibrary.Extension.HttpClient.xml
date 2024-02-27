@@ -1,0 +1,279 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SAE.CommonLibrary.Extension.HttpClient</name>
+    </assembly>
+    <members>
+        <member name="T:SAE.CommonLibrary.Extension.HttpClientExtension">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.HttpClientExtension.UseLogging(System.Net.Http.HttpClient,System.Func{SAE.CommonLibrary.Logging.ILogging})">
+            <summary>
+            使用记录器
+            </summary>
+            <param name="httpClient"></param>
+            <param name="record"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.HttpClientExtension.Clone(System.Net.Http.HttpRequestMessage)">
+            <summary>
+            克隆<paramref name="request"/>请求体
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.HttpClientExtension.AddHeader(System.Net.Http.HttpRequestMessage,System.String,System.String)">
+            <summary>
+            添加请求头
+            </summary>
+            <param name="request"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.HttpClientExtension.AddHeader(System.Net.Http.HttpRequestMessage,System.String,System.String[])">
+            <summary>
+            添加请求头
+            </summary>
+            <param name="request"></param>
+            <param name="key"></param>
+            <param name="values"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.HttpClientExtension.AddContent(System.Net.Http.HttpRequestMessage,System.String,System.String)">
+            <summary>
+            以字符串的形式添加数据
+            </summary>
+            <param name="request"></param>
+            <param name="value"></param>
+            <param name="mediaType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.HttpClientExtension.AddContent(System.Net.Http.HttpRequestMessage,System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            以键值对的形式添加数据
+            </summary>
+            <param name="request"></param>
+            <param name="nameValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.HttpClientExtension.AddJsonContent``1(System.Net.Http.HttpRequestMessage,``0)">
+            <summary>
+            以Json形式添加数据
+            </summary>
+            <typeparam name="TModel"></typeparam>
+            <param name="request"></param>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.HttpClientExtension.AddContent(System.Net.Http.HttpRequestMessage,System.IO.Stream)">
+            <summary>
+            添加流Content
+            </summary>
+            <param name="request"></param>
+            <param name="stream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.HttpClientExtension.AddContent(System.Net.Http.HttpRequestMessage,System.IO.FileInfo,System.String)">
+            <summary>
+            添加文件Content
+            </summary>
+            <param name="request"></param>
+            <param name="fileInfo"></param>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.HttpClientExtension.AddContent(System.Net.Http.HttpRequestMessage,System.Net.Http.HttpContent)">
+            <summary>
+            添加HttpContent
+            </summary>
+            <param name="request"></param>
+            <param name="content"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.HttpClientExtension.AddProperty(System.Net.Http.HttpRequestMessage,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            添加请求属性集
+            </summary>
+            <param name="request"></param>
+            <param name="Properties"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.HttpClientExtension.AsAsync``1(System.Net.Http.HttpResponseMessage)">
+            <summary>
+            获取请求报文，如果请求失败则触发<seealso cref="T:System.Net.Http.HttpRequestException"/>。
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="response"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.HttpClientExtension.UseDefaultMiddleware(System.Net.Http.HttpClient)">
+            <summary>
+            使用默认的中间件
+            </summary>
+            <param name="httpClient"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.HttpClientExtension.Use(System.Net.Http.HttpClient,System.Net.Http.DelegatingHandler)">
+            <summary>
+            使用<paramref name="handler"/>作为中间件
+            </summary>
+            <param name="httpClient"></param>
+            <param name="handler"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.HttpClientExtension.UsePolly(System.Net.Http.HttpClient,System.Int32,System.Net.HttpStatusCode[])">
+            <summary>
+            添加Polly代理。当请求出现<paramref name="httpStatusCodes"/>或<seealso cref="T:System.Net.Http.HttpRequestException"/>异常时.
+            将为进行<paramref name="retryCount"/>次重试
+            </summary>
+            <param name="httpClient">请求客户端</param>
+            <param name="retryCount">失败重试次数默认10次</param>
+            <param name="httpStatusCodes">当出现错误响应码，将进行重试,默认响应码:
+            <seealso cref="F:System.Net.HttpStatusCode.RequestTimeout"/>,
+            <seealso cref="F:System.Net.HttpStatusCode.InternalServerError"/>,
+            <seealso cref="F:System.Net.HttpStatusCode.BadGateway"/>,
+            <seealso cref="F:System.Net.HttpStatusCode.ServiceUnavailable"/>,
+            <seealso cref="F:System.Net.HttpStatusCode.GatewayTimeout"/></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.HttpClientExtension.UseExceptionHandler(System.Net.Http.HttpClient,System.Func{System.Net.Http.HttpResponseMessage,System.Threading.Tasks.Task})">
+            <summary>
+            使用<paramref name="handler"/>作为异常处理中间件
+            </summary>
+            <param name="httpClient"></param>
+            <param name="handler"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.HttpClientExtension.UseDefaultExceptionHandler(System.Net.Http.HttpClient)">
+            <summary>
+            使用默认错误处理程序
+            </summary>
+            <param name="httpClient"></param>
+            <returns></returns>
+            <exception cref="T:SAE.CommonLibrary.SAEException"></exception>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.HttpClientExtension.UseChunkHandler(System.Net.Http.HttpClient)">
+            <summary>
+            使用分块上传处理程序
+            </summary>
+            <param name="httpClient"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.HttpClientExtension.UseOAuth(System.Net.Http.HttpClient,SAE.CommonLibrary.Extension.Middleware.OAuthOptions)">
+            <summary>
+            加入OAuth授权中间件
+            </summary>
+            <param name="httpClient"></param>
+            <param name="options">授权信息</param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.HttpClientExtension.DownloadAsync(System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage,System.Int64)">
+            <summary>
+            分段下载文件
+            </summary>
+            <param name="httpClient"></param>
+            <param name="httpRequestMessage"></param>
+            <param name="chunkSize"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SAE.CommonLibrary.Extension.ChunkStreamContent">
+            <summary>
+            分段上传内容流
+            </summary>
+        </member>
+        <member name="F:SAE.CommonLibrary.Extension.ChunkStreamContent.DefaultChunkSize">
+            <summary>
+            默认块大小5MB
+            </summary>
+        </member>
+        <member name="P:SAE.CommonLibrary.Extension.ChunkStreamContent.ChunkSize">
+            <summary>
+            块大小
+            </summary>
+        </member>
+        <member name="P:SAE.CommonLibrary.Extension.ChunkStreamContent.FileName">
+            <summary>
+            文件名
+            </summary>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.ChunkStreamContent.#ctor(System.IO.Stream,System.String)">
+            <summary>
+            创建大块文件流内容
+            </summary>
+            <param name="content"></param>
+            <param name="fileName"></param>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.ChunkStreamContent.#ctor(System.IO.Stream,System.String,System.Int32)">
+            <summary>
+            创建大块文件流内容
+            </summary>
+            <param name="stream"></param>
+            <param name="fileName"></param>
+            <param name="chunkSize"></param>
+        </member>
+        <member name="T:SAE.CommonLibrary.Extension.Middleware.ChunkUploadMiddleware">
+            <summary>
+            分段上传处理程序
+            </summary>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.Middleware.OAuthMiddleware.#ctor(SAE.CommonLibrary.Extension.Middleware.OAuthOptions)">
+            <summary>
+            
+            </summary>
+            <param name="authority">认证地址</param>
+            <param name="appId">appid</param>
+            <param name="appKey">appkey</param>
+        </member>
+        <member name="P:SAE.CommonLibrary.Extension.Middleware.OAuthMiddleware.RequestToken.AccessToken">
+            <summary>
+            token
+            </summary>
+        </member>
+        <member name="P:SAE.CommonLibrary.Extension.Middleware.OAuthMiddleware.RequestToken.Deadline">
+            <summary>
+            截止时间
+            </summary>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.Middleware.OAuthMiddleware.RequestToken.Check">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:SAE.CommonLibrary.Extension.Middleware.OAuthOptions.Authority">
+            <summary>
+            授权地址
+            </summary>
+        </member>
+        <member name="P:SAE.CommonLibrary.Extension.Middleware.OAuthOptions.Scope">
+            <summary>
+            授权域
+            </summary>
+        </member>
+        <member name="P:SAE.CommonLibrary.Extension.Middleware.OAuthOptions.AppId">
+            <summary>
+            应用id
+            </summary>
+        </member>
+        <member name="P:SAE.CommonLibrary.Extension.Middleware.OAuthOptions.AppSecret">
+            <summary>
+            应用Secret
+            </summary>
+        </member>
+        <member name="P:SAE.CommonLibrary.Extension.Middleware.OAuthOptions.Expires">
+            <summary>
+            过期百分比默认超过70时间就重置
+            </summary>
+        </member>
+        <member name="M:SAE.CommonLibrary.Extension.Middleware.OAuthOptions.Check(System.Boolean)">
+            <summary>
+            check oauth whether effective
+            </summary>
+            <param name="error">true tagger error </param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

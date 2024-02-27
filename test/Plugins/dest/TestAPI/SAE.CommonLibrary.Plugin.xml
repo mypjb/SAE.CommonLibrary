@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SAE.CommonLibrary.Plugin</name>
+    </assembly>
+    <members>
+        <member name="T:SAE.CommonLibrary.Plugin.IPlugin">
+            <summary>
+            插件接口
+            </summary>
+        </member>
+        <member name="P:SAE.CommonLibrary.Plugin.IPlugin.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:SAE.CommonLibrary.Plugin.IPlugin.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:SAE.CommonLibrary.Plugin.IPlugin.Version">
+            <summary>
+            版本号
+            </summary>
+        </member>
+        <member name="P:SAE.CommonLibrary.Plugin.IPlugin.Path">
+            <summary>
+            所在路径
+            </summary>
+        </member>
+        <member name="P:SAE.CommonLibrary.Plugin.IPlugin.Order">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="P:SAE.CommonLibrary.Plugin.IPlugin.Status">
+            <summary>
+            状态
+            </summary>
+        </member>
+        <member name="T:SAE.CommonLibrary.Plugin.IPluginManage">
+            <summary>
+            插件管理接口
+            </summary>
+        </member>
+        <member name="P:SAE.CommonLibrary.Plugin.IPluginManage.Plugins">
+            <summary>
+            插件列表
+            </summary>
+        </member>
+        <member name="M:SAE.CommonLibrary.Plugin.IPluginManage.Load(SAE.CommonLibrary.Plugin.IPlugin)">
+            <summary>
+            加载程序集
+            </summary>
+            <param name="plugin"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Plugin.IPluginManage.UnLoad(System.String)">
+            <summary>
+            卸载程序集
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="T:SAE.CommonLibrary.Plugin.AspNetCore.PluginManage`1">
+            <summary>
+            <seealso cref="T:SAE.CommonLibrary.Plugin.IPluginManage"/>实现
+            </summary>
+            <typeparam name="TPlugin"></typeparam>
+        </member>
+        <member name="F:SAE.CommonLibrary.Plugin.AspNetCore.PluginManage`1._pluginDir">
+            <summary>
+            插件目录
+            </summary>
+        </member>
+        <member name="F:SAE.CommonLibrary.Plugin.AspNetCore.PluginManage`1._pluginType">
+            <summary>
+            插件类型
+            </summary>
+        </member>
+        <member name="F:SAE.CommonLibrary.Plugin.AspNetCore.PluginManage`1._store">
+            <summary>
+            插件存储
+            </summary>
+        </member>
+        <member name="F:SAE.CommonLibrary.Plugin.AspNetCore.PluginManage`1.Package">
+            <summary>
+            插件描述文件
+            </summary>
+        </member>
+        <member name="M:SAE.CommonLibrary.Plugin.AspNetCore.PluginManage`1.#ctor(SAE.CommonLibrary.Plugin.PluginOptions)">
+            <summary>
+            ctor
+            </summary>
+            <param name="pluginOptions"></param>
+        </member>
+        <member name="M:SAE.CommonLibrary.Plugin.AspNetCore.PluginManage`1.LoadPlugin">
+            <inheritdoc/>
+        </member>
+        <member name="M:SAE.CommonLibrary.Plugin.AspNetCore.PluginManage`1.Read(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SAE.CommonLibrary.Plugin.AspNetCore.PluginManage`1.CreateInstance(System.Type)">
+            <summary>
+            创建实例
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Plugin.AspNetCore.PluginManage`1.AbsolutePath(System.String)">
+            <summary>
+            是否为绝对路径
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="P:SAE.CommonLibrary.Plugin.AspNetCore.PluginManage`1.Plugins">
+            <inheritdoc/>
+        </member>
+        <member name="M:SAE.CommonLibrary.Plugin.AspNetCore.PluginManage`1.Load(SAE.CommonLibrary.Plugin.IPlugin)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SAE.CommonLibrary.Plugin.AspNetCore.PluginManage`1.UnLoad(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="P:SAE.CommonLibrary.Plugin.PluginOptions.Path">
+            <summary>
+            插件目录地址
+            </summary>
+        </member>
+    </members>
+</doc>

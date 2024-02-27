@@ -1,0 +1,145 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SAE.CommonLibrary.Scope</name>
+    </assembly>
+    <members>
+        <member name="T:SAE.CommonLibrary.Scope.DefaultScope">
+            <summary>
+            <inheritdoc />
+            </summary>
+        </member>
+        <member name="F:SAE.CommonLibrary.Scope.DefaultScope._previous">
+            <summary>
+            ��ǰ������
+            </summary>
+        </member>
+        <member name="E:SAE.CommonLibrary.Scope.DefaultScope.OnDispose">
+            <summary>
+            �����ͷŵ��¼�
+            </summary>
+        </member>
+        <member name="M:SAE.CommonLibrary.Scope.DefaultScope.#ctor(System.String)">
+            <summary>
+            ���캯��
+            </summary>
+            <param name="name">scope name</param>
+        </member>
+        <member name="M:SAE.CommonLibrary.Scope.DefaultScope.#ctor(System.String,SAE.CommonLibrary.Scope.IScope)">
+            <summary>
+            ���캯��
+            </summary>
+            <param name="name">�µ���������</param>
+            <param name="previous">�ͷ�ʱ����Ϊ��ֵ <seealso cref="M:SAE.CommonLibrary.Scope.DefaultScope.Dispose"/></param>
+        </member>
+        <member name="T:SAE.CommonLibrary.Scope.DefaultScopeFactory">
+            <summary>
+            Ĭ�����򹤳�ʵ��
+            </summary>
+            <inheritdoc/>
+        </member>
+        <member name="M:SAE.CommonLibrary.Scope.DefaultScopeFactory.#ctor">
+            <summary>
+            ���캯��
+            </summary>
+        </member>
+        <member name="M:SAE.CommonLibrary.Scope.DefaultScopeFactory.GetCurrentScope">
+            <summary>
+            ��õ�ǰ����
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Scope.DefaultScopeFactory.Restore(SAE.CommonLibrary.Scope.IScope)">
+            <summary>
+            ��������
+            </summary>
+            <param name="scope"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SAE.CommonLibrary.Scope.DefaultScopeWrapper`1">
+            <summary>
+            <see cref="T:SAE.CommonLibrary.Scope.IScopeWrapper`1"/>默认实现
+            </summary>
+            <typeparam name="TService"></typeparam>
+            <inheritdoc/>
+        </member>
+        <member name="T:SAE.CommonLibrary.Scope.IScope">
+            <summary>
+            �����ʶ�ӿ�
+            </summary>
+        </member>
+        <member name="P:SAE.CommonLibrary.Scope.IScope.Name">
+            <summary>
+            ���������
+            </summary>
+        </member>
+        <member name="T:SAE.CommonLibrary.Scope.IScopeFactory">
+            <summary>
+            区域工厂
+            </summary>
+        </member>
+        <member name="M:SAE.CommonLibrary.Scope.IScopeFactory.GetAsync">
+            <summary>
+            返回当前区域
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SAE.CommonLibrary.Scope.IScopeFactory.GetAsync(System.String)">
+            <summary> 
+            临时设置区域为 <paramref name="scopeName"/>当调用<see cref="M:System.IDisposable.Dispose"/>接口后将会重置它
+            </summary>
+            <param name="scopeName">区域的名称</param>
+            <returns></returns>
+        </member>
+        <member name="T:SAE.CommonLibrary.Scope.IScopeWrapper`1">
+            <summary>
+            ��������װ��
+            </summary>
+            <typeparam name="TService"></typeparam>
+        </member>
+        <member name="M:SAE.CommonLibrary.Scope.IScopeWrapper`1.GetService(System.String,System.Func{`0})">
+            <summary>
+            ��õ�ǰ����
+            <param name="key"> cache key</param>
+            <param name="constructor"><typeparamref name="TService"/>�������</param>>
+            </summary>
+        </member>
+        <member name="M:SAE.CommonLibrary.Scope.IScopeWrapper`1.Clear">
+            <summary>
+            ����
+            </summary>
+        </member>
+        <member name="T:SAE.CommonLibrary.Scope.ScopeFactoryExtensions">
+            <summary>
+            ���򹤳���չ
+            </summary>
+        </member>
+        <member name="M:SAE.CommonLibrary.Scope.ScopeFactoryExtensions.Get(SAE.CommonLibrary.Scope.IScopeFactory)">
+            <summary>
+            <para><em>ͬ������</em></para>
+            <para>��õ�ǰ<see cref="T:SAE.CommonLibrary.Scope.IScope"/>����</para>
+            </summary>
+            <param name="factory"></param>
+        </member>
+        <member name="M:SAE.CommonLibrary.Scope.ScopeFactoryExtensions.Get(SAE.CommonLibrary.Scope.IScopeFactory,System.String)">
+            <summary>
+            <para><em>ͬ������</em></para>
+            <para>���ò�����<see cref="T:SAE.CommonLibrary.Scope.IScope"/>����</para>
+            </summary>
+            <param name="factory"></param>
+            <param name="name">��������</param>
+        </member>
+        <member name="T:Microsoft.Extensions.DependencyInjection.DefaultScopeServiceCollectionExtensions">
+            <summary>
+            Ĭ������ע����
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.DefaultScopeServiceCollectionExtensions.AddDefaultScope(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            ����Ĭ������ʵ��
+            </summary>
+            <param name="services"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

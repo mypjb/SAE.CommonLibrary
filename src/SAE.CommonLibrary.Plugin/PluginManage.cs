@@ -10,27 +10,53 @@ using SAE.CommonLibrary.Extension;
 
 namespace SAE.CommonLibrary.Plugin.AspNetCore
 {
+    /// <summary>
+    /// <seealso cref="IPluginManage"/>实现
+    /// </summary>
+    /// <typeparam name="TPlugin"></typeparam>
     public class PluginManage<TPlugin> : IPluginManage where TPlugin : IPlugin
     {
-        private readonly string _pluginDir;
-        private readonly Type _plutinType;
-        private readonly ConcurrentDictionary<string, IPlugin> _store;
+        /// <summary>
+        /// 插件目录
+        /// </summary>
+        protected readonly string _pluginDir;
+        /// <summary>
+        /// 插件类型
+        /// </summary>
+        protected readonly Type _pluginType;
+        /// <summary>
+        /// 插件存储
+        /// </summary>
+        protected readonly ConcurrentDictionary<string, IPlugin> _store;
+        /// <summary>
+        /// 插件描述文件
+        /// </summary>
         public const string Package = "package.json";
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="pluginOptions"></param>
         public PluginManage(PluginOptions pluginOptions)
         {
-            this._plutinType = typeof(TPlugin);
+            this._pluginType = typeof(TPlugin);
             this._store = new ConcurrentDictionary<string, IPlugin>();
             this._pluginDir = this.AbsolutePath(pluginOptions.Path) ?
                                     pluginOptions.Path :
                                     Path.Combine(AppContext.BaseDirectory, pluginOptions.Path);
-            this.LoadPlugin();
-        }
 
-        protected virtual void LoadPlugin()
+            var pairs = this.LoadPlugin();
+
+            foreach (var kv in pairs.OrderByDescending(kv => kv.Value.Order))
+            {
+                this._store[kv.Key] = kv.Value;
+            }
+        }
+        ///<inheritdoc/>
+        protected virtual Dictionary<string, IPlugin> LoadPlugin()
         {
+            Dictionary<string, IPlugin> pairs = new Dictionary<string, IPlugin>();
             if (Directory.Exists(this._pluginDir))
             {
-                Dictionary<string, IPlugin> pairs = new Dictionary<string, IPlugin>();
                 Directory.GetDirectories(this._pluginDir)
                          .ForEach(dir =>
                          {
@@ -40,14 +66,10 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
                                  pairs[plugin.Name] = plugin;
                              }
                          });
-
-                foreach (var kv in pairs.OrderByDescending(kv => kv.Value.Order))
-                {
-                    this._store[kv.Key] = kv.Value;
-                }
             }
+            return pairs;
         }
-
+        ///<inheritdoc/>
         protected virtual IPlugin Read(string dir)
         {
             IPlugin plugin = null;
@@ -67,12 +89,17 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
                 {
                     var assembly = this.Load(proxyPlugin);
 
+                    if (assembly == null)
+                    {
+                        return plugin;
+                    }
+                    
                     var pluginType = assembly.GetTypes()
                                              .FirstOrDefault(
-                                                s => this._plutinType.IsAssignableFrom(s));
+                                                s => this._pluginType.IsAssignableFrom(s));
                     if (pluginType != null)
                     {
-                        var tPlugin = (IPlugin)Activator.CreateInstance(pluginType);
+                        var tPlugin = this.CreateInstance(pluginType);
                         proxyPlugin.Extension(tPlugin);
                     }
                 }
@@ -81,16 +108,29 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
 
             return plugin;
         }
-
+        /// <summary>
+        /// 创建实例
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        protected virtual IPlugin CreateInstance(Type type)
+        {
+            return (IPlugin)Activator.CreateInstance(type);
+        }
+        /// <summary>
+        /// 是否为绝对路径
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         private bool AbsolutePath(string path)
         {
             return Path.IsPathRooted(path);
         }
-
-        public IEnumerable<IPlugin> Plugins =>
+        ///<inheritdoc/>
+        public virtual IEnumerable<IPlugin> Plugins =>
                this._store.Values.OfType<ProxyPlugin>().Select(s => s.plugin).ToArray();
-
-        public Assembly Load(IPlugin plugin)
+        ///<inheritdoc/>
+        public virtual Assembly Load(IPlugin plugin)
         {
             if (!Path.IsPathRooted(plugin.Path))
             {
@@ -115,7 +155,8 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
                  });
             return proxy.Register();
         }
-        public void UnLoad(string name)
+        ///<inheritdoc/>
+        public virtual void UnLoad(string name)
         {
             IPlugin plugin;
             if (this._store.TryRemove(name, out plugin))
