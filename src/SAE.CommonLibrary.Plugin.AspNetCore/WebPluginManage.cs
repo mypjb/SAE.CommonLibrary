@@ -36,7 +36,19 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
                     {
                         if (this._pluginType.IsAssignableFrom(type))
                         {
-                            storage[assembly.GetName().Name] = (IPlugin)Activator.CreateInstance(type);
+                            if (type.IsAbstract || type.IsInterface)
+                            {
+                                continue;
+                            }
+                            var plugin = (IPlugin)Activator.CreateInstance(type);
+
+                            plugin.Status = true;
+                            plugin.Version = "v1";
+                            plugin.Name = type.Name;
+                            plugin.Path = assembly.Location;
+                            plugin.Description = type.Name;
+
+                            storage[assembly.GetName().Name] = plugin;
                             break;
                         }
                     }

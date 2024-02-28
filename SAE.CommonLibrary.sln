@@ -127,6 +127,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.Database.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.MessageQueue.Test", "test\SAE.CommonLibrary.MessageQueue.Test\SAE.CommonLibrary.MessageQueue.Test.csproj", "{427C739D-7282-4D20-ADE6-7D81447DE806}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAE.CommonLibrary.Plugin.Merge.Test", "test\SAE.CommonLibrary.Plugin.Merge.Test\SAE.CommonLibrary.Plugin.Merge.Test.csproj", "{8B3DE3E2-DC57-4BF9-B1EB-D7EAEDFE50BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -333,6 +335,10 @@ Global
 		{427C739D-7282-4D20-ADE6-7D81447DE806}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{427C739D-7282-4D20-ADE6-7D81447DE806}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{427C739D-7282-4D20-ADE6-7D81447DE806}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B3DE3E2-DC57-4BF9-B1EB-D7EAEDFE50BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B3DE3E2-DC57-4BF9-B1EB-D7EAEDFE50BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B3DE3E2-DC57-4BF9-B1EB-D7EAEDFE50BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B3DE3E2-DC57-4BF9-B1EB-D7EAEDFE50BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -390,6 +396,7 @@ Global
 		{4D7E331A-42F1-42B8-8A3D-FC6BFB28115D} = {8AD43B5B-ED55-4712-B865-1E6E1D7B19FE}
 		{2EF9EFAE-330A-4F36-8B4D-D1CC46E53093} = {8AD43B5B-ED55-4712-B865-1E6E1D7B19FE}
 		{427C739D-7282-4D20-ADE6-7D81447DE806} = {8AD43B5B-ED55-4712-B865-1E6E1D7B19FE}
+		{8B3DE3E2-DC57-4BF9-B1EB-D7EAEDFE50BE} = {8AD43B5B-ED55-4712-B865-1E6E1D7B19FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2FF66E70-E062-4202-A1AD-A821991FEA65}

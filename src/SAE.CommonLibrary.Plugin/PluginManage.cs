@@ -40,7 +40,7 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
         {
             this._pluginType = typeof(TPlugin);
             this._store = new ConcurrentDictionary<string, IPlugin>();
-            this._pluginDir = this.AbsolutePath(pluginOptions.Path) ?
+            this._pluginDir = this.AbsolutePath(pluginOptions.Path)?
                                     pluginOptions.Path :
                                     Path.Combine(AppContext.BaseDirectory, pluginOptions.Path);
 
@@ -93,7 +93,7 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
                     {
                         return plugin;
                     }
-                    
+
                     var pluginType = assembly.GetTypes()
                                              .FirstOrDefault(
                                                 s => this._pluginType.IsAssignableFrom(s));

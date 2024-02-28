@@ -18,6 +18,10 @@
 		<ProjectReference Include="..\..\src\SAE.CommonLibrary.Extension.HttpClient\SAE.CommonLibrary.Extension.HttpClient.csproj" />
 		<ProjectReference Include="..\..\src\SAE.CommonLibrary.Plugin.AspNetCore\SAE.CommonLibrary.Plugin.AspNetCore.csproj" />
 		<ProjectReference Include="..\Plugins\SAE.CommonLibrary.Plugin.Constant\SAE.CommonLibrary.Plugin.Constant.csproj" />
+		<ProjectReference Include="..\Plugins\SAE.CommonLibrary.Plugin.FrontEnd\SAE.CommonLibrary.Plugin.FrontEnd.csproj" />
+		<ProjectReference Include="..\Plugins\SAE.CommonLibrary.Plugin.Identity\SAE.CommonLibrary.Plugin.Identity.csproj" />
+		<ProjectReference Include="..\Plugins\SAE.CommonLibrary.Plugin.OAuth\SAE.CommonLibrary.Plugin.OAuth.csproj" />
+		<ProjectReference Include="..\Plugins\SAE.CommonLibrary.Plugin.TestAPI\SAE.CommonLibrary.Plugin.TestAPI.csproj" />
 		<ProjectReference Include="..\SAE.CommonLibrary.Test\SAE.CommonLibrary.Test.csproj" />
 	</ItemGroup>
 </Project>
