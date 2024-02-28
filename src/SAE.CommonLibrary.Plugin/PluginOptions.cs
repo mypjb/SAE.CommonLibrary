@@ -6,11 +6,9 @@ namespace SAE.CommonLibrary.Plugin
 {
     public class PluginOptions
     {
-        public const string DefaultPath = "plugins";
         public const string Option = "plugin";
         public PluginOptions()
         {
-            this.path = DefaultPath;
         }
 
         private string path;
@@ -20,12 +18,7 @@ namespace SAE.CommonLibrary.Plugin
         /// </summary>
         public string Path
         {
-            get => path; set
-            {
-                if (string.IsNullOrWhiteSpace(value)) return;
-                
-                this.path = value;
-            }
+            get; set;
         }
     }
 }

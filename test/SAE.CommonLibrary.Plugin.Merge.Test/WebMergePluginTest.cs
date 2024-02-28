@@ -136,10 +136,7 @@ namespace SAE.CommonLibrary.Plugin.Test
                             options.Backchannel = WebMergePluginTest.Client.Invoke();
                         });
 
-            services.AddPluginManage(new PluginOptions
-            {
-                Path = AppContext.BaseDirectory
-            });
+            services.AddPluginManage();
 
             services.PostConfigure<AuthenticationOptions>(s =>
             {
