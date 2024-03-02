@@ -53,5 +53,11 @@ namespace SAE.CommonLibrary.Caching
         /// </summary>
         /// <returns></returns>
         Task<IEnumerable<string>> GetKeysAsync();
+        /// <summary>
+        /// 缓存是否存在
+        /// </summary>
+        /// <param name="key">缓存键</param>
+        /// <returns></returns>
+        Task<bool> ExistAsync(string key);
     }
 }

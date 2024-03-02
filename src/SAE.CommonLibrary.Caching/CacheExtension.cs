@@ -354,7 +354,7 @@ namespace SAE.CommonLibrary.Caching
         {
             return cache.AddAsync(TimeSpan.FromSeconds(second), pairs);
         }
-        
+
 
         /// <summary>
         /// 清理缓存
@@ -560,7 +560,7 @@ namespace SAE.CommonLibrary.Caching
                 return Task.FromResult(valueFactory.Invoke());
             }).GetAwaiter().GetResult();
         }
-        
+
         /// <summary>
         /// 根据<paramref name="key"/>获得缓存,如果缓存不存在
         /// 则通过<paramref name="valueFactory"/>添加
@@ -572,9 +572,13 @@ namespace SAE.CommonLibrary.Caching
         /// <returns></returns>
         public static async Task<T> GetOrAddAsync<T>(this ICache cache, string key, Func<Task<T>> valueFactory)
         {
-            var value = await cache.GetAsync<T>(key);
+            T value;
 
-            if (value == null)
+            if (await cache.ExistAsync(key))
+            {
+                value = await cache.GetAsync<T>(key);
+            }
+            else
             {
                 value = await valueFactory.Invoke();
                 await cache.AddAsync(key, value);
@@ -681,6 +685,6 @@ namespace SAE.CommonLibrary.Caching
 
             return value;
         }
-        
+
     }
 }

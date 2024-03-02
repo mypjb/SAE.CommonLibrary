@@ -15,7 +15,7 @@ namespace SAE.CommonLibrary.Caching.Redis
 {
 
     /// <summary>
-    /// <inheritdoc/>
+    /// redis分布式缓存实现
     /// </summary>
     public class RedisDistributedCache : IDistributedCache
     {
@@ -47,6 +47,7 @@ namespace SAE.CommonLibrary.Caching.Redis
                 this._logging.Error($"{methodNmae} => redis connection fail:{database.Database}");
             }
         }
+        /// <inheritdoc/>
         public async Task<bool> AddAsync<T>(CacheDescription<T> description)
         {
             bool result = false;
@@ -58,7 +59,7 @@ namespace SAE.CommonLibrary.Caching.Redis
             });
             return result;
         }
-
+        /// <inheritdoc/>
         public async Task<IEnumerable<bool>> AddAsync<T>(IEnumerable<CacheDescription<T>> descriptions)
         {
             var result = new List<bool>();
@@ -80,7 +81,7 @@ namespace SAE.CommonLibrary.Caching.Redis
             });
             return result;
         }
-
+        /// <inheritdoc/>
         public async Task<bool> ClearAsync()
         {
             await this.DatabaseOperation(async db =>
@@ -95,7 +96,7 @@ namespace SAE.CommonLibrary.Caching.Redis
             });
             return true;
         }
-
+        /// <inheritdoc/>
         public async Task<T> GetAsync<T>(string key)
         {
             string result = null;
@@ -106,7 +107,7 @@ namespace SAE.CommonLibrary.Caching.Redis
             });
             return result.IsNullOrWhiteSpace() ? default(T) : result.ToObject<T>();
         }
-
+        /// <inheritdoc/>
         public async Task<IEnumerable<T>> GetAsync<T>(IEnumerable<string> keys)
         {
             IEnumerable<string> results = Enumerable.Empty<string>();
@@ -122,7 +123,7 @@ namespace SAE.CommonLibrary.Caching.Redis
                 return s.IsNullOrWhiteSpace() ? default(T) : s.ToObject<T>();
             }).ToArray();
         }
-
+        /// <inheritdoc/>
         public async Task<IEnumerable<string>> GetKeysAsync()
         {
             List<string> keys = new List<string>();
@@ -142,7 +143,7 @@ namespace SAE.CommonLibrary.Caching.Redis
 
             return keys.Distinct();
         }
-
+        /// <inheritdoc/>
         public async Task<bool> DeleteAsync(string key)
         {
             var result = false;
@@ -153,7 +154,7 @@ namespace SAE.CommonLibrary.Caching.Redis
             });
             return result;
         }
-
+        /// <inheritdoc/>
         public async Task<IEnumerable<bool>> DeleteAsync(IEnumerable<string> keys)
         {
             var result = keys.Select(s => false).ToArray();
@@ -162,6 +163,18 @@ namespace SAE.CommonLibrary.Caching.Redis
                 this._logging.Debug($"batch delete keys");
                 await db.KeyDeleteAsync(keys.Select(key => (RedisKey)key).ToArray());
                 result = keys.Select(s => true).ToArray();
+            });
+            return result;
+        }
+
+        /// <inheritdoc/>
+        public async Task<bool> ExistAsync(string key)
+        {
+            bool result = false;
+            await this.DatabaseOperation(async db =>
+            {
+                this._logging.Debug($"read:{db.Database} => {key}");
+                result = await db.KeyExistsAsync(key);
             });
             return result;
         }

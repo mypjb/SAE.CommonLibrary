@@ -38,7 +38,7 @@ namespace SAE.CommonLibrary.Cache.Test
             Xunit.Assert.Equal(student.Sex, value.Sex);
             return student;
         }
-        
+
         public async Task<IEnumerable<string>> Adds()
         {
             Dictionary<string, Student> dic = new Dictionary<string, Student>();
@@ -102,6 +102,31 @@ namespace SAE.CommonLibrary.Cache.Test
             await _distributedCache.ClearAsync();
             var keys = await _distributedCache.GetKeysAsync();
             Xunit.Assert.True(keys.Count() == 0);
+        }
+
+        [Fact]
+        public async Task GetOrAdd()
+        {
+            var student = new Student();
+
+            var value = await this._distributedCache.GetOrAddAsync(student.Name, () =>
+            {
+                return Task.FromResult(student);
+            });
+            Xunit.Assert.NotNull(value);
+            Xunit.Assert.Equal(student.Age, value.Age);
+            Xunit.Assert.Equal(student.CreateTime, value.CreateTime);
+            Xunit.Assert.Equal(student.Name, value.Name);
+            Xunit.Assert.Equal(student.Sex, value.Sex);
+
+            var tuple = Tuple.Create(this.GetRandom(), this.GetRandom());
+
+            var valueStr = await this._distributedCache.GetOrAddAsync(tuple.Item1, () =>
+            {
+                return Task.FromResult(tuple.Item2);
+            });
+
+            Xunit.Assert.Equal(tuple.Item2, valueStr);
         }
 
     }

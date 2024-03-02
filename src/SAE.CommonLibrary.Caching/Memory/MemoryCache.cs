@@ -6,16 +6,23 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Caching.Memory
 {
+    /// <summary>
+    /// 內存实现
+    /// </summary>
     public class MemoryCache : IMemoryCache
     {
         private IList<string> keys { get; }
         private readonly Microsoft.Extensions.Caching.Memory.IMemoryCache _cache;
-
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="cache"></param>
         public MemoryCache(Microsoft.Extensions.Caching.Memory.IMemoryCache cache)
         {
             this.keys = new List<string>();
             this._cache = cache;
         }
+        ///<inheritdoc/>
         public Task<bool> AddAsync<T>(CacheDescription<T> description)
         {
             using (var entry = this._cache.CreateEntry(description.Key))
@@ -44,7 +51,7 @@ namespace SAE.CommonLibrary.Caching.Memory
             }
             return Task.FromResult(true);
         }
-
+        ///<inheritdoc/>
         public async Task<IEnumerable<bool>> AddAsync<T>(IEnumerable<CacheDescription<T>> descriptions)
         {
             IList<bool> resutls = new List<bool>();
@@ -54,20 +61,20 @@ namespace SAE.CommonLibrary.Caching.Memory
             }
             return resutls;
         }
-
+        ///<inheritdoc/>
         public async Task<bool> ClearAsync()
         {
             await this.DeleteAsync(this.keys);
             return true;
         }
-
+        ///<inheritdoc/>
         public virtual Task<T> GetAsync<T>(string key)
         {
             object @object;
-            this._cache.TryGetValue(key,out @object);
-            return Task.FromResult((T)@object);
+            this._cache.TryGetValue(key, out @object);
+            return Task.FromResult(@object == null ? default(T) : (T)@object);
         }
-
+        ///<inheritdoc/>
         public virtual async Task<IEnumerable<T>> GetAsync<T>(IEnumerable<string> keys)
         {
             IList<T> results = new List<T>();
@@ -77,19 +84,19 @@ namespace SAE.CommonLibrary.Caching.Memory
             }
             return results;
         }
-
+        ///<inheritdoc/>
         public Task<IEnumerable<string>> GetKeysAsync()
         {
             return Task.FromResult<IEnumerable<string>>(this.keys);
         }
-
+        ///<inheritdoc/>
         public Task<bool> DeleteAsync(string key)
         {
             this._cache.Remove(key);
             this.keys.Remove(key);
             return Task.FromResult(true);
         }
-
+        ///<inheritdoc/>
         public async Task<IEnumerable<bool>> DeleteAsync(IEnumerable<string> keys)
         {
             IList<bool> results = new List<bool>();
@@ -98,6 +105,12 @@ namespace SAE.CommonLibrary.Caching.Memory
                 results.Add(await this.DeleteAsync(this.keys[0]));
             }
             return results;
+        }
+        
+        /// <inheritdoc/>
+        public Task<bool> ExistAsync(string key)
+        {
+            return Task.FromResult(this._cache.TryGetValue(key, out object _));
         }
     }
 }
