@@ -141,7 +141,8 @@ namespace SAE.CommonLibrary.Configuration
                 logging?.Info("重新加载配置");
             }
         }
-
+        
+        /// <inheritdoc/>
         public override void Load()
         {
             if (this.Source.Stream.Position > 0)
@@ -163,7 +164,6 @@ namespace SAE.CommonLibrary.Configuration
 
             using (var rep = await this._options.Client.GetAsync(this._options.Url))
             {
-
                 if (rep.StatusCode == System.Net.HttpStatusCode.NotModified)
                 {
                     logging?.Debug("配置尚未更改，跳过后续步骤");

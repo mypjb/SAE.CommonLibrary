@@ -21,7 +21,8 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization.ABAC
         /// 请求谓词
         /// </summary> 
         public string Method { get; set; }
-
+        
+        /// <inheritdoc/>
         public override string Key
         {
             get

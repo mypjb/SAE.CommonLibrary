@@ -84,7 +84,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
 
             foreach (var kv in this._store.OrderBy(s => s.Key))
             {
-                sb.Append(kv.Key).Append(":").Append(kv.Value);
+                sb.Append(kv.Key).Append(":").Append(kv.Value).Append(",");
             }
             return sb.ToString();
         }

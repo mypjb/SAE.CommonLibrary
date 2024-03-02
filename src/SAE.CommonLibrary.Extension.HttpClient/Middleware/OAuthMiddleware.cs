@@ -7,27 +7,39 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Extension.Middleware
 {
+    /// <summary>
+    /// 授权中间件
+    /// </summary>
     public class OAuthMiddleware : DelegatingHandler
     {
+        /// <summary>
+        /// 锁对象
+        /// </summary>
         protected readonly object _lock = new object();
         private readonly OAuthOptions _options;
         private readonly Func<ILogging> _loggingRecord;
+        /// <summary>
+        /// request token
+        /// </summary>
         protected RequestToken Token
         {
             get;
             private set;
         }
         /// <summary>
-        /// 
+        /// ctor
         /// </summary>
-        /// <param name="authority">认证地址</param>
-        /// <param name="appId">appid</param>
-        /// <param name="appKey">appkey</param>
         public OAuthMiddleware(OAuthOptions options)
         {
             this._loggingRecord = HttpClientExtension.LoggerRecord;
             this._options = options;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             await RequestTokenAsync(request);
@@ -94,8 +106,16 @@ namespace SAE.CommonLibrary.Extension.Middleware
 
             request.SetBearerToken(this.Token?.AccessToken);
         }
+        /// <summary>
+        /// 请求令牌
+        /// </summary>
         protected class RequestToken
         {
+            /// <summary>
+            /// 请求令牌
+            /// </summary>
+            /// <param name="token">令牌</param>
+            /// <param name="expiresIn">截止时间</param>
             public RequestToken(string token, int expiresIn)
             {
                 this.AccessToken = token;

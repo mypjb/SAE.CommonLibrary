@@ -10,6 +10,6 @@ dotnet build -c release
 #本地构建不进行单元测试
 #dotnet test -v q -l "console;verbosity=detailed"
 
-dotnet pack --no-build -c release --output $release_dir
+dotnet pack --no-build --include-source -c release --output $release_dir
 
 echo "build end"

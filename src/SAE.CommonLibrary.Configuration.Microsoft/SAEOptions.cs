@@ -21,7 +21,10 @@ namespace SAE.CommonLibrary.Configuration
             this.PollInterval = Constants.DefaultPollInterval;
             this.NextRequestHeaderName = Constants.DefaultNextRequestHeaderName;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="options"></param>
         public SAEOptions(SAEOptions options)
         {
             this.Client = options.Client;
@@ -125,8 +128,6 @@ namespace SAE.CommonLibrary.Configuration
         /// 检查配置
         /// </summary>
         internal void Check()
-
-
         {
             Assert.Build(this.Url)
                   .NotNullOrWhiteSpace();

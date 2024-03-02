@@ -75,6 +75,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         {
             await this._cache.ClearAsync();
         }
+        /// <inheritdoc/>
         public async Task<bool> AuthAsync()
         {
             bool result;
@@ -105,7 +106,6 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
                 {
                     return await this.AuthCoreAsync(context, authDescriptor);
                 });
-
             }
 
             this._logging.Info($"授权{(result ? "成功" : "失败")}!");
@@ -154,7 +154,10 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
 
             return false;
         }
-
+        /// <summary>
+        /// 获得授权描述符
+        /// </summary>
+        /// <returns></returns>
         public virtual async Task<AuthDescriptor> GetAuthDescriptorAsync()
         {
             var authDescriptors = this._authDescriptorsOptionsMonitor.CurrentValue ?? new List<TAuthDescriptor>();
@@ -175,7 +178,10 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
                 return null;
             }
         }
-
+        /// <summary>
+        /// 获得授权策略
+        /// </summary>
+        /// <returns></returns>
         public virtual Task<AuthorizationPolicy[]> GetAuthorizationPoliciesAsync()
         {
             return Task.FromResult(this._authorizationPoliciesOptionsMonitor.CurrentValue?.ToArray() ?? new AuthorizationPolicy[0]);
