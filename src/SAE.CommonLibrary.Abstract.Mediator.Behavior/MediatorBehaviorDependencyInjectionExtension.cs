@@ -11,8 +11,16 @@ using SAE.CommonLibrary.Caching;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class MediatorBehaviorDependencyInjectionExtension
     {
+        /// <summary>
+        /// 添加管道配置
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
         public static IMediatorBehaviorBuilder AddMediatorBehavior(this IServiceCollection services)
         {
             return new MediatorBehaviorBuilder(services);
