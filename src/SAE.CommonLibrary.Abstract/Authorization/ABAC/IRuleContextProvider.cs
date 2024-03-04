@@ -8,8 +8,10 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC;
 /// </summary>
 public interface IRuleContextProvider
 {
+    
     /// <summary>
-    /// 
+    /// 获得当前规则上下文
     /// </summary>
+    /// <returns>规则上下文</returns>
     Task<RuleContext> GetAsync();
 }

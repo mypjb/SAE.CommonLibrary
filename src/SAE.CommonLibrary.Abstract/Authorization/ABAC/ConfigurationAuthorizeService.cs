@@ -117,6 +117,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// </summary>
         /// <param name="context">上下文</param>
         /// <param name="authDescriptor">描述符</param>
+        /// <returns>true:认证成功，false:失败</returns>
         protected async Task<bool> AuthCoreAsync(RuleContext context, AuthDescriptor authDescriptor)
         {
             var authorizationPolicies = await this.GetAuthorizationPoliciesAsync();
@@ -157,7 +158,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// <summary>
         /// 获得授权描述符
         /// </summary>
-        /// <returns></returns>
+        /// <returns>授权描述符</returns>
         public virtual async Task<AuthDescriptor> GetAuthDescriptorAsync()
         {
             var authDescriptors = this._authDescriptorsOptionsMonitor.CurrentValue ?? new List<TAuthDescriptor>();
@@ -181,7 +182,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// <summary>
         /// 获得授权策略
         /// </summary>
-        /// <returns></returns>
+        /// <returns>授权策略集合</returns>
         public virtual Task<AuthorizationPolicy[]> GetAuthorizationPoliciesAsync()
         {
             return Task.FromResult(this._authorizationPoliciesOptionsMonitor.CurrentValue?.ToArray() ?? new AuthorizationPolicy[0]);
@@ -189,11 +190,13 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// <summary>
         /// 获得<see cref="AuthDescriptor"/>唯一标识:<see cref="AuthDescriptor.Key"/>
         /// </summary>
+        /// <returns>当前授权描述符key</returns>
         protected abstract Task<string> GetAuthDescriptorKeyAsync();
 
         /// <summary>
         /// 默认授权，默认不通过
         /// </summary>
+        /// <returns>true:认证成功，false:失败</returns>
         protected virtual Task<bool> DefaultAuthAsync(RuleContext context)
         {
             return Task.FromResult(false);
@@ -207,6 +210,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// <param name="authDescriptors">
         /// 描述符集合
         /// </param>
+        /// <returns>授权描述符</returns>
         protected virtual Task<AuthDescriptor> FindAuthDescriptorCoreAsync(string key, IEnumerable<AuthDescriptor> authDescriptors)
         {
             var authDescriptor = authDescriptors.FirstOrDefault(s => s.Key.Equals(key, StringComparison.OrdinalIgnoreCase));

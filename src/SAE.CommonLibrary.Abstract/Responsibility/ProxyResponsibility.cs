@@ -7,36 +7,46 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Abstract.Responsibility
 {
+    /// <summary>
+    /// 职责链代理实现
+    /// </summary>
+    /// <typeparam name="TContext">上下文</typeparam>
     public class ProxyResponsibility<TContext> : AbstractResponsibility<TContext> where TContext : ResponsibilityContext
     {
+        /// <summary>
+        /// 代理
+        /// </summary>
         private readonly IResponsibility<TContext> _proxy;
-
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="responsibility">链条</param>
         public ProxyResponsibility(IResponsibility<TContext> responsibility)
         {
             Assert.Build(responsibility, nameof(responsibility))
                   .NotNull();
             this._proxy = responsibility;
         }
-
-        public ProxyResponsibility(IEnumerable<IResponsibility<TContext>> responsibilitys)
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="responsibilities">链条集合</param>
+        public ProxyResponsibility(IEnumerable<IResponsibility<TContext>> responsibilities)
         {
-            Assert.Build(responsibilitys, nameof(responsibilitys))
+            Assert.Build(responsibilities, nameof(responsibilities))
                   .NotNull()
-                  .Then(s => s.Any(), nameof(responsibilitys))
+                  .Then(s => s.Any(), nameof(responsibilities))
                   .True();
 
-            this._proxy = responsibilitys.First();
+            this._proxy = responsibilities.First();
 
-            for (var i = 1; i < responsibilitys.Count(); i++)
+            for (var i = 1; i < responsibilities.Count(); i++)
             {
-                this.Add(responsibilitys.ElementAt(i));
+                this.Add(responsibilities.ElementAt(i));
             }
         }
 
-        /// <summary>
-        /// 送上至下执行链条知道知道结果为止
-        /// </summary>
-        /// <param name="context"></param>
+        ///<inheritdoc/>
         public override async Task HandleAsync(TContext context)
         {
             await this._proxy.HandleAsync(context);

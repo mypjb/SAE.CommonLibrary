@@ -45,7 +45,7 @@ namespace SAE.CommonLibrary
             /// 判断IP地址是否为内网IP地址
             /// </summary>
             /// <param name="ipAddress">IP地址字符串</param>
-            /// <returns></returns>
+            /// <returns>true:内网，false:外网</returns>
             public static bool IsInnerIP(string ipAddress)
             {
                 bool isInnerIp = false;
@@ -69,7 +69,7 @@ namespace SAE.CommonLibrary
             /// 把IP地址转换为Long型数字
             /// </summary>
             /// <param name="ipAddress">IP地址字符串</param>
-            /// <returns></returns>
+            /// <returns>long类型的IP地址</returns>
             private static long GetIpNum(string ipAddress)
             {
                 String[] ip = ipAddress.Split('.');
@@ -84,10 +84,10 @@ namespace SAE.CommonLibrary
             /// <summary>
             /// 判断用户IP地址转换为Long型后是否在内网IP地址所在范围
             /// </summary>
-            /// <param name="userIp"></param>
-            /// <param name="begin"></param>
-            /// <param name="end"></param>
-            /// <returns></returns>
+            /// <param name="userIp">用户ip</param>
+            /// <param name="begin">开始范围</param>
+            /// <param name="end">结束范围</param>
+            /// <returns>true:内网,false:外网</returns>
             private static bool IsInner(long userIp, long begin, long end)
             {
                 return (userIp >= begin) && (userIp <= end);

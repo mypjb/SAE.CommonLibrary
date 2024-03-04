@@ -15,18 +15,19 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
     public class BinaryRuleDecorator<T> : IDecorator<RuleContext> where T : IComparable, IEquatable<T>
     {
         /// <summary>
-        /// 
+        /// 关系操作符
         /// </summary>
         /// <value></value>
         protected RelationalOperator Operator { get; }
         /// <summary>
-        /// 
+        /// ctor
         /// </summary>
+        /// <param name="operator">操作符</param>
         public BinaryRuleDecorator(RelationalOperator @operator)
         {
             this.Operator = @operator;
         }
-
+        ///<inheritdoc/>
         public async Task DecorateAsync(RuleContext context)
         {
             var left = context.Dequeue<T>();

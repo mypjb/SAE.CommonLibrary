@@ -8,14 +8,13 @@ namespace SAE.CommonLibrary.Abstract.Mediator
     /// <summary>
     /// 通过<seealso cref="IMediator.Send{TResponse}(object)"/>调用命令
     /// </summary>
-    /// <typeparam name="TCommand"></typeparam>
-    public interface ICommandHandler<TCommand>:IMediatorHandler
+    /// <typeparam name="TCommand">命令</typeparam>
+    public interface ICommandHandler<TCommand> : IMediatorHandler
     {
         /// <summary>
         /// 处理<typeparamref name="TCommand"/>命令
         /// </summary>
-        /// <param name="command"></param>
-        /// <returns></returns>
+        /// <param name="command">命令类型</param>
         Task HandleAsync(TCommand command);
     }
 
@@ -23,15 +22,15 @@ namespace SAE.CommonLibrary.Abstract.Mediator
     /// 通过<seealso cref="IMediator.Send{TResponse}(object)"/>
     /// 调用命令并返回<typeparamref name="TResponse"/>
     /// </summary>
-    /// <typeparam name="TCommand"></typeparam>
-    /// <typeparam name="TResponse"></typeparam>
+    /// <typeparam name="TCommand">命令类型</typeparam>
+    /// <typeparam name="TResponse">响应类型</typeparam>
     public interface ICommandHandler<TCommand, TResponse> : IMediatorHandler where TCommand : class
     {
         /// <summary>
         /// 处理<paramref name="command"/>命令并返回<typeparamref name="TResponse"/>
         /// </summary>
-        /// <param name="command"></param>
-        /// <returns></returns>
+        /// <param name="command">命令</param>
+        /// <returns>响应</returns>
         Task<TResponse> HandleAsync(TCommand command);
     }
 }

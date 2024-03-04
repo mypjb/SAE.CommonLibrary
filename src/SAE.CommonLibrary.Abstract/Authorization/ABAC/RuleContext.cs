@@ -13,15 +13,27 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
     /// </summary>
     public class RuleContext : DecoratorContext
     {
+        /// <summary>
+        /// ctor
+        /// </summary>
         internal RuleContext() : this(new Dictionary<string, string>())
         {
         }
+        /// <summary>
+        /// 队列
+        /// </summary>
         private Queue<object> _queue { get; }
+        /// <summary>
+        /// 字典
+        /// </summary>
+        /// <remarks>
+        /// 存储属性的key字符表示。
+        /// </remarks>
         private IDictionary<string, string> _store;
         /// <summary>
-        /// 
+        /// ctor
         /// </summary>
-        /// <param name="dict"></param>
+        /// <param name="dict">属性字典</param>
         public RuleContext(IDictionary<string, string> dict)
         {
             this._store = dict;
@@ -30,7 +42,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// <summary>
         /// 合并<paramref name="context"/>
         /// </summary>
-        /// <param name="context"></param>
+        /// <param name="context">待合并的上下文</param>
         public void Merge(RuleContext context)
         {
             this.Merge(context._store);
@@ -38,7 +50,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// <summary>
         /// 合并<paramref name="dict"/>
         /// </summary>
-        /// <param name="dict"></param>
+        /// <param name="dict">属性字典</param>
         public void Merge(IDictionary<string, string> dict)
         {
             if (dict == null || dict.Count == 0) return;
@@ -51,6 +63,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// 获得value
         /// </summary>
         /// <param name="key">键值</param>
+        /// <returns>属性的字符表示</returns>
         public string Get(string key)
         {
             this._store.TryGetValue(key.ToLower(), out string val);
@@ -59,7 +72,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// <summary>
         /// 入队
         /// </summary>
-        /// <param name="o"></param>
+        /// <param name="o">待入队的对象</param>
         /// <summary>
         public void Enqueue(object o)
         {
@@ -68,7 +81,8 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// <summary>
         /// 出队
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">出队类型</typeparam>
+        /// <returns>出队对象</returns>
         public T Dequeue<T>()
         {
             Assert.Build(this._queue.Any())

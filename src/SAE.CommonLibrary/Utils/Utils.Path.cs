@@ -19,7 +19,7 @@ namespace SAE.CommonLibrary
             /// 将<paramref name="paths"/>和<seealso cref="Constants.Path.Config"/>组合成路径
             /// </summary>
             /// <param name="paths">路径列表</param>
-            /// <returns></returns>
+            /// <returns>路径</returns>
             public static string Config(params string[] paths)
             {
                 List<string> pathList = new List<string>();
@@ -33,10 +33,10 @@ namespace SAE.CommonLibrary
                 return System.IO.Path.Combine(pathList.ToArray());
             }
             /// <summary>
-            /// 将<paramref name="paths"/>和<seealso cref="Constants.Path."/>组合成路径
+            /// 将<paramref name="paths"/>和<seealso cref="Constants.Path.Root"/>组合成路径
             /// </summary>
             /// <param name="paths">路径列表</param>
-            /// <returns></returns>
+            /// <returns>路径</returns>
             public static string Root(params string[] paths)
             {
                 List<string> pathList = new List<string>();

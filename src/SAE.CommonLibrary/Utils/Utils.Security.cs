@@ -18,9 +18,9 @@ namespace SAE.CommonLibrary
             /// <summary>
             /// <c>md5</c>加密
             /// </summary>
-            /// <param name="input"></param>
-            /// <param name="short"></param>
-            /// <returns></returns>
+            /// <param name="input">加密字符串</param>
+            /// <param name="short">true:16位加密，false:32位</param>
+            /// <returns>加密后的字符串(大写)</returns>
             public static string MD5(string input, bool @short = false)
             {
                 if (input.IsNullOrWhiteSpace()) return input;
@@ -42,9 +42,9 @@ namespace SAE.CommonLibrary
             /// <summary>
             /// <c>md5</c>加密
             /// </summary>
-            /// <param name="bytes"></param>
-            /// <param name="short"></param>
-            /// <returns></returns>
+            /// <param name="bytes">加密字节</param>
+            /// <param name="short">true:16位加密，false:32位</param>
+            /// <returns>加密后的字符串(大写)</returns>
             public static string MD5(IEnumerable<byte> bytes, bool @short = false)
             {
                 if (bytes == null || !bytes.Any()) return string.Empty;
@@ -67,9 +67,9 @@ namespace SAE.CommonLibrary
             /// <summary>
             /// <c>md5</c>加密
             /// </summary>
-            /// <param name="stream"></param>
-            /// <param name="short"></param>
-            /// <returns></returns>
+            /// <param name="stream">加密流</param>
+            /// <param name="short">true:16位加密，false:32位</param>
+            /// <returns>加密后的字符串(大写)</returns>
             public static string MD5(Stream stream, bool @short = false)
             {
                 if (stream == null) return string.Empty;
@@ -100,7 +100,8 @@ namespace SAE.CommonLibrary
             /// <summary>
             /// 转换成<c>base64</c>
             /// </summary>
-            /// <param name="bytes"></param>
+            /// <param name="bytes">加密字节</param>
+            /// <returns>base64字符串</returns>
             public static string Base64(IEnumerable<byte> bytes)
             {
                 return Convert.ToBase64String(bytes.ToArray());

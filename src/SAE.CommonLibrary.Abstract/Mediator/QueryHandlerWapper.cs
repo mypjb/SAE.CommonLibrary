@@ -8,18 +8,37 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Abstract.Mediator
 {
+    /// <summary>
+    /// 抽象请求处理程序包装器
+    /// </summary>
     internal abstract class RequestHandlerWrapper
     {
         
            public abstract Task<object> InvokeAsync(object command);
     }
-
+    /// <summary>
+    /// 默认请求处理包装器
+    /// </summary>
+    /// <typeparam name="TCommand">命令</typeparam>
+    /// <typeparam name="TResponse">响应</typeparam>
     internal class RequestHandlerWrapper<TCommand, TResponse> : RequestHandlerWrapper where TCommand : class
     {
+        /// <summary>
+        /// 处理集合
+        /// </summary>
         private readonly IEnumerable<ICommandHandler<TCommand, TResponse>> _handlers;
+        /// <summary>
+        /// 行为管道集合
+        /// </summary>
         private readonly IEnumerable<IPipelineBehavior<TCommand, TResponse>> _pipelineBehaviors;
+        /// <summary>
+        /// 处理程序是否存在
+        /// </summary>
         private readonly bool _handlerExist;
-
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="serviceProvider">服务提供者</param>
         public RequestHandlerWrapper(IServiceProvider serviceProvider)
         {
             this._pipelineBehaviors = serviceProvider.GetServices<IPipelineBehavior<TCommand, TResponse>>()
@@ -39,7 +58,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator
             //}
             this._handlerExist = this._handlers.Any();
         }
-
+        /// <inheritdoc/>
         public override async Task<object> InvokeAsync(object command)
         {
             if (!this._handlerExist)
@@ -55,13 +74,17 @@ namespace SAE.CommonLibrary.Abstract.Mediator
             for (int i = 0; i < this._pipelineBehaviors.Count(); i++)
             {
                 var pipelineBehavior = this._pipelineBehaviors.ElementAt(i);
-                var pipelineBehaviorWapper = new PipelineBehaviorWapper<TCommand, TResponse>(arg, pipelineBehavior, next);
+                var pipelineBehaviorWapper = new PipelineBehaviorWrapper<TCommand, TResponse>(arg, pipelineBehavior, next);
                 next = pipelineBehaviorWapper.Build();
             }
 
             return await next.Invoke();
         }
-
+        /// <summary>
+        /// 核心执行函数
+        /// </summary>
+        /// <param name="command">命令</param>
+        /// <returns>响应</returns>
         private async Task<TResponse> InvokeCoreAsync(TCommand command)
         {
             TResponse result = default(TResponse);

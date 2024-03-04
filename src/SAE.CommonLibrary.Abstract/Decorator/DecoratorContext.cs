@@ -4,6 +4,9 @@ using System.Text;
 
 namespace SAE.CommonLibrary.Abstract.Decorator
 {
+    /// <summary>
+    /// 装饰上下文
+    /// </summary>
     public class DecoratorContext
     {
         /// <summary>

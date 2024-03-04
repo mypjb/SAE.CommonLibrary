@@ -9,10 +9,10 @@ namespace SAE.CommonLibrary.Extension
         #region 判断
 
         /// <summary>
-        /// 如果<paramref name="str"/>为null或空字符串或一连串空的字符串则返回<seealso cref="bool.TrueString"/>
+        /// <paramref name="str"/>是否为null、空、或连续的空字符串。
         /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
+        /// <param name="str">输入</param>
+        /// <returns>如果<paramref name="str"/>为null或空字符串或一连串空的字符串则返回<seealso cref="bool.TrueString"/></returns>
         public static bool IsNullOrWhiteSpace(this string str)
         {
             return string.IsNullOrWhiteSpace(str);
@@ -31,8 +31,8 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 判断<paramref name="object"/>是否为Null
         /// </summary>
-        /// <param name="object"></param>
-        /// <returns></returns>
+        /// <param name="object">校验对象</param>
+        /// <returns>true为null，false不为null</returns>
         public static bool IsNull(this object @object)
         {
             return @object == null;
@@ -41,8 +41,8 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 判断<paramref name="object"/>是否不为Null
         /// </summary>
-        /// <param name="object"></param>
-        /// <returns></returns>
+        /// <param name="object">校验对象</param>
+        /// <returns>true不为null，false为null</returns>
         public static bool IsNotNull(this object @object)
         {
             return !@object.IsNull();

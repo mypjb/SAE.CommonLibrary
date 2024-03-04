@@ -11,21 +11,31 @@ using SAE.CommonLibrary.Logging;
 
 namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
 {
-    /// <inheritdoc/>
     /// <summary>
     /// <see cref="IRuleDecoratorBuilder"/>默认实现
     /// </summary>
     public class DefaultRuleDecoratorBuilder : IRuleDecoratorBuilder
     {
+        /// <summary>
+        /// 日志记录器
+        /// </summary>
         private readonly ILogging _logging;
+        /// <summary>
+        /// 服务提供者
+        /// </summary>
         private readonly IServiceProvider _serviceProvider;
-
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="logging">日志记录器</param>
+        /// <param name="serviceProvider">服务提供者</param>
         public DefaultRuleDecoratorBuilder(ILogging<DefaultRuleDecoratorBuilder> logging,
                                            IServiceProvider serviceProvider)
         {
             this._logging = logging;
             this._serviceProvider = serviceProvider;
         }
+        ///<inheritdoc/>
         public virtual IDecorator<RuleContext> Build(string expression)
         {
             this._logging.Info($"开始解析表达式：{expression}");
@@ -94,7 +104,8 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// <summary>
         /// 解析逻辑操作符
         /// </summary>
-        /// <param name="expression"></param>
+        /// <param name="expression">表达式</param>
+        /// <returns>逻辑操作符和表达式元组</returns>
         protected virtual Tuple<LogicalOperator[], string[]> ParseLogicalOperator(string expression)
         {
             this._logging.Info($"开始解析逻辑操作符:{expression}");
@@ -137,20 +148,22 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// <summary>
         /// 转换逻辑操作符
         /// </summary>
-        /// <param name="str"></param>
-        protected virtual LogicalOperator ConvertLogicalOperator(string str)
+        /// <param name="expression">操作符</param>
+        ///<returns>逻辑操作符</returns>
+        protected virtual LogicalOperator ConvertLogicalOperator(string expression)
         {
-            return str.Equals("&&") ? LogicalOperator.And : LogicalOperator.Or;
+            return expression.Equals("&&") ? LogicalOperator.And : LogicalOperator.Or;
         }
 
         /// <summary>
         /// 转换操作符
         /// </summary>
-        /// <param name="str"></param>
-        protected virtual RelationalOperator ConvertRelationalOperator(string str)
+        /// <param name="expression">操作符</param>
+        ///<returns>关系操作符</returns>
+        protected virtual RelationalOperator ConvertRelationalOperator(string expression)
         {
             RelationalOperator relationalOperator;
-            switch (str)
+            switch (expression)
             {
                 case ">":
                     {
@@ -203,14 +216,15 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
                         break;
                     }
             }
-            this._logging.Debug($"关系符转换 {str} -> {relationalOperator}");
+            this._logging.Debug($"关系符转换 {expression} -> {relationalOperator}");
             return relationalOperator;
         }
 
         /// <summary>
         /// 解析关系操作符
         /// </summary>
-        /// <param name="expression"></param>
+        /// <param name="expression">表达式</param>
+        /// <returns>表达式集合</returns>
         protected virtual string[] ParseRelationalOperator(string expression)
         {
             string[] exps;
@@ -247,7 +261,8 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// <summary>
         /// 构建值装饰器
         /// </summary>
-        /// <param name="expressions"></param>
+        /// <param name="expressions">表达式</param>
+        /// <returns>装饰器元组</returns>
         protected virtual Tuple<IDecorator<RuleContext>, IDecorator<RuleContext>[]> ConvertDecorators(string[] expressions)
         {
             var relationalOperator = this.ConvertRelationalOperator(expressions[0]);
@@ -328,8 +343,9 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// <summary>
         /// 构建值装饰器核心
         /// </summary>
-        /// <param name="expressions"></param>
-        /// <typeparam name="T"></typeparam>
+        /// <param name="expressions">表达式</param>
+        /// <typeparam name="T">类型</typeparam>
+        /// <returns>装饰器集合</returns>
         protected virtual IDecorator<RuleContext>[] ConvertDecoratorsCore<T>(string[] expressions)
         {
             var decorates = new IDecorator<RuleContext>[expressions.Length];
@@ -346,8 +362,9 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// <summary>
         /// 获得属性
         /// </summary>
-        /// <param name="propertyName"></param>
-        /// <typeparam name="T"></typeparam>
+        /// <param name="propertyName">属性名称</param>
+        /// <typeparam name="T">类型</typeparam>
+        /// <returns>属性装饰器</returns>
         protected virtual IDecorator<RuleContext> PropertyBuild<T>(string propertyName)
         {
             return new PropertyRuleDecorator<T>(propertyName, this._serviceProvider.GetService<IPropertyConvertor<T>>());
@@ -355,8 +372,9 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// <summary>
         /// 获得常量
         /// </summary>
-        /// <param name="constant"></param>
-        /// <typeparam name="T"></typeparam>
+        /// <param name="constant">常量</param>
+        /// <typeparam name="T">类型</typeparam>
+        /// <returns>常量装饰器</returns>
         protected virtual IDecorator<RuleContext> ConstantBuild<T>(string constant)
         {
             var propertyConvertor = this._serviceProvider.GetService<IPropertyConvertor<T>>();
@@ -364,10 +382,11 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         }
 
         /// <summary>
-        /// 
+        /// 构建关系操作符装饰器
         /// </summary>
-        /// <param name="operator"></param>
-        /// <typeparam name="T"></typeparam>
+        /// <param name="operator">操作符</param>
+        /// <typeparam name="T">类型</typeparam>
+        /// /// <returns>关系操作符装饰器</returns>
         protected virtual IDecorator<RuleContext> RelationalOperatorBuild<T>(RelationalOperator @operator) where T : IComparable, IEquatable<T>
         {
             return new BinaryRuleDecorator<T>(@operator);

@@ -10,9 +10,9 @@ namespace SAE.CommonLibrary.Extension
 		/// <summary>
 		/// 从程序集中检索所有继承自<paramref name="type"/>的对象
 		/// </summary>
-		/// <param name="assembly"></param>
-		/// <param name="type"></param>
-		/// <returns></returns>
+		/// <param name="assembly">程序集</param>
+		/// <param name="type">类型</param>
+		/// <returns>返回查找到的对象</returns>
 		public static IEnumerable<Type> GetAssignableFrom(this Assembly assembly, Type type)
 		{
 			return assembly.GetTypes().Where(t => type.IsAssignableFrom(t));
@@ -20,9 +20,9 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 从程序集中检索所有继承自<typeparamref name="T"/>的对象
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="assembly"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">类型</typeparam>
+        /// <param name="assembly">程序集</param>
+        /// <returns>返回查找到的对象</returns>
         public static IEnumerable<Type> GetAssignableFrom<T>(this Assembly assembly) where T : class
 		{
 			var type = typeof(T);
@@ -34,8 +34,8 @@ namespace SAE.CommonLibrary.Extension
         /// <remarks>
         /// 该函数使用类型的完全限定名,经过<c>md5</c>运算所得
         /// </remarks>
-        /// <param name="type"></param>
-        /// <returns></returns>
+        /// <param name="type">类型</param>
+        /// <returns>类型的md5值</returns>
         public static string GetIdentity(this Type type)
         {
 			var identity = type.FullName.ToMd5(true).ToLower();

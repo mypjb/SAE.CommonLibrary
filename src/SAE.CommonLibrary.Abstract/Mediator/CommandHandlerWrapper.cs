@@ -10,15 +10,35 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Abstract.Mediator
 {
+    /// <summary>
+    /// 抽象命令处理装饰器
+    /// </summary>
     internal abstract class CommandHandlerWrapper
     {
+        /// <summary>
+        /// 执行命令
+        /// </summary>
+        /// <param name="command">命令</param>
         public abstract Task InvokeAsync(object command);
     }
+    /// <summary>
+    /// 命令处理包装器
+    /// </summary>
+    /// <typeparam name="TCommand">命令</typeparam>
 
     internal class CommandHandlerWrapper<TCommand> : CommandHandlerWrapper where TCommand : class
     {
+        /// <summary>
+        /// 命令处理集合
+        /// </summary>
         private readonly IEnumerable<ICommandHandler<TCommand>> _handlers;
+        /// <summary>
+        /// 管道集合
+        /// </summary>
         private readonly IEnumerable<IPipelineBehavior<TCommand>> _pipelineBehaviors;
+        /// <summary>
+        /// 处理程序是否存在
+        /// </summary>
         private bool _handlerExist;
         public CommandHandlerWrapper(IServiceProvider serviceProvider)
         {
@@ -35,7 +55,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator
             //}
             this._handlerExist = this._handlers.Any();
         }
-
+        ///<inheritdoc/>
         public override async Task InvokeAsync(object command)
         {
             if (!this._handlerExist)
@@ -51,18 +71,21 @@ namespace SAE.CommonLibrary.Abstract.Mediator
             for (int i = 0; i < this._pipelineBehaviors.Count(); i++)
             {
                 var pipelineBehavior = this._pipelineBehaviors.ElementAt(i);
-                var pipelineBehaviorWapper = new PipelineBehaviorWapper<TCommand>(arg, pipelineBehavior, next);
+                var pipelineBehaviorWapper = new PipelineBehaviorWrapper<TCommand>(arg, pipelineBehavior, next);
                 next = pipelineBehaviorWapper.Build();
             }
 
             await next.Invoke();
         }
-
+        /// <summary>
+        /// 执行核心
+        /// </summary>
+        /// <param name="command">命令</param>
         private async Task InvokeCoreAsync(TCommand command)
         {
             foreach (var handler in this._handlers)
             {
-                 await handler.HandleAsync(command);
+                await handler.HandleAsync(command);
             }
         }
 #warning 采用其他方式进行调用

@@ -13,7 +13,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// <summary>
         /// 授权
         /// </summary>
-        /// <returns>授权是否成功</returns>
+        /// <returns>true:成功,false:失败</returns>
         Task<bool> AuthAsync();
 
         /// <summary>

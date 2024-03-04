@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using Microsoft.VisualBasic.CompilerServices;
 using Newtonsoft.Json;
 using SAE.CommonLibrary.Extension;
 
@@ -16,7 +13,9 @@ namespace SAE.CommonLibrary
         /// </summary>
         public class Serialize
         {
-
+            /// <summary>
+            /// 创建静态实例
+            /// </summary>
             static Serialize()
             {
                 JsonConvert.DefaultSettings = () => new JsonSerializerSettings
@@ -27,8 +26,8 @@ namespace SAE.CommonLibrary
             /// <summary>
             /// Json序列化
             /// </summary>
-            /// <param name="object"></param>
-            /// <returns></returns>
+            /// <param name="object">序列化对象</param>
+            /// <returns>json字符串</returns>
             public static string Json(object @object)
             {
                 if (@object.IsNull())
@@ -44,8 +43,8 @@ namespace SAE.CommonLibrary
             /// <summary>
             /// 将<paramref name="object"/>序列化为<seealso cref="XDocument"/>
             /// </summary>
-            /// <param name="object"></param>
-            /// <returns></returns>
+            /// <param name="object">序列化对象</param>
+            /// <returns>xml文档</returns>
             public static XDocument Xml(object @object)
             {
                 var serializer = new XmlSerializer(@object.GetType());
@@ -57,8 +56,8 @@ namespace SAE.CommonLibrary
             /// <summary>
             /// 将<paramref name="json"/>序列化为<seealso cref="XDocument"/>
             /// </summary>
-            /// <param name="json"></param>
-            /// <returns></returns>
+            /// <param name="json">json字符串</param>
+            /// <returns>xml文档</returns>
             public static XDocument Xml(string json)
             {
                 return JsonConvert.DeserializeXNode(json) ?? null;
@@ -70,7 +69,13 @@ namespace SAE.CommonLibrary
         /// </summary>
         public class Deserialize
         {
+            /// <summary>
+            /// string类型
+            /// </summary>
             internal static readonly Type StringType = typeof(string);
+            /// <summary>
+            /// 创建静态对象
+            /// </summary>
             static Deserialize()
             {
                 JsonConvert.DefaultSettings = () => new JsonSerializerSettings
@@ -85,7 +90,7 @@ namespace SAE.CommonLibrary
             /// </summary>
             /// <param name="json">json字符串</param>
             /// <param name="type">反序列化的类型</param>
-            /// <returns></returns>
+            /// <returns>反序列化对象</returns>
             public static object Json(string json, Type type)
             {
                 if (json.IsNullOrWhiteSpace()) return null;
@@ -113,7 +118,7 @@ namespace SAE.CommonLibrary
             /// </summary>
             /// <param name="document"></param>
             /// <param name="type"></param>
-            /// <returns></returns>
+            /// <returns>反序列化对象</returns>
             public static object Xml(XDocument document, Type type)
             {
                 var serializer = new XmlSerializer(type);

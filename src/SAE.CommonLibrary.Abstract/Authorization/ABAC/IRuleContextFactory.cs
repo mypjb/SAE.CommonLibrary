@@ -13,5 +13,6 @@ public interface IRuleContextFactory
     /// <summary>
     /// 返回最终的<see cref="RuleContext"/>对象
     /// </summary>
+    /// <returns>规则上下文</returns>
     Task<RuleContext> GetAsync();
 }

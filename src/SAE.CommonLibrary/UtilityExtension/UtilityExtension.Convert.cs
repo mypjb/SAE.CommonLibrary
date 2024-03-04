@@ -10,13 +10,18 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 将对象<paramref name="input"/>转换成<typeparamref name="TEnum"/>
         /// </summary>
-        /// <typeparam name="TEnum"></typeparam>
-        /// <param name="input"></param>
-        /// <returns></returns>
+        /// <typeparam name="TEnum">枚举类型</typeparam>
+        /// <param name="input">字符串形式的枚举</param>
+        /// <returns>枚举</returns>
         public static TEnum EnumTo<TEnum>(this string input) where TEnum : struct
         => EnumTo<TEnum>(o: input);
 
-
+        /// <summary>
+        /// 将对象<paramref name="o"/>转换成<typeparamref name="TEnum"/>
+        /// </summary>
+        /// <typeparam name="TEnum">枚举类型</typeparam>
+        /// <param name="o">枚举</param>
+        /// <returns>枚举</returns>
         private static TEnum EnumTo<TEnum>(object o) where TEnum : struct
         {
             TEnum @enum;
@@ -27,17 +32,17 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 将对象<paramref name="input"/>转换成<typeparamref name="TEnum"/>
         /// </summary>
-        /// <typeparam name="TEnum"></typeparam>
-        /// <param name="input"></param>
-        /// <returns></returns>
+        /// <typeparam name="TEnum">枚举类型</typeparam>
+        /// <param name="input">int形式的枚举</param>
+        /// <returns>枚举</returns>
         public static TEnum EnumTo<TEnum>(this int input) where TEnum : struct
         => EnumTo<TEnum>(o: input);
 
         /// <summary>
-        /// get <paramref name="enum"/> detail
+        /// 获得 <paramref name="enum"/>描述
         /// </summary>
-        /// <param name="enum"></param>
-        /// <returns></returns>
+        /// <param name="enum">枚举</param>
+        /// <returns>描述</returns>
         public static string GetDetail(this Enum @enum)
         {
             var str = @enum.ToString();
@@ -63,22 +68,22 @@ namespace SAE.CommonLibrary.Extension
 
 
         /// <summary>
-        /// 将<paramref name="input"/>按照<paramref name="encoding"/>编码转换成<seealso cref="IEnumerable{byte}"/>
+        /// 将<paramref name="input"/>按照<paramref name="encoding"/>编码转换成<seealso cref="byte[]"/>
         /// </summary>
-        /// <param name="input"></param>
-        /// <param name="encoding"></param>
-        /// <returns></returns>
-        public static IEnumerable<byte> ToBytes(this string input, Encoding encoding = null)
+        /// <param name="input">字符串</param>
+        /// <param name="encoding">编码</param>
+        /// <returns>字节集合</returns>
+        public static byte[] ToBytes(this string input, Encoding encoding = null)
         {
             return input.IsNullOrWhiteSpace() ? new byte[0] : (encoding ?? Constants.Encoding).GetBytes(input);
         }
 
         /// <summary>
-        /// 将对象<paramref name="object"/>附加到<paramref name="target"/>
+        /// 将<paramref name="object"/>附加到<paramref name="target"/>
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="target"></param>
-        /// <param name="object"></param>
+        /// <param name="target">主对象</param>
+        /// <param name="object">附加对象</param>
         public static void Extend<T>(this T target, T @object) where T : class
         {
             if (target == null || @object == null) return;
@@ -104,7 +109,7 @@ namespace SAE.CommonLibrary.Extension
         /// </summary>
         /// <param name="json">json字符串</param>
         /// <param name="target">要进行填充的对象</param>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T"><paramref name="target"/>类型</typeparam>
         public static void JsonExtend<T>(this T target, string json) where T : class
         {
             Utils.Deserialize.PopulateObject(json, target);

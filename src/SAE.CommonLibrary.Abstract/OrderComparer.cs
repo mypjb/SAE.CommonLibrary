@@ -6,9 +6,16 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Abstract
 {
+    /// <summary>
+    /// 排序规则
+    /// </summary>
     public class OrderComparer : IComparer<object>
     {
+        /// <summary>
+        /// 默认排序规则
+        /// </summary>
         public static OrderComparer Comparer = new OrderComparer();
+        ///<inheritdoc/>
         public int Compare(object x, object y)
         {
             var xIndex = (x != null && x is IOrdered) ? ((IOrdered)x).Order : 0;

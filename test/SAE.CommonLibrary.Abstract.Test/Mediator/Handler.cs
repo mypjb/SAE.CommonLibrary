@@ -28,7 +28,7 @@ namespace SAE.CommonLibrary.Abstract.Test.Mediator
             command.Number += 1;
             if (command.Number != 10)
             {
-                throw new SAEException(StatusCodes.ParamesterInvalid, $"age:{command.Number}");
+                throw new SAEException(StatusCodes.ParameterInvalid, $"age:{command.Number}");
             }
             return new Student
             {
@@ -57,7 +57,7 @@ namespace SAE.CommonLibrary.Abstract.Test.Mediator
             command.Number += 1;
             if (command.Number != 10)
             {
-                throw new SAEException(StatusCodes.ParamesterInvalid, $"age:{command.Number}");
+                throw new SAEException(StatusCodes.ParameterInvalid, $"age:{command.Number}");
             }
             return Task.CompletedTask;
         }

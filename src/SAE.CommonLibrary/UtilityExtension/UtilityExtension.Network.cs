@@ -11,8 +11,8 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 判断<paramref name="address"/>是否为内网Ip
         /// </summary>
-        /// <param name="address"></param>
-        /// <returns></returns>
+        /// <param name="address">IP地址</param>
+        /// <returns>true是内网，false不是内网</returns>
         public static bool IsInnerIP(this IPAddress address)
         {
             return Utils.Network.IsInnerIP(address.MapToIPv4().ToString());

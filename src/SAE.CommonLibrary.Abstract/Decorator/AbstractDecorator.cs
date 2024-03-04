@@ -9,7 +9,6 @@ namespace SAE.CommonLibrary.Abstract.Decorator
     /// 接口<seealso cref="IDecorator{TContext}"/>抽象实现
     /// </summary>
     /// <typeparam name="TContext">上下文</typeparam>
-    /// <inheritdoc/>
     public abstract class AbstractDecorator<TContext> : IDecorator<TContext> where TContext : DecoratorContext
     {
         private AbstractDecorator<TContext> decorator;
@@ -23,7 +22,7 @@ namespace SAE.CommonLibrary.Abstract.Decorator
         /// <summary>
         /// 添加装饰器,这会把装饰其累加到下一级
         /// </summary>
-        /// <param name="decorator"></param>
+        /// <param name="decorator">装饰器</param>
         public virtual void Add(IDecorator<TContext> decorator)
         {
             var abstractDecorator = decorator is AbstractDecorator<TContext> ?
@@ -38,7 +37,7 @@ namespace SAE.CommonLibrary.Abstract.Decorator
                 this.decorator.Add(abstractDecorator);
             }
         }
-
+        /// <inheritdoc/>
         public virtual async Task DecorateAsync(TContext context)
         {
             if (this.decorator != null && !context.Complete)

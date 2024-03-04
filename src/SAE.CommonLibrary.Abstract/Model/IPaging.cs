@@ -24,7 +24,7 @@
         /// <summary>
         /// 起始范围
         /// </summary>
-        int BegingRange { get; }
+        int BeginRange { get; }
         /// <summary>
         /// 结束范围
         /// </summary>

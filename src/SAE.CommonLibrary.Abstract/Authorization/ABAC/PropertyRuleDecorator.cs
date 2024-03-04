@@ -14,11 +14,16 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
     /// <inheritdoc/>
     public class PropertyRuleDecorator<T> : IDecorator<RuleContext>
     {
+        /// <summary>
+        /// 属性转换器
+        /// </summary>
         private readonly IPropertyConvertor<T> _propertyConvertor;
 
         /// <summary>
         /// ctor
         /// </summary>
+        /// <param name="propertyName">属性名称</param>
+        /// <param name="propertyConvertor">属性转换器</param>
         public PropertyRuleDecorator(string propertyName, IPropertyConvertor<T> propertyConvertor)
         {
             this.PropertyName = propertyName;
@@ -28,12 +33,13 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// 属性名称
         /// </summary>
         protected string PropertyName { get; }
-
-        public async Task DecorateAsync(RuleContext context)
+        /// <inheritdoc/>
+        public Task DecorateAsync(RuleContext context)
         {
             var val = context.Get(this.PropertyName);
             var value = this._propertyConvertor.Convert(val);
             context.Enqueue(value);
+            return Task.CompletedTask;
         }
     }
 }

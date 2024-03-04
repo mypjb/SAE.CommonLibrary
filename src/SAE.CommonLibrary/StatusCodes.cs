@@ -20,6 +20,10 @@ namespace SAE.CommonLibrary
         /// </summary>
         [Display(Name = "内部异常,请联系工程")]
         Unknown = 500,
+        /// <summary>
+        /// 自定义错误
+        /// </summary>
+        [Display(Name = "自定义错误")]
         Custom = 501,
         /// <summary>
         /// 账号或密码错误
@@ -35,7 +39,7 @@ namespace SAE.CommonLibrary
         /// 参数无效
         /// </summary>
         [Display(Name = "参数无效")]
-        ParamesterInvalid = 4002,
+        ParameterInvalid = 4002,
         /// <summary>
         /// 
         /// </summary>

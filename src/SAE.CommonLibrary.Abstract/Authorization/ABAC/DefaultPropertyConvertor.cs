@@ -10,23 +10,25 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
     /// <summary>
     /// <see cref="IPropertyConvertor{T}"/>默认实现
     /// </summary>
-    /// <inheritdoc/>
     public class DefaultPropertyConvertor : IPropertyConvertor<bool>,
                                             IPropertyConvertor<float>,
                                             IPropertyConvertor<DateTime>,
                                             IPropertyConvertor<TimeSpan>,
                                             IPropertyConvertor<string>
     {
+        /// <summary>
+        /// 日至记录器
+        /// </summary>
         private readonly ILogging _logging;
         /// <summary>
         /// ctor
         /// </summary>
-        /// <param name="logging"></param>
+        /// <param name="logging">日志记录器</param>
         public DefaultPropertyConvertor(ILogging<DefaultPropertyConvertor> logging)
         {
             this._logging = logging;
         }
-
+        ///<inheritdoc/>
         bool IPropertyConvertor<bool>.Convert(string val)
         {
             bool result;
@@ -39,7 +41,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
 
             return result;
         }
-
+        ///<inheritdoc/>
         float IPropertyConvertor<float>.Convert(string val)
         {
             float result;
@@ -52,7 +54,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
 
             return result;
         }
-
+        ///<inheritdoc/>
         DateTime IPropertyConvertor<DateTime>.Convert(string val)
         {
             DateTime result;
@@ -65,7 +67,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
 
             return result;
         }
-
+        ///<inheritdoc/>
         TimeSpan IPropertyConvertor<TimeSpan>.Convert(string val)
         {
             TimeSpan result;
@@ -78,7 +80,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
 
             return result;
         }
-
+        ///<inheritdoc/>
         string IPropertyConvertor<string>.Convert(string val)
         {
             return string.IsNullOrWhiteSpace(val) ? string.Empty : val.Trim();

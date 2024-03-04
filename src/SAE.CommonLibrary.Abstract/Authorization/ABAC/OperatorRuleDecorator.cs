@@ -13,9 +13,9 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
     public class OperatorRuleDecorator : IDecorator<RuleContext>
     {
         /// <summary>
-        /// 
+        /// ctor
         /// </summary>
-        /// <param name="operators"></param>
+        /// <param name="operators">逻辑操作符集合</param>
         public OperatorRuleDecorator(IEnumerable<LogicalOperator> operators)
         {
             this.Operators = operators;
@@ -23,9 +23,10 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// <summary>
         /// 逻辑操作符集合
         /// </summary>
-        /// <value></value>
         protected IEnumerable<LogicalOperator> Operators { get; }
-        public async Task DecorateAsync(RuleContext context)
+
+        ///<inheritdoc/>
+        public Task DecorateAsync(RuleContext context)
         {
             var result = context.Dequeue<bool>();
 
@@ -56,6 +57,8 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
             {
                 context.Success();
             }
+
+            return Task.CompletedTask;
         }
     }
 }

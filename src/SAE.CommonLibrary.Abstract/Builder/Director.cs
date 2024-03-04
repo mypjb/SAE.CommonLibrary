@@ -11,14 +11,20 @@ namespace SAE.CommonLibrary.Abstract.Builder
     /// </summary>
     public class Director : IDirector
     {
+        /// <summary>
+        /// 服务提供者
+        /// </summary>
         private readonly IServiceProvider _serviceProvider;
-
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="serviceProvider">服务提供者</param>
         public Director(IServiceProvider serviceProvider)
         {
             this._serviceProvider = serviceProvider;
         }
-
-        public virtual async Task Build<T>(T model) where T : class
+        /// <inheritdoc/>
+        public virtual async Task BuildAsync<T>(T model) where T : class
         {
             if (model.IsNull()) return;
             //只有注册了具体的建筑对象才实例化它
@@ -27,7 +33,7 @@ namespace SAE.CommonLibrary.Abstract.Builder
             {
                 await builders.ForEachAsync(async builder =>
                 {
-                    await builder.Build(model);
+                    await builder.BuildAsync(model);
                 });
             }
         }

@@ -14,8 +14,8 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 转换成http状态码
         /// </summary>
-        /// <param name="errorOutput"></param>
-        /// <returns></returns>
+        /// <param name="errorOutput">错误输出</param>
+        /// <returns>返回错误码</returns>
 
         public static int ToHttpStatusCode(this ErrorOutput errorOutput)
         {
@@ -26,10 +26,10 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 循环<paramref name="enumerable"/>集合,并挨个执行<paramref name="action"/>函数
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="enumerable"></param>
-        /// <param name="action"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">集合类型</typeparam>
+        /// <param name="enumerable">集合</param>
+        /// <param name="action">循环函数</param>
+        /// <returns><paramref name="enumerable"/></returns>
         public static IEnumerable<T> ForEach<T>(this IEnumerable<T> enumerable, Action<T> action)
         {
             if (enumerable != null)
@@ -45,10 +45,10 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 循环<paramref name="enumerable"/>集合,并挨个执行<paramref name="action"/>函数
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="enumerable"></param>
-        /// <param name="action"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">集合类型</typeparam>
+        /// <param name="enumerable">集合类型</param>
+        /// <param name="action">循环函数</param>
+        /// <returns><paramref name="enumerable"/></returns>
         public static IEnumerable<T> ForEach<T>(this IEnumerable<T> enumerable, Action<T, int> action)
         {
             if (enumerable != null)
@@ -65,10 +65,10 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 循环<paramref name="enumerable"/>集合,并挨个执行<paramref name="delegate"/>函数
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="enumerable"></param>
-        /// <param name="delegate"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">集合类型</typeparam>
+        /// <param name="enumerable">集合类型</param>
+        /// <param name="delegate">循环函数</param>
+        /// <returns><paramref name="enumerable"/></returns>
         public static async Task<IEnumerable<T>> ForEachAsync<T>(this IEnumerable<T> enumerable, Func<T, Task> @delegate)
         {
             if (enumerable != null)
@@ -83,10 +83,10 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 循环<paramref name="enumerable"/>集合,并挨个执行<paramref name="delegate"/>函数
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="enumerable"></param>
-        /// <param name="delegate"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">集合类型</typeparam>
+        /// <param name="enumerable">集合类型</param>
+        /// <param name="delegate">循环函数</param>
+        /// <returns><paramref name="enumerable"/></returns>
         public static async Task<IEnumerable<T>> ForEachAsync<T>(this IEnumerable<T> enumerable, Func<T, int, Task> @delegate)
         {
             if (enumerable != null)
@@ -102,11 +102,8 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 获得时间戳
         /// </summary>
-        /// <param name="dateTime"></param>
-        /// <returns></returns> <summary>
-        /// 
-        /// </summary>
-        /// <param name="dateTime"></param>
+        /// <param name="dateTime">日期</param>
+        /// <returns>时间辍</returns> 
         public static long ToTimestamp(this DateTime dateTime)
         {
             return Utils.Timestamp(dateTime);

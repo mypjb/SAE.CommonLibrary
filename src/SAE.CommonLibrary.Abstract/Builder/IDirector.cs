@@ -10,7 +10,12 @@ namespace SAE.CommonLibrary.Abstract.Builder
     /// </summary>
     public interface IDirector
     {
-        Task Build<T>(T model) where T : class;
+        /// <summary>
+        /// 开始构建对象
+        /// </summary>
+        /// <typeparam name="T">构建的类型</typeparam>
+        /// <param name="model">构建的对象</param>
+        Task BuildAsync<T>(T model) where T : class;
     }
     /// <summary>
     /// 指挥者具体接口
@@ -18,7 +23,11 @@ namespace SAE.CommonLibrary.Abstract.Builder
     /// <typeparam name="T"></typeparam>
     public interface IDirector<T> where T : class
     {
-        Task Build(T model);
+        /// <summary>
+        /// 开始构建对象
+        /// </summary>
+        /// <param name="model">构建的对象</param>
+        Task BuildAsync(T model);
     }
-    
+
 }

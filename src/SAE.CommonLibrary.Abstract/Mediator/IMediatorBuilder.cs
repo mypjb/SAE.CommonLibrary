@@ -5,24 +5,43 @@ using System.Text;
 
 namespace SAE.CommonLibrary.Abstract.Mediator
 {
+    /// <summary>
+    /// 中介者构建接口
+    /// </summary>
     public interface IMediatorBuilder
     {
+        /// <summary>
+        /// 处理程序描述集合
+        /// </summary>
         public IEnumerable<CommandHandlerDescriptor> Descriptors { get; }
-        public IServiceCollection Services{ get;}
+        /// <summary>
+        /// 服务集合
+        /// </summary>
+        public IServiceCollection Services { get; }
     }
+    /// <summary>
+    /// 中介者构建接口
+    /// </summary>
     public class MediatorBuilder : IMediatorBuilder
     {
+        /// <summary>
+        /// 描述集合
+        /// </summary>
         private List<CommandHandlerDescriptor> descriptors;
 
-
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="services">服务集合</param>
+        /// <param name="descriptors">描述集</param>
         public MediatorBuilder(IServiceCollection services, List<CommandHandlerDescriptor> descriptors)
         {
             this.Services = services;
             this.Descriptors = descriptors;
         }
-
+        /// <inheritdoc/>
         public IServiceCollection Services { get; }
-
+        /// <inheritdoc/>
         public IEnumerable<CommandHandlerDescriptor> Descriptors { get; }
     }
 }

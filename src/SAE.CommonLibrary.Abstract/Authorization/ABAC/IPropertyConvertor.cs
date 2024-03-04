@@ -8,13 +8,14 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
     /// <summary>
     /// 属性转换器
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">属性类型</typeparam>
     public interface IPropertyConvertor<T>
     {
         /// <summary>
         /// 转换
         /// </summary>
-        /// <param name="val"></param>
+        /// <param name="val">属性的字符形式</param>
+        /// <returns>属性对象</returns>
         T Convert(string val);
     }
 }

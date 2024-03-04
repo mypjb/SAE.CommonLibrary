@@ -5,9 +5,19 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Abstract.Responsibility
 {
+    /// <summary>
+    /// 职责链抽象实现
+    /// </summary>
+    /// <typeparam name="TContext"></typeparam>
     public class AbstractResponsibility<TContext> : IResponsibility<TContext> where TContext : ResponsibilityContext
     {
+        /// <summary>
+        /// 链条
+        /// </summary>
         protected IResponsibility<TContext> Responsibility { get; private set; }
+        /// <summary>
+        /// ctor
+        /// </summary>
         public AbstractResponsibility()
         {
 
@@ -37,10 +47,7 @@ namespace SAE.CommonLibrary.Abstract.Responsibility
                 ((ProxyResponsibility<TContext>)this.Responsibility).Add(proxy);
             }
         }
-        /// <summary>
-        /// 送上至下执行链条知道知道结果为止
-        /// </summary>
-        /// <param name="context"></param>
+        ///<inheritdoc/>
         public virtual async Task HandleAsync(TContext context)
         {
             if (context.Complete || this.Responsibility == null) return;

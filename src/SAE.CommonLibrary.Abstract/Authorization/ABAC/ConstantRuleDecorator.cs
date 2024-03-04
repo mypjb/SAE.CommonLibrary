@@ -6,7 +6,7 @@ using SAE.CommonLibrary.Abstract.Decorator;
 
 namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
 {
-    /// <inheritdoc/>
+
     /// <summary>
     /// 常量装饰器
     /// </summary>
@@ -16,7 +16,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// <summary>
         /// ctor
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">常量</param>
         public ConstantRuleDecorator(T value)
         {
             this.Value = value;
@@ -26,7 +26,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// </summary>
         /// <value></value>
         protected T Value { get; }
-
+        ///<inheritdoc/>
         public async Task DecorateAsync(RuleContext context)
         {
             context.Enqueue(this.Value);

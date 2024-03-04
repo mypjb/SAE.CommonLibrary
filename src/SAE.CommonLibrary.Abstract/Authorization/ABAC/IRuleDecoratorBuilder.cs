@@ -15,6 +15,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// 使用<paramref name="expression"/>构造<see cref="IDecorator{RuleContext}"/>对象
         /// </summary>
         /// <param name="expression">表达式</param>
+        /// <returns>装饰器</returns>
         IDecorator<RuleContext> Build(string expression);
     }
 }

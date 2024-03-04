@@ -103,28 +103,31 @@ namespace SAE.CommonLibrary.Abstract.Model
 
         }
 
-        [JsonProperty(PropertyName = "totalPages")]
+        
         /// <summary>
         /// 总页数
         /// </summary>
+        [JsonProperty(PropertyName = "totalPages")]
         public int TotalPages { get; set; }
-        [JsonProperty(PropertyName = "totalCount")]
+        
         /// <summary>
         /// 总记录数
         /// </summary>
+        [JsonProperty(PropertyName = "totalCount")]
         public int TotalCount { get; set; }
-        [JsonProperty(PropertyName = "pageIndex")]
+        
         /// <summary>
         /// 当前页
         /// </summary>
-        public int PageIndex { get; set; }
-        [JsonProperty(PropertyName = "pageSize")]
+        [JsonProperty(PropertyName = "pageIndex")]
+        public int PageIndex { get; set; }        
         /// <summary>
         /// 每页显示多少条记录
         /// </summary>
+        [JsonProperty(PropertyName = "pageIndex")]
         public int PageSize { get; set; }
 
-        int IPaging.BegingRange { get; }
+        int IPaging.BeginRange { get; }
         int IPaging.EndRange { get; }
 
         /// <summary>
@@ -141,12 +144,28 @@ namespace SAE.CommonLibrary.Abstract.Model
             return this.GetEnumerator();
         }
     }
-
+    
+    /// <summary>
+    /// 分页列表
+    /// </summary>
     public static class PagedList
     {
+        /// <summary>
+        /// 构建分页对象
+        /// </summary>
+        /// <typeparam name="T">类型</typeparam>
+        /// <param name="source">集合</param>
+        /// <param name="paging">分页信息接口</param>
+        /// <returns>分页对象</returns>
         public static IPagedList<T> Build<T>(IEnumerable<T> source, IPaging paging)
             => new PagedList<T>(source, paging);
-
+        /// <summary>
+        /// 构建分页对象
+        /// </summary>
+        /// <typeparam name="T">类型</typeparam>
+        /// <param name="source">集合</param>
+        /// <param name="paging">分页信息接口</param>
+        /// <returns>分页对象</returns>
         public static IPagedList<T> Build<T>(IQueryable<T> source, IPaging paging)
             => new PagedList<T>(source, paging);
     }
