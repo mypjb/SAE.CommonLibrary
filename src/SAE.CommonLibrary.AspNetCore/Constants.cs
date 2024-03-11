@@ -44,7 +44,9 @@ namespace SAE.CommonLibrary.AspNetCore
             /// 配置节根
             /// </summary>
             public const string Option = "auth";
-
+            /// <summary>
+            /// ABAC
+            /// </summary>
             public class ABAC
             {
                 /// <summary>

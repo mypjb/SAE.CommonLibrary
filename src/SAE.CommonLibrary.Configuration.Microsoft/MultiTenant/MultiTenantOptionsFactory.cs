@@ -23,14 +23,14 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
         private readonly ILogging _logging;
 
         /// <summary>
-        /// 
+        /// ctor
         /// </summary>
-        /// <param name="setups"></param>
-        /// <param name="postConfigures"></param>
-        /// <param name="scopeFactory"></param>
-        /// <param name="configuration"></param>
-        /// <param name="optionsMonitor"></param>
-        /// <param name="logging"></param>
+        /// <param name="setups">启动时的配置函数</param>
+        /// <param name="postConfigures">初始化后的配置函数</param>
+        /// <param name="scopeFactory">区域接口</param>
+        /// <param name="configuration">配置接口</param>
+        /// <param name="optionsMonitor">多租户配置监控器</param>
+        /// <param name="logging">日志记录器</param>
         public MultiTenantOptionsFactory(
             IEnumerable<IConfigureOptions<TOptions>> setups,
             IEnumerable<IPostConfigureOptions<TOptions>> postConfigures,
@@ -46,15 +46,15 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
         }
 
         /// <summary>
-        /// 
+        /// ctor
         /// </summary>
-        /// <param name="setups"></param>
-        /// <param name="postConfigures"></param>
-        /// <param name="validations"></param>
-        /// <param name="scopeFactory"></param>
-        /// <param name="configuration"></param>
-        /// <param name="optionsMonitor"></param>
-        /// <param name="logging"></param>
+        /// <param name="setups">启动时的配置函数</param>
+        /// <param name="postConfigures">初始化后的配置函数</param>
+        /// <param name="validations">验证接口</param>
+        /// <param name="scopeFactory">区域接口</param>
+        /// <param name="configuration">配置接口</param>
+        /// <param name="optionsMonitor">多租户配置监控器</param>
+        /// <param name="logging">日志记录器</param>
         public MultiTenantOptionsFactory(IEnumerable<IConfigureOptions<TOptions>> setups,
                                          IEnumerable<IPostConfigureOptions<TOptions>> postConfigures,
                                          IEnumerable<IValidateOptions<TOptions>> validations,
@@ -68,7 +68,7 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
             this._optionsMonitor = optionsMonitor;
             this._logging = logging;
         }
-
+        /// <inheritdoc/>
         protected override TOptions CreateInstance(string name)
         {
             // get 'name' multi tenant options

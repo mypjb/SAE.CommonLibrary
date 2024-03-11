@@ -15,8 +15,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// 添加内存Storage,只限于测试使用
         /// </summary>
-        /// <param name="serviceCollection"></param>
-        /// <returns></returns>
+        /// <param name="serviceCollection">服务集合</param>
+        /// <returns>服务集合</returns>
         public static StorageOptions AddMemoryStorage(this IServiceCollection serviceCollection)
         {
             serviceCollection.TryAddSingleton<IMetadataProvider, MetadataProvider>();
@@ -25,7 +25,13 @@ namespace Microsoft.Extensions.DependencyInjection
                              .AddTinyMapper();
             return new StorageOptions(serviceCollection);
         }
-
+        /// <summary>
+        /// 添加映射
+        /// </summary>
+        /// <typeparam name="T">根类型</typeparam>
+        /// <typeparam name="TDto">传输类型</typeparam>
+        /// <param name="options"><see cref="IStorage"/>配置</param>
+        /// <returns><see cref="IStorage"/>配置</returns>
         public static StorageOptions AddMapper<T, TDto>(this StorageOptions options) where T : class
                                                                                      where TDto : class
         {
@@ -35,21 +41,40 @@ namespace Microsoft.Extensions.DependencyInjection
             options.ServiceCollection.TryAddSingleton(dtoMetadata);
             return options;
         }
-
+        /// <summary>
+        /// 添加映射
+        /// </summary>
+        /// <typeparam name="T">根类型</typeparam>
+        /// <param name="options"><see cref="IStorage"/>配置</param>
+        /// <param name="name">元数据名称</param>
+        /// <returns><see cref="IStorage"/>配置</returns>
         public static StorageOptions AddMapper<T>(this StorageOptions options, string name) where T : class
         {
             var metadata = new Metadata<T>(name);
             options.ServiceCollection.TryAddSingleton(metadata);
             return options;
         }
-
+        /// <summary>
+        /// 添加映射
+        /// </summary>
+        /// <typeparam name="T">根类型</typeparam>
+        /// <param name="options"><see cref="IStorage"/>配置</param>
+        /// <param name="name">元数据名称</param>
+        /// <param name="identityFactory">标识工厂</param>
+        /// <returns><see cref="IStorage"/>配置</returns>
         public static StorageOptions AddMapper<T>(this StorageOptions options, string name, Func<T, object> identityFactory) where T : class
         {
             var metadata = new Metadata<T>(name, identityFactory);
             options.ServiceCollection.TryAddSingleton(metadata);
             return options;
         }
-
+        /// <summary>
+        /// 添加映射
+        /// </summary>
+        /// <param name="options"><see cref="IStorage"/>配置</param>
+        /// <param name="documentType">文档类型</param>
+        /// <param name="dtoType">传输类型</param>
+        /// <returns><see cref="IStorage"/>配置</returns>
         public static StorageOptions AddMapper(this StorageOptions options, Type documentType, Type dtoType)
         {
             var metadataType = typeof(Metadata<>);

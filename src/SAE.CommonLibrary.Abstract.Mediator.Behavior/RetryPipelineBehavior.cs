@@ -32,16 +32,28 @@ namespace SAE.CommonLibrary.Abstract.Mediator.Behavior
     {
         private readonly ILogging _logging;
         private readonly IOptionsSnapshot<RetryPipelineBehaviorOptions> _options;
-
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="logging">日志记录器</param>
+        /// <param name="options">管道重试配置</param>
         public RetryPipelineBehavior(ILogging<RetryPipelineBehavior<TCommand>> logging, IOptionsSnapshot<RetryPipelineBehaviorOptions> options)
         {
             this._options = options;
             this._logging = logging;
         }
+        /// <inheritdoc/>
         public async Task ExecutionAsync(TCommand command, Func<Task> next)
         {
             await this.ExecutionCoreAsync(command, next);
         }
+        /// <summary>
+        /// 核心执行函数
+        /// </summary>
+        /// <param name="command">命令</param>
+        /// <param name="next">下个管道委托</param>
+        /// <param name="num">执行次数</param>
+        /// <returns></returns>
         private async Task ExecutionCoreAsync(TCommand command, Func<Task> next, int num = 0)
         {
             try
@@ -72,16 +84,29 @@ namespace SAE.CommonLibrary.Abstract.Mediator.Behavior
         private readonly ILogging _logging;
 
         private readonly IOptionsSnapshot<RetryPipelineBehaviorOptions> _options;
-
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="logging">日志记录器</param>
+        /// <param name="options">管道重试配置</param>
         public RetryPipelineBehavior(ILogging<RetryPipelineBehavior<TCommand, TResponse>> logging, IOptionsSnapshot<RetryPipelineBehaviorOptions> options)
         {
             this._options = options;
             this._logging = logging;
         }
+
+        /// <inheritdoc/>
         public async Task<TResponse> ExecutionAsync(TCommand command, Func<Task<TResponse>> next)
         {
             return await this.ExecutionCoreAsync(command, next);
         }
+        /// <summary>
+        /// 核心执行函数
+        /// </summary>
+        /// <param name="command">命令</param>
+        /// <param name="next">下个管道委托</param>
+        /// <param name="num">执行次数</param>
+        /// <returns>响应</returns>
         private async Task<TResponse> ExecutionCoreAsync(TCommand command, Func<Task<TResponse>> next, int num = 0)
         {
             try

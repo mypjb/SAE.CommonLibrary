@@ -11,11 +11,10 @@ using SAE.CommonLibrary.Scope;
 namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
 {
 
-    /// <inheritdoc/>
     /// <summary>
     /// 多租户配置监控器
     /// </summary>
-    /// <typeparam name="TOptions"></typeparam>
+    /// <typeparam name="TOptions">配置类型</typeparam>
     public class MultiTenantOptionsMonitor<TOptions> : OptionsMonitor<TOptions> where TOptions : class
     {
         private readonly IOptionsFactory<TOptions> _factory;
@@ -24,14 +23,14 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
         private readonly ILogging _logging;
 
         /// <summary>
-        /// 
+        /// ctor
         /// </summary>
-        /// <param name="factory"></param>
-        /// <param name="sources"></param>
-        /// <param name="cache"></param>
-        /// <param name="configuration"></param>
-        /// <param name="scopeFactory"></param>
-        /// <param name="logging"></param>
+        /// <param name="factory">配置工厂</param>
+        /// <param name="sources">配置源</param>
+        /// <param name="cache">缓存接口</param>
+        /// <param name="configuration">配置接口</param>
+        /// <param name="scopeFactory">区域接口</param>
+        /// <param name="logging">日志记录器</param>
         public MultiTenantOptionsMonitor(IOptionsFactory<TOptions> factory,
                                          IEnumerable<IOptionsChangeTokenSource<TOptions>> sources,
                                          IOptionsMonitorCache<TOptions> cache,
@@ -54,7 +53,7 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
             }, this);
 
         }
-
+        /// <inheritdoc/>
         public override TOptions Get(string name)
         {
             name ??= Options.DefaultName;

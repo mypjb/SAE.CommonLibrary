@@ -67,10 +67,15 @@ namespace SAE.CommonLibrary.AspNetCore.Routing
                 this.Name=this.Path;
             }
         }
+        /// <inheritdoc/>
         public string Method { get; set; }
+        /// <inheritdoc/>
         public string Path { get; set; }
+        /// <inheritdoc/>
         public string Name { get; set; }
+        /// <inheritdoc/>
         public string Group { get; set; }
+        /// <inheritdoc/>
         public int Index { get; set; }
     }
 }

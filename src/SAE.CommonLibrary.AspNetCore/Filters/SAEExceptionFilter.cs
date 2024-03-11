@@ -17,14 +17,15 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
         /// <summary>
         /// 创建一个新的对象
         /// </summary>
-        /// <param name="logging"></param>
+        /// <param name="logging">日志记录器</param>
         public SAEExceptionFilter(ILogging<SAEException> logging)
         {
             this.Order = FilterScope.First;
             this._logging = logging;
         }
+        /// <inheritdoc/>
         public int Order { get; set; }
-
+        /// <inheritdoc/>
         public Task OnExceptionAsync(ExceptionContext context)
         {
             if (context.Exception == null || context.ExceptionHandled)

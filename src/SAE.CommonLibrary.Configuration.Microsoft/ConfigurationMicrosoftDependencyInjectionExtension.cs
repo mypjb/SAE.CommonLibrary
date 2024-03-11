@@ -42,9 +42,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// 使用<see cref="IConfiguration"/>进行配置绑定
         /// </summary>
-        /// <typeparam name="TOptions"></typeparam>
-        /// <param name="optionsBuilder"></param>
-        /// <returns></returns>
+        /// <typeparam name="TOptions">配置类型</typeparam>
+        /// <param name="optionsBuilder">配置构建器</param>
+        /// <returns>配置构建器</returns>
         public static OptionsBuilder<TOptions> Bind<TOptions>(this OptionsBuilder<TOptions> optionsBuilder) where TOptions : class
         {
             return optionsBuilder.Bind(Options.Options.DefaultName);
@@ -53,10 +53,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// 将<see cref="IConfiguration"/>的<paramref name="key"/>绑定到配置
         /// </summary>
-        /// <typeparam name="TOptions"></typeparam>
-        /// <param name="optionsBuilder"></param>
-        /// <param name="key"><see cref="IConfiguration"/> section</param>
-        /// <returns></returns>
+        /// <typeparam name="TOptions">配置类型</typeparam>
+        /// <param name="optionsBuilder">配置构建器</param>
+        /// <param name="key"><see cref="IConfiguration"/>配置节</param>
+        /// <returns>配置构建器</returns>
         public static OptionsBuilder<TOptions> Bind<TOptions>(this OptionsBuilder<TOptions> optionsBuilder, string key) where TOptions : class
         {
 
@@ -104,8 +104,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// 查找配置 <see cref="IConfiguration"/> 
         /// </summary>
-        /// <param name="services"></param>
-        /// <returns></returns>
+        /// <param name="services">服务集合</param>
+        /// <returns>配置对象</returns>
         public static IConfiguration FindConfiguration(this IServiceCollection services)
         {
             var serviceDescriptor = services.FirstOrDefault(s => s.ServiceType == typeof(IConfiguration));

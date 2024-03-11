@@ -23,40 +23,6 @@ namespace Microsoft.Extensions.DependencyInjection
     {
 
         /// <summary>
-        /// 添加Cors中间件依赖
-        /// </summary>
-        /// <param name="services"></param>
-        /// <param name="action"></param>
-        /// <returns></returns>
-        public static IServiceCollection AddSAECors(this IServiceCollection services, Action<CorsOptions> action)
-        {
-            services.AddOptions<CorsOptions>(CorsOptions.Options).Configure(action);
-            services.AddDefaultLogger();
-            return services;
-        }
-
-        /// <summary>
-        /// 添加Cors中间件依赖
-        /// </summary>
-        /// <param name="services"></param>
-        /// <returns></returns>
-        public static IServiceCollection AddSAECors(this IServiceCollection services)
-        {
-            return services.AddSAECors(_ => { });
-        }
-
-        /// <summary>
-        /// 启用Cors中间件
-        /// </summary>
-        /// <param name="app"></param>
-        /// <returns></returns>
-        public static IApplicationBuilder UseSAECors(this IApplicationBuilder app)
-        {
-            app.UseMiddleware<CorsMiddleware>();
-            return app;
-        }
-
-        /// <summary>
         /// 拦截错误响应，并将其重置为<see cref="ErrorOutput"/>
         /// </summary>
         /// <param name="builder"></param>

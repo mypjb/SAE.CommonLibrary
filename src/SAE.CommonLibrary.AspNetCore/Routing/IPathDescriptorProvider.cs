@@ -39,14 +39,15 @@ namespace SAE.CommonLibrary.AspNetCore.Routing
         /// <summary>
         /// 创建一个新的对象
         /// </summary>
-        /// <param name="serviceProvider"></param>
-        /// <param name="logging"></param>
+        /// <param name="serviceProvider">服务提供者</param>
+        /// <param name="logging">日志记录器</param>
         public PathDescriptorProvider(IServiceProvider serviceProvider, ILogging<PathDescriptorProvider> logging)
         {
             this.serviceProvider = serviceProvider;
             this._logging = logging;
             this.Scan();
         }
+        /// <inheritdoc/>
         public IEnumerable<IPathDescriptor> GetDescriptors()
         {
             return this.pathDescriptors;

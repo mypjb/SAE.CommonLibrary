@@ -7,10 +7,17 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Caching.Memory
 {
+    /// <summary>
+    /// 基于内存的分布式缓存实现
+    /// </summary>
     public class MemoryDistributedCache : MemoryCache, IDistributedCache
     {
         private readonly ILogging<MemoryDistributedCache> _logging;
-
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="cache">内存</param>
+        /// <param name="logging">日志记录器</param>
         public MemoryDistributedCache(Microsoft.Extensions.Caching.Memory.IMemoryCache cache,
                                       ILogging<MemoryDistributedCache> logging) : base(cache)
         {

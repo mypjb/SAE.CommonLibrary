@@ -15,7 +15,6 @@ namespace SAE.CommonLibrary.Configuration
     /// <summary>
     /// SAE配置源
     /// </summary>
-    /// <inheritdoc/>
     public class SAEConfigurationSource : NewtonsoftJsonStreamConfigurationSource
     {
         private readonly SAEOptions options;
@@ -23,7 +22,7 @@ namespace SAE.CommonLibrary.Configuration
         /// <summary>
         /// 创建一额新的 <see cref="SAEConfigurationSource"/>
         /// </summary>
-        /// <param name="options"></param>
+        /// <param name="options">源配置</param>
         public SAEConfigurationSource(SAEOptions options)
         {
             this.options = options;
@@ -31,7 +30,7 @@ namespace SAE.CommonLibrary.Configuration
         /// <summary>
         /// 构造配置提供程序
         /// </summary>
-        /// <param name="builder"></param>
+        /// <param name="builder">配置构建器</param>
         public override IConfigurationProvider Build(IConfigurationBuilder builder)
         {
             this.provider ??= new SAEConfigurationProvider(options, this);
@@ -109,7 +108,6 @@ namespace SAE.CommonLibrary.Configuration
     /// <summary>
     /// SAE 配置提供者
     /// </summary>
-    /// <inheritdoc/>
     public class SAEConfigurationProvider : NewtonsoftJsonStreamConfigurationProvider
     {
         private readonly CancellationTokenSource _cancellationToken;
@@ -119,8 +117,8 @@ namespace SAE.CommonLibrary.Configuration
         /// <summary>
         /// 创建一个新的<see cref="SAEConfigurationProvider"/>
         /// </summary>
-        /// <param name="options"></param>
-        /// <param name="source"></param>
+        /// <param name="options">源配置</param>
+        /// <param name="source">json配置源</param>
         public SAEConfigurationProvider(SAEOptions options, NewtonsoftJsonStreamConfigurationSource source) : base(source)
         {
             this._cancellationToken = new CancellationTokenSource();
@@ -247,7 +245,9 @@ namespace SAE.CommonLibrary.Configuration
         /// <summary>
         /// 从本地文件当中获得配置
         /// </summary>
+        /// <param name="exception">异常</param>
         /// <returns></returns>
+        /// <exception cref="FileNotFoundException">远程拉取失败，且<see cref="SAEOptions.FullPath"/>不存在，将会触发。</exception>
         protected async Task LoadFileAsync(Exception exception = null)
         {
             var fileName = this._options.FullPath;
@@ -273,7 +273,7 @@ namespace SAE.CommonLibrary.Configuration
         /// <summary>
         /// 设置源
         /// </summary>
-        /// <param name="stream"></param>
+        /// <param name="stream">配置流</param>
         protected async Task SetSourceAsync(Stream stream)
         {
             var oldStream = this.Source.Stream;

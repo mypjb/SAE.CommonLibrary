@@ -22,9 +22,9 @@ namespace SAE.CommonLibrary.Configuration
             this.NextRequestHeaderName = Constants.DefaultNextRequestHeaderName;
         }
         /// <summary>
-        /// 
+        /// ctor
         /// </summary>
-        /// <param name="options"></param>
+        /// <param name="options">源配置</param>
         public SAEOptions(SAEOptions options)
         {
             this.Client = options.Client;
@@ -41,32 +41,26 @@ namespace SAE.CommonLibrary.Configuration
         /// <summary>
         /// 文件名称
         /// </summary>
-        /// <value></value>
         public string FileName { get; set; }
         /// <summary>
         /// 完整路径
         /// </summary>
-        /// <value></value>
         public string FullPath { get; set; }
         /// <summary>
         /// 备用地址
         /// </summary>
-        /// <value></value>
         public string FullPathBackup{get;set;}
         /// <summary>
         /// 远程配置数据地址
         /// </summary>
-        /// <value></value>
         public string Url { get; set; }
         /// <summary>
         /// 配置文件轮询时间单位秒(默认: <see cref="Constants.DefaultPollInterval"/>)
         /// </summary>
-        /// <value></value>
         public int PollInterval { get; set; }
         /// <summary>
         /// 远程授权配置
         /// </summary>
-        /// <value></value>
         public OAuthOptions OAuth { get; set; }
         /// <summary>
         /// 配置节
@@ -113,7 +107,6 @@ namespace SAE.CommonLibrary.Configuration
         /// <summary>
         /// 用于发送远程请求的<see cref="HttpClient"/>
         /// </summary>
-        /// <value></value>
         public HttpClient Client
         {
             get => this.client;

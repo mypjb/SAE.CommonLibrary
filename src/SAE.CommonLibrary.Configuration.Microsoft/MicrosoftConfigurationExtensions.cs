@@ -19,8 +19,8 @@ namespace Microsoft.Extensions.Configuration
         /// <summary>
         ///  添加SAE远程配置源
         /// </summary>
-        /// <param name="configurationBuilder"></param>
-        /// <returns></returns>
+        /// <param name="configurationBuilder">配置构建器</param>
+        /// <returns>配置构建器</returns>
         public static IConfigurationBuilder AddRemoteSource(this IConfigurationBuilder configurationBuilder)
         {
             return configurationBuilder.AddRemoteSource(_ => { });
@@ -29,9 +29,9 @@ namespace Microsoft.Extensions.Configuration
         /// <summary>
         /// 添加SAE远程配置源
         /// </summary>
-        /// <param name="configurationBuilder"></param>
-        /// <param name="options"></param>
-        /// <returns></returns>
+        /// <param name="configurationBuilder">配置构建器</param>
+        /// <param name="options">远程配置</param>
+        /// <returns>配置构建器</returns>
         public static IConfigurationBuilder AddRemoteSource(this IConfigurationBuilder configurationBuilder, SAEOptions options)
         {
             return configurationBuilder.AddRemoteSource(op =>
@@ -42,8 +42,9 @@ namespace Microsoft.Extensions.Configuration
         /// <summary>
         /// 添加SAE远程配置源,并从<see cref="Constants.Config.OptionKey"/>获取<see cref="SAEOptions"/>
         /// </summary>
-        /// <param name="configurationBuilder"></param>
+        /// <param name="configurationBuilder">配置构建器</param>
         /// <param name="action">初始化配置</param>
+        /// <returns>配置构建器</returns>
         public static IConfigurationBuilder AddRemoteSource(this IConfigurationBuilder configurationBuilder, Action<SAEOptions> action)
         {
             return configurationBuilder.AddRemoteSource(null, action);
@@ -51,10 +52,10 @@ namespace Microsoft.Extensions.Configuration
         /// <summary>
         /// 添加SAE远程配置源，并从<paramref name="configurationSection"/>获取<see cref="SAEOptions"/>
         /// </summary>
-        /// <param name="configurationBuilder"></param>
+        /// <param name="configurationBuilder">配置构建器</param>
         /// <param name="configurationSection">配置子节点名称</param>
         /// <param name="action">初始化配置</param>
-        /// <returns></returns>
+        /// <returns>配置构建器</returns>
         public static IConfigurationBuilder AddRemoteSource(this IConfigurationBuilder configurationBuilder, string configurationSection, Action<SAEOptions> action)
         {
             configurationSection = configurationSection.IsNullOrWhiteSpace() ? Constants.Config.OptionKey : configurationSection;
@@ -135,9 +136,9 @@ namespace Microsoft.Extensions.Configuration
         /// <summary>
         /// 添加SAE远程配置源，并从<paramref name="configurationSection"/>获取<see cref="SAEOptions"/>
         /// </summary>
-        /// <param name="configurationBuilder"></param>
+        /// <param name="configurationBuilder">配置构建器</param>
         /// <param name="configurationSection">配置子节点名称</param>
-        /// <returns></returns>
+        /// <returns>配置构建器</returns>
         public static IConfigurationBuilder AddRemoteSource(this IConfigurationBuilder configurationBuilder, string configurationSection)
         {
             return configurationBuilder.AddRemoteSource(configurationSection, _ => { });
@@ -146,8 +147,8 @@ namespace Microsoft.Extensions.Configuration
         /// <summary>
         /// 扫描 <see cref="Constants.Config.DefaultRootDirectory"/> 目录所有 <see cref="Constants.JsonSuffix"/> 后缀的文件
         /// </summary>
-        /// <param name="configurationBuilder"></param>
-        /// <returns></returns>
+        /// <param name="configurationBuilder">配置构建器</param>
+        /// <returns>配置构建器</returns>
         public static IConfigurationBuilder AddJsonFileDirectory(this IConfigurationBuilder configurationBuilder)
         {
             return configurationBuilder.AddJsonFileDirectory(null);
@@ -155,9 +156,9 @@ namespace Microsoft.Extensions.Configuration
         /// <summary>
         /// 扫描 <paramref name="path"/>目录所有 <see cref="Constants.JsonSuffix"/> 后缀的文件
         /// </summary>
-        /// <param name="configurationBuilder"></param>
+        /// <param name="configurationBuilder">配置构建器</param>
         /// <param name="path">json文件目录</param>
-        /// <returns></returns>
+        /// <returns>配置构建器</returns>
         public static IConfigurationBuilder AddJsonFileDirectory(this IConfigurationBuilder configurationBuilder, string path)
         {
             var configuration = configurationBuilder.Build();

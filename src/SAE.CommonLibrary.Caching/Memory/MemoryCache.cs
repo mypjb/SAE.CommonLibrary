@@ -16,7 +16,7 @@ namespace SAE.CommonLibrary.Caching.Memory
         /// <summary>
         /// ctor
         /// </summary>
-        /// <param name="cache"></param>
+        /// <param name="cache">内存</param>
         public MemoryCache(Microsoft.Extensions.Caching.Memory.IMemoryCache cache)
         {
             this.keys = new List<string>();

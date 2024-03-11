@@ -9,16 +9,25 @@ using SAE.CommonLibrary.Logging;
 
 namespace SAE.CommonLibrary.AspNetCore.Authorization.ABAC
 {
+    /// <summary>
+    /// <see cref="IHttpRuleContextAppend"/>实现
+    /// </summary>
     public class HttpRuleContextAppend : IHttpRuleContextAppend
     {
         private readonly IHostEnvironment _environment;
         private readonly ILogging _logging;
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="environment">环境变量</param>
+        /// <param name="logging">日志记录器</param>
         public HttpRuleContextAppend(IHostEnvironment environment,
                                      ILogging<HttpRuleContextAppend> logging)
         {
             _environment = environment;
             _logging = logging;
         }
+        /// <inheritdoc/>
         public Task<IDictionary<string, string>> GetContextAsync(HttpContext ctx)
         {
             IDictionary<string, string> dict = new Dictionary<string, string>();

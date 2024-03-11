@@ -23,11 +23,11 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization.ABAC
         private readonly IEnumerable<IHttpRuleContextAppend> _httpRuleContextAppends;
 
         /// <summary>
-        /// 
+        /// ctor
         /// </summary>
-        /// <param name="httpContextAccessor"></param>
-        /// <param name="logging"></param>
-        /// <param name="httpRuleContextAppends"></param>
+        /// <param name="httpContextAccessor">httpContext连接器</param>
+        /// <param name="logging">日至记录器</param>
+        /// <param name="httpRuleContextAppends"><see cref="IHttpRuleContextAppend"/>附加上下文</param>
         public HttpRuleContextProvider(IHttpContextAccessor httpContextAccessor,
                                        ILogging<HttpRuleContextProvider> logging,
                                        IEnumerable<IHttpRuleContextAppend> httpRuleContextAppends)
@@ -36,7 +36,7 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization.ABAC
             this._logging = logging;
             this._httpRuleContextAppends = httpRuleContextAppends;
         }
-
+        /// <inheritdoc/>
         public async Task<RuleContext> GetAsync()
         {
 

@@ -24,14 +24,14 @@ namespace SAE.CommonLibrary.Caching.Redis
         /// <summary>
         /// ctor
         /// </summary>
-        /// <param name="optionsMonitor"></param>
-        /// <param name="logging"></param>
+        /// <param name="optionsMonitor">配置监控对象</param>
+        /// <param name="logging">日志记录器</param>
         public RedisDistributedCache(IOptionsMonitor<RedisOptions> optionsMonitor, ILogging<RedisDistributedCache> logging)
         {
             this._optionsMonitor = optionsMonitor;
             this._logging = logging;
         }
-
+        /// <inheritdoc/>
         private async Task DatabaseOperation(Func<IDatabase, Task> databaseOperation, [CallerMemberName] string methodNmae = null)
         {
             var options = this._optionsMonitor.CurrentValue;

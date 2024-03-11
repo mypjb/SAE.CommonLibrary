@@ -5,6 +5,9 @@ using SAE.CommonLibrary.Extension;
 
 namespace SAE.CommonLibrary.Caching
 {
+    /// <summary>
+    /// 缓存生命周期
+    /// </summary>
     public enum CacheLimit
     {
         /// <summary>
@@ -20,8 +23,17 @@ namespace SAE.CommonLibrary.Caching
         /// </summary>
         Sliding
     }
+    /// <summary>
+    /// 缓存描述
+    /// </summary>
+    /// <typeparam name="T">缓存值的类型</typeparam>
     public class CacheDescription<T>
     {
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="key">缓存键</param>
+        /// <param name="value">缓存值</param>
         public CacheDescription(string key, T value)
         {
             Assert.Build(key).NotNullOrWhiteSpace("请提供有效的 'key'");
@@ -37,7 +49,9 @@ namespace SAE.CommonLibrary.Caching
         /// 缓存值
         /// </summary>
         public T Value { get; set; }
-
+        /// <summary>
+        /// 绝对时间
+        /// </summary>
         private DateTimeOffset? absoluteExpiration;
 
         /// <summary>
@@ -87,7 +101,10 @@ namespace SAE.CommonLibrary.Caching
                 return limit;
             }
         }
-
+        /// <summary>
+        /// 获得时间戳
+        /// </summary>
+        /// <returns>时间戳</returns>
         public DateTimeOffset? GetDateTimeOffset()
         {
             if (this.Limit == CacheLimit.Absolute)
@@ -101,7 +118,10 @@ namespace SAE.CommonLibrary.Caching
             }
             return null;
         }
-
+        /// <summary>
+        /// 获得时间
+        /// </summary>
+        /// <returns>时间</returns>
         public TimeSpan? GetTimeSpan()
         {
             if (this.Limit == CacheLimit.Absolute)

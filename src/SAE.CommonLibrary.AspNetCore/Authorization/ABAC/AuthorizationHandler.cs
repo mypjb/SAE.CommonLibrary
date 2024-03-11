@@ -22,15 +22,15 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization.ABAC
         /// <summary>
         /// ctor
         /// </summary>
-        /// <param name="logging"></param>
-        /// <param name="authorizeService"></param>
+        /// <param name="logging">日志记录器</param>
+        /// <param name="authorizeService">授权服务</param>
         public AuthorizationHandler(ILogging<AuthorizationHandler> logging,
                                     IAuthorizeService authorizeService)
         {
             this._logging = logging;
             this._authorizeService = authorizeService;
         }
-
+        /// <inheritdoc/>
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, ABACAuthorizationRequirement requirement)
         {
             this._logging.Info("准备进入ABAC授权管道");

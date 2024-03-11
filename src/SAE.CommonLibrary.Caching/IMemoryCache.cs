@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Caching
 {
+    /// <summary>
+    /// 内存缓存
+    /// </summary>
     public interface IMemoryCache : ICache
     {
         

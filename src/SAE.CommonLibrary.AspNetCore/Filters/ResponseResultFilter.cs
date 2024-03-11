@@ -20,19 +20,20 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
         /// <summary>
         /// 创建一个新的对象
         /// </summary>
-        /// <param name="logging"></param>
+        /// <param name="logging">日志记录器</param>
         public ResponseResultFilter(ILogging<ResponseResultFilter> logging)
         {
             this.Order = FilterScope.Global;
             this._logging = logging;
         }
+        /// <inheritdoc/>
         public int Order
         {
             get;
             set;
         }
 
-
+        /// <inheritdoc/>
         public void OnActionExecuted(ActionExecutedContext context)
         {
             if (context.Exception != null)
@@ -83,7 +84,7 @@ namespace SAE.CommonLibrary.AspNetCore.Filters
             }
 
         }
-
+        /// <inheritdoc/>
         public void OnActionExecuting(ActionExecutingContext context)
         {
 

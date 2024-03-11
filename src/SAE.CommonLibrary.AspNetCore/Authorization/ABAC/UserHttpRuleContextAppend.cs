@@ -9,6 +9,9 @@ using SAE.CommonLibrary.Logging;
 
 namespace SAE.CommonLibrary.AspNetCore.Authorization.ABAC
 {
+    /// <summary>
+    /// 基于用户的<see cref="IHttpRuleContextAppend"/>实现
+    /// </summary>
     public class UserHttpRuleContextAppend : IHttpRuleContextAppend
     {
         private readonly ILogging _logging;
@@ -16,11 +19,12 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization.ABAC
         /// <summary>
         /// ctor
         /// </summary>
-        /// <param name="logging"></param>
+        /// <param name="logging">日志记录器</param>
         public UserHttpRuleContextAppend(ILogging<UserHttpRuleContextAppend> logging)
         {
             this._logging = logging;
         }
+        /// <inheritdoc/>
         public Task<IDictionary<string, string>> GetContextAsync(HttpContext ctx)
         {
             IDictionary<string, string> dict = new Dictionary<string, string>();
