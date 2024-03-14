@@ -33,10 +33,10 @@ namespace SAE.CommonLibrary.Plugin.Test
 
             Client = () => new HttpClient(new ProxyMessageHandler(this._client));
 
-            var frontEndType= typeof(SAE.CommonLibrary.Plugin.FrontEnd.Startup);
-            var identityType= typeof(SAE.CommonLibrary.Plugin.Identity.Startup);
-            var testAPIType= typeof(SAE.CommonLibrary.Plugin.TestAPI.Startup);
-            var oAuthType= typeof(SAE.CommonLibrary.Plugin.OAuth.OAuthPlugin);
+            // var frontEndType= typeof(SAE.CommonLibrary.Plugin.FrontEnd.Startup);
+            // var identityType= typeof(SAE.CommonLibrary.Plugin.Identity.Startup);
+            // var testAPIType= typeof(SAE.CommonLibrary.Plugin.TestAPI.Startup);
+            // var oAuthType= typeof(SAE.CommonLibrary.Plugin.OAuth.OAuthPlugin);
         }
 
 

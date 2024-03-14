@@ -14,6 +14,7 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
     /// </summary>
     public class WebPluginManage : PluginManage<WebPlugin>
     {
+        private const string SearchAssemblyFile = "*.dll";
 
         /// <summary>
         /// ctor
@@ -29,9 +30,12 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
             var storage = new Dictionary<string, IPlugin>();
             if (AppContext.BaseDirectory.Equals(this._pluginDir))
             {
-                var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-                foreach (var assembly in assemblies)
+
+                var files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, SearchAssemblyFile);
+
+                foreach (var assemblyFile in files)
                 {
+                    var assembly = Assembly.LoadFrom(assemblyFile);
                     foreach (var type in assembly.GetTypes())
                     {
                         if (this._pluginType.IsAssignableFrom(type))
@@ -41,14 +45,14 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
                                 continue;
                             }
                             var plugin = (IPlugin)Activator.CreateInstance(type);
-
+                            var assemblyName = assembly.GetName();
                             plugin.Status = true;
                             plugin.Version = "v1";
-                            plugin.Name = type.Name;
+                            plugin.Name = assemblyName.Name;
                             plugin.Path = assembly.Location;
-                            plugin.Description = type.Name;
+                            plugin.Description = assemblyName.Name;
 
-                            storage[assembly.GetName().Name] = plugin;
+                            storage[assemblyName.Name] = plugin;
                             break;
                         }
                     }
