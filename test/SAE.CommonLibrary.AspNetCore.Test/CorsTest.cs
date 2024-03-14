@@ -56,7 +56,6 @@ namespace SAE.CommonLibrary.AspNetCore.Test
             public void ConfigureServices(IServiceCollection services)
             {
                 services.AddControllers();
-                services.AddSAECors();
 
             }
 
@@ -67,7 +66,6 @@ namespace SAE.CommonLibrary.AspNetCore.Test
 
                 app.UseRouting();
 
-                app.UseSAECors();
                 app.UseEndpoints(endpoints =>
                 {
                     endpoints.MapControllers();
