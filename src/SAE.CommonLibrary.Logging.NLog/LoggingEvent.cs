@@ -7,10 +7,20 @@ namespace SAE.CommonLibrary.Logging.Nlog
     /// </summary>
     internal class LoggingEvent
     {
+        /// <summary>
+        /// ctor
+        /// </summary>
         public LoggingEvent()
         {
 
         }
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="type">日志类型</param>
+        /// <param name="level">日志级别</param>
+        /// <param name="message">日志信息</param>
+        /// <exception cref="ArgumentException"></exception>
         public LoggingEvent(string type, string level, string message)
         {
             if (string.IsNullOrWhiteSpace(type))

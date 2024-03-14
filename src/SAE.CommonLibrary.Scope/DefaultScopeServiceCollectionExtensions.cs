@@ -17,8 +17,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// 添加默认区域实现
         /// </summary>
-        /// <param name="services"></param>
-        /// <returns></returns>
+        /// <param name="services">服务集合</param>
+        /// <returns><paramref name="services"/></returns>
         public static IServiceCollection AddDefaultScope(this IServiceCollection services)
         {
             services.AddDefaultLogger();

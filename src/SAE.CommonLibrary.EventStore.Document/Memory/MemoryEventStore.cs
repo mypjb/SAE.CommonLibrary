@@ -10,7 +10,6 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory
     /// <summary>
     /// 基于内存的事件存储
     /// </summary>
-    /// <inheritdoc/>
     public class MemoryEventStore : IEventStore
     {
         /// <summary>
@@ -18,12 +17,14 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory
         /// </summary>
         private readonly ConcurrentDictionary<string, List<EventStream>> _store;
         /// <summary>
-        /// 
+        /// ctor
         /// </summary>
         public MemoryEventStore()
         {
             _store = new ConcurrentDictionary<string, List<EventStream>>();
         }
+
+        /// <inheritdoc/>
         public Task AppendAsync(EventStream eventStream)
         {
             var list = new List<EventStream>() { eventStream };
@@ -35,6 +36,7 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory
             return Task.CompletedTask;
         }
 
+        /// <inheritdoc/>
         public async Task<int> GetVersionAsync(IIdentity identity)
         {
             if (this._store.TryGetValue(identity.ToString(), out var list))
@@ -46,6 +48,7 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory
             return 0;
         }
 
+        /// <inheritdoc/>
         public Task<EventStream> LoadEventStreamAsync(IIdentity identity, int skipEvents, int maxCount)
         {
             var eventStream = new EventStream(identity, 0, string.Empty);
@@ -62,6 +65,7 @@ namespace SAE.CommonLibrary.EventStore.Document.Memory
             return Task.FromResult(eventStream);
         }
 
+        /// <inheritdoc/>
         public Task DeleteAsync(IIdentity identity)
         {
             this._store.TryRemove(identity.ToString(), out _);

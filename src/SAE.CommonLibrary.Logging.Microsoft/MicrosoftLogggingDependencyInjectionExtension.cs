@@ -11,8 +11,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// 添加对<seealso cref=" Microsoft.Extensions.Logging"/>的代理实现
         /// </summary>
-        /// <param name="serviceCollection"></param>
-        /// <returns></returns>
+        /// <param name="serviceCollection">服务集合</param>
+        /// <returns><paramref name="serviceCollection"/></returns>
         public static IServiceCollection AddMicrosoftLogging(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<ILoggerProvider, MicrosoftProxyLoggingProvider>();

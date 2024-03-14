@@ -20,7 +20,6 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// 移除文档对象
         /// </summary>
         /// <param name="identity">对象标识</param>
-        /// <returns></returns>
         Task DeleteAsync<TDocument>(IIdentity identity) where TDocument : IDocument;
     }
 }

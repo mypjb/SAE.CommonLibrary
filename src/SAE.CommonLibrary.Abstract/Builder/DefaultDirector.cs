@@ -9,7 +9,7 @@ namespace SAE.CommonLibrary.Abstract.Builder
     /// <summary>
     /// 指挥者代理实现
     /// </summary>
-    public class Director : IDirector
+    public class DefaultDirector : IDirector
     {
         /// <summary>
         /// 服务提供者
@@ -19,7 +19,7 @@ namespace SAE.CommonLibrary.Abstract.Builder
         /// ctor
         /// </summary>
         /// <param name="serviceProvider">服务提供者</param>
-        public Director(IServiceProvider serviceProvider)
+        public DefaultDirector(IServiceProvider serviceProvider)
         {
             this._serviceProvider = serviceProvider;
         }

@@ -12,7 +12,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator
     /// <summary>
     /// 中介者
     /// </summary>
-    public class Mediator : IMediator
+    public class DefaultMediator : IMediator
     {
         /// <summary>
         /// 服务提供者
@@ -26,7 +26,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator
         /// ctor
         /// </summary>
         /// <param name="serviceProvider"></param>
-        public Mediator(IServiceProvider serviceProvider)
+        public DefaultMediator(IServiceProvider serviceProvider)
         {
             this._serviceProvider = serviceProvider;
             this._cache = new ConcurrentDictionary<string, object>();
@@ -39,7 +39,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator
 
             var wrapper = this._cache.GetOrAdd(key, k =>
             {
-                return Activator.CreateInstance(typeof(RequestHandlerWrapper<,>)
+                return Activator.CreateInstance(typeof(DefaultRequestHandlerWrapper<,>)
                                 .MakeGenericType(commandType, responseType), this._serviceProvider);
             });
 
@@ -54,7 +54,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator
 
             var wrapper = this._cache.GetOrAdd(key, k =>
             {
-                return Activator.CreateInstance(typeof(CommandHandlerWrapper<>)
+                return Activator.CreateInstance(typeof(DefaultCommandHandlerWrapper<>)
                                 .MakeGenericType(commandType), this._serviceProvider);
             });
 

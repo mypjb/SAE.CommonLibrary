@@ -10,11 +10,14 @@ namespace SAE.CommonLibrary.EventStore.Document
     /// <typeparam name="TDocument">文档类型</typeparam>
     public class AbstractHandler<TDocument> where TDocument : IDocument, new()
     {
+        /// <summary>
+        /// 文档存储接口
+        /// </summary>
         protected readonly IDocumentStore _documentStore;
         /// <summary>
         /// 创建一个新的对象
         /// </summary>
-        /// <param name="documentStore"></param>
+        /// <param name="documentStore">文档存储接口</param>
         public AbstractHandler(IDocumentStore documentStore)
         {
             this._documentStore = documentStore;
@@ -63,11 +66,14 @@ namespace SAE.CommonLibrary.EventStore.Document
     /// </summary>
     public class AbstractHandler
     {
+        /// <summary>
+        /// 文档存储接口
+        /// </summary>
         protected readonly IDocumentStore _documentStore;
         /// <summary>
         /// 创建一个新的对象
         /// </summary>
-        /// <param name="documentStore"></param>
+        /// <param name="documentStore">文档存储接口</param>
         public AbstractHandler(IDocumentStore documentStore)
         {
             this._documentStore = documentStore;

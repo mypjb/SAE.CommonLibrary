@@ -17,18 +17,21 @@ namespace SAE.CommonLibrary.Extension
 {
 
     /// <summary>
-    /// 
+    /// HttpClient扩展配置类
     /// </summary>
     public static partial class HttpClientExtension
     {
+        /// <summary>
+        /// 日志记录器
+        /// </summary>
         internal static Func<ILogging> LoggerRecord { get; set; }
 
         /// <summary>
         /// 使用记录器
         /// </summary>
-        /// <param name="httpClient"></param>
-        /// <param name="record"></param>
-        /// <returns></returns>
+        /// <param name="httpClient"><see cref="HttpClient"/></param>
+        /// <param name="record">记录器</param>
+        /// <returns><paramref name="httpClient"/></returns>
         public static HttpClient UseLogging(this HttpClient httpClient, Func<ILogging> record)
         {
             LoggerRecord = record;
@@ -38,8 +41,8 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 克隆<paramref name="request"/>请求体
         /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
+        /// <param name="request"><see cref="HttpRequestMessage"/></param>
+        /// <returns><paramref name="request"/></returns>
         public static HttpRequestMessage Clone(this HttpRequestMessage request)
         {
             var clone = new HttpRequestMessage(request.Method, request.RequestUri);
@@ -61,10 +64,10 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 添加请求头
         /// </summary>
-        /// <param name="request"></param>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
+        /// <param name="request"><see cref="HttpRequestMessage"/></param>
+        /// <param name="key">key</param>
+        /// <param name="value">value</param>
+        /// <returns><paramref name="request"/></returns>
         public static HttpRequestMessage AddHeader(this HttpRequestMessage request, string key, string value)
         {
             return request.AddHeader(key, new string[] { value });
@@ -72,10 +75,10 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 添加请求头
         /// </summary>
-        /// <param name="request"></param>
-        /// <param name="key"></param>
-        /// <param name="values"></param>
-        /// <returns></returns>
+        /// <param name="request"><see cref="HttpRequestMessage"/></param>
+        /// <param name="key">key</param>
+        /// <param name="values">value集合</param>
+        /// <returns><paramref name="request"/></returns>
         public static HttpRequestMessage AddHeader(this HttpRequestMessage request, string key, params string[] values)
         {
             request.Headers.TryAddWithoutValidation(key, values);
@@ -85,10 +88,10 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 以字符串的形式添加数据
         /// </summary>
-        /// <param name="request"></param>
-        /// <param name="value"></param>
-        /// <param name="mediaType"></param>
-        /// <returns></returns>
+        /// <param name="request"><see cref="HttpRequestMessage"/></param>
+        /// <param name="value">内容</param>
+        /// <param name="mediaType"><paramref name="value"/>类型</param>
+        /// <returns><paramref name="request"/></returns>
         public static HttpRequestMessage AddContent(this HttpRequestMessage request,
                                                     string value,
                                                     string mediaType = "application/json")
@@ -103,9 +106,9 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 以键值对的形式添加数据
         /// </summary>
-        /// <param name="request"></param>
-        /// <param name="nameValue"></param>
-        /// <returns></returns>
+        /// <param name="request"><see cref="HttpRequestMessage"/></param>
+        /// <param name="nameValue">键值对</param>
+        /// <returns><paramref name="request"/></returns>
         public static HttpRequestMessage AddContent(this HttpRequestMessage request, IDictionary<string, string> nameValue)
         {
             foreach (var nv in nameValue)
@@ -124,10 +127,10 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 以Json形式添加数据
         /// </summary>
-        /// <typeparam name="TModel"></typeparam>
-        /// <param name="request"></param>
-        /// <param name="model"></param>
-        /// <returns></returns>
+        /// <typeparam name="TModel"><paramref name="model"/>类型</typeparam>
+        /// <param name="request"><see cref="HttpRequestMessage"/></param>
+        /// <param name="model">待Json序列化的对象</param>
+        /// <returns><paramref name="request"/></returns>
         public static HttpRequestMessage AddJsonContent<TModel>(this HttpRequestMessage request, TModel model) where TModel : class
         {
             var json = model == null ? string.Empty : model.ToJsonString();
@@ -137,40 +140,20 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 添加流Content
         /// </summary>
-        /// <param name="request"></param>
-        /// <param name="stream"></param>
-        /// <returns></returns>
+        /// <param name="request"><see cref="HttpRequestMessage"/></param>
+        /// <param name="stream">流</param>
+        /// <returns><paramref name="request"/></returns>
         public static HttpRequestMessage AddContent(this HttpRequestMessage request, Stream stream)
         {
             return request.AddContent(content: new StreamContent(stream));
         }
 
         /// <summary>
-        /// 添加文件Content
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="fileInfo"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static HttpRequestMessage AddContent(this HttpRequestMessage request, FileInfo fileInfo, string name = null)
-        {
-            if (string.IsNullOrWhiteSpace(name)) name = Guid.NewGuid().ToString();
-
-            var stream = new StreamContent(fileInfo.OpenRead());
-
-            var content = new MultipartFormDataContent();
-
-            content.Add(stream, name, fileInfo.Name);
-
-            return request.AddContent(content: content);
-        }
-
-        /// <summary>
         /// 添加HttpContent
         /// </summary>
-        /// <param name="request"></param>
-        /// <param name="content"></param>
-        /// <returns></returns>
+        /// <param name="request"><see cref="HttpRequestMessage"/></param>
+        /// <param name="content"><see cref="HttpContent"/></param>
+        /// <returns><paramref name="request"/></returns>
         public static HttpRequestMessage AddContent(this HttpRequestMessage request, HttpContent content)
         {
 
@@ -219,9 +202,9 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 添加请求属性集
         /// </summary>
-        /// <param name="request"></param>
-        /// <param name="Properties"></param>
-        /// <returns></returns>
+        /// <param name="request"><see cref="HttpRequestMessage"/></param>
+        /// <param name="Properties">属性对象</param>
+        /// <returns><paramref name="request"/></returns>
         public static HttpRequestMessage AddProperty(this HttpRequestMessage request, IDictionary<string, object> Properties)
         {
             foreach (var p in Properties)
@@ -232,9 +215,9 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 获取请求报文，如果请求失败则触发<seealso cref="System.Net.Http.HttpRequestException"/>。
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="response"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">返序列化对象</typeparam>
+        /// <param name="response">响应</param>
+        /// <returns><paramref name="response"/></returns>
         public static async Task<T> AsAsync<T>(this HttpResponseMessage response) where T : class
         {
             var json = await response.Content.ReadAsStringAsync();
@@ -247,8 +230,8 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 使用默认的中间件
         /// </summary>
-        /// <param name="httpClient"></param>
-        /// <returns></returns>
+        /// <param name="httpClient"><see cref="HttpClient"/></param>
+        /// <returns><paramref name="httpClient"/></returns>
         public static HttpClient UseDefaultMiddleware(this HttpClient httpClient)
         {
             httpClient.Timeout = TimeSpan.FromMilliseconds(Constants.Timeout);
@@ -259,9 +242,9 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 使用<paramref name="handler"/>作为中间件
         /// </summary>
-        /// <param name="httpClient"></param>
-        /// <param name="handler"></param>
-        /// <returns></returns>
+        /// <param name="httpClient"><see cref="HttpClient"/></param>
+        /// <param name="handler">处理程序</param>
+        /// <returns><paramref name="httpClient"/></returns>
         public static HttpClient Use(this HttpClient httpClient, DelegatingHandler handler)
         {
             var handlerFieldInfo = Utils.Reflection.GetFieldInfo<HttpMessageInvoker>(Constants.HttpMessageInvokerHandler, BindingFlags.Instance | BindingFlags.NonPublic);
@@ -287,7 +270,7 @@ namespace SAE.CommonLibrary.Extension
         /// <seealso cref="HttpStatusCode.BadGateway"/>,
         /// <seealso cref="HttpStatusCode.ServiceUnavailable"/>,
         /// <seealso cref="HttpStatusCode.GatewayTimeout"/></param>
-        /// <returns></returns>
+        /// <returns><paramref name="httpClient"/></returns>
         public static HttpClient UsePolly(this HttpClient httpClient, int retryCount = 10, params HttpStatusCode[] httpStatusCodes)
         {
             return httpClient.Use(new PollyMiddleware(retryCount, httpStatusCodes));
@@ -296,9 +279,9 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 使用<paramref name="handler"/>作为异常处理中间件
         /// </summary>
-        /// <param name="httpClient"></param>
-        /// <param name="handler"></param>
-        /// <returns></returns>
+        /// <param name="httpClient"><see cref="HttpClient"/></param>
+        /// <param name="handler">处理程序</param>
+        /// <returns><paramref name="httpClient"/></returns>
         public static HttpClient UseExceptionHandler(this HttpClient httpClient, Func<HttpResponseMessage, Task> handler)
         {
             return httpClient.Use(new ExceptionMiddleware(handler));
@@ -306,9 +289,9 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 使用默认错误处理程序
         /// </summary>
-        /// <param name="httpClient"></param>
-        /// <returns></returns>
-        /// <exception cref="SAEException"></exception>
+        /// <param name="httpClient"><see cref="HttpClient"/></param>
+        /// <returns><paramref name="httpClient"/></returns>
+        /// <exception cref="SAEException">异常对象</exception>
         public static HttpClient UseDefaultExceptionHandler(this HttpClient httpClient)
         {
             httpClient.UseExceptionHandler(async response =>
@@ -326,8 +309,8 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 使用分块上传处理程序
         /// </summary>
-        /// <param name="httpClient"></param>
-        /// <returns></returns>
+        /// <param name="httpClient"><see cref="HttpClient"/></param>
+        /// <returns><paramref name="httpClient"/></returns>
         public static HttpClient UseChunkHandler(this HttpClient httpClient)
         {
             var handlerFieldInfo = Utils.Reflection.GetFieldInfo<HttpMessageInvoker>("_handler", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -339,9 +322,9 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 加入OAuth授权中间件
         /// </summary>
-        /// <param name="httpClient"></param>
+        /// <param name="httpClient"><see cref="HttpClient"/></param>
         /// <param name="options">授权信息</param>
-        /// <returns></returns>
+        /// <returns><paramref name="httpClient"/></returns>
         public static HttpClient UseOAuth(this HttpClient httpClient, OAuthOptions options)
         {
             return httpClient.Use(new OAuthMiddleware(options));
@@ -353,10 +336,10 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 分段下载文件
         /// </summary>
-        /// <param name="httpClient"></param>
-        /// <param name="httpRequestMessage"></param>
-        /// <param name="chunkSize"></param>
-        /// <returns></returns>
+        /// <param name="httpClient"><see cref="HttpClient"/></param>
+        /// <param name="httpRequestMessage">请求体</param>
+        /// <param name="chunkSize">分段大小</param>
+        /// <returns>文件流</returns>
         public static async Task<Stream> DownloadAsync(this HttpClient httpClient,
                                                        HttpRequestMessage httpRequestMessage,
                                                        long chunkSize = ChunkStreamContent.DefaultChunkSize)
@@ -405,25 +388,36 @@ namespace SAE.CommonLibrary.Extension
         #endregion
 
         #region Private Class
-
+        /// <summary>
+        /// 代理处理程序
+        /// </summary>
         private class ProxyHandler : DelegatingHandler
         {
             private readonly Func<Func<Task<HttpResponseMessage>>, Task<HttpResponseMessage>> _responseProxy;
             private readonly Action<HttpRequestMessage> _requestProxy;
+            /// <inheritdoc/>
             public ProxyHandler(HttpMessageHandler innerHandler) : base(innerHandler)
             {
             }
-
+            /// <summary>
+            /// ctor
+            /// </summary>
+            /// <param name="requestProxy">请求代理</param>
+            /// <param name="innerHandler">内部执行程序</param>
             public ProxyHandler(Action<HttpRequestMessage> requestProxy, HttpMessageHandler innerHandler) : this(innerHandler)
             {
                 this._requestProxy = requestProxy;
             }
-
+            /// <summary>
+            /// ctor
+            /// </summary>
+            /// <param name="proxy">响应代理</param>
+            /// <param name="innerHandler">内部执行程序</param>
             public ProxyHandler(Func<Func<Task<HttpResponseMessage>>, Task<HttpResponseMessage>> proxy, HttpMessageHandler innerHandler) : this(innerHandler)
             {
                 this._responseProxy = proxy;
             }
-
+            ///<inheritdoc/>
             protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
             {
                 if (this._requestProxy != null)
@@ -464,8 +458,8 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 创建大块文件流内容
         /// </summary>
-        /// <param name="content"></param>
-        /// <param name="fileName"></param>
+        /// <param name="content">文件流</param>
+        /// <param name="fileName">文件名</param>
         public ChunkStreamContent(Stream content, string fileName) : this(content, fileName, DefaultChunkSize)
         {
 
@@ -473,9 +467,9 @@ namespace SAE.CommonLibrary.Extension
         /// <summary>
         /// 创建大块文件流内容
         /// </summary>
-        /// <param name="stream"></param>
-        /// <param name="fileName"></param>
-        /// <param name="chunkSize"></param>
+        /// <param name="stream">文件流</param>
+        /// <param name="fileName">文件名</param>
+        /// <param name="chunkSize">分片大小</param>
         public ChunkStreamContent(Stream stream, string fileName, int chunkSize) : base(stream)
         {
             Assert.Build(stream != null && stream.Length > 0)

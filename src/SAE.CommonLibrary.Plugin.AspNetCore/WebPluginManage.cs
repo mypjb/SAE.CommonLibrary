@@ -18,7 +18,7 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
         /// <summary>
         /// ctor
         /// </summary>
-        /// <param name="pluginOptions"></param>
+        /// <param name="pluginOptions">插件配置</param>
         public WebPluginManage(PluginOptions pluginOptions) : base(pluginOptions)
         {
         }
@@ -61,7 +61,7 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
 
             return storage;
         }
-
+        ///<inheritdoc/>
         public override Assembly Load(IPlugin plugin)
         {
             if (AppContext.BaseDirectory.Equals(this._pluginDir))
@@ -74,7 +74,7 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
             }
 
         }
-
+        ///<inheritdoc/>
         public override void UnLoad(string name)
         {
             if (!AppContext.BaseDirectory.Equals(this._pluginDir))

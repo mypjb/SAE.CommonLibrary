@@ -13,7 +13,7 @@ namespace SAE.CommonLibrary.EventStore
         /// <param name="identity">通过标识获得事件流</param>
         /// <param name="skipEvents">跳过的事件</param>
         /// <param name="maxCount">获取事件个数</param>
-        /// <returns></returns>
+        /// <returns>事件流</returns>
         Task<EventStream> LoadEventStreamAsync(IIdentity identity,int skipEvents,int maxCount);
 
         /// <summary>
@@ -25,13 +25,13 @@ namespace SAE.CommonLibrary.EventStore
         /// 使用<paramref name="identity"/>返回当前版本号
         /// </summary>
         /// <param name="identity">事件流标识</param>
-        /// <returns></returns>
+        /// <returns>版本号</returns>
         Task<int> GetVersionAsync(IIdentity identity);
 
         /// <summary>
         /// 将事件彻底从事件存储移除
         /// </summary>
-        /// <param name="identity"></param>
+        /// <param name="identity">标识</param>
         /// <returns></returns>
         Task DeleteAsync(IIdentity identity);
     }

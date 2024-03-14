@@ -4,8 +4,15 @@ using System.Threading;
 
 namespace SAE.CommonLibrary
 {
+    /// <summary>
+    /// 服务门面
+    /// </summary>
     public class ServiceFacade
     {
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="serviceProvider">服务提供者</param>
 
         public ServiceFacade(IServiceProvider serviceProvider)
         {
@@ -16,6 +23,9 @@ namespace SAE.CommonLibrary
 
         private static AsyncLocal<IServiceProvider> asyncLocal = new AsyncLocal<IServiceProvider>();
         private static IServiceProvider defaultProvider;
+        /// <summary>
+        /// 返回当前线程的服务提供者
+        /// </summary>
         public static IServiceProvider ServiceProvider
         {
             get
@@ -27,8 +37,8 @@ namespace SAE.CommonLibrary
         /// <summary>
         /// 获得<typeparamref name="TService"/>
         /// </summary>
-        /// <typeparam name="TService"></typeparam>
-        /// <returns></returns>
+        /// <typeparam name="TService">服务接口</typeparam>
+        /// <returns><typeparamref name="TService"/>对象</returns>
         public static TService GetService<TService>() where TService : class
         {
             //var key = typeof(TService).GUID.ToString();

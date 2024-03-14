@@ -20,7 +20,7 @@ namespace SAE.CommonLibrary.Database.Responsibility
         {
 
         }
-
+        /// <inheritdoc/>
         protected override Task HandleCoreAsync(DatabaseResponsibilityContext context)
         {
             context.SetInvoke((connStr, options) =>

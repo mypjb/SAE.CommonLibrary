@@ -12,7 +12,7 @@ namespace SAE.CommonLibrary.EventStore
         /// <summary>
         /// ctor
         /// </summary>
-        /// <param name="types"></param>
+        /// <param name="types">事件类型集合</param>
         public EventMappingProvider(IEnumerable<Type> types)
         {
             this.Types = types;

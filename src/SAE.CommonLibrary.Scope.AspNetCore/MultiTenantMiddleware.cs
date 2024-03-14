@@ -7,7 +7,7 @@ using SAE.CommonLibrary.Logging;
 namespace SAE.CommonLibrary.Scope.AspNetCore
 {
     /// <summary>
-    /// multi tenant middleware
+    /// 多租户中间件
     /// </summary>
     public class MultiTenantMiddleware
     {
@@ -18,10 +18,10 @@ namespace SAE.CommonLibrary.Scope.AspNetCore
         /// <summary>
         /// ctor
         /// </summary>
-        /// <param name="next"></param>
-        /// <param name="scopeFactory"></param>
-        /// <param name="logging"></param>
-        /// <param name="multiTenantService"></param>
+        /// <param name="next">下一个管道</param>
+        /// <param name="scopeFactory">区域工厂</param>
+        /// <param name="logging">日志记录器</param>
+        /// <param name="multiTenantService">多租户服务</param>
         public MultiTenantMiddleware(RequestDelegate next,
                                      IScopeFactory scopeFactory,
                                      ILogging<MultiTenantMiddleware> logging,
@@ -34,10 +34,9 @@ namespace SAE.CommonLibrary.Scope.AspNetCore
         }
 
         /// <summary>
-        /// call middleware request
+        /// 执行中间件
         /// </summary>
-        /// <param name="context"></param>
-        /// <returns></returns>
+        /// <param name="context">上下文</param>
         public async Task InvokeAsync(HttpContext context)
         {
             this._logging.Debug("find tenant identity");

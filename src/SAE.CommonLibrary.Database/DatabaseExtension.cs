@@ -18,16 +18,18 @@ namespace SAE.CommonLibrary.Database
         /// <summary>
         /// 获得默认数据库链接(异步)
         /// </summary>
-        /// <param name="factory"></param>
+        /// <param name="factory">数据库链接工厂</param>
+        /// <returns><see cref="IDbConnection"/></returns>
         public static Task<IDbConnection> GetAsync(this IDBConnectionFactory factory)
         {
             return factory.GetAsync(DefaultName);
         }
-        
+
         /// <summary>
         /// 获得默认数据库链接
         /// </summary>
-        /// <param name="factory"></param>
+        /// <param name="factory">数据库链接工厂</param>
+        /// <returns><see cref="IDbConnection"/></returns>
         public static IDbConnection Get(this IDBConnectionFactory factory)
         {
             return factory.Get(DefaultName);
@@ -35,8 +37,9 @@ namespace SAE.CommonLibrary.Database
         /// <summary>
         /// 获得与<see cref="DBConnectOptions.Name"/>匹配的数据库链接
         /// </summary>
-        /// <param name="factory"></param>
+        /// <param name="factory">数据库链接工厂</param>
         /// <param name="name">链接名称</param>
+        /// <returns><see cref="IDbConnection"/></returns>
         public static IDbConnection Get(this IDBConnectionFactory factory,string name)
         {
             return factory.GetAsync(name).GetAwaiter().GetResult();

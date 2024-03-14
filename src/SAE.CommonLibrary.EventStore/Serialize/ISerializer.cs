@@ -13,14 +13,14 @@ namespace SAE.CommonLibrary.EventStore.Serialize
         /// 将事件集合转化成字符串
         /// </summary>
         /// <param name="object"></param>
-        /// <returns></returns>
+        /// <returns>序列化后的结果</returns>
         string Serialize(object @object);
         /// <summary>
         /// 将字符串反序列化为事件集合
         /// </summary>
-        /// <param name="input"></param>
-        /// <param name="type"></param>
-        /// <returns></returns>
+        /// <param name="input">输入</param>
+        /// <param name="type">类型</param>
+        /// <returns>反序列化后的对象</returns>
         object Deserialize(string input,Type type);
         /// <summary>
         /// 使用字符串的值填充现有对象实例。

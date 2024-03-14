@@ -11,7 +11,7 @@ using SAE.CommonLibrary.Logging;
 
 namespace SAE.CommonLibrary.Database
 {
-    /// <inheritdoc/>
+
     /// <summary>
     /// 默认<see cref="IDBConnectionFactory"/>实现
     /// </summary>
@@ -56,7 +56,7 @@ namespace SAE.CommonLibrary.Database
             this._logging = logging;
         }
 
-        
+        /// <inheritdoc/>
         public async Task<IDbConnection> GetAsync(string name)
         {
             Assert.Build(name)

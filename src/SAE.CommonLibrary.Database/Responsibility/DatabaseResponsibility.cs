@@ -10,7 +10,6 @@ namespace SAE.CommonLibrary.Database.Responsibility
     /// <summary>
     /// 数据库职责链
     /// </summary>
-    /// <inheritdoc/>
     public abstract class DatabaseResponsibility : AbstractResponsibility<DatabaseResponsibilityContext>
     {
         /// <summary>
@@ -25,7 +24,8 @@ namespace SAE.CommonLibrary.Database.Responsibility
         {
             this.Provider = provider;
         }
-    
+
+        /// <inheritdoc/>
         public override async Task HandleAsync(DatabaseResponsibilityContext context)
         {
             if (this.HasProvider(context))
@@ -39,7 +39,7 @@ namespace SAE.CommonLibrary.Database.Responsibility
         /// <summary>
         /// 上下文的提供者和当前对象是否匹配
         /// </summary>
-        /// <param name="context"></param>
+        /// <param name="context">上下文</param>
         protected virtual bool HasProvider(DatabaseResponsibilityContext context)
         {
             return context.Options.Provider.Equals(this.Provider, StringComparison.OrdinalIgnoreCase);
@@ -47,7 +47,7 @@ namespace SAE.CommonLibrary.Database.Responsibility
         /// <summary>
         /// 核心处理函数
         /// </summary>
-        /// <param name="context"></param>
+        /// <param name="context">上下文</param>
         /// <returns></returns>
         protected abstract Task HandleCoreAsync(DatabaseResponsibilityContext context);
     }

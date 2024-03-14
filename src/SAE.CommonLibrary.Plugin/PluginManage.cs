@@ -13,7 +13,7 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
     /// <summary>
     /// <seealso cref="IPluginManage"/>实现
     /// </summary>
-    /// <typeparam name="TPlugin"></typeparam>
+    /// <typeparam name="TPlugin">插件类型</typeparam>
     public class PluginManage<TPlugin> : IPluginManage where TPlugin : IPlugin
     {
         /// <summary>
@@ -35,7 +35,7 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
         /// <summary>
         /// ctor
         /// </summary>
-        /// <param name="pluginOptions"></param>
+        /// <param name="pluginOptions">插件配置</param>
         public PluginManage(PluginOptions pluginOptions)
         {
             this._pluginType = typeof(TPlugin);
@@ -120,8 +120,8 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
         /// <summary>
         /// 创建实例
         /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
+        /// <param name="type">插件类型</param>
+        /// <returns>插件接口</returns>
         protected virtual IPlugin CreateInstance(Type type)
         {
             return (IPlugin)Activator.CreateInstance(type);
@@ -129,8 +129,8 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
         /// <summary>
         /// 是否为绝对路径
         /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
+        /// <param name="path">路径</param>
+        /// <returns>true:绝对路径</returns>
         private bool AbsolutePath(string path)
         {
             return Path.IsPathRooted(path);

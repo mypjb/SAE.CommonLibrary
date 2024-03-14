@@ -55,7 +55,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 }
             }
 
-            services.TryAddTransient<IMediator, Mediator>();
+            services.TryAddTransient<IMediator, DefaultMediator>();
 
             return new MediatorBuilder(services, descriptors);
         }
@@ -70,7 +70,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             if (assemblies == null || !assemblies.Any()) assemblies = new Assembly[] { Assembly.GetCallingAssembly() };
 
-            services.TryAddSingleton<IDirector, Director>();
+            services.TryAddSingleton<IDirector, DefaultDirector>();
 
 #pragma warning disable CS0618 // Type or member is obsolete
             var builderType = typeof(IBuilder);

@@ -14,7 +14,7 @@ using SAE.CommonLibrary.Extension;
 namespace Microsoft.Extensions.DependencyInjection
 {
     /// <summary>
-    /// 
+    /// aspnetcore 插件配置
     /// </summary>
     public static class PluginAspNetCoreDependencyInjectionExtension
     {
@@ -22,8 +22,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// 添加插件管理(web)
         /// </summary>
-        /// <param name="services"></param>
-        /// <returns></returns>
+        /// <param name="services">服务集合</param>
+        /// <returns><paramref name="services"/></returns>
         public static IServiceCollection AddPluginManage(this IServiceCollection services)
         {
             return services.AddPluginManage(new PluginOptions());
@@ -32,9 +32,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// 添加插件管理(web)
         /// </summary>
-        /// <param name="services"></param>
-        /// <param name="configuration"></param>
-        /// <returns></returns>
+        /// <param name="services">服务集合</param>
+        /// <param name="configuration">配置对象</param>
+        /// <returns><paramref name="services"/></returns>
         public static IServiceCollection AddPluginManage(this IServiceCollection services, IConfiguration configuration)
         {
             return services.AddPluginManage(configuration.GetSection(PluginOptions.Option).Get<PluginOptions>());
@@ -43,8 +43,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// 添加插件管理(web)
         /// </summary>
-        /// <param name="services"></param>
-        /// <returns></returns>
+        /// <param name="services">服务集合</param>
+        /// <returns><paramref name="services"/></returns>
         public static IServiceCollection AddPluginManage(this IServiceCollection services, PluginOptions options)
         {
             services.AddDefaultLogger();
@@ -72,8 +72,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// 使用插件管理
         /// </summary>
-        /// <param name="builder"></param>
-        /// <returns></returns>
+        /// <param name="builder">构建器</param>
+        /// <returns><paramref name="builder"/></returns>
         public static IApplicationBuilder UsePluginManage(this IApplicationBuilder builder)
         {
             var logging = builder.ApplicationServices.GetService<ILogging<WebPluginManage>>();
@@ -106,7 +106,9 @@ namespace Microsoft.Extensions.DependencyInjection
                 catch (Exception ex)
                 {
                     logging.Error(ex, $"load '{plugin.Name}' failure");
+#pragma warning disable CA2200 // 再次引发以保留堆栈详细信息
                     throw ex;
+#pragma warning restore CA2200 // 再次引发以保留堆栈详细信息
                 }
 
             }

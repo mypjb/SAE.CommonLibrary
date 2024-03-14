@@ -16,12 +16,12 @@ namespace SAE.CommonLibrary.Extension.Middleware
     public class ChunkUploadMiddleware : DelegatingHandler
     {
         private readonly Func<ILogging> _loggingRecord;
-
+        ///<inheritdoc/>
         public ChunkUploadMiddleware(HttpMessageHandler innerHandler) : base(innerHandler)
         {
             this._loggingRecord = HttpClientExtension.LoggerRecord;
         }
-
+        ///<inheritdoc/>
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             if (!(request.Content is ChunkStreamContent))
@@ -32,12 +32,18 @@ namespace SAE.CommonLibrary.Extension.Middleware
             return await this.UploadCoreAsync(request, (ChunkStreamContent)request.Content, cancellationToken);
         }
 
-
+        /// <summary>
+        /// 上传核心处理程序
+        /// </summary>
+        /// <param name="httpRequestMessage">请求</param>
+        /// <param name="chunkStreamContent">分段流</param>
+        /// <param name="cancellationToken">取消令牌</param>
+        /// <returns>响应正文</returns>
         private async Task<HttpResponseMessage> UploadCoreAsync(HttpRequestMessage httpRequestMessage,
                                                                 ChunkStreamContent chunkStreamContent,
                                                                 CancellationToken cancellationToken)
         {
-
+            
             var chunkSize = chunkStreamContent.ChunkSize;
 
             var fileStream = await chunkStreamContent.ReadAsStreamAsync();

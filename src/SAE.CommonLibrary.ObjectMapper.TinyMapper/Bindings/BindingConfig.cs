@@ -5,6 +5,7 @@ using SAE.CommonLibrary.ObjectMapper.Core.Extensions;
 
 namespace SAE.CommonLibrary.ObjectMapper.Bindings
 {
+
     internal class BindingConfig
     {
         private readonly Dictionary<string, List<string>> _oneToOneBindFields = new Dictionary<string, List<string>>();

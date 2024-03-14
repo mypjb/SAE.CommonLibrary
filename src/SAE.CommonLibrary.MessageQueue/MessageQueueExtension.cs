@@ -9,11 +9,14 @@ using SAE.CommonLibrary.Logging;
 namespace SAE.CommonLibrary.MessageQueue
 {
     /// <summary>
-    /// 
+    /// <see cref="IMessageQueue"/>扩展
     /// </summary>
     public static class MessageQueueExtension
     {
         private readonly static ConcurrentDictionary<string, Delegate> _concurrentDictionary;
+        /// <summary>
+        /// ctor
+        /// </summary>
         static MessageQueueExtension()
         {
             _concurrentDictionary = new ConcurrentDictionary<string, Delegate>();
@@ -21,8 +24,8 @@ namespace SAE.CommonLibrary.MessageQueue
         /// <summary>
         /// 发布消息
         /// </summary>
-        /// <typeparam name="TMessage"></typeparam>
-        /// <param name="messageQueue"></param>
+        /// <typeparam name="TMessage">消息类型</typeparam>
+        /// <param name="messageQueue">队列接口</param>
         /// <param name="message">消息主体</param>
         public static Task PublishAsync<TMessage>(this IMessageQueue messageQueue, TMessage message) where TMessage : class
         {
@@ -32,8 +35,8 @@ namespace SAE.CommonLibrary.MessageQueue
         /// <summary>
         /// 发布消息
         /// </summary>
-        /// <typeparam name="TMessage"></typeparam>
-        /// <param name="messageQueue"></param>
+        /// <typeparam name="TMessage">消息类型</typeparam>
+        /// <param name="messageQueue">队列接口</param>
         /// <param name="message">消息主体</param>
         public static void Publish<TMessage>(this IMessageQueue messageQueue, TMessage message) where TMessage : class
         {
@@ -43,8 +46,8 @@ namespace SAE.CommonLibrary.MessageQueue
         /// <summary>
         /// 发布消息
         /// </summary>
-        /// <typeparam name="TMessage"></typeparam>
-        /// <param name="messageQueue"></param>
+        /// <typeparam name="TMessage">消息类型</typeparam>
+        /// <param name="messageQueue">队列接口</param>
         /// <param name="identity">发布标识</param>
         /// <param name="message">消息主体</param>
         public static void Publish<TMessage>(this IMessageQueue messageQueue, string identity, TMessage message) where TMessage : class
@@ -57,10 +60,9 @@ namespace SAE.CommonLibrary.MessageQueue
         /// <summary>
         /// 使用<typeparamref name="TMessage"/>类型作为订阅identity
         /// </summary>
-        /// <typeparam name="TMessage"></typeparam>
-        /// <param name="messageQueue"></param>
+        /// <typeparam name="TMessage">消息类型</typeparam>
+        /// <param name="messageQueue">队列接口</param>
         /// <param name="delegate">订阅处理程序</param>
-        /// <returns></returns>
         public static void Subscribe<TMessage>(this IMessageQueue messageQueue, Func<TMessage, Task> @delegate) where TMessage : class
         {
             messageQueue.SubscribeAsync(@delegate)
@@ -71,7 +73,8 @@ namespace SAE.CommonLibrary.MessageQueue
         /// <summary>
         /// 使用<typeparamref name="TMessage"/>类型作为订阅identity
         /// </summary>
-        /// <typeparam name="TMessage"></typeparam>
+        /// <typeparam name="TMessage">消息类型</typeparam>
+        /// <param name="messageQueue">队列接口</param>
         public static void Subscribe<TMessage>(this IMessageQueue messageQueue) where TMessage : class
         {
             messageQueue.SubscribeAsync<TMessage>()
@@ -82,10 +85,9 @@ namespace SAE.CommonLibrary.MessageQueue
         /// <summary>
         /// 使用<typeparamref name="TMessage"/>类型作为订阅identity
         /// </summary>
-        /// <typeparam name="TMessage"></typeparam>
-        /// <param name="messageQueue"></param>
+        /// <typeparam name="TMessage">消息类型</typeparam>
+        /// <param name="messageQueue">队列接口</param>
         /// <param name="delegate">订阅处理程序</param>
-        /// <returns></returns>
         public static async Task SubscribeAsync<TMessage>(this IMessageQueue messageQueue, Func<TMessage, Task> @delegate) where TMessage : class
         {
             var identity = Utils.Get<TMessage>();
@@ -96,8 +98,8 @@ namespace SAE.CommonLibrary.MessageQueue
         /// <summary>
         /// 使用<typeparamref name="TMessage"/>类型作为订阅identity,并使用依赖注入的方式进行订阅处理
         /// </summary>
-        /// <typeparam name="TMessage"></typeparam>
-        /// <param name="messageQueue"></param>
+        /// <typeparam name="TMessage">消息类型</typeparam>
+        /// <param name="messageQueue">队列接口</param>
         public static async Task SubscribeAsync<TMessage>(this IMessageQueue messageQueue) where TMessage : class
         {
             var identity = Utils.Get<TMessage>();
@@ -118,10 +120,10 @@ namespace SAE.CommonLibrary.MessageQueue
         /// <summary>
         /// 添加对事件<paramref name="identity"/>的映射。
         /// </summary>
-        /// <param name="messageQueue"></param>
+        /// <typeparam name="TMessage">消息类型</typeparam>
+        /// <param name="messageQueue">队列接口</param>
         /// <param name="identity">标识</param>
         /// <param name="delegate">执行的委托</param>
-        /// <returns></returns>
         public static Task MappingAsync<TMessage>(this IMessageQueue messageQueue, string identity, Func<TMessage, Task> @delegate) where TMessage : class
         {
             _concurrentDictionary.AddOrUpdate(identity, @delegate, (a, b) =>
@@ -136,11 +138,10 @@ namespace SAE.CommonLibrary.MessageQueue
         /// <summary>
         /// 执行订阅程序的处理
         /// </summary>
-        /// <typeparam name="TMessage"></typeparam>
-        /// <param name="messageQueue"></param>
+        /// <typeparam name="TMessage">消息类型</typeparam>
+        /// <param name="messageQueue">队列接口</param>
         /// <param name="identity">订阅标识</param>
-        /// <param name="message">订阅消息</param>
-        /// <returns></returns>
+        /// <param name="message">订阅消息</param>        
         public static async Task HandlerCoreAsync<TMessage>(this IMessageQueue messageQueue,
                                                             string identity,
                                                             TMessage message) where TMessage : class
@@ -160,7 +161,9 @@ namespace SAE.CommonLibrary.MessageQueue
                     catch (Exception ex)
                     {
                         logging.Error("消息执行失败!", ex);
+#pragma warning disable CA2200 // 再次引发以保留堆栈详细信息
                         throw ex;
+#pragma warning restore CA2200 // 再次引发以保留堆栈详细信息
                     }
                 }
                 else
@@ -177,10 +180,9 @@ namespace SAE.CommonLibrary.MessageQueue
         /// <summary>
         /// 执行订阅程序的处理
         /// </summary>
-        /// <typeparam name="TMessage"></typeparam>
-        /// <param name="messageQueue"></param>
+        /// <typeparam name="TMessage">消息类型</typeparam>
+        /// <param name="messageQueue">队列接口</param>
         /// <param name="message">订阅消息</param>
-        /// <returns></returns>
         public static Task HandlerCoreAsync<TMessage>(this IMessageQueue messageQueue, TMessage message) where TMessage : class
         {
             var identity = Utils.Get(message);

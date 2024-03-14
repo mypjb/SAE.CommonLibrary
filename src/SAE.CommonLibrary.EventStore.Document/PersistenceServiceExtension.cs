@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.EventStore.Document
 {
+    /// <summary>
+    /// 持久化扩展接口
+    /// </summary>
     public static class PersistenceServiceExtension
     {
         ///// <summary>

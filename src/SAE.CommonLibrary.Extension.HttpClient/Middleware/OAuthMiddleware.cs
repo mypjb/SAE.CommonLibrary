@@ -29,17 +29,16 @@ namespace SAE.CommonLibrary.Extension.Middleware
         /// <summary>
         /// ctor
         /// </summary>
+        /// <param name="options">
+        /// 授权配置
+        /// </param>
         public OAuthMiddleware(OAuthOptions options)
         {
             this._loggingRecord = HttpClientExtension.LoggerRecord;
             this._options = options;
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+
+        /// <inheritdoc/>
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             await RequestTokenAsync(request);
@@ -57,7 +56,11 @@ namespace SAE.CommonLibrary.Extension.Middleware
 
             return responseMessage;
         }
-
+        /// <summary>
+        /// 附加请求token
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         private async Task RequestTokenAsync(HttpRequestMessage request)
         {
             if (this.Token == null || !this.Token.Check())
@@ -130,9 +133,9 @@ namespace SAE.CommonLibrary.Extension.Middleware
             /// </summary>
             public DateTime Deadline { get; }
             /// <summary>
-            /// 
+            /// 检查令牌是否过期
             /// </summary>
-            /// <returns></returns>
+            /// <returns>true:未过期</returns>
             public bool Check()
             {
                 return this.Deadline > DateTime.Now;

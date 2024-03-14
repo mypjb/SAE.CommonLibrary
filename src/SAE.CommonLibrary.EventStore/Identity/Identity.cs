@@ -11,7 +11,7 @@
         /// </summary>
         public string Id { get; }
         /// <summary>
-        /// 
+        /// ctor
         /// </summary>
         public Identity():this(Utils.GenerateId())
         {
@@ -26,10 +26,8 @@
                 id = Utils.GenerateId();
             this.Id = id;
         }
-        /// <summary>
-        /// 返回字符串形式的标识
-        /// </summary>
-        /// <returns></returns>
+
+        /// <inheritdoc/>
         public override string ToString()
         {
             return this.Id;
@@ -38,7 +36,7 @@
         /// <summary>
         /// 字符串隐式转换为<see cref="Identity"/>
         /// </summary>
-        /// <param name="identity"></param>
+        /// <param name="identity">标识</param>
         public static implicit operator Identity(string identity)
         {
             return new Identity(identity);
@@ -47,32 +45,32 @@
         /// <summary>
         /// 隐式转换
         /// </summary>
-        /// <param name="identity"></param>
+        /// <param name="identity">标识</param>
         public static implicit operator string(Identity identity)
         {
             return identity.ToString();
         }
-
+        /// <inheritdoc/>
         public override bool Equals(object obj)
         {
             if (object.ReferenceEquals(this, obj)) return true;
 
             return this.ToString().Equals(obj.ToString());
         }
-
+        /// <inheritdoc/>
         public static bool operator ==(Identity left, Identity right)
         {
             if ((object)left == null && (object)right == null) return true;
             return left.Equals(right);
         }
 
-        
 
+        /// <inheritdoc/>
         public static bool operator !=(Identity left, Identity right)
         {
             return !(left == right);
         }
-
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             return this.ToString().GetHashCode();

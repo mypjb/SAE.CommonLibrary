@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace SAE.CommonLibrary.Scope.AspNetCore
 {
     /// <summary>
-    /// aspnetcore multi tenant strategy
+    /// aspnetcore租户策略
     /// </summary>
     public enum MultiTenantStrategy
     {
@@ -19,20 +19,20 @@ namespace SAE.CommonLibrary.Scope.AspNetCore
     }
 
     /// <summary>
-    /// aspnetcore tenant options
+    /// aspnetcore租户配置
     /// </summary>
     public class MultiTenantOptions
     {
         /// <summary>
-        /// configuration node
+        /// 配置节
         /// </summary>
         public const string Option = "MultiTenant";
         /// <summary>
-        /// default user claim name
+        /// 用户默认claim名称
         /// </summary>
         public const string DefaultClaimName = "siteid";
         /// <summary>
-        /// default header name
+        /// 默认请求头名称
         /// </summary>
         public const string DefalutHeaderName = "tenant";
         /// <summary>
@@ -47,7 +47,7 @@ namespace SAE.CommonLibrary.Scope.AspNetCore
 
         private string claimName;
         /// <summary>
-        /// tenant identity claim name
+        /// 用户claim名称
         /// </summary>
         /// <value></value>
         public string ClaimName
@@ -66,7 +66,7 @@ namespace SAE.CommonLibrary.Scope.AspNetCore
 
         private string headerName;
         /// <summary>
-        /// tenant identity claim name
+        /// 请求头名称
         /// </summary>
         /// <value></value>
         public string HeaderName
@@ -84,21 +84,21 @@ namespace SAE.CommonLibrary.Scope.AspNetCore
         }
 
         /// <summary>
-        /// multi tenant strategy
+        /// 多租户策略
         /// </summary>
         /// <value></value>
         public MultiTenantStrategy Strategy { get; set; }
 
         /// <summary>
-        /// master host
+        /// 中域名，只有在策略为<see cref="MultiTenantStrategy.Domain"/>时才生效
         /// </summary>
         public string Host { get; set; }
         /// <summary>
-        /// set default rule
+        /// 是否使用默认规则
         /// </summary>
         public bool UseDefaultRule { get; set; }
         /// <summary>
-        /// mapping dictionary of host and tenant identity 
+        /// 域名和租户身份的映射字典
         /// </summary>
         public Dictionary<string, string> Mapper { get; set; }
     }

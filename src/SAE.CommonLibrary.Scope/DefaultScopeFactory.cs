@@ -8,7 +8,6 @@ namespace SAE.CommonLibrary.Scope
     /// <summary>
     /// 默认区域工厂实现
     /// </summary>
-    /// <inheritdoc/>
     public class DefaultScopeFactory : IScopeFactory
     {
         private readonly AsyncLocal<IScope> _asyncLocal;
@@ -20,11 +19,13 @@ namespace SAE.CommonLibrary.Scope
             this._asyncLocal = new AsyncLocal<IScope>();
         }
 
+        /// <inheritdoc/>
         public Task<IScope> GetAsync()
         {
             return Task.FromResult<IScope>(this.GetCurrentScope());
         }
 
+        /// <inheritdoc/>
         public Task<IScope> GetAsync(string scopeName)
         {
             var currentScope = this.GetCurrentScope();
@@ -41,7 +42,7 @@ namespace SAE.CommonLibrary.Scope
         /// <summary>
         /// 获得当前区域
         /// </summary>
-        /// <returns></returns>
+        /// <returns>区域对象</returns>
         private IScope GetCurrentScope()
         {
             if (this._asyncLocal.Value == null)
@@ -54,8 +55,7 @@ namespace SAE.CommonLibrary.Scope
         /// <summary>
         /// 重置区域
         /// </summary>
-        /// <param name="scope"></param>
-        /// <returns></returns>
+        /// <param name="scope">重置区域</param>
         private Task Restore(IScope scope)
         {
             this._asyncLocal.Value = scope;

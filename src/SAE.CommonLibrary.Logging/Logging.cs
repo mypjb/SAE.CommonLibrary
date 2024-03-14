@@ -10,34 +10,24 @@ namespace SAE.CommonLibrary.Logging
     /// <typeparam name="TCategoryName"></typeparam>
     public class Logging<TCategoryName> : ILogging<TCategoryName>
     {
-        private readonly ILogging _log;
+        private readonly ILogging _logging;
         /// <summary>
-        /// 
+        /// ctor
         /// </summary>
-        /// <param name="factory"></param>
+        /// <param name="factory">日志记录器工厂</param>
         public Logging(ILoggingFactory factory)
         {
-            _log = factory.Create<TCategoryName>();
+            _logging = factory.Create<TCategoryName>();
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="level"></param>
-        /// <returns></returns>
+       /// <inheritdoc/>
         public bool IsEnabled(Level level)
         {
-            return this._log.IsEnabled(level);
+            return this._logging.IsEnabled(level);
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="level"></param>
-        /// <param name="exception"></param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public ILogging Write(string message, Level level, Exception exception)
         {
-           return this._log.Write(message, level, exception);
+           return this._logging.Write(message, level, exception);
         }
     }
 }

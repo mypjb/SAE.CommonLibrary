@@ -11,10 +11,20 @@ using System.Threading.Tasks;
 
 namespace SAE.CommonLibrary.Extension.Middleware
 {
+    /// <summary>
+    /// 重试中间件
+    /// </summary>
+    /// <remarks>
+    /// 在特定的请求异常时，会重试指定次数
+    /// </remarks>
     public class PollyMiddleware : DelegatingHandler
     {
         private readonly AsyncRetryPolicy<HttpResponseMessage> _policy;
-
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="retryCount">重试次数</param>
+        /// <param name="httpStatusCodes">异常状态码,默认为401、408、500、502、503、504</param>
         public PollyMiddleware(int retryCount, IEnumerable<HttpStatusCode> httpStatusCodes)
         {
             retryCount = retryCount < 0 ? 10 : retryCount;
@@ -41,6 +51,7 @@ namespace SAE.CommonLibrary.Extension.Middleware
                                    })
                               .RetryAsync(retryCount);
         }
+        /// <inheritdoc/>
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             return await this._policy.ExecuteAsync(() => base.SendAsync(request, cancellationToken));

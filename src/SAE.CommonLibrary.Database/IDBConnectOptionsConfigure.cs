@@ -21,7 +21,7 @@ namespace SAE.CommonLibrary.Database
         /// <param name="options">配置对象</param>
         void Configure(IEnumerable<DBConnectOptions> options);
     }
-    /// <inheritdoc />
+
     /// <summary>
     /// <see cref="IDBConnectOptionsConfigure"/> 默认实现
     /// </summary>
@@ -50,7 +50,7 @@ namespace SAE.CommonLibrary.Database
         /// <summary>
         /// 配置变更
         /// </summary>
-        /// <param name="dBConnectOptions"></param>
+        /// <param name="dBConnectOptions">数据库链接配置集</param>
         public virtual void Configure(IEnumerable<DBConnectOptions> dBConnectOptions)
         {
             if (dBConnectOptions == null || !dBConnectOptions.Any())

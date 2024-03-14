@@ -26,7 +26,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator
     /// </summary>
     /// <typeparam name="TCommand">命令</typeparam>
 
-    internal class CommandHandlerWrapper<TCommand> : CommandHandlerWrapper where TCommand : class
+    internal class DefaultCommandHandlerWrapper<TCommand> : CommandHandlerWrapper where TCommand : class
     {
         /// <summary>
         /// 命令处理集合
@@ -40,7 +40,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator
         /// 处理程序是否存在
         /// </summary>
         private bool _handlerExist;
-        public CommandHandlerWrapper(IServiceProvider serviceProvider)
+        public DefaultCommandHandlerWrapper(IServiceProvider serviceProvider)
         {
             this._handlers = serviceProvider.GetServices<ICommandHandler<TCommand>>();
             this._pipelineBehaviors = serviceProvider.GetServices<IPipelineBehavior<TCommand>>()
@@ -71,7 +71,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator
             for (int i = 0; i < this._pipelineBehaviors.Count(); i++)
             {
                 var pipelineBehavior = this._pipelineBehaviors.ElementAt(i);
-                var pipelineBehaviorWapper = new PipelineBehaviorWrapper<TCommand>(arg, pipelineBehavior, next);
+                var pipelineBehaviorWapper = new DefaultPipelineBehaviorWrapper<TCommand>(arg, pipelineBehavior, next);
                 next = pipelineBehaviorWapper.Build();
             }
 

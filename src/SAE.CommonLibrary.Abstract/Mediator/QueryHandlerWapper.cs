@@ -21,7 +21,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator
     /// </summary>
     /// <typeparam name="TCommand">命令</typeparam>
     /// <typeparam name="TResponse">响应</typeparam>
-    internal class RequestHandlerWrapper<TCommand, TResponse> : RequestHandlerWrapper where TCommand : class
+    internal class DefaultRequestHandlerWrapper<TCommand, TResponse> : RequestHandlerWrapper where TCommand : class
     {
         /// <summary>
         /// 处理集合
@@ -39,7 +39,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator
         /// ctor
         /// </summary>
         /// <param name="serviceProvider">服务提供者</param>
-        public RequestHandlerWrapper(IServiceProvider serviceProvider)
+        public DefaultRequestHandlerWrapper(IServiceProvider serviceProvider)
         {
             this._pipelineBehaviors = serviceProvider.GetServices<IPipelineBehavior<TCommand, TResponse>>()
                                                    .OrderBy(s => s, OrderComparer.Comparer)
@@ -74,7 +74,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator
             for (int i = 0; i < this._pipelineBehaviors.Count(); i++)
             {
                 var pipelineBehavior = this._pipelineBehaviors.ElementAt(i);
-                var pipelineBehaviorWapper = new PipelineBehaviorWrapper<TCommand, TResponse>(arg, pipelineBehavior, next);
+                var pipelineBehaviorWapper = new DefaultPipelineBehaviorWrapper<TCommand, TResponse>(arg, pipelineBehavior, next);
                 next = pipelineBehaviorWapper.Build();
             }
 

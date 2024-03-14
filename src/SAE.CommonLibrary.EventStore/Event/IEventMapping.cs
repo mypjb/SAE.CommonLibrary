@@ -29,7 +29,6 @@ namespace SAE.CommonLibrary.EventStore
     /// <summary>
     /// <see cref="IEventMapping"/> 默认实现
     /// </summary>
-    /// <inheritdoc/>
     public class DefaultEventMapping : IEventMapping
     {
         private readonly ILogging<DefaultEventMapping> _logging;
@@ -37,8 +36,8 @@ namespace SAE.CommonLibrary.EventStore
         /// <summary>
         /// ctor
         /// </summary>
-        /// <param name="logging"></param>
-        /// <param name="providers"></param>
+        /// <param name="logging">日志记录器</param>
+        /// <param name="providers">事件映射提供程序</param>
         public DefaultEventMapping(ILogging<DefaultEventMapping> logging,IEnumerable<EventMappingProvider> providers)
         {
             this._logging = logging;
@@ -51,12 +50,13 @@ namespace SAE.CommonLibrary.EventStore
                 }
             }
         }
+        /// <inheritdoc/>
         public void Add(string key, Type type)
         {
             this._mapping[key] = type;
             this._logging.Info($"add mapping: key:'{key}',type:{type}");
         }
-
+        /// <inheritdoc/>
         public Type Get(string key)
         {
             Type type;

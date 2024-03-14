@@ -14,7 +14,6 @@ namespace SAE.CommonLibrary.MessageQueue
         /// <summary>
         /// 服务接口
         /// </summary>
-        /// <value></value>
         IServiceCollection Services { get; }
     }
     /// <summary>
@@ -22,10 +21,15 @@ namespace SAE.CommonLibrary.MessageQueue
     /// </summary>
     public class MessageQueueBuilder : IMessageQueueBuilder
     {
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="services">服务集合</param>
         public MessageQueueBuilder(IServiceCollection services)
         {
             this.Services = services;
         }
+        /// <inheritdoc/>
         public IServiceCollection Services { get; }
     }
 }

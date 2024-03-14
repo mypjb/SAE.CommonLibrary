@@ -49,7 +49,7 @@ namespace SAE.CommonLibrary.Logging
         /// 该日志级别是否启用
         /// </summary>
         /// <param name="level"></param>
-        /// <returns></returns>
+        /// <returns>true:启用</returns>
         bool IsEnabled(Level level);
 
         /// <summary>
@@ -58,6 +58,7 @@ namespace SAE.CommonLibrary.Logging
         /// <param name="message">日志消息</param>
         /// <param name="level">日志类型</param>
         /// <param name="exception">异常</param>
+        /// <returns>日志记录器</returns>
         ILogging Write(string message, Level level, Exception exception);
     }
 

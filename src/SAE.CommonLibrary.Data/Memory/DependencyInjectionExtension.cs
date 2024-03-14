@@ -8,7 +8,7 @@ using System.Reflection;
 namespace Microsoft.Extensions.DependencyInjection
 {
     /// <summary>
-    /// 
+    /// <see cref="IStorage"/>注册
     /// </summary>
     public static class DependencyInjectionExtension
     {
@@ -17,13 +17,13 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="serviceCollection">服务集合</param>
         /// <returns>服务集合</returns>
-        public static StorageOptions AddMemoryStorage(this IServiceCollection serviceCollection)
+        public static StorageBuilder AddMemoryStorage(this IServiceCollection serviceCollection)
         {
-            serviceCollection.TryAddSingleton<IMetadataProvider, MetadataProvider>();
+            serviceCollection.TryAddSingleton<IMetadataProvider, DefaultMetadataProvider>();
             serviceCollection.TryAddSingleton<IStorage, MemoryStorage>();
             serviceCollection.AddDefaultLogger()
                              .AddTinyMapper();
-            return new StorageOptions(serviceCollection);
+            return new StorageBuilder(serviceCollection);
         }
         /// <summary>
         /// 添加映射
@@ -32,7 +32,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <typeparam name="TDto">传输类型</typeparam>
         /// <param name="options"><see cref="IStorage"/>配置</param>
         /// <returns><see cref="IStorage"/>配置</returns>
-        public static StorageOptions AddMapper<T, TDto>(this StorageOptions options) where T : class
+        public static StorageBuilder AddMapper<T, TDto>(this StorageBuilder options) where T : class
                                                                                      where TDto : class
         {
             var metadata = new Metadata<T>();
@@ -48,7 +48,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="options"><see cref="IStorage"/>配置</param>
         /// <param name="name">元数据名称</param>
         /// <returns><see cref="IStorage"/>配置</returns>
-        public static StorageOptions AddMapper<T>(this StorageOptions options, string name) where T : class
+        public static StorageBuilder AddMapper<T>(this StorageBuilder options, string name) where T : class
         {
             var metadata = new Metadata<T>(name);
             options.ServiceCollection.TryAddSingleton(metadata);
@@ -62,7 +62,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="name">元数据名称</param>
         /// <param name="identityFactory">标识工厂</param>
         /// <returns><see cref="IStorage"/>配置</returns>
-        public static StorageOptions AddMapper<T>(this StorageOptions options, string name, Func<T, object> identityFactory) where T : class
+        public static StorageBuilder AddMapper<T>(this StorageBuilder options, string name, Func<T, object> identityFactory) where T : class
         {
             var metadata = new Metadata<T>(name, identityFactory);
             options.ServiceCollection.TryAddSingleton(metadata);
@@ -75,7 +75,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="documentType">文档类型</param>
         /// <param name="dtoType">传输类型</param>
         /// <returns><see cref="IStorage"/>配置</returns>
-        public static StorageOptions AddMapper(this StorageOptions options, Type documentType, Type dtoType)
+        public static StorageBuilder AddMapper(this StorageBuilder options, Type documentType, Type dtoType)
         {
             var metadataType = typeof(Metadata<>);
             var matadataDocumentType = metadataType.MakeGenericType(documentType);

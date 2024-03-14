@@ -17,13 +17,12 @@ namespace SAE.CommonLibrary.EventStore.Document
             /// <summary>
             /// 标识
             /// </summary>
-            /// <value></value>
             public string Id { get; set; }
         }
         /// <summary>
         /// 查找多个
         /// </summary>
-        /// <typeparam name="TDto"></typeparam>
+        /// <typeparam name="TDto">对象类型</typeparam>
         public class Finds<TDto>
         {
             /// <summary>
@@ -34,7 +33,7 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// <summary>
         /// 列出列表
         /// </summary>
-        /// <typeparam name="TDot"></typeparam>
+        /// <typeparam name="TDot">对象类型</typeparam>
         public class List<TDot>
         {
 
@@ -42,7 +41,7 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// <summary>
         /// 删除
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">对象类型</typeparam>
         public class Delete<T>
         {
             /// <summary>
@@ -54,7 +53,7 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// <summary>
         /// 批量删除
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">对象类型</typeparam>
         public class BatchDelete<T>
         {
             /// <summary>

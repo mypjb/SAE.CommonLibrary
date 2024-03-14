@@ -15,7 +15,7 @@ using SAE.CommonLibrary.Logging;
 namespace SAE.CommonLibrary.Data.MongoDB
 {
     /// <summary>
-    /// <inheritdoc/>
+    /// <see cref="IStorage"/>Mongo实现
     /// </summary>
     public class MongoDBStorage : IStorage
     {
@@ -27,11 +27,11 @@ namespace SAE.CommonLibrary.Data.MongoDB
         #endregion
 
         /// <summary>
-        /// 
+        /// ctor
         /// </summary>
-        /// <param name="optionsMonitor"></param>
-        /// <param name="logging"></param>
-        /// <param name="descriptionProvider"></param>
+        /// <param name="optionsMonitor">配置监控器</param>
+        /// <param name="logging">日志记录器></param>
+        /// <param name="descriptionProvider">元数据提供者</param>
         public MongoDBStorage(IOptionsMonitor<MongoDBOptions> optionsMonitor,
                               ILogging<MongoDBStorage> logging,
                               IMetadataProvider descriptionProvider)
@@ -41,9 +41,9 @@ namespace SAE.CommonLibrary.Data.MongoDB
             this._optionsMonitor = optionsMonitor;
         }
         /// <summary>
-        /// 获得mongodb里的一个`collection`.
+        /// 获得mongodb里的一个<c>collection</c>.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">collection类型</typeparam>
         private IMongoCollection<T> GetCollection<T>() where T : class
         {
             var options = this._optionsMonitor.CurrentValue;
@@ -52,12 +52,12 @@ namespace SAE.CommonLibrary.Data.MongoDB
             this._logging.Debug($"访问数据库：{options.DB}中的{description.Name}表");
             return mongoDatabase.GetCollection<T>(description.Name);
         }
-
+        /// <inheritdoc/>
         public IQueryable<T> AsQueryable<T>() where T : class
         {
             return this.GetCollection<T>().AsQueryable();
         }
-
+        /// <inheritdoc/>
         public async Task DeleteAsync<T>(T model) where T : class
         {
             if (model == null) return;
@@ -72,7 +72,7 @@ namespace SAE.CommonLibrary.Data.MongoDB
 
             this._logging.Debug($"Remove {collection.CollectionNamespace}:{id}");
         }
-
+        /// <inheritdoc/>
         public async Task DeleteAsync<T>(object id) where T : class
         {
             if (id == null) return;
@@ -85,7 +85,7 @@ namespace SAE.CommonLibrary.Data.MongoDB
 
             this._logging.Debug($"Remove {collection.CollectionNamespace}:{id}");
         }
-
+        /// <inheritdoc/>
         public async Task SaveAsync<T>(T model) where T : class
         {
             if (model == null) return;

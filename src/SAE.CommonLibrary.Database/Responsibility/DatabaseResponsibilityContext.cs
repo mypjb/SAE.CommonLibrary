@@ -15,7 +15,7 @@ namespace SAE.CommonLibrary.Database.Responsibility
         /// <summary>
         /// 使用数据库配置初始化对象
         /// </summary>
-        /// <param name="options"></param>
+        /// <param name="options">数据库链接配置</param>
         public DatabaseResponsibilityContext(DBConnectOptions options)
         {
             Options = options;
@@ -23,7 +23,6 @@ namespace SAE.CommonLibrary.Database.Responsibility
         /// <summary>
         /// 数据库配置对象
         /// </summary>
-        /// <value></value>
         public DBConnectOptions Options { get; }
         /// <summary>
         /// <see cref="GetAsync(string)"/>委托对象

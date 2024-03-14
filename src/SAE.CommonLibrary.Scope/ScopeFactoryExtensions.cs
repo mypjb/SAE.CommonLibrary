@@ -14,7 +14,8 @@ namespace SAE.CommonLibrary.Scope
         /// <para><em>同步函数</em></para>
         /// <para>获得当前<see cref="IScope"/>对象</para>
         /// </summary>
-        /// <param name="factory"></param>
+        /// <param name="factory">区域工厂</param>
+        /// <returns>区域</returns>
         public static IScope Get(this IScopeFactory factory)
         {
             return factory.GetAsync().GetAwaiter().GetResult();
@@ -23,8 +24,9 @@ namespace SAE.CommonLibrary.Scope
         /// <para><em>同步函数</em></para>
         /// <para>设置并返回<see cref="IScope"/>对象</para>
         /// </summary>
-        /// <param name="factory"></param>
+        /// <param name="factory">区域工厂</param>
         /// <param name="name">区域名称</param>
+        /// <returns>区域</returns>
         public static IScope Get(this IScopeFactory factory, string name)
         {
             return factory.GetAsync(name).GetAwaiter().GetResult();

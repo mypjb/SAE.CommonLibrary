@@ -10,7 +10,6 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
     /// 多租户配置管理
     /// </summary>
     /// <typeparam name="TOptions">配置类型</typeparam>
-    /// <inheritdoc/>
     public class MultiTenantOptionsManager<TOptions> : OptionsManager<TOptions>, IOptionsSnapshot<TOptions> where TOptions : class
     {
         private readonly IOptionsMonitor<TOptions> _monitor;

@@ -8,7 +8,6 @@ namespace SAE.CommonLibrary.EventStore.Document
     /// <summary>
     /// <see cref="IDocument"/> 抽象实现
     /// </summary>
-    /// <inheritdoc/>
     public abstract class Document : IDocument
     {
         /// <summary>
@@ -22,7 +21,9 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// 内部事件集合
         /// </summary>
         private readonly IList<IEvent> _status;
+
         IIdentity IDocument.Identity => this.GetIdentity().ToIdentity();
+
 
         IEnumerable<IEvent> IDocument.ChangeEvents => this._status;
 

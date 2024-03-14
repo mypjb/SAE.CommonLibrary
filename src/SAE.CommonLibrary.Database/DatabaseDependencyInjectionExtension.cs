@@ -17,7 +17,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// 注册默认<see cref="DefaultDBConnectionFactory"/>
         /// </summary>
-        /// <param name="services"></param>
+        /// <param name="services">服务集合</param>
+        /// <returns><paramref name="services"/></returns>
         private static IServiceCollection AddDefaultDBConnectionFactory(this IServiceCollection services)
         {
             if (!services.IsRegister<IDBConnectionFactory>())
@@ -40,8 +41,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// 添加数据库驱动
         /// </summary>
-        /// <param name="services"></param>
+        /// <param name="services">服务集合</param>
         /// <typeparam name="TDatabaseResponsibility">处理程序类</typeparam>
+        /// <returns><paramref name="services"/></returns>
         public static IServiceCollection AddDatabase<TDatabaseResponsibility>(this IServiceCollection services) where TDatabaseResponsibility : DatabaseResponsibility
         {
             services.AddDefaultDBConnectionFactory()
@@ -53,9 +55,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// 使用委托的方式，添加数据库驱动。
         /// </summary>
-        /// <param name="services"></param>
+        /// <param name="services">服务集合</param>
         /// <param name="provider">驱动名称</param>
         /// <param name="handler">处理函数</param>
+        /// <returns><paramref name="services"/></returns>
         public static IServiceCollection AddDatabase(this IServiceCollection services,
             string provider,
             Func<string, DBConnectOptions, Task<IDbConnection>> handler)
@@ -68,7 +71,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// 添加<c>mssql</c>数据库驱动
         /// </summary>
-        /// <param name="services"></param>
+        /// <param name="services">服务集合</param>
+        /// <returns><paramref name="services"/></returns>
         public static IServiceCollection AddMSSqlDatabase(this IServiceCollection services)
         {
             return services.AddDatabase<MSSqlDatabaseResponsibility>();
@@ -76,7 +80,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// 添加<c>mysql</c>数据库驱动
         /// </summary>
-        /// <param name="services"></param>
+        /// <param name="services">服务集合</param>
+        /// <returns><paramref name="services"/></returns>
         public static IServiceCollection AddMySqlDatabase(this IServiceCollection services)
         {
             return services.AddDatabase(MYSQL, (connStr, options) =>

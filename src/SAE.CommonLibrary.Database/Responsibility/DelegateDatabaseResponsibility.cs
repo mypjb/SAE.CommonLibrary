@@ -11,7 +11,6 @@ namespace SAE.CommonLibrary.Database.Responsibility
     /// <summary>
     /// <see cref="DatabaseResponsibility"/> 的委托实现
     /// </summary>
-    /// <inheritdoc/>
     public class DelegateDatabaseResponsibility : DatabaseResponsibility
     {
         private readonly Func<string, DBConnectOptions, Task<IDbConnection>> _handler;
@@ -24,6 +23,7 @@ namespace SAE.CommonLibrary.Database.Responsibility
         {
             this._handler = handler;
         }
+        /// <inheritdoc/>
         protected override async Task HandleCoreAsync(DatabaseResponsibilityContext context)
         {
             // var connection = await this._handler.Invoke(context);

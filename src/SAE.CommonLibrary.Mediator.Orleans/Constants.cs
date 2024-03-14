@@ -4,6 +4,9 @@ using System.Text;
 
 namespace SAE.CommonLibrary.Mediator.Orleans
 {
+    /// <summary>
+    /// 常量
+    /// </summary>
     internal class Constants
     {
         /// <summary>

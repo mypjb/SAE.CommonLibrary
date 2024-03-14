@@ -13,7 +13,7 @@ namespace SAE.CommonLibrary.EventStore.Snapshot
         /// <summary>
         /// 构造一个新的对象
         /// </summary>
-        /// <param name="identity"></param>
+        /// <param name="identity">标识</param>
         internal Snapshot(IIdentity identity)
         {
             this.Id = identity.ToString();
@@ -29,9 +29,9 @@ namespace SAE.CommonLibrary.EventStore.Snapshot
         /// <summary>
         /// 构造一个新的对象
         /// </summary>
-        /// <param name="identity"></param>
-        /// <param name="data"></param>
-        /// <param name="version"></param>
+        /// <param name="identity">标识</param>
+        /// <param name="data">数据</param>
+        /// <param name="version">版本</param>
         public Snapshot(IIdentity identity, string data, int version) : this(identity)
         {
             this.Id = identity.ToString();

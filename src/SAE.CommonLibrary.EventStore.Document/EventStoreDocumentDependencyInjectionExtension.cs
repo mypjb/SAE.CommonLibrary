@@ -89,9 +89,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="serviceCollection"></param>
         /// <returns></returns>
-        public static StorageOptions AddMemoryDataPersistenceService(this IServiceCollection serviceCollection)
+        public static StorageBuilder AddMemoryDataPersistenceService(this IServiceCollection serviceCollection)
         {
-            serviceCollection.TryAddSingleton(typeof(IPersistenceService<>), typeof(DataPersistenceServiceAdapter<>));
+            serviceCollection.TryAddSingleton(typeof(IPersistenceService<>), typeof(DefaultDataPersistenceServiceAdapter<>));
             return serviceCollection.AddMemoryStorage();
         }
         /// <summary>
@@ -99,7 +99,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="serviceCollection"></param>
         /// <param name="configure"></param>
-        public static IServiceCollection AddDataPersistenceService(this IServiceCollection serviceCollection, Action<StorageOptions> configure)
+        public static IServiceCollection AddDataPersistenceService(this IServiceCollection serviceCollection, Action<StorageBuilder> configure)
         {
             configure.Invoke(serviceCollection.AddMemoryDataPersistenceService());
             return serviceCollection;

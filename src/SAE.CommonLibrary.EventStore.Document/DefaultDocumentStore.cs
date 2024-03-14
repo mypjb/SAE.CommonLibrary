@@ -32,7 +32,6 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// <param name="documentEvents">文档事件集合</param>
         /// <param name="serializer">事件序列化器</param>
         /// <param name="options">文档配置</param>
-        /// <param name="mapping">事件映射器</param>
         /// <param name="logging">日志记录器</param>
         public DefaultDocumentStore(ISnapshotStore snapshot,
                                     IEventStore eventStore,
@@ -48,6 +47,8 @@ namespace SAE.CommonLibrary.EventStore.Document
             this._logging = logging;
             this._options = options.Value;
         }
+
+        /// <inheritdoc/>
         public virtual async Task<TDocument> FindAsync<TDocument>(IIdentity identity, int version) where TDocument : IDocument, new()
         {
             //获取快照
@@ -82,13 +83,15 @@ namespace SAE.CommonLibrary.EventStore.Document
         /// </summary>
         /// <param name="document">文档对象</param>
         /// <param name="eventStrings">事件字符串</param>
-        protected virtual async Task AppendEventAsync(IDocument document, string eventStrings)
+        protected virtual Task AppendEventAsync(IDocument document, string eventStrings)
         {
             var events = this._serializer.Deserialize<object[]>(eventStrings);
             foreach (var @event in events)
             {
                 this._serializer.Deserialize(@event.ToString(), document);
             }
+
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -118,6 +121,7 @@ namespace SAE.CommonLibrary.EventStore.Document
             return snapshot;
         }
 
+        /// <inheritdoc/>
         public virtual async Task SaveAsync<TDocument>(TDocument document) where TDocument : IDocument, new()
         {
             var identity = document.Identity;
@@ -163,6 +167,7 @@ namespace SAE.CommonLibrary.EventStore.Document
             await this._snapshot.SaveAsync(new Snapshot.Snapshot(identity, this._serializer.Serialize(document), document.Version));
         }
 
+        /// <inheritdoc/>
         public async Task DeleteAsync<TDocument>(IIdentity identity) where TDocument : IDocument, new()
         {
             await this._snapshot.DeleteAsync(identity);

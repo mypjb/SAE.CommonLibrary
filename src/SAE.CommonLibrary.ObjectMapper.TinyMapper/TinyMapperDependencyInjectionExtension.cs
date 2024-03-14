@@ -5,13 +5,16 @@ using System;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// <see cref="IObjectMapper"/>配置
+    /// </summary>
     public static class TinyMapperDependencyInjectionExtension
     {
         /// <summary>
-        /// register tiny implement 
+        /// 注册<see cref="IObjectMapper"/>实现
         /// </summary>
-        /// <param name="services"></param>
-        /// <returns><seealso cref="IObjectMapper"/> build class <seealso cref="IObjectMapperBuilder"/></returns>
+        /// <param name="services">服务集合</param>
+        /// <returns><seealso cref="IObjectMapperBuilder"/></returns>
         public static IObjectMapperBuilder AddTinyMapper(this IServiceCollection services)
         {
             services.TryAddSingleton<IObjectMapper, TinyMapper>();
@@ -21,11 +24,11 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Add configuration
+        /// 添加映射配置
         /// </summary>
-        /// <param name="objectMapperBuilder"></param>
-        /// <param name="configAction">configuratioin action</param>
-        /// <returns></returns>
+        /// <param name="objectMapperBuilder">构造器</param>
+        /// <param name="configAction">配置委托</param>
+        /// <returns><paramref name="objectMapperBuilder"/>构造器</returns>
         public static IObjectMapperBuilder AddBuilder(this IObjectMapperBuilder objectMapperBuilder,Action<IObjectMapper> configAction)
         {
             objectMapperBuilder.Add(configAction);

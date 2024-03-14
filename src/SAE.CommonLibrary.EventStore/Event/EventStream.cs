@@ -68,16 +68,16 @@ namespace SAE.CommonLibrary.EventStore
         /// 事件存储
         /// </summary>
         private readonly List<string> _store;
-
+        ///<inheritdoc/>
         public IEnumerator<string> GetEnumerator() => this._store.GetEnumerator();
 
-
+        ///<inheritdoc/>
         IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 
         /// <summary>
         /// 附加事件,该操作将会替换当前<see cref="EventStream.Identity"/>,<see cref="EventStream.Timestamp"/>,<see cref="EventStream.Version"/>并附加event
         /// </summary>
-        /// <param name="eventStream"></param>
+        /// <param name="eventStream">事件流</param>
         public void Append(EventStream eventStream)
         {
             this.Identity = eventStream.Identity;
@@ -89,9 +89,9 @@ namespace SAE.CommonLibrary.EventStore
         }
 
         /// <summary>
-        /// 
+        /// 验证版本号
         /// </summary>
-        /// <param name="version"></param>
+        /// <param name="version">版本号</param>
         public void Valid(int version)
         {
             Assert.Build(this.Version >= version)

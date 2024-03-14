@@ -15,7 +15,7 @@ namespace SAE.CommonLibrary.EventStore.Snapshot
         /// <param name="snapshotStore"></param>
         /// <param name="identity">标识</param>
         /// <param name="version">返回版本的快照</param>
-        /// <returns></returns>
+        /// <returns>快照</returns>
         public static Snapshot Find(this ISnapshotStore snapshotStore,IIdentity identity, int version)
         {
             return snapshotStore.FindAsync(identity, version)
@@ -25,9 +25,9 @@ namespace SAE.CommonLibrary.EventStore.Snapshot
         /// <summary>
         /// 查找快照
         /// </summary>
-        /// <param name="snapshotStore"></param>
+        /// <param name="snapshotStore">快照存储接口</param>
         /// <param name="identity">标识</param>
-        /// <returns></returns>
+        /// <returns>快照</returns>
         public static Snapshot Find(this ISnapshotStore snapshotStore,IIdentity identity)
         {
             return snapshotStore.FindAsync(identity)
@@ -37,7 +37,7 @@ namespace SAE.CommonLibrary.EventStore.Snapshot
         /// <summary>
         /// 保存快照
         /// </summary>
-        /// <param name="snapshotStore"></param>
+        /// <param name="snapshotStore">快照存储接口</param>
         /// <param name="snapshot">要保存的快照对象</param>
         public static void Save(this ISnapshotStore snapshotStore,Snapshot snapshot)
         {

@@ -27,12 +27,12 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
         /// <summary>
         /// 配置依赖
         /// </summary>
-        /// <param name="services"></param>
+        /// <param name="services">服务集合</param>
         public abstract void PluginConfigureServices(IServiceCollection services);
         /// <summary>
         /// 配置服务
         /// </summary>
-        /// <param name="app"></param>
+        /// <param name="app">构造器</param>
         public abstract void PluginConfigure(IApplicationBuilder app);
         ///<inheritdoc/>
         public override string ToString()

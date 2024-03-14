@@ -21,7 +21,7 @@ namespace SAE.CommonLibrary.MessageQueue
         /// <summary>
         /// 执行处理程序
         /// </summary>
-        /// <param name="message"></param>
+        /// <param name="message">消息</param>
         Task HandleAsync(TMessage message);
     }
 

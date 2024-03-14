@@ -8,17 +8,16 @@ using SAE.CommonLibrary.Data.MongoDB;
 namespace Microsoft.Extensions.DependencyInjection
 {
     /// <summary>
-    /// 
+    /// <see cref="IStorage"/>Mongo配置类
     /// </summary>
     public static class MongoDBDependencyInjectionExtension
     {
         /// <summary>
-        /// 添加Storage
+        /// 注册<see cref="IStorage"/>mongo实现
         /// </summary>
-        /// <param name="serviceCollection"></param>
-        /// <param name="config">mongodb配置</param>
-        /// <returns></returns>
-        public static StorageOptions AddMongoDB(this IServiceCollection serviceCollection)
+        /// <param name="serviceCollection">服务集合</param>
+        /// <returns>构建器</returns>
+        public static StorageBuilder AddMongoDB(this IServiceCollection serviceCollection)
         {
             var conventions = new ConventionPack
                         {
@@ -30,12 +29,12 @@ namespace Microsoft.Extensions.DependencyInjection
 
             ConventionRegistry.Register(conventionName, conventions, type => true);
 
-            serviceCollection.TryAddSingleton<IMetadataProvider, MetadataProvider>();
+            serviceCollection.TryAddSingleton<IMetadataProvider, DefaultMetadataProvider>();
             serviceCollection.TryAddSingleton<IStorage, MongoDBStorage>();
             serviceCollection.AddDefaultLogger();
             serviceCollection.AddOptions<MongoDBOptions>()
                              .Bind(MongoDBOptions.Option);
-            return new StorageOptions(serviceCollection);
+            return new StorageBuilder(serviceCollection);
         }
 
     }

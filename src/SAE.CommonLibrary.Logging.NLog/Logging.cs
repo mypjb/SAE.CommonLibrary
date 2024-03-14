@@ -11,24 +11,28 @@ namespace SAE.CommonLibrary.Logging.Nlog
     {
         #region Private Readonly Field;
 
-        private readonly ILogger _log;
+        private readonly ILogger _logging;
         #endregion 
 
         #region Ctor
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="name">日志名称</param>
         public Logging(string name = "Default")
         {
-            _log = LogManager.GetLogger(name);
+            _logging = LogManager.GetLogger(name);
         }
 
 
         #endregion Ctor
 
         #region Log Member
-
+        /// <summary>
+        /// 转换记录类型
+        /// </summary>
+        /// <param name="level">日志类型</param>
+        /// <returns>Nlog记录类型</returns>
         private LogLevel Convert(Level level)
         {
             LogLevel logLevel;
@@ -44,25 +48,18 @@ namespace SAE.CommonLibrary.Logging.Nlog
             return logLevel;
         }
 
-        ///<summary>
-        ///写日志
-        ///</summary>
-        ///<param name="message">日志消息</param>
-        ///<param name="level">日志类型</param>
-        ///<param name="exception">异常</param>
+        /// <inheritdoc/>
         public ILogging Write(string message, Level level, Exception exception)
         {
             LogLevel logLevel = this.Convert(level);
-            this._log.Log(logLevel, exception, message);
+            this._logging.Log(logLevel, exception, message);
             return this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+        /// <inheritdoc/>
         public bool IsEnabled(Level level)
         {
-            return this._log.IsEnabled(this.Convert(level));
+            return this._logging.IsEnabled(this.Convert(level));
         }
 
         #endregion Log Member

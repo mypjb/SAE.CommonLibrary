@@ -4,9 +4,18 @@ using System.Text;
 
 namespace SAE.CommonLibrary.Plugin
 {
+    /// <summary>
+    /// 插件类型
+    /// </summary>
     public class PluginOptions
     {
+        /// <summary>
+        /// 配置节
+        /// </summary>
         public const string Option = "plugin";
+        /// <summary>
+        /// ctor
+        /// </summary>
         public PluginOptions()
         {
         }

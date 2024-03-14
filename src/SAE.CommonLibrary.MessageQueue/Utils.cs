@@ -18,8 +18,8 @@ namespace SAE.CommonLibrary.MessageQueue
         /// <summary>
         /// 获得队列名称
         /// </summary>
-        /// <typeparam name="TMessage"></typeparam>
-        /// <returns></returns>
+        /// <typeparam name="TMessage">消息类型</typeparam>
+        /// <returns>队列名称</returns>
         public static string Get<TMessage>()
         {
             var type = typeof(TMessage);
@@ -28,7 +28,12 @@ namespace SAE.CommonLibrary.MessageQueue
             logging.Debug($"简化标识'{type.Name}' => '{identity}'");
             return identity;
         }
-
+        /// <summary>
+        /// 获得队列名称
+        /// </summary>
+        /// <typeparam name="TMessage">消息类型</typeparam>
+        /// <param name="message">消息</param>
+        /// <returns>队列名称</returns>
         public static string Get<TMessage>(TMessage message)
         {
             if (message is IIdentity)

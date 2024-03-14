@@ -5,16 +5,25 @@ using System.Text;
 
 namespace SAE.CommonLibrary.Extension.Middleware
 {
+    /// <summary>
+    /// 授权配置
+    /// </summary>
     public class OAuthOptions
     {
+        /// <summary>
+        /// ctor
+        /// </summary>
         public OAuthOptions()
         {
             this.Expires = Constants.Expires;
             this.Scope = Constants.Scope;
             this.ManageTokenInvalid = Constants.OAuthManageTokenInvalid;
             this.Client = new HttpClient();
-            this.Client.Timeout =  TimeSpan.FromMilliseconds(Constants.OAuthTimeout);
+            this.Client.Timeout = TimeSpan.FromMilliseconds(Constants.OAuthTimeout);
         }
+        /// <summary>
+        /// 配置节名称
+        /// </summary>
         public const string Option = "oauth";
         /// <summary>
         /// 授权地址
@@ -48,6 +57,9 @@ namespace SAE.CommonLibrary.Extension.Middleware
             }
         }
         private HttpClient client;
+        /// <summary>
+        /// 发送授权的HttpClient
+        /// </summary>
         public HttpClient Client
         {
             get => client; set
@@ -56,30 +68,34 @@ namespace SAE.CommonLibrary.Extension.Middleware
                 client = value;
             }
         }
-
+        /// <summary>
+        /// Token无效时是否进行重试
+        /// </summary>
+        /// <remarks>
+        /// 默认true,进行重试。
+        /// </remarks>
         public bool ManageTokenInvalid
         {
-            get;set;
+            get; set;
         }
 
         /// <summary>
-        /// check oauth whether effective
+        /// 检查是否正确设置了配置
         /// </summary>
-        /// <param name="error">true tagger error </param>
+        /// <param name="error">true：错误时触发异常</param>
         /// <returns></returns>
         public bool Check(bool error = false)
         {
-            if (error)
+            var result = !(this.AppId.IsNullOrWhiteSpace() ||
+                           this.AppSecret.IsNullOrWhiteSpace() ||
+                           this.Authority.IsNullOrWhiteSpace());
+
+            if (error&&!result)
             {
-                Assert.Build(this.AppId.IsNullOrWhiteSpace() ||
-                             this.AppSecret.IsNullOrWhiteSpace() ||
-                             this.Authority.IsNullOrWhiteSpace())
-                      .False("oauth must offer 'Authority' 'AppId' 'AppSecret'");
+                throw new SAEException("oauth must offer 'Authority' 'AppId' 'AppSecret'");
             }
 
-            return !(this.AppId.IsNullOrWhiteSpace() ||
-               this.AppSecret.IsNullOrWhiteSpace() ||
-               this.Authority.IsNullOrWhiteSpace());
+            return result;
         }
     }
 }

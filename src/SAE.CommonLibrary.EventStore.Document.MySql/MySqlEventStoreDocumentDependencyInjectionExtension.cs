@@ -16,8 +16,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// 使用MySql存储文档
         /// </summary>
-        /// <param name="serviceCollection"></param>
-        /// <returns></returns>
+        /// <param name="serviceCollection">服务集合</param>
+        /// <returns><paramref name="serviceCollection"/></returns>
         public static IServiceCollection AddMySqlDocument(this IServiceCollection serviceCollection, params Assembly[] assemblies)
         {
             if (assemblies == null || !assemblies.Any())

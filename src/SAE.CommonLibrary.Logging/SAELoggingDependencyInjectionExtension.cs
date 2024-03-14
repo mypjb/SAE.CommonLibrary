@@ -13,8 +13,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// 添加<see cref="ILoggingFactory"/>实现
         /// </summary>
-        /// <param name="serviceCollection"></param>
-        /// <returns></returns>
+        /// <param name="serviceCollection">服务集合</param>
+        /// <returns><paramref name="serviceCollection"/></returns>
         public static IServiceCollection AddLogger<TLoggingFactory>(this IServiceCollection serviceCollection) where TLoggingFactory : class, ILoggingFactory
         {
             if (serviceCollection.IsAddEmptyLoggingFactory())
@@ -34,8 +34,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// 添加空的日志记录工厂
         /// </summary>
-        /// <param name="serviceCollection"></param>
-        /// <returns></returns>
+        /// <param name="serviceCollection">服务集合</param>
+        /// <returns><paramref name="serviceCollection"/></returns>
         public static IServiceCollection AddDefaultLogger(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddLogger<EmptyLoggingFactory>();
@@ -44,7 +44,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// 是否注册了<see cref="EmptyLoggingFactory"/>
         /// </summary>
-        /// <param name="services"></param>
+        /// <param name="services">服务集合</param>
+        /// <returns>true：已存在</returns>
         public static bool IsAddEmptyLoggingFactory(this IServiceCollection services)
         {
             return !services.Any(s => s.ServiceType == typeof(ILoggingFactory) &&

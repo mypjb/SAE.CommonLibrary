@@ -10,18 +10,18 @@ namespace SAE.CommonLibrary.EventStore.Document.MySql
     /// <summary>
     /// 基于mysql的快照存储
     /// </summary>
-    /// <inheritdoc/>
     public class MySqlSnapshotStore : ISnapshotStore
     {
         private readonly IDBConnectionFactory _factory;
         /// <summary>
         /// 创建一个新的对象
         /// </summary>
-        /// <param name="factory"></param>
+        /// <param name="factory">数据库连接工厂</param>
         public MySqlSnapshotStore(IDBConnectionFactory factory)
         {
             this._factory = factory;
         }
+        /// <inheritdoc/>
         public async Task<Snapshot.Snapshot> FindAsync(IIdentity identity, int version)
         {
             Snapshot.Snapshot snapshot;
@@ -40,6 +40,7 @@ namespace SAE.CommonLibrary.EventStore.Document.MySql
             return snapshot;
         }
 
+        /// <inheritdoc/>
         public async Task<Snapshot.Snapshot> FindAsync(IIdentity identity)
         {
             Snapshot.Snapshot snapshot;
@@ -54,7 +55,7 @@ namespace SAE.CommonLibrary.EventStore.Document.MySql
             snapshot.Id = identity.ToString();
             return snapshot;
         }
-
+        /// <inheritdoc/>
         public async Task DeleteAsync(IIdentity identity)
         {
             using (var conn = this._factory.Get())
@@ -62,7 +63,7 @@ namespace SAE.CommonLibrary.EventStore.Document.MySql
                 await conn.ExecuteAsync($"delete from  snapshot where id=@id", new { id = identity.ToString() });
             }
         }
-
+        /// <inheritdoc/>
         public async Task SaveAsync(Snapshot.Snapshot snapshot)
         {
             using (var conn = this._factory.Get())

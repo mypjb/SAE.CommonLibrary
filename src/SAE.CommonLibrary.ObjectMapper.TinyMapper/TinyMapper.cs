@@ -22,7 +22,10 @@ namespace SAE.CommonLibrary.ObjectMapper
         private readonly TargetMapperBuilder _targetMapperBuilder;
         private readonly TinyMapperConfig _config;
         private readonly object _lock;
-
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="builders">构建器</param>
         public TinyMapper(IEnumerable<IObjectMapperBuilder> builders)
         {
             this._lock = new object();
@@ -84,8 +87,8 @@ namespace SAE.CommonLibrary.ObjectMapper
         /// <summary>
         /// Find out if a binding exists from Source to Target.
         /// </summary>
-        /// <typeparam name="TSource">Source type.</typeparam>
-        /// <typeparam name="TTarget">Target type.</typeparam>
+        /// <param name="sourceType">Source type.</param>
+        /// <param name="targetType">Target type.</param>
         /// <returns>True if exists, otherwise - False.</returns>
         /// <remarks>The method is thread safe.</remarks>
         public bool BindingExists(Type sourceType, Type targetType)

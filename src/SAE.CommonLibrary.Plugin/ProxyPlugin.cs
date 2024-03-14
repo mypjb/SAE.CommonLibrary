@@ -8,11 +8,17 @@ using System.Text;
 
 namespace SAE.CommonLibrary.Plugin
 {
+    /// <summary>
+    /// 插件代理实现
+    /// </summary>
     internal class ProxyPlugin : IPlugin
     {
         internal IPlugin plugin;
         private readonly Lazy<PluginLoadContext> _loadContext;
-
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="plugin">插件对象</param>
         public ProxyPlugin(IPlugin plugin)
         {
             this.plugin = plugin;
@@ -26,29 +32,45 @@ namespace SAE.CommonLibrary.Plugin
             }
 
         }
-
+        /// <summary>
+        /// 初始化上下文
+        /// </summary>
+        /// <returns></returns>
         private PluginLoadContext InitContext()
         {
             return new PluginLoadContext(this);
         }
-
+        /// <inheritdoc/>
         public string Name { get => plugin.Name; set => plugin.Name = value; }
+        /// <inheritdoc/>
         public string Description { get => plugin.Description; set => plugin.Description = value; }
+        /// <inheritdoc/>
         public string Version { get => plugin.Version; set => plugin.Version = value; }
+        /// <inheritdoc/>
         public string Path { get => plugin.Path; set => plugin.Path = value; }
+        /// <inheritdoc/>
         public bool Status { get => plugin.Status; set => plugin.Status = value; }
+        /// <inheritdoc/>
         public int Order { get => plugin.Order; set => plugin.Order = value; }
-
+        /// <summary>
+        /// 注册插件
+        /// </summary>
+        /// <returns>插件程序集</returns>
         internal Assembly Register()
         {
             return this._loadContext.Value.Load(this.Path);
         }
-
+        /// <summary>
+        /// 删除插件
+        /// </summary>
         internal void Delete()
         {
             this._loadContext.Value.Unload();
         }
-
+        /// <summary>
+        /// 检查插件是否合规
+        /// </summary>
+        /// <returns></returns>
         internal bool Check()
         {
 
@@ -56,7 +78,10 @@ namespace SAE.CommonLibrary.Plugin
                      string.IsNullOrWhiteSpace(this.Version) ||
                      string.IsNullOrWhiteSpace(this.Path));
         }
-
+        /// <summary>
+        /// 合并插件对象
+        /// </summary>
+        /// <param name="plugin">插件</param>
         internal void Extension(IPlugin plugin)
         {
             plugin.Name = this.Name;
@@ -68,19 +93,24 @@ namespace SAE.CommonLibrary.Plugin
             this.plugin = plugin;
         }
     }
-
+    /// <summary>
+    /// 插件上下文
+    /// </summary>
     internal class PluginLoadContext : AssemblyLoadContext
     {
         private readonly string _root;
         private readonly AssemblyDependencyResolver _resolver;
-
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="plugin">插件对象</param>
         public PluginLoadContext(IPlugin plugin)
         {
             this._root = Path.GetDirectoryName(plugin.Path);
             this._resolver = new AssemblyDependencyResolver(this._root);
             AssemblyLoadContext.Default.Resolving += Default_Resolving;
         }
-
+        /// <inheritdoc/>
         protected override Assembly Load(AssemblyName assemblyName)
         {
             var assembly = Default.Assemblies
@@ -105,7 +135,7 @@ namespace SAE.CommonLibrary.Plugin
 
             return assembly;
         }
-
+        /// <inheritdoc/>
         protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
         {
             string libraryPath = _resolver.ResolveUnmanagedDllToPath(unmanagedDllName);
@@ -116,7 +146,11 @@ namespace SAE.CommonLibrary.Plugin
 
             return IntPtr.Zero;
         }
-
+        /// <summary>
+        /// 加载程序集
+        /// </summary>
+        /// <param name="assemblyPath">程序集路径</param>
+        /// <returns>程序集</returns>
         public Assembly Load(string assemblyPath)
         {
             Assembly assembly = null;
@@ -126,7 +160,12 @@ namespace SAE.CommonLibrary.Plugin
             }
             return assembly;
         }
-
+        /// <summary>
+        /// 默认解析器
+        /// </summary>
+        /// <param name="context">上下文</param>
+        /// <param name="assemblyName">程序集名称</param>
+        /// <returns>程序集</returns>
         private Assembly Default_Resolving(AssemblyLoadContext context, AssemblyName assemblyName)
         {
             var assembly = Default.Assemblies

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace SAE.CommonLibrary.Scope
 {
     /// <summary>
-    /// <inheritdoc />
+    /// <see cref="IScope"/>д╛хой╣ож
     /// </summary>
     internal class DefaultScope : IScope
     {
@@ -36,12 +36,12 @@ namespace SAE.CommonLibrary.Scope
             this.Name=name;
             this._previous=previous;
         }
-
+        ///<inheritdoc/>
         public string Name
         {
             get;
         }
-
+        ///<inheritdoc/>
         public void Dispose()
         {
             this.OnDispose?.Invoke(this._previous);

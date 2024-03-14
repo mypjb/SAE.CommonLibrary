@@ -9,7 +9,7 @@ namespace SAE.CommonLibrary.Scope.AspNetCore
 {
     /// <summary>
     /// <inheritdoc/>
-    /// aspnetcore multi tenant filter
+    /// aspnetcore多租户筛选器
     /// </summary>
     public class MultiTenantFilter : IAsyncActionFilter
     {
@@ -20,9 +20,9 @@ namespace SAE.CommonLibrary.Scope.AspNetCore
         /// <summary>
         /// ctor
         /// </summary>
-        /// <param name="multiTenantService"></param>
-        /// <param name="scopeFactory"></param>
-        /// <param name="logging"></param>
+        /// <param name="multiTenantService">租户服务</param>
+        /// <param name="scopeFactory">区域工厂</param>
+        /// <param name="logging">日志记录器</param>
         public MultiTenantFilter(IMultiTenantService multiTenantService,
                                  IScopeFactory scopeFactory,
                                  ILogging<MultiTenantFilter> logging)
@@ -32,6 +32,7 @@ namespace SAE.CommonLibrary.Scope.AspNetCore
             this._logging = logging;
         }
 
+        /// <inheritdoc/>
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             this._logging.Debug("find tenant identity");

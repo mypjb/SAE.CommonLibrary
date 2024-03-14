@@ -13,8 +13,7 @@ namespace SAE.CommonLibrary.Configuration.Microsoft.MultiTenant
     /// <summary>
     /// 多租户配置工厂
     /// </summary>
-    /// <typeparam name="TOptions"></typeparam>
-    /// <inheritdoc/>
+    /// <typeparam name="TOptions">配置类型</typeparam>
     public class MultiTenantOptionsFactory<TOptions> : OptionsFactory<TOptions>, IOptionsFactory<TOptions> where TOptions : class
     {
         private readonly IScopeFactory _scopeFactory;

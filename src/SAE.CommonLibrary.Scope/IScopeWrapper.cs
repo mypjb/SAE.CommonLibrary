@@ -14,7 +14,7 @@ namespace SAE.CommonLibrary.Scope
     {
         /// <summary>
         /// 获得当前区域
-        /// <param name="key"> cache key</param>
+        /// <param name="key">缓存key</param>
         /// <param name="constructor"><typeparamref name="TService"/>构造服务</param>>
         /// </summary>
         TService GetService(string key, Func<TService> constructor);

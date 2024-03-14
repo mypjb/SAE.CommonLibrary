@@ -11,6 +11,9 @@ namespace SAE.CommonLibrary.Logging.Nlog
     /// </summary>
     public class LoggingOptions
     {
+        /// <summary>
+        /// 配置节
+        /// </summary>
         public const string Option = "Nlog";
     }
 }

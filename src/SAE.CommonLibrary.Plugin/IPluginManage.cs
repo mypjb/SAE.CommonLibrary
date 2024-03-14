@@ -19,12 +19,12 @@ namespace SAE.CommonLibrary.Plugin
         /// 加载程序集
         /// </summary>
         /// <param name="plugin"></param>
-        /// <returns></returns>
+        /// <returns>程序集</returns>
         Assembly Load(IPlugin plugin);
         /// <summary>
         /// 卸载程序集
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="name">插件名称</param>
         void UnLoad(string name);
     }
 }

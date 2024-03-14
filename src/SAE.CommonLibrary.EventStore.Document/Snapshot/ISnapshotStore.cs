@@ -15,13 +15,13 @@ namespace SAE.CommonLibrary.EventStore.Snapshot
         /// </summary>
         /// <param name="identity">标识</param>
         /// <param name="version">返回版本的快照</param>
-        /// <returns></returns>
+        /// <returns>快照</returns>
         Task<Snapshot> FindAsync(IIdentity identity,int version);
         /// <summary>
         /// 查找
         /// </summary>
         /// <param name="identity">标识</param>
-        /// <returns></returns>
+        /// <returns>快照</returns>
         Task<Snapshot> FindAsync(IIdentity identity);
         /// <summary>
         /// 保存快照
@@ -31,8 +31,7 @@ namespace SAE.CommonLibrary.EventStore.Snapshot
         /// <summary>
         /// 根据<paramref name="identity"/>移除快照
         /// </summary>
-        /// <param name="identity"></param>
-        /// <returns></returns>
+        /// <param name="identity">标识</param>
         Task DeleteAsync(IIdentity identity);
     }
 }

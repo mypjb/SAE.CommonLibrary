@@ -11,45 +11,44 @@ using SAE.CommonLibrary.Logging;
 namespace SAE.CommonLibrary.Scope.AspNetCore
 {
     /// <summary>
-    /// <para>aspnetcore tenant service </para>
+    /// <para>aspnetcore多租户服务</para>
     /// <para>
-    /// The tenant identity is obtained from the context according to the policy
+    /// 根据策略从上下文中获取租户标识
     /// </para>
     /// </summary>
     public interface IMultiTenantService
     {
         /// <summary>
-        /// get tenant identity from <paramref name="ctx"/> 
+        /// 根据上下文获取租户信息
         /// </summary>
-        /// <param name="ctx">request context</param>
-        /// <returns>return tenant identity</returns>
+        /// <param name="ctx">上下文</param>
+        /// <returns>租户标识</returns>
         Task<string> GetAsync(HttpContext ctx);
     }
 
     /// <summary>
-    /// <inheritdoc/>
-    /// default <see cref="IMultiTenantService"/> imp
+    ///  <see cref="IMultiTenantService"/>默认实现
     /// </summary>
     public class DefaultMultiTenantService : IMultiTenantService
     {
         /// <summary>
-        /// domain separator char
+        /// 域名分隔符
         /// </summary>
         private const char DomainSeparator = '.';
         /// <summary>
-        /// aspnetcore multi tenant options
+        /// 租户配置
         /// </summary>
         private MultiTenantOptions Options;
         /// <summary>
-        /// logging
+        /// 日志记录器
         /// </summary>
         private readonly ILogging _logging;
 
         /// <summary>
         /// ctor
         /// </summary>
-        /// <param name="monitor"></param>
-        /// <param name="logging"></param>
+        /// <param name="monitor">配置对象</param>
+        /// <param name="logging">日志记录器</param>
         public DefaultMultiTenantService(IOptionsMonitor<MultiTenantOptions> monitor,
                                          ILogging<DefaultMultiTenantService> logging)
         {
@@ -59,7 +58,7 @@ namespace SAE.CommonLibrary.Scope.AspNetCore
         }
 
         /// <summary>
-        /// listener configuration change
+        /// 监控配置更改
         /// </summary>
         /// <param name="options"></param>
         private void OnChange(MultiTenantOptions options)
@@ -67,7 +66,7 @@ namespace SAE.CommonLibrary.Scope.AspNetCore
             this._logging.Info($"configuration tenant :\r\n{options.ToJsonString()}");
             this.Options = options;
         }
-        
+        /// <inheritdoc/>
         public Task<string> GetAsync(HttpContext ctx)
         {
             var tenantId = string.Empty;
@@ -87,7 +86,11 @@ namespace SAE.CommonLibrary.Scope.AspNetCore
 
             return Task.FromResult(tenantId);
         }
-
+        /// <summary>
+        /// 在域名中查找租户信息
+        /// </summary>
+        /// <param name="ctx">上下文</param>
+        /// <returns>租户标识</returns>
         private string DomainFind(HttpContext ctx)
         {
             var hostString = ctx.Request.Host;
@@ -117,7 +120,11 @@ namespace SAE.CommonLibrary.Scope.AspNetCore
             return tenantId;
 
         }
-
+        /// <summary>
+        /// 在用户上查找租户信息
+        /// </summary>
+        /// <param name="ctx">上下文</param>
+        /// <returns>租户标识</returns>
         private string UserFind(HttpContext ctx)
         {
             var tenantId = string.Empty;
@@ -131,7 +138,11 @@ namespace SAE.CommonLibrary.Scope.AspNetCore
 
             return tenantId;
         }
-
+        /// <summary>
+        /// 在请求头上查找租户信息
+        /// </summary>
+        /// <param name="ctx">上下文</param>
+        /// <returns>返回租户信息</returns>
         private string HeaderFind(HttpContext ctx)
         {
             var tenantId = string.Empty;

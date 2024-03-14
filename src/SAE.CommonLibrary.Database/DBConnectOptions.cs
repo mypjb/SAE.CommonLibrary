@@ -9,6 +9,9 @@ namespace SAE.CommonLibrary.Database
     /// </summary>
     public class DBConnectOptions
     {
+        /// <summary>
+        /// 配置节名称
+        /// </summary>
         public const string Option = "database";
         /// <summary>
         /// 链接名称

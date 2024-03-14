@@ -17,11 +17,12 @@ namespace SAE.CommonLibrary.EventStore.Document.MySql
         /// <summary>
         /// 创建一个新的对象
         /// </summary>
-        /// <param name="factory"></param>
+        /// <param name="factory">数据库连接工厂</param>
         public MySqlEventStore(IDBConnectionFactory factory)
         {
             this._factory = factory;
         }
+        /// <inheritdoc/>
         public async Task AppendAsync(EventStream eventStream)
         {
             using (var conn = await this._factory.GetAsync())
@@ -38,7 +39,7 @@ namespace SAE.CommonLibrary.EventStore.Document.MySql
                 }
             }
         }
-
+        /// <inheritdoc/>
         public async Task<int> GetVersionAsync(IIdentity identity)
         {
             using (var conn = await this._factory.GetAsync())
@@ -46,7 +47,7 @@ namespace SAE.CommonLibrary.EventStore.Document.MySql
                 return await conn.ExecuteScalarAsync<int>("select version from event_stream where id=@id order by version desc limit 1", new { id = identity.ToString() });
             }
         }
-
+        /// <inheritdoc/>
         public async Task<EventStream> LoadEventStreamAsync(IIdentity identity, int skipEvents, int maxCount)
         {
             var eventStream = new EventStream(identity, 0, string.Empty);
@@ -70,7 +71,7 @@ namespace SAE.CommonLibrary.EventStore.Document.MySql
             }
             return eventStream;
         }
-
+        /// <inheritdoc/>
         public async Task DeleteAsync(IIdentity identity)
         {
             using (var conn = await this._factory.GetAsync())

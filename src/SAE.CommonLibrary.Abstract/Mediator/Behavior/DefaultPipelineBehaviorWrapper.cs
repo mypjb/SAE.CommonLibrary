@@ -11,7 +11,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator.Behavior
     /// </summary>
     /// <typeparam name="TCommand">命令</typeparam>
     /// <typeparam name="TResponse">响应</typeparam>
-    internal class PipelineBehaviorWrapper<TCommand, TResponse> where TCommand : class
+    internal class DefaultPipelineBehaviorWrapper<TCommand, TResponse> where TCommand : class
     {
         /// <summary>
         /// 管道行为装饰器
@@ -19,7 +19,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator.Behavior
         /// <param name="command">命令</param>
         /// <param name="proxy">代理</param>
         /// <param name="next">下个管道委托</param>
-        public PipelineBehaviorWrapper(TCommand command,
+        public DefaultPipelineBehaviorWrapper(TCommand command,
                                        IPipelineBehavior<TCommand, TResponse> proxy,
                                        Func<Task<TResponse>> next)
         {
@@ -52,7 +52,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator.Behavior
     /// 管道行为装饰器
     /// </summary>
     /// <typeparam name="TCommand">命令</typeparam>
-    internal class PipelineBehaviorWrapper<TCommand> where TCommand : class
+    internal class DefaultPipelineBehaviorWrapper<TCommand> where TCommand : class
     {
         /// <summary>
         /// 管道行为装饰器
@@ -60,7 +60,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator.Behavior
         /// <param name="command">命令</param>
         /// <param name="proxy">代理</param>
         /// <param name="next">下个管道委托</param>
-        public PipelineBehaviorWrapper(TCommand command,
+        public DefaultPipelineBehaviorWrapper(TCommand command,
                                       IPipelineBehavior<TCommand> proxy,
                                       Func<Task> next)
         {
