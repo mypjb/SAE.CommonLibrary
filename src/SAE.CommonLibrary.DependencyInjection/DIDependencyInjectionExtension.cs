@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using SAE.CommonLibrary;
 using System;
@@ -72,17 +71,6 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             serviceProvider.GetService<ServiceFacade>();
             return serviceProvider;
-        }
-
-        /// <summary>
-        /// 注册服务提供程序<seealso cref="ServiceFacade"/>
-        /// </summary>
-        /// <param name="applicationBuilder">应用构建者</param>
-        /// <returns><paramref name="applicationBuilder"/></returns>
-        public static IApplicationBuilder UseServiceFacade(this IApplicationBuilder applicationBuilder)
-        {
-            applicationBuilder.ApplicationServices.GetService<ServiceFacade>();
-            return applicationBuilder;
         }
 
         /// <summary>

@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-    <PackageReference Include="xunit" Version="2.6.4" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.6">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+    <PackageReference Include="xunit" Version="2.7.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.7">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="coverlet.collector" Version="6.0.0">
+    <PackageReference Include="coverlet.collector" Version="6.0.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -16,7 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\SAE.CommonLibrary.Scope\SAE.CommonLibrary.Scope.csproj" />
     <ProjectReference Include="..\SAE.CommonLibrary.Test\SAE.CommonLibrary.Test.csproj" />
-    <ProjectReference Include="..\..\src\SAE.CommonLibrary.Scope.AspNetCore\SAE.CommonLibrary.Scope.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\src\SAE.CommonLibrary.AspNetCore.Scope\SAE.CommonLibrary.AspNetCore.Scope.csproj" />
   </ItemGroup>
 
 </Project>

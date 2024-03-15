@@ -3,6 +3,7 @@
   <PropertyGroup>
     <NameOfLastUsedPublishProfile>E:\Program\GitHub\SAE\CommonLibrary\test\Plugins\SAE.CommonLibrary.Plugin.TestAPI\Properties\PublishProfiles\FolderProfile.pubxml</NameOfLastUsedPublishProfile>
     <ActiveDebugProfile>SAE.CommonLibrary.Plugin.TestAPI</ActiveDebugProfile>
+    <_LastSelectedProfileId>E:\GitHub\SAE\CommonLibrary\test\Plugins\SAE.CommonLibrary.Plugin.TestAPI\Properties\PublishProfiles\FolderProfile1.pubxml</_LastSelectedProfileId>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>

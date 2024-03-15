@@ -13,25 +13,25 @@
             <summary>
             使用<see cref="T:Microsoft.Extensions.Configuration.IConfiguration"/>进行配置绑定
             </summary>
-            <typeparam name="TOptions"></typeparam>
-            <param name="optionsBuilder"></param>
-            <returns></returns>
+            <typeparam name="TOptions">配置类型</typeparam>
+            <param name="optionsBuilder">配置构建器</param>
+            <returns>配置构建器</returns>
         </member>
         <member name="M:Microsoft.Extensions.DependencyInjection.ConfigurationMicrosoftDependencyInjectionExtension.Bind``1(Microsoft.Extensions.Options.OptionsBuilder{``0},System.String)">
             <summary>
             将<see cref="T:Microsoft.Extensions.Configuration.IConfiguration"/>的<paramref name="key"/>绑定到配置
             </summary>
-            <typeparam name="TOptions"></typeparam>
-            <param name="optionsBuilder"></param>
-            <param name="key"><see cref="T:Microsoft.Extensions.Configuration.IConfiguration"/> section</param>
-            <returns></returns>
+            <typeparam name="TOptions">配置类型</typeparam>
+            <param name="optionsBuilder">配置构建器</param>
+            <param name="key"><see cref="T:Microsoft.Extensions.Configuration.IConfiguration"/>配置节</param>
+            <returns>配置构建器</returns>
         </member>
         <member name="M:Microsoft.Extensions.DependencyInjection.ConfigurationMicrosoftDependencyInjectionExtension.FindConfiguration(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
             查找配置 <see cref="T:Microsoft.Extensions.Configuration.IConfiguration"/> 
             </summary>
-            <param name="services"></param>
-            <returns></returns>
+            <param name="services">服务集合</param>
+            <returns>配置对象</returns>
         </member>
         <member name="T:Microsoft.Extensions.Hosting.ConfigurationMicrosoftHostBuilderExtensions">
             <summary>
@@ -42,55 +42,56 @@
             <summary>
             添加sae远程配置源,并从<see cref="F:SAE.CommonLibrary.Configuration.Constants.Config.OptionKey"/>获取<see cref="T:SAE.CommonLibrary.Configuration.SAEOptions"/>
             </summary>
-            <param name="builder"></param>
+            <param name="builder">Host构建器</param>
             <param name="action">初始化配置</param>
-            <returns></returns>
+            <returns>Host构建器</returns>
         </member>
         <member name="M:Microsoft.Extensions.Hosting.ConfigurationMicrosoftHostBuilderExtensions.ConfigureRemoteSource(Microsoft.Extensions.Hosting.IHostBuilder,System.String,System.Action{SAE.CommonLibrary.Configuration.SAEOptions})">
             <summary>
             添加sae远程配置源,并从<paramref name="configurationSection"/>获取<see cref="T:SAE.CommonLibrary.Configuration.SAEOptions"/>
             </summary>
-            <param name="builder"></param>
+            <param name="builder">Host构建器</param>
             <param name="configurationSection">配置子节点名称</param>
             <param name="action">初始化配置</param>
-            <returns></returns>
+            <returns>Host构建器</returns>
         </member>
         <member name="M:Microsoft.Extensions.Hosting.ConfigurationMicrosoftHostBuilderExtensions.ConfigureRemoteSource(Microsoft.Extensions.Hosting.IHostBuilder)">
             <summary>
             添加sae远程配置源
             </summary>
-            <param name="builder"></param>
+            <param name="builder">Host构建器</param>
+            <returns>Host构建器</returns>
         </member>
         <member name="M:Microsoft.Extensions.Hosting.ConfigurationMicrosoftHostBuilderExtensions.ConfigureRemoteSource(Microsoft.Extensions.Hosting.IHostBuilder,SAE.CommonLibrary.Configuration.SAEOptions)">
             <summary>
             添加sae远程配置源
             </summary>
-            <param name="builder"></param>
-            <param name="options"></param>
-            <returns></returns>
+            <param name="builder">Host构建器</param>
+            <param name="options">远程配置</param>
+            <returns>Host构建器</returns>
         </member>
         <member name="M:Microsoft.Extensions.Hosting.ConfigurationMicrosoftHostBuilderExtensions.ConfigureRemoteSource(Microsoft.Extensions.Hosting.IHostBuilder,System.String)">
             <summary>
             添加sae远程配置源
             </summary>
-            <param name="builder"></param>
-            <param name="configurationSection"></param>
-            <returns></returns>
+            <param name="builder">Host构建器</param>
+            <param name="configurationSection">配置节点名称</param>
+            <returns>Host构建器</returns>
         </member>
         <member name="M:Microsoft.Extensions.Hosting.ConfigurationMicrosoftHostBuilderExtensions.ConfigureJsonFileDirectorySource(Microsoft.Extensions.Hosting.IHostBuilder)">
             <summary>
             使用<see cref="F:SAE.CommonLibrary.Configuration.Constants.Config.DefaultRootDirectory"/>文件夹到配置源
             </summary>
-            <param name="builder"></param>
-            <returns></returns>
+            <param name="builder">Host构建器</param>
+            <returns>Host构建器</returns>
         </member>
         <member name="M:Microsoft.Extensions.Hosting.ConfigurationMicrosoftHostBuilderExtensions.ConfigureJsonFileDirectorySource(Microsoft.Extensions.Hosting.IHostBuilder,System.String)">
             <summary>
             添加<paramref name="path"/>路径到配置源
             </summary>
-            <param name="builder"></param>
+            <param name="builder">Host构建器</param>
             <param name="path">json文件目录</param>
-            <returns></returns>
+            <returns>Host构建器</returns>
         </member>
         <member name="T:Microsoft.Extensions.Configuration.MicrosoftConfigurationExtensions">
             <summary>
@@ -101,55 +102,56 @@
             <summary>
              添加SAE远程配置源
             </summary>
-            <param name="configurationBuilder"></param>
-            <returns></returns>
+            <param name="configurationBuilder">配置构建器</param>
+            <returns>配置构建器</returns>
         </member>
         <member name="M:Microsoft.Extensions.Configuration.MicrosoftConfigurationExtensions.AddRemoteSource(Microsoft.Extensions.Configuration.IConfigurationBuilder,SAE.CommonLibrary.Configuration.SAEOptions)">
             <summary>
             添加SAE远程配置源
             </summary>
-            <param name="configurationBuilder"></param>
-            <param name="options"></param>
-            <returns></returns>
+            <param name="configurationBuilder">配置构建器</param>
+            <param name="options">远程配置</param>
+            <returns>配置构建器</returns>
         </member>
         <member name="M:Microsoft.Extensions.Configuration.MicrosoftConfigurationExtensions.AddRemoteSource(Microsoft.Extensions.Configuration.IConfigurationBuilder,System.Action{SAE.CommonLibrary.Configuration.SAEOptions})">
             <summary>
             添加SAE远程配置源,并从<see cref="F:SAE.CommonLibrary.Configuration.Constants.Config.OptionKey"/>获取<see cref="T:SAE.CommonLibrary.Configuration.SAEOptions"/>
             </summary>
-            <param name="configurationBuilder"></param>
+            <param name="configurationBuilder">配置构建器</param>
             <param name="action">初始化配置</param>
+            <returns>配置构建器</returns>
         </member>
         <member name="M:Microsoft.Extensions.Configuration.MicrosoftConfigurationExtensions.AddRemoteSource(Microsoft.Extensions.Configuration.IConfigurationBuilder,System.String,System.Action{SAE.CommonLibrary.Configuration.SAEOptions})">
             <summary>
             添加SAE远程配置源，并从<paramref name="configurationSection"/>获取<see cref="T:SAE.CommonLibrary.Configuration.SAEOptions"/>
             </summary>
-            <param name="configurationBuilder"></param>
+            <param name="configurationBuilder">配置构建器</param>
             <param name="configurationSection">配置子节点名称</param>
             <param name="action">初始化配置</param>
-            <returns></returns>
+            <returns>配置构建器</returns>
         </member>
         <member name="M:Microsoft.Extensions.Configuration.MicrosoftConfigurationExtensions.AddRemoteSource(Microsoft.Extensions.Configuration.IConfigurationBuilder,System.String)">
             <summary>
             添加SAE远程配置源，并从<paramref name="configurationSection"/>获取<see cref="T:SAE.CommonLibrary.Configuration.SAEOptions"/>
             </summary>
-            <param name="configurationBuilder"></param>
+            <param name="configurationBuilder">配置构建器</param>
             <param name="configurationSection">配置子节点名称</param>
-            <returns></returns>
+            <returns>配置构建器</returns>
         </member>
         <member name="M:Microsoft.Extensions.Configuration.MicrosoftConfigurationExtensions.AddJsonFileDirectory(Microsoft.Extensions.Configuration.IConfigurationBuilder)">
             <summary>
             扫描 <see cref="F:SAE.CommonLibrary.Configuration.Constants.Config.DefaultRootDirectory"/> 目录所有 <see cref="F:SAE.CommonLibrary.Configuration.Constants.JsonSuffix"/> 后缀的文件
             </summary>
-            <param name="configurationBuilder"></param>
-            <returns></returns>
+            <param name="configurationBuilder">配置构建器</param>
+            <returns>配置构建器</returns>
         </member>
         <member name="M:Microsoft.Extensions.Configuration.MicrosoftConfigurationExtensions.AddJsonFileDirectory(Microsoft.Extensions.Configuration.IConfigurationBuilder,System.String)">
             <summary>
             扫描 <paramref name="path"/>目录所有 <see cref="F:SAE.CommonLibrary.Configuration.Constants.JsonSuffix"/> 后缀的文件
             </summary>
-            <param name="configurationBuilder"></param>
+            <param name="configurationBuilder">配置构建器</param>
             <param name="path">json文件目录</param>
-            <returns></returns>
+            <returns>配置构建器</returns>
         </member>
         <member name="T:SAE.CommonLibrary.Configuration.Constants">
             <summary>
@@ -281,105 +283,121 @@
             <summary>
             多租户配置工厂
             </summary>
-            <typeparam name="TOptions"></typeparam>
-            <inheritdoc/>
+            <typeparam name="TOptions">配置类型</typeparam>
         </member>
         <member name="M:SAE.CommonLibrary.Configuration.Microsoft.MultiTenant.MultiTenantOptionsFactory`1.#ctor(System.Collections.Generic.IEnumerable{Microsoft.Extensions.Options.IConfigureOptions{`0}},System.Collections.Generic.IEnumerable{Microsoft.Extensions.Options.IPostConfigureOptions{`0}},SAE.CommonLibrary.Scope.IScopeFactory,Microsoft.Extensions.Configuration.IConfiguration,Microsoft.Extensions.Options.IOptionsMonitor{SAE.CommonLibrary.Configuration.Microsoft.MultiTenant.MultiTenantOptions{`0}},SAE.CommonLibrary.Logging.ILogging{SAE.CommonLibrary.Configuration.Microsoft.MultiTenant.MultiTenantOptionsFactory{`0}})">
             <summary>
-            
+            ctor
             </summary>
-            <param name="setups"></param>
-            <param name="postConfigures"></param>
-            <param name="scopeFactory"></param>
-            <param name="configuration"></param>
-            <param name="optionsMonitor"></param>
-            <param name="logging"></param>
+            <param name="setups">启动时的配置函数</param>
+            <param name="postConfigures">初始化后的配置函数</param>
+            <param name="scopeFactory">区域接口</param>
+            <param name="configuration">配置接口</param>
+            <param name="optionsMonitor">多租户配置监控器</param>
+            <param name="logging">日志记录器</param>
         </member>
         <member name="M:SAE.CommonLibrary.Configuration.Microsoft.MultiTenant.MultiTenantOptionsFactory`1.#ctor(System.Collections.Generic.IEnumerable{Microsoft.Extensions.Options.IConfigureOptions{`0}},System.Collections.Generic.IEnumerable{Microsoft.Extensions.Options.IPostConfigureOptions{`0}},System.Collections.Generic.IEnumerable{Microsoft.Extensions.Options.IValidateOptions{`0}},SAE.CommonLibrary.Scope.IScopeFactory,Microsoft.Extensions.Configuration.IConfiguration,Microsoft.Extensions.Options.IOptionsMonitor{SAE.CommonLibrary.Configuration.Microsoft.MultiTenant.MultiTenantOptions{`0}},SAE.CommonLibrary.Logging.ILogging{SAE.CommonLibrary.Configuration.Microsoft.MultiTenant.MultiTenantOptionsFactory{`0}})">
             <summary>
-            
+            ctor
             </summary>
-            <param name="setups"></param>
-            <param name="postConfigures"></param>
-            <param name="validations"></param>
-            <param name="scopeFactory"></param>
-            <param name="configuration"></param>
-            <param name="optionsMonitor"></param>
-            <param name="logging"></param>
+            <param name="setups">启动时的配置函数</param>
+            <param name="postConfigures">初始化后的配置函数</param>
+            <param name="validations">验证接口</param>
+            <param name="scopeFactory">区域接口</param>
+            <param name="configuration">配置接口</param>
+            <param name="optionsMonitor">多租户配置监控器</param>
+            <param name="logging">日志记录器</param>
+        </member>
+        <member name="M:SAE.CommonLibrary.Configuration.Microsoft.MultiTenant.MultiTenantOptionsFactory`1.CreateInstance(System.String)">
+            <inheritdoc/>
         </member>
         <member name="T:SAE.CommonLibrary.Configuration.Microsoft.MultiTenant.MultiTenantOptionsManager`1">
             <summary>
             多租户配置管理
             </summary>
-            <typeparam name="TOptions"></typeparam>
+            <typeparam name="TOptions">配置类型</typeparam>
+        </member>
+        <member name="M:SAE.CommonLibrary.Configuration.Microsoft.MultiTenant.MultiTenantOptionsManager`1.#ctor(Microsoft.Extensions.Options.IOptionsFactory{`0},Microsoft.Extensions.Options.IOptionsMonitor{`0})">
+            <summary>
+            ctor
+            </summary>
+            <param name="factory">配置工厂</param>
+            <param name="monitor">配置监控器</param>
+        </member>
+        <member name="M:SAE.CommonLibrary.Configuration.Microsoft.MultiTenant.MultiTenantOptionsManager`1.Get(System.String)">
             <inheritdoc/>
         </member>
         <member name="T:SAE.CommonLibrary.Configuration.Microsoft.MultiTenant.MultiTenantOptionsMonitor`1">
-            <inheritdoc/>
             <summary>
             多租户配置监控器
             </summary>
-            <typeparam name="TOptions"></typeparam>
+            <typeparam name="TOptions">配置类型</typeparam>
         </member>
         <member name="M:SAE.CommonLibrary.Configuration.Microsoft.MultiTenant.MultiTenantOptionsMonitor`1.#ctor(Microsoft.Extensions.Options.IOptionsFactory{`0},System.Collections.Generic.IEnumerable{Microsoft.Extensions.Options.IOptionsChangeTokenSource{`0}},Microsoft.Extensions.Options.IOptionsMonitorCache{`0},Microsoft.Extensions.Configuration.IConfiguration,SAE.CommonLibrary.Scope.IScopeFactory,SAE.CommonLibrary.Logging.ILogging{SAE.CommonLibrary.Configuration.Microsoft.MultiTenant.MultiTenantOptionsMonitor{`0}})">
             <summary>
-            
+            ctor
             </summary>
-            <param name="factory"></param>
-            <param name="sources"></param>
-            <param name="cache"></param>
-            <param name="configuration"></param>
-            <param name="scopeFactory"></param>
-            <param name="logging"></param>
+            <param name="factory">配置工厂</param>
+            <param name="sources">配置源</param>
+            <param name="cache">缓存接口</param>
+            <param name="configuration">配置接口</param>
+            <param name="scopeFactory">区域接口</param>
+            <param name="logging">日志记录器</param>
+        </member>
+        <member name="M:SAE.CommonLibrary.Configuration.Microsoft.MultiTenant.MultiTenantOptionsMonitor`1.Get(System.String)">
+            <inheritdoc/>
         </member>
         <member name="T:SAE.CommonLibrary.Configuration.Microsoft.MultiTenant.MultiTenantUnnamedOptionsManager`1">
             <summary>
             多租户默认配置项
             </summary>
-            <typeparam name="TOptions"></typeparam>
-            <inheritdoc/>
+            <typeparam name="TOptions">配置类型</typeparam>
         </member>
         <member name="M:SAE.CommonLibrary.Configuration.Microsoft.MultiTenant.MultiTenantUnnamedOptionsManager`1.#ctor(Microsoft.Extensions.Options.IOptionsMonitor{`0})">
             <summary>
             ctor
             </summary>
-            <param name="monitor"></param>
+            <param name="monitor">配置健康器</param>
+        </member>
+        <member name="P:SAE.CommonLibrary.Configuration.Microsoft.MultiTenant.MultiTenantUnnamedOptionsManager`1.Value">
+            <inheritdoc/>
         </member>
         <member name="T:SAE.CommonLibrary.Configuration.SAEConfigurationSource">
             <summary>
             SAE配置源
             </summary>
-            <inheritdoc/>
         </member>
         <member name="M:SAE.CommonLibrary.Configuration.SAEConfigurationSource.#ctor(SAE.CommonLibrary.Configuration.SAEOptions)">
             <summary>
             创建一额新的 <see cref="T:SAE.CommonLibrary.Configuration.SAEConfigurationSource"/>
             </summary>
-            <param name="options"></param>
+            <param name="options">源配置</param>
         </member>
         <member name="M:SAE.CommonLibrary.Configuration.SAEConfigurationSource.Build(Microsoft.Extensions.Configuration.IConfigurationBuilder)">
             <summary>
             构造配置提供程序
             </summary>
-            <param name="builder"></param>
+            <param name="builder">配置构建器</param>
         </member>
         <member name="T:SAE.CommonLibrary.Configuration.SAEConfigurationProvider">
             <summary>
             SAE 配置提供者
             </summary>
-            <inheritdoc/>
         </member>
         <member name="M:SAE.CommonLibrary.Configuration.SAEConfigurationProvider.#ctor(SAE.CommonLibrary.Configuration.SAEOptions,Microsoft.Extensions.Configuration.NewtonsoftJson.NewtonsoftJsonStreamConfigurationSource)">
             <summary>
             创建一个新的<see cref="T:SAE.CommonLibrary.Configuration.SAEConfigurationProvider"/>
             </summary>
-            <param name="options"></param>
-            <param name="source"></param>
+            <param name="options">源配置</param>
+            <param name="source">json配置源</param>
         </member>
         <member name="M:SAE.CommonLibrary.Configuration.SAEConfigurationProvider.LoadAsync">
             <summary>
             加载配置
             </summary>
+        </member>
+        <member name="M:SAE.CommonLibrary.Configuration.SAEConfigurationProvider.Load">
+            <inheritdoc/>
         </member>
         <member name="M:SAE.CommonLibrary.Configuration.SAEConfigurationProvider.PullAsync">
             <summary>
@@ -391,13 +409,15 @@
             <summary>
             从本地文件当中获得配置
             </summary>
+            <param name="exception">异常</param>
             <returns></returns>
+            <exception cref="T:System.IO.FileNotFoundException">远程拉取失败，且<see cref="P:SAE.CommonLibrary.Configuration.SAEOptions.FullPath"/>不存在，将会触发。</exception>
         </member>
         <member name="M:SAE.CommonLibrary.Configuration.SAEConfigurationProvider.SetSourceAsync(System.IO.Stream)">
             <summary>
             设置源
             </summary>
-            <param name="stream"></param>
+            <param name="stream">配置流</param>
         </member>
         <member name="M:SAE.CommonLibrary.Configuration.SAEConfigurationProvider.Init">
             <summary>
@@ -431,41 +451,41 @@
             new <see cref="T:SAE.CommonLibrary.Configuration.SAEOptions"/>
             </summary>
         </member>
+        <member name="M:SAE.CommonLibrary.Configuration.SAEOptions.#ctor(SAE.CommonLibrary.Configuration.SAEOptions)">
+            <summary>
+            ctor
+            </summary>
+            <param name="options">源配置</param>
+        </member>
         <member name="P:SAE.CommonLibrary.Configuration.SAEOptions.FileName">
             <summary>
             文件名称
             </summary>
-            <value></value>
         </member>
         <member name="P:SAE.CommonLibrary.Configuration.SAEOptions.FullPath">
             <summary>
             完整路径
             </summary>
-            <value></value>
         </member>
         <member name="P:SAE.CommonLibrary.Configuration.SAEOptions.FullPathBackup">
             <summary>
             备用地址
             </summary>
-            <value></value>
         </member>
         <member name="P:SAE.CommonLibrary.Configuration.SAEOptions.Url">
             <summary>
             远程配置数据地址
             </summary>
-            <value></value>
         </member>
         <member name="P:SAE.CommonLibrary.Configuration.SAEOptions.PollInterval">
             <summary>
             配置文件轮询时间单位秒(默认: <see cref="F:SAE.CommonLibrary.Configuration.Constants.DefaultPollInterval"/>)
             </summary>
-            <value></value>
         </member>
         <member name="P:SAE.CommonLibrary.Configuration.SAEOptions.OAuth">
             <summary>
             远程授权配置
             </summary>
-            <value></value>
         </member>
         <member name="P:SAE.CommonLibrary.Configuration.SAEOptions.ConfigurationSection">
             <summary>
@@ -514,7 +534,6 @@
             <summary>
             用于发送远程请求的<see cref="T:System.Net.Http.HttpClient"/>
             </summary>
-            <value></value>
         </member>
         <member name="M:SAE.CommonLibrary.Configuration.SAEOptions.Check">
             <summary>

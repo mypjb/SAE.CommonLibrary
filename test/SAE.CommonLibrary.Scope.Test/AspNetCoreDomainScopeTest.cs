@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using SAE.CommonLibrary.Scope.AspNetCore;
+using SAE.CommonLibrary.AspNetCore.Scope;
 using SAE.CommonLibrary.Test;
 using Xunit;
 using Xunit.Abstractions;

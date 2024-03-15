@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\SAE.CommonLibrary.Plugin.AspNetCore\SAE.CommonLibrary.Plugin.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\..\src\SAE.CommonLibrary.AspNetCore.Plugin\SAE.CommonLibrary.AspNetCore.Plugin.csproj" />
     <ProjectReference Include="..\SAE.CommonLibrary.Plugin.Constant\SAE.CommonLibrary.Plugin.Constant.csproj" />
   </ItemGroup>
   <ItemGroup>
