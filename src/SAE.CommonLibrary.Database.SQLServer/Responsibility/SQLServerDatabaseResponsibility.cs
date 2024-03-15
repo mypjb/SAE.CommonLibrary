@@ -1,22 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.Data.SqlClient;
+using SAE.CommonLibrary.Database.Responsibility;
 using System.Data;
-using System.Data.SqlClient;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace SAE.CommonLibrary.Database.Responsibility
+namespace SAE.CommonLibrary.Database.SQLServer.Responsibility
 {
     /// <summary>
     /// 微软sqlserver<see cref="DatabaseResponsibility"/>实现
     /// </summary>
     /// <inheritdoc/>
-    public class MSSqlDatabaseResponsibility : DatabaseResponsibility
+    public class SQLServerDatabaseResponsibility : DatabaseResponsibility
     {
         /// <summary>
         /// 实例化一个mssql职责处理对象
         /// </summary>
-        public MSSqlDatabaseResponsibility() : base("MSSql")
+        public SQLServerDatabaseResponsibility() : base(Constants.Database.Provider.SQLServer)
         {
 
         }

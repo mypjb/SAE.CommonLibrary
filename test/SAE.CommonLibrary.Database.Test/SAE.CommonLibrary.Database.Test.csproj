@@ -13,6 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\SAE.CommonLibrary.Database.MySQL\SAE.CommonLibrary.Database.MySQL.csproj" />
+    <ProjectReference Include="..\..\src\SAE.CommonLibrary.Database.SQLServer\SAE.CommonLibrary.Database.SQLServer.csproj" />
     <ProjectReference Include="..\SAE.CommonLibrary.Test\SAE.CommonLibrary.Test.csproj" />
     <ProjectReference Include="..\..\src\SAE.CommonLibrary.Database\SAE.CommonLibrary.Database.csproj" />
   </ItemGroup>

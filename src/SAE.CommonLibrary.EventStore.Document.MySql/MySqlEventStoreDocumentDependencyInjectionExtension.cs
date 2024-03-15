@@ -26,7 +26,7 @@ namespace Microsoft.Extensions.DependencyInjection
             }
 
             serviceCollection.AddDocument(assemblies)
-                             .AddMySqlDatabase();
+                             .AddMySQLDatabase();
             serviceCollection.TryAddSingleton<ISnapshotStore, MySqlSnapshotStore>();
             serviceCollection.TryAddSingleton<IEventStore, MySqlEventStore>();
             return serviceCollection;

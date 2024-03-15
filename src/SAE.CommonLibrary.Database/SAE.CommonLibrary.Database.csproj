@@ -1,9 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <ItemGroup>
-    <PackageReference Include="MySql.Data" Version="8.3.0" />
-    <PackageReference Include="MySqlConnector" Version="2.3.5" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SAE.CommonLibrary.Abstract\SAE.CommonLibrary.Abstract.csproj" />
