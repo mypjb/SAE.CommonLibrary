@@ -8,6 +8,8 @@
 		<PackageIcon>nuget.png</PackageIcon>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<PackageVersion>$(Version)</PackageVersion>
+		<GenerateDocumentationFile>false</GenerateDocumentationFile>
+		<NoWarn>CS1591</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Include="$(MSBuildStartupDirectory)/nuget.png">
