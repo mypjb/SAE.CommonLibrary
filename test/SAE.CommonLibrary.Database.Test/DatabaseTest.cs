@@ -33,7 +33,7 @@ public class DatabaseTest : BaseTest, IDisposable
                       {
                           var databaseName = $"test_{Guid.NewGuid():N}";
                           dict[$"{key}:{nameof(DBConnectOptions.ConnectionString)}"] = $"Data Source={Constants.DBConnection.MYSQL.Server};Database={databaseName};User ID={Constants.DBConnection.MYSQL.UId};Password={Constants.DBConnection.MYSQL.Password};pooling=true;port=3306;sslmode=none;CharSet=utf8;allowPublicKeyRetrieval=true";
-                          dict[$"{key}:{nameof(DBConnectOptions.Provider)}"] = "mysql";
+                          dict[$"{key}:{nameof(DBConnectOptions.Provider)}"] = SAE.CommonLibrary.Constants.Database.Provider.MySQL;
                           dict[$"{key}:{nameof(DBConnectOptions.InitialCommand)}"] = $"CREATE DATABASE {databaseName}";
                           dict[$"{key}:{nameof(DBConnectOptions.InitialConnectionString)}"] = $"Data Source={Constants.DBConnection.MYSQL.Server};User ID={Constants.DBConnection.MYSQL.UId};Password={Constants.DBConnection.MYSQL.Password};pooling=true;port=3306;sslmode=none;CharSet=utf8;allowPublicKeyRetrieval=true"; ;
                           dict[$"{key}:{nameof(DBConnectOptions.InitialDetectionCommand)}"] = $"SELECT count(1) FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = '{databaseName}'";
@@ -43,7 +43,7 @@ public class DatabaseTest : BaseTest, IDisposable
                           dict[$"{key}:{nameof(DBConnectOptions.ConnectionString)}"] = s % 2 == 0 ?
                           $"Data Source=127.0.0.1;Database={s}_mysql;User ID={s}_user;Password={s}_pwd;pooling=true;sslmode=none;CharSet=utf8;allowPublicKeyRetrieval=true" :
                           $"server=127.0.0.1:database={s}_mssql;uid={s}_user;pwd={s}_pwd;";
-                          dict[$"{key}:{nameof(DBConnectOptions.Provider)}"] = s % 2 == 0 ? "mysql" : "mssql";
+                          dict[$"{key}:{nameof(DBConnectOptions.Provider)}"] = s % 2 == 0 ? SAE.CommonLibrary.Constants.Database.Provider.MySQL : SAE.CommonLibrary.Constants.Database.Provider.SQLServer;
                       }
 
                   });
@@ -58,8 +58,8 @@ public class DatabaseTest : BaseTest, IDisposable
 
     protected override void ConfigureServices(IServiceCollection services)
     {
-        services.AddMySqlDatabase()
-                .AddMSSqlDatabase()
+        services.AddMySQLDatabase()
+                .AddSQLServerDatabase()
                 .AddNlogLogger();
 
         base.ConfigureServices(services);

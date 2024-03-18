@@ -1,21 +1,21 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Json;
+using SAE.CommonLibrary.Extension;
+using SAE.CommonLibrary.Logging;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.NewtonsoftJson;
-using SAE.CommonLibrary.Extension;
-using SAE.CommonLibrary.Logging;
 
 namespace SAE.CommonLibrary.Configuration
 {
     /// <summary>
     /// SAE配置源
     /// </summary>
-    public class SAEConfigurationSource : NewtonsoftJsonStreamConfigurationSource
+    public class SAEConfigurationSource : JsonStreamConfigurationSource
     {
         private readonly SAEOptions options;
         private IConfigurationProvider provider;
@@ -108,18 +108,24 @@ namespace SAE.CommonLibrary.Configuration
     /// <summary>
     /// SAE 配置提供者
     /// </summary>
-    public class SAEConfigurationProvider : NewtonsoftJsonStreamConfigurationProvider
+    public class SAEConfigurationProvider : JsonStreamConfigurationProvider
     {
         private readonly CancellationTokenSource _cancellationToken;
         private readonly SAEOptions _options;
         private Task pollTask;
-        private ILogging _logging;
+        private ILogging Logging
+        {
+            get
+            {
+                return (ILogging)ServiceFacade.GetService<ILogging<SAEConfigurationProvider>>() ?? new EmptyLogging();
+            }
+        }
         /// <summary>
         /// 创建一个新的<see cref="SAEConfigurationProvider"/>
         /// </summary>
         /// <param name="options">源配置</param>
         /// <param name="source">json配置源</param>
-        public SAEConfigurationProvider(SAEOptions options, NewtonsoftJsonStreamConfigurationSource source) : base(source)
+        public SAEConfigurationProvider(SAEOptions options, JsonStreamConfigurationSource source) : base(source)
         {
             this._cancellationToken = new CancellationTokenSource();
             this._options = options;
@@ -132,17 +138,21 @@ namespace SAE.CommonLibrary.Configuration
         {
             if (await this.PullAsync())
             {
-                var logging = this.GetLogging();
-                logging?.Info($"成功从远程拉取最新配置:'{this._options.Url}'");
+                this.Logging.Info($"成功从远程拉取最新配置:'{this._options.Url}'");
                 this.Load(this.Source.Stream);
                 this.OnReload();
-                logging?.Info("重新加载配置");
+                this.Logging.Info("重新加载配置");
             }
         }
         
         /// <inheritdoc/>
         public override void Load()
         {
+            if (this.Source.Stream == null || !this.Source.Stream.CanRead)
+            {
+                this.Logging.Warn("流处于不可读状态。");
+                return;
+            }
             if (this.Source.Stream.Position > 0)
             {
                 this.Source.Stream.Position = 0;
@@ -156,33 +166,32 @@ namespace SAE.CommonLibrary.Configuration
         /// <returns></returns>
         protected async Task<bool> PullAsync()
         {
-            var logging = this.GetLogging();
 
-            logging?.Debug($"从'{this._options.Url}'拉取配置");
+            this.Logging.Debug($"从'{this._options.Url}'拉取配置");
 
             using (var rep = await this._options.Client.GetAsync(this._options.Url))
             {
                 if (rep.StatusCode == System.Net.HttpStatusCode.NotModified)
                 {
-                    logging?.Debug("配置尚未更改，跳过后续步骤");
+                    this.Logging.Debug("配置尚未更改，跳过后续步骤");
                     return false;
                 }
 
                 rep.EnsureSuccessStatusCode();
-                logging?.Info("从远程拉取到最新配置");
+                this.Logging.Info("从远程拉取到最新配置");
                 IEnumerable<string> values;
 
                 if (rep.Headers.TryGetValues(this._options.NextRequestHeaderName, out values))
                 {
                     this._options.Url = values.First();
-                    logging?.Info($"设置下一次拉取请求为'{this._options.Url}'");
+                    this.Logging.Info($"设置下一次拉取请求为'{this._options.Url}'");
                 }
                 else
                 {
-                    logging?.Warn($"没有从响应中获得下一次请求地址'{this._options.NextRequestHeaderName}'");
+                    this.Logging.Warn($"没有从响应中获得下一次请求地址'{this._options.NextRequestHeaderName}'");
                 }
 
-                logging?.Info($"设置配置源二进制流");
+                this.Logging.Info($"设置配置源二进制流");
 
                 if (!this._options.ConfigurationSection.IsNullOrWhiteSpace())
                 {
@@ -193,7 +202,7 @@ namespace SAE.CommonLibrary.Configuration
                                                        StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
                                                 .ToArray();
 
-                    this._logging?.Info($"包装配置:'{this._options.ConfigurationSection}'");
+                    this.Logging.Info($"包装配置:'{this._options.ConfigurationSection}'");
 
                     var jsonBuilder = new StringBuilder();
 
@@ -213,7 +222,7 @@ namespace SAE.CommonLibrary.Configuration
 
                     var jsonData = jsonBuilder.ToString();
 
-                    this._logging?.Debug($"拉取到的json数据：\r\n{jsonData}");
+                    this.Logging.Debug($"拉取到的json数据：\r\n{jsonData}");
 
                     await this.SetSourceAsync(new MemoryStream(SAE.CommonLibrary.Constants.Encoding.GetBytes(jsonData)));
                 }
@@ -222,13 +231,13 @@ namespace SAE.CommonLibrary.Configuration
                     await this.SetSourceAsync(new MemoryStream(await rep.Content.ReadAsByteArrayAsync()));
                 }
 
-                logging?.Info($"持久化配置到'{this._options.FullPath}'");
+                this.Logging.Info($"持久化配置到'{this._options.FullPath}'");
 
                 var configDirectory = Path.GetDirectoryName(this._options.FullPath);
 
                 if (!Directory.Exists(configDirectory))
                 {
-                    this._logging?.Warn($"配置目录不存在'{configDirectory}',自动创建它");
+                    this.Logging.Warn($"配置目录不存在'{configDirectory}',自动创建它");
                     Directory.CreateDirectory(configDirectory);
                 }
 
@@ -282,13 +291,13 @@ namespace SAE.CommonLibrary.Configuration
             {
                 if (oldStream != null)
                 {
-                    this._logging.Debug("将旧配置流进行释放");
+                    this.Logging.Debug("将旧配置流进行释放");
                     await oldStream.DisposeAsync();
                 }
             }
             catch (Exception ex)
             {
-                this._logging.Warn("旧配置流行释放失败，这可能该流被提前释放导致的", ex);
+                this.Logging.Warn("旧配置流行释放失败，这可能该流被提前释放导致的", ex);
             }
         }
 
@@ -337,21 +346,11 @@ namespace SAE.CommonLibrary.Configuration
                 }
                 catch (Exception ex)
                 {
-                    this.GetLogging()?.Error($"load configuration error:{ex.Message}", ex);
+                    this.Logging.Error($"load configuration error:{ex.Message}", ex);
                     // Ignore
                 }
             }
         }
-        /// <summary>
-        /// 获得日志记录器
-        /// </summary>
-        private ILogging GetLogging()
-        {
-            if (this._logging == null)
-            {
-                this._logging = ServiceFacade.GetService<ILogging<SAEConfigurationProvider>>();
-            }
-            return this._logging;
-        }
+     
     }
 }

@@ -6,71 +6,93 @@
     <members>
         <member name="T:SAE.CommonLibrary.Scope.DefaultScope">
             <summary>
-            <inheritdoc />
+            <see cref="T:SAE.CommonLibrary.Scope.IScope"/>默认实现
             </summary>
         </member>
         <member name="F:SAE.CommonLibrary.Scope.DefaultScope._previous">
             <summary>
-            ��ǰ������
+            以前的区域
             </summary>
         </member>
         <member name="E:SAE.CommonLibrary.Scope.DefaultScope.OnDispose">
             <summary>
-            �����ͷŵ��¼�
+            区域释放的事件
             </summary>
         </member>
         <member name="M:SAE.CommonLibrary.Scope.DefaultScope.#ctor(System.String)">
             <summary>
-            ���캯��
+            构造函数
             </summary>
             <param name="name">scope name</param>
         </member>
         <member name="M:SAE.CommonLibrary.Scope.DefaultScope.#ctor(System.String,SAE.CommonLibrary.Scope.IScope)">
             <summary>
-            ���캯��
+            构造函数
             </summary>
-            <param name="name">�µ���������</param>
-            <param name="previous">�ͷ�ʱ����Ϊ��ֵ <seealso cref="M:SAE.CommonLibrary.Scope.DefaultScope.Dispose"/></param>
+            <param name="name">新的区域名称</param>
+            <param name="previous">释放时重置为此值 <seealso cref="M:SAE.CommonLibrary.Scope.DefaultScope.Dispose"/></param>
+        </member>
+        <member name="P:SAE.CommonLibrary.Scope.DefaultScope.Name">
+            <inheritdoc/>
+        </member>
+        <member name="M:SAE.CommonLibrary.Scope.DefaultScope.Dispose">
+            <inheritdoc/>
         </member>
         <member name="T:SAE.CommonLibrary.Scope.DefaultScopeFactory">
             <summary>
-            Ĭ�����򹤳�ʵ��
+            默认区域工厂实现
             </summary>
-            <inheritdoc/>
         </member>
         <member name="M:SAE.CommonLibrary.Scope.DefaultScopeFactory.#ctor">
             <summary>
-            ���캯��
+            构造函数
             </summary>
+        </member>
+        <member name="M:SAE.CommonLibrary.Scope.DefaultScopeFactory.GetAsync">
+            <inheritdoc/>
+        </member>
+        <member name="M:SAE.CommonLibrary.Scope.DefaultScopeFactory.GetAsync(System.String)">
+            <inheritdoc/>
         </member>
         <member name="M:SAE.CommonLibrary.Scope.DefaultScopeFactory.GetCurrentScope">
             <summary>
-            ��õ�ǰ����
+            获得当前区域
             </summary>
-            <returns></returns>
+            <returns>区域对象</returns>
         </member>
         <member name="M:SAE.CommonLibrary.Scope.DefaultScopeFactory.Restore(SAE.CommonLibrary.Scope.IScope)">
             <summary>
-            ��������
+            重置区域
             </summary>
-            <param name="scope"></param>
-            <returns></returns>
+            <param name="scope">重置区域</param>
         </member>
         <member name="T:SAE.CommonLibrary.Scope.DefaultScopeWrapper`1">
             <summary>
             <see cref="T:SAE.CommonLibrary.Scope.IScopeWrapper`1"/>默认实现
             </summary>
-            <typeparam name="TService"></typeparam>
+            <typeparam name="TService">服务类型</typeparam>
+        </member>
+        <member name="M:SAE.CommonLibrary.Scope.DefaultScopeWrapper`1.#ctor(SAE.CommonLibrary.Scope.IScopeFactory,System.IServiceProvider)">
+            <summary>
+            默认区域包装器
+            </summary>
+            <param name="scopeFactory">区域工厂</param>
+            <param name="serviceProvider">服务提供者</param>
+        </member>
+        <member name="M:SAE.CommonLibrary.Scope.DefaultScopeWrapper`1.Clear">
+            <inheritdoc/>
+        </member>
+        <member name="M:SAE.CommonLibrary.Scope.DefaultScopeWrapper`1.GetService(System.String,System.Func{`0})">
             <inheritdoc/>
         </member>
         <member name="T:SAE.CommonLibrary.Scope.IScope">
             <summary>
-            �����ʶ�ӿ�
+            区域标识接口
             </summary>
         </member>
         <member name="P:SAE.CommonLibrary.Scope.IScope.Name">
             <summary>
-            ���������
+            区域的名称
             </summary>
         </member>
         <member name="T:SAE.CommonLibrary.Scope.IScopeFactory">
@@ -82,64 +104,66 @@
             <summary>
             返回当前区域
             </summary>
-            <returns></returns>
+            <returns>区域</returns>
         </member>
         <member name="M:SAE.CommonLibrary.Scope.IScopeFactory.GetAsync(System.String)">
             <summary> 
             临时设置区域为 <paramref name="scopeName"/>当调用<see cref="M:System.IDisposable.Dispose"/>接口后将会重置它
             </summary>
             <param name="scopeName">区域的名称</param>
-            <returns></returns>
+            <returns>区域</returns>
         </member>
         <member name="T:SAE.CommonLibrary.Scope.IScopeWrapper`1">
             <summary>
-            ��������װ��
+            区域服务包装器
             </summary>
             <typeparam name="TService"></typeparam>
         </member>
         <member name="M:SAE.CommonLibrary.Scope.IScopeWrapper`1.GetService(System.String,System.Func{`0})">
             <summary>
-            ��õ�ǰ����
-            <param name="key"> cache key</param>
-            <param name="constructor"><typeparamref name="TService"/>�������</param>>
+            获得当前区域
+            <param name="key">缓存key</param>
+            <param name="constructor"><typeparamref name="TService"/>构造服务</param>>
             </summary>
         </member>
         <member name="M:SAE.CommonLibrary.Scope.IScopeWrapper`1.Clear">
             <summary>
-            ����
+            清理
             </summary>
         </member>
         <member name="T:SAE.CommonLibrary.Scope.ScopeFactoryExtensions">
             <summary>
-            ���򹤳���չ
+            区域工厂扩展
             </summary>
         </member>
         <member name="M:SAE.CommonLibrary.Scope.ScopeFactoryExtensions.Get(SAE.CommonLibrary.Scope.IScopeFactory)">
             <summary>
-            <para><em>ͬ������</em></para>
-            <para>��õ�ǰ<see cref="T:SAE.CommonLibrary.Scope.IScope"/>����</para>
+            <para><em>同步函数</em></para>
+            <para>获得当前<see cref="T:SAE.CommonLibrary.Scope.IScope"/>对象</para>
             </summary>
-            <param name="factory"></param>
+            <param name="factory">区域工厂</param>
+            <returns>区域</returns>
         </member>
         <member name="M:SAE.CommonLibrary.Scope.ScopeFactoryExtensions.Get(SAE.CommonLibrary.Scope.IScopeFactory,System.String)">
             <summary>
-            <para><em>ͬ������</em></para>
-            <para>���ò�����<see cref="T:SAE.CommonLibrary.Scope.IScope"/>����</para>
+            <para><em>同步函数</em></para>
+            <para>设置并返回<see cref="T:SAE.CommonLibrary.Scope.IScope"/>对象</para>
             </summary>
-            <param name="factory"></param>
-            <param name="name">��������</param>
+            <param name="factory">区域工厂</param>
+            <param name="name">区域名称</param>
+            <returns>区域</returns>
         </member>
         <member name="T:Microsoft.Extensions.DependencyInjection.DefaultScopeServiceCollectionExtensions">
             <summary>
-            Ĭ������ע����
+            默认区域注册类
             </summary>
         </member>
         <member name="M:Microsoft.Extensions.DependencyInjection.DefaultScopeServiceCollectionExtensions.AddDefaultScope(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
-            ����Ĭ������ʵ��
+            添加默认区域实现
             </summary>
-            <param name="services"></param>
-            <returns></returns>
+            <param name="services">服务集合</param>
+            <returns><paramref name="services"/></returns>
         </member>
     </members>
 </doc>

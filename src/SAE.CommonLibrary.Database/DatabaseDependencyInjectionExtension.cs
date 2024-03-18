@@ -13,7 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection
     /// </summary>
     public static class DatabaseDependencyInjectionExtension
     {
-        internal const string MYSQL = "mysql";
+ 
         /// <summary>
         /// 注册默认<see cref="DefaultDBConnectionFactory"/>
         /// </summary>
@@ -68,26 +68,5 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        /// <summary>
-        /// 添加<c>mssql</c>数据库驱动
-        /// </summary>
-        /// <param name="services">服务集合</param>
-        /// <returns><paramref name="services"/></returns>
-        public static IServiceCollection AddMSSqlDatabase(this IServiceCollection services)
-        {
-            return services.AddDatabase<MSSqlDatabaseResponsibility>();
-        }
-        /// <summary>
-        /// 添加<c>mysql</c>数据库驱动
-        /// </summary>
-        /// <param name="services">服务集合</param>
-        /// <returns><paramref name="services"/></returns>
-        public static IServiceCollection AddMySqlDatabase(this IServiceCollection services)
-        {
-            return services.AddDatabase(MYSQL, (connStr, options) =>
-            {
-                return Task.FromResult<IDbConnection>(new MySqlConnector.MySqlConnection(connStr));
-            });
-        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using SAE.CommonLibrary.Plugin.AspNetCore;
+﻿using SAE.CommonLibrary.AspNetCore.Plugin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;

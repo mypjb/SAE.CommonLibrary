@@ -7,8 +7,9 @@ using System.Reflection;
 using System.Text;
 using System.Linq;
 using SAE.CommonLibrary.Extension;
+using SAE.CommonLibrary.Plugin;
 
-namespace SAE.CommonLibrary.Plugin.AspNetCore
+namespace SAE.CommonLibrary.AspNetCore.Plugin
 {
     /// <summary>
     /// <seealso cref="IPluginManage"/>实现
@@ -90,7 +91,7 @@ namespace SAE.CommonLibrary.Plugin.AspNetCore
 
             var json = File.ReadAllText(packageFile);
 
-            var proxyPlugin = new ProxyPlugin(json.ToObject<Plugin>());
+            var proxyPlugin = new ProxyPlugin(json.ToObject<SAE.CommonLibrary.Plugin.Plugin>());
 
             if (proxyPlugin?.Check() ?? false)
             {
