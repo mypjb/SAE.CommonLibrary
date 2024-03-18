@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace SAE.CommonLibrary.Database.SQLServer.Responsibility
 {
     /// <summary>
-    /// 微软sqlserver<see cref="DatabaseResponsibility"/>实现
+    /// 微软<see cref="SAE.CommonLibrary.Constants.Database.Provider.SQLServer"/><see cref="DatabaseResponsibility"/>实现
     /// </summary>
     /// <inheritdoc/>
     public class SQLServerDatabaseResponsibility : DatabaseResponsibility

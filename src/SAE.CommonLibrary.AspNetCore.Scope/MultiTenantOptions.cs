@@ -6,35 +6,41 @@ using Microsoft.Extensions.DependencyInjection;
 namespace SAE.CommonLibrary.AspNetCore.Scope
 {
     /// <summary>
-    /// aspnetcore×â»§²ßÂÔ
+    /// aspnetcoreç§Ÿæˆ·ç­–ç•¥
     /// </summary>
     public enum MultiTenantStrategy
     {
-        ///Adopt parent-child domain name strategy
+        /// <summary>
+        /// ä½¿ç”¨çˆ¶å­çº§åŸŸå
+        /// </summary>
         Domain,
-        ///Based on user information strategy
+        /// <summary>
+        /// ä½¿ç”¨ç”¨æˆ·æ ‡è¯†
+        /// </summary>
         User,
-        /// Use request header
+        /// <summary>
+        /// ä½¿ç”¨è¯·æ±‚å¤´
+        /// </summary>
         Header
     }
 
     /// <summary>
-    /// aspnetcore×â»§ÅäÖÃ
+    /// aspnetcoreå¤šç§Ÿæˆ·é…ç½®
     /// </summary>
     public class MultiTenantOptions
     {
         /// <summary>
-        /// ÅäÖÃ½Ú
+        /// é…ç½®é¡¹
         /// </summary>
         public const string Option = "MultiTenant";
         /// <summary>
-        /// ÓÃ»§Ä¬ÈÏclaimÃû³Æ
+        /// é»˜è®¤ç§Ÿæˆ·<c>claim</c>åç§°
         /// </summary>
         public const string DefaultClaimName = "siteid";
         /// <summary>
-        /// Ä¬ÈÏÇëÇóÍ·Ãû³Æ
+        /// é»˜è®¤ç§Ÿæˆ·è¯·æ±‚å¤´åç§°
         /// </summary>
-        public const string DefalutHeaderName = "tenant";
+        public const string DefaultHeaderName = "tenant";
         /// <summary>
         /// ctor
         /// </summary>
@@ -42,12 +48,12 @@ namespace SAE.CommonLibrary.AspNetCore.Scope
         {
             this.Mapper = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             this.ClaimName = DefaultClaimName;
-            this.HeaderName = DefalutHeaderName;
+            this.HeaderName = DefaultHeaderName;
         }
 
         private string claimName;
         /// <summary>
-        /// ÓÃ»§claimÃû³Æ
+        /// ç§Ÿæˆ·<c>claim</c>åç§°
         /// </summary>
         /// <value></value>
         public string ClaimName
@@ -66,7 +72,7 @@ namespace SAE.CommonLibrary.AspNetCore.Scope
 
         private string headerName;
         /// <summary>
-        /// ÇëÇóÍ·Ãû³Æ
+        /// ç§Ÿæˆ·<c>claim</c>åç§°
         /// </summary>
         /// <value></value>
         public string HeaderName
@@ -84,21 +90,20 @@ namespace SAE.CommonLibrary.AspNetCore.Scope
         }
 
         /// <summary>
-        /// ¶à×â»§²ßÂÔ
+        /// ç§Ÿæˆ·è¯·æ±‚å¤´åç§°
         /// </summary>
-        /// <value></value>
         public MultiTenantStrategy Strategy { get; set; }
 
         /// <summary>
-        /// ÖĞÓòÃû£¬Ö»ÓĞÔÚ²ßÂÔÎª<see cref="MultiTenantStrategy.Domain"/>Ê±²ÅÉúĞ§
+        /// ç§Ÿæˆ·çš„çˆ¶çº§åŸŸåï¼Œåªæœ‰ä½¿ç”¨<see cref="MultiTenantStrategy.Domain"/>ç­–ç•¥æ‰æœ‰æ„ä¹‰
         /// </summary>
         public string Host { get; set; }
         /// <summary>
-        /// ÊÇ·ñÊ¹ÓÃÄ¬ÈÏ¹æÔò
+        /// æ˜¯å¦ä½¿ç”¨é»˜è®¤ç­–ç•¥
         /// </summary>
         public bool UseDefaultRule { get; set; }
         /// <summary>
-        /// ÓòÃûºÍ×â»§Éí·İµÄÓ³Éä×Öµä
+        /// ç§Ÿæˆ·åŸŸåç­–ç•¥æ˜ å°„å™¨
         /// </summary>
         public Dictionary<string, string> Mapper { get; set; }
     }

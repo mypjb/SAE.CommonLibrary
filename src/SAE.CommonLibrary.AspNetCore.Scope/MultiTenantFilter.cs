@@ -9,8 +9,7 @@ using SAE.CommonLibrary.Scope;
 namespace SAE.CommonLibrary.AspNetCore.Scope
 {
     /// <summary>
-    /// <inheritdoc/>
-    /// aspnetcore¶à×â»§É¸Ñ¡Æ÷
+    /// ç§Ÿæˆ·ç­›é€‰å™¨
     /// </summary>
     public class MultiTenantFilter : IAsyncActionFilter
     {
@@ -21,9 +20,9 @@ namespace SAE.CommonLibrary.AspNetCore.Scope
         /// <summary>
         /// ctor
         /// </summary>
-        /// <param name="multiTenantService">×â»§·şÎñ</param>
-        /// <param name="scopeFactory">ÇøÓò¹¤³§</param>
-        /// <param name="logging">ÈÕÖ¾¼ÇÂ¼Æ÷</param>
+        /// <param name="multiTenantService">ç§Ÿæˆ·æœåŠ¡</param>
+        /// <param name="scopeFactory">åŒºåŸŸå·¥å‚</param>
+        /// <param name="logging">æ—¥å¿—è®°å½•å™¨</param>
         public MultiTenantFilter(IMultiTenantService multiTenantService,
                                  IScopeFactory scopeFactory,
                                  ILogging<MultiTenantFilter> logging)

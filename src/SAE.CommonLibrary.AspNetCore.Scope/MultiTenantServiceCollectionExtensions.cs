@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using SAE.CommonLibrary.Scope;
@@ -13,7 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
 
         /// <summary>
-        /// configuration multi tenant
+        /// 添加多租户配置
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
@@ -27,7 +27,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
         /// <summary>
-        /// use multi tenant middleware
+        /// 添加多租户中间件
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
