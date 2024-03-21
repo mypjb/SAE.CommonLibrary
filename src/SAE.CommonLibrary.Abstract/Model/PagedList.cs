@@ -124,7 +124,7 @@ namespace SAE.CommonLibrary.Abstract.Model
         /// <summary>
         /// 每页显示多少条记录
         /// </summary>
-        [JsonProperty(PropertyName = "pageIndex")]
+        [JsonProperty(PropertyName = "pageSize")]
         public int PageSize { get; set; }
 
         int IPaging.BeginRange { get; }
