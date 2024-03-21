@@ -10,14 +10,14 @@ namespace Microsoft.Extensions.DependencyInjection
 {
 
     /// <summary>
-    /// Ä¬ÈÏÇøÓò×¢²áÀà
+    /// é»˜è®¤åŒºåŸŸæ³¨å†Œç±»
     /// </summary>
     public static class DefaultScopeServiceCollectionExtensions
     {
         /// <summary>
-        /// Ìí¼ÓÄ¬ÈÏÇøÓòÊµÏÖ
+        /// æ·»åŠ é»˜è®¤åŒºåŸŸå®ç°
         /// </summary>
-        /// <param name="services">·şÎñ¼¯ºÏ</param>
+        /// <param name="services">æœåŠ¡é›†åˆ</param>
         /// <returns><paramref name="services"/></returns>
         public static IServiceCollection AddDefaultScope(this IServiceCollection services)
         {

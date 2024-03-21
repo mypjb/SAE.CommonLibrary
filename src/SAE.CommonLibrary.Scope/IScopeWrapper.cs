@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 namespace SAE.CommonLibrary.Scope
 {
     /// <summary>
-    /// ÇøÓò·şÎñ°ü×°Æ÷
+    /// åŒºåŸŸæœåŠ¡åŒ…è£…å™¨
     /// </summary>
     /// <typeparam name="TService"></typeparam>
     [Obsolete("this interface is in preview stage")]
     public interface IScopeWrapper<TService> where TService : class
     {
         /// <summary>
-        /// »ñµÃµ±Ç°ÇøÓò
-        /// <param name="key">»º´ækey</param>
-        /// <param name="constructor"><typeparamref name="TService"/>¹¹Ôì·şÎñ</param>>
+        /// è·å¾—å½“å‰åŒºåŸŸ
+        /// <param name="key">ç¼“å­˜key</param>
+        /// <param name="constructor"><typeparamref name="TService"/>æ„é€ æœåŠ¡</param>>
         /// </summary>
         TService GetService(string key, Func<TService> constructor);
 
         /// <summary>
-        /// ÇåÀí
+        /// æ¸…ç†
         /// </summary>
         void Clear();
     }

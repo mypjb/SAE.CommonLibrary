@@ -3,12 +3,12 @@ using System;
 namespace SAE.CommonLibrary.Scope
 {
     /// <summary>
-    /// ÇøÓò±êÊ¶½Ó¿Ú
+    /// åŒºåŸŸæ ‡è¯†æ¥å£
     /// </summary>
     public interface IScope:IDisposable
     {
         /// <summary>
-        /// ÇøÓòµÄÃû³Æ
+        /// åŒºåŸŸçš„åç§°
         /// </summary>
         string Name { get;}
     }

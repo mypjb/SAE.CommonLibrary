@@ -5,20 +5,20 @@ using System.Threading.Tasks;
 namespace SAE.CommonLibrary.Scope
 {
     /// <summary>
-    /// <see cref="IScope"/>Ä¬ÈÏÊµÏÖ
+    /// <see cref="IScope"/>é»˜è®¤å®ç°
     /// </summary>
     internal class DefaultScope : IScope
     {
         /// <summary>
-        /// ÒÔÇ°µÄÇøÓò
+        /// ä»¥å‰çš„åŒºåŸŸ
         /// </summary>
         private readonly IScope _previous;
         /// <summary>
-        /// ÇøÓòÊÍ·ÅµÄÊÂ¼ş
+        /// åŒºåŸŸé‡Šæ”¾çš„äº‹ä»¶
         /// </summary>
         public event Func<IScope, Task> OnDispose;
         /// <summary>
-        /// ¹¹Ôìº¯Êı
+        /// æ„é€ å‡½æ•°
         /// </summary>
         /// <param name="name">scope name</param>
         public DefaultScope(string name)
@@ -27,10 +27,10 @@ namespace SAE.CommonLibrary.Scope
             this._previous=this;
         }
         /// <summary>
-        /// ¹¹Ôìº¯Êı
+        /// æ„é€ å‡½æ•°
         /// </summary>
-        /// <param name="name">ĞÂµÄÇøÓòÃû³Æ</param>
-        /// <param name="previous">ÊÍ·ÅÊ±ÖØÖÃÎª´ËÖµ <seealso cref="Dispose()"/></param>
+        /// <param name="name">æ–°çš„åŒºåŸŸåç§°</param>
+        /// <param name="previous">é‡Šæ”¾æ—¶é‡ç½®ä¸ºæ­¤å€¼ <seealso cref="Dispose()"/></param>
         public DefaultScope(string name, IScope previous)
         {
             this.Name=name;

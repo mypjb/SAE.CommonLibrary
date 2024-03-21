@@ -6,27 +6,27 @@ using System.Threading.Tasks;
 namespace SAE.CommonLibrary.Scope
 {
     /// <summary>
-    /// ÇøÓò¹¤³§À©Õ¹
+    /// åŒºåŸŸå·¥å‚æ‰©å±•
     /// </summary>
     public static class ScopeFactoryExtensions
     {
         /// <summary>
-        /// <para><em>Í¬²½º¯Êı</em></para>
-        /// <para>»ñµÃµ±Ç°<see cref="IScope"/>¶ÔÏó</para>
+        /// <para><em>åŒæ­¥å‡½æ•°</em></para>
+        /// <para>è·å¾—å½“å‰<see cref="IScope"/>å¯¹è±¡</para>
         /// </summary>
-        /// <param name="factory">ÇøÓò¹¤³§</param>
-        /// <returns>ÇøÓò</returns>
+        /// <param name="factory">åŒºåŸŸå·¥å‚</param>
+        /// <returns>åŒºåŸŸ</returns>
         public static IScope Get(this IScopeFactory factory)
         {
             return factory.GetAsync().GetAwaiter().GetResult();
         }
         /// <summary>
-        /// <para><em>Í¬²½º¯Êı</em></para>
-        /// <para>ÉèÖÃ²¢·µ»Ø<see cref="IScope"/>¶ÔÏó</para>
+        /// <para><em>åŒæ­¥å‡½æ•°</em></para>
+        /// <para>è®¾ç½®å¹¶è¿”å›<see cref="IScope"/>å¯¹è±¡</para>
         /// </summary>
-        /// <param name="factory">ÇøÓò¹¤³§</param>
-        /// <param name="name">ÇøÓòÃû³Æ</param>
-        /// <returns>ÇøÓò</returns>
+        /// <param name="factory">åŒºåŸŸå·¥å‚</param>
+        /// <param name="name">åŒºåŸŸåç§°</param>
+        /// <returns>åŒºåŸŸ</returns>
         public static IScope Get(this IScopeFactory factory, string name)
         {
             return factory.GetAsync(name).GetAwaiter().GetResult();

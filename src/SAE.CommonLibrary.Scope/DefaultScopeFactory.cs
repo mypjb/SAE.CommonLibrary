@@ -6,13 +6,13 @@ using Microsoft.VisualBasic;
 namespace SAE.CommonLibrary.Scope
 {
     /// <summary>
-    /// Ä¬ÈÏÇøÓò¹¤³§ÊµÏÖ
+    /// é»˜è®¤åŒºåŸŸå·¥å‚å®ç°
     /// </summary>
     public class DefaultScopeFactory : IScopeFactory
     {
         private readonly AsyncLocal<IScope> _asyncLocal;
         /// <summary>
-        /// ¹¹Ôìº¯Êı
+        /// æ„é€ å‡½æ•°
         /// </summary>
         public DefaultScopeFactory()
         {
@@ -40,9 +40,9 @@ namespace SAE.CommonLibrary.Scope
         }
 
         /// <summary>
-        /// »ñµÃµ±Ç°ÇøÓò
+        /// è·å¾—å½“å‰åŒºåŸŸ
         /// </summary>
-        /// <returns>ÇøÓò¶ÔÏó</returns>
+        /// <returns>åŒºåŸŸå¯¹è±¡</returns>
         private IScope GetCurrentScope()
         {
             if (this._asyncLocal.Value == null)
@@ -53,9 +53,9 @@ namespace SAE.CommonLibrary.Scope
         }
 
         /// <summary>
-        /// ÖØÖÃÇøÓò
+        /// é‡ç½®åŒºåŸŸ
         /// </summary>
-        /// <param name="scope">ÖØÖÃÇøÓò</param>
+        /// <param name="scope">é‡ç½®åŒºåŸŸ</param>
         private Task Restore(IScope scope)
         {
             this._asyncLocal.Value = scope;
