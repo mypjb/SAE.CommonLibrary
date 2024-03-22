@@ -33,7 +33,10 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
             if (this.Operators.Any())
             {
                 var operatorCount = this.Operators.Count();
-                for (var i = 0; i < operatorCount; i++)
+
+                var i = 0;
+
+                for (; i < operatorCount; i++)
                 {
                     var @operator = this.Operators.ElementAt(i);
                     var right = context.Dequeue<bool>();
@@ -51,6 +54,15 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
                         }
                     }
                 }
+
+                i++;
+                while (i < operatorCount)
+                {
+                    //清空队列中剩余的值
+                    context.Dequeue<bool>();
+                    i++;
+                }
+
             }
 
             if (result)

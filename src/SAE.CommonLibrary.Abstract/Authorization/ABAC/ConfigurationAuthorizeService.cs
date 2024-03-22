@@ -137,13 +137,17 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
 
                     var decorator = this._ruleDecoratorBuilder.Build(policy.Rule);
 
-                    await decorator.DecorateAsync(context);
-
-                    if (context.Complete)
+                    if (decorator != null)
                     {
-                        this._logging.Info($"策略授权成功:{policyMessage}");
-                        return true;
+                        await decorator.DecorateAsync(context);
+
+                        if (context.Complete)
+                        {
+                            this._logging.Info($"策略授权成功:{policyMessage}");
+                            return true;
+                        }
                     }
+
                     this._logging.Info($"策略授权失败:{policyMessage}");
                 }
             }
@@ -213,7 +217,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// <returns>授权描述符</returns>
         protected virtual Task<AuthDescriptor> FindAuthDescriptorCoreAsync(string key, IEnumerable<AuthDescriptor> authDescriptors)
         {
-            var authDescriptor = authDescriptors.FirstOrDefault(s => s.Key.Equals(key, StringComparison.OrdinalIgnoreCase));
+            var authDescriptor = authDescriptors.FirstOrDefault(s => s.Comparison(key));
 
             return Task.FromResult(authDescriptor);
         }

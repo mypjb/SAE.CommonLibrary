@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using SAE.CommonLibrary.Abstract.Authorization.ABAC;
 
@@ -32,6 +33,30 @@ namespace SAE.CommonLibrary.AspNetCore.Authorization.ABAC
             set
             {
             }
+        }
+
+        /// <summary>
+        /// <see cref="Key"/>的匹配模式
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// 0：使用基类<see cref="AuthDescriptor"/>的匹配规则。
+        /// </para>
+        /// <para>
+        /// 1：使用正则进行匹配。
+        /// </para>
+        /// </remarks>
+        public int MatchPattern { get; set; }
+
+        /// <inheritdoc/>
+        public override bool Comparison(string key)
+        {
+            if (MatchPattern == 1)
+            {
+                return Regex.Match(key, this.Key).Success;
+            }
+
+            return base.Comparison(key);
         }
     }
 }
