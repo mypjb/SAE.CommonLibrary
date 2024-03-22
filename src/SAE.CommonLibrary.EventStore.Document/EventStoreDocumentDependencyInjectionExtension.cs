@@ -21,8 +21,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// 添加EventStore.Docment默认实现
         /// </summary>
-        /// <param name="services"></param>
-        /// <returns></returns>
+        /// <param name="services">服务接口</param>
+        /// <param name="assemblies">文档所在的程序集集合</param>
+        /// <returns><paramref name="services"/></returns>
         public static IServiceCollection AddDocument(this IServiceCollection services, params Assembly[] assemblies)
         {
             if (assemblies == null || assemblies.Count() == 0)
@@ -69,8 +70,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// 添加Memory默认实现
         /// </summary>
-        /// <param name="serviceCollection"></param>
-        /// <returns></returns>
+        /// <param name="serviceCollection">服务接口</param>
+        /// <param name="assemblies"></param>
+        /// <returns><paramref name="serviceCollection"/></returns>
         public static IServiceCollection AddMemoryDocument(this IServiceCollection serviceCollection, params Assembly[] assemblies)
         {
             if (assemblies == null || assemblies.Count() == 0)

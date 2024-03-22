@@ -348,7 +348,7 @@ namespace SAE.CommonLibrary.Logging
         /// </summary>
         /// <param name="factory">日志工厂</param>
         /// <typeparam name="TCategory">日志类型</typeparam>
-        /// <returns><paramref name="logging"/></returns>
+        /// <returns><see cref="ILogging"/></returns>
         public static ILogging Create<TCategory>(this ILoggingFactory factory) => factory.Create(typeof(TCategory).Name);
     }
 }

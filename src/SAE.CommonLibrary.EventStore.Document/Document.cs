@@ -44,7 +44,7 @@ namespace SAE.CommonLibrary.EventStore.Document
         }
         /// <summary>
         /// <para>将<paramref name="command"/>应用到当前对象。</para>
-        /// <para>该函数先将<paramref name="command"/>转换成<typeparamref name="TEvent"/>，再以此调用<paramref name="action"/>和<see cref="Apply(TEvent)"/></para>
+        /// <para>该函数先将<paramref name="command"/>转换成<typeparamref name="TEvent"/>，再以此调用<paramref name="action"/>和<see cref="Apply"/></para>
         /// </summary>
         /// <param name="command">待转换的事件对象</param>
         /// <param name="action">转化完成后，执行的回调</param>

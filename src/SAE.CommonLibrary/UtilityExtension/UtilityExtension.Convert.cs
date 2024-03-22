@@ -68,7 +68,7 @@ namespace SAE.CommonLibrary.Extension
 
 
         /// <summary>
-        /// 将<paramref name="input"/>按照<paramref name="encoding"/>编码转换成<seealso cref="byte[]"/>
+        /// 将<paramref name="input"/>按照<paramref name="encoding"/>编码转换成<seealso cref="byte"/>[]
         /// </summary>
         /// <param name="input">字符串</param>
         /// <param name="encoding">编码</param>

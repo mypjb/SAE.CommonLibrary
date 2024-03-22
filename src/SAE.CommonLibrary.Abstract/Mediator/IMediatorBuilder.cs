@@ -25,11 +25,6 @@ namespace SAE.CommonLibrary.Abstract.Mediator
     public class MediatorBuilder : IMediatorBuilder
     {
         /// <summary>
-        /// 描述集合
-        /// </summary>
-        private List<CommandHandlerDescriptor> descriptors;
-
-        /// <summary>
         /// ctor
         /// </summary>
         /// <param name="services">服务集合</param>

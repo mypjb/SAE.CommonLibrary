@@ -190,6 +190,8 @@ namespace SAE.CommonLibrary.Extension
         /// <see cref="IAssert{TAssert}.Current"/>集合中是否有满足条件的项
         /// </summary>
         /// <param name="assert">断言对象</param>
+        /// <param name="predicate"></param>
+        /// <param name="message"></param>
         /// <returns>断言对象</returns>
         public static IAssert<IEnumerable<TAssert>> Any<TAssert>(this IAssert<IEnumerable<TAssert>> assert, Func<TAssert, bool> predicate, string message = null)
         {
@@ -203,6 +205,8 @@ namespace SAE.CommonLibrary.Extension
         /// <see cref="IAssert{TAssert}.Current"/>集合中没有满足条件的项
         /// </summary>
         /// <param name="assert">断言对象</param>
+        /// <param name="predicate"></param>
+        /// <param name="message"></param>
         /// <returns>断言对象</returns>
         public static IAssert<IEnumerable<TAssert>> NotAny<TAssert>(this IAssert<IEnumerable<TAssert>> assert, Func<TAssert, bool> predicate, string message = null)
         {

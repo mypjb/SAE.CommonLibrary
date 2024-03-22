@@ -102,7 +102,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// 添加<seealso cref="IResponsibilityProvider{TResponsibilityContext}"/>实现
         /// </summary>
         /// <typeparam name="TContext">上下文</typeparam>
-        /// <param name="services"><服务集合/param>
+        /// <param name="services">服务集合</param>
         /// <returns><see cref="IServiceCollection"/></returns>
         public static IServiceCollection AddResponsibilityProvider<TContext>(this IServiceCollection services) where TContext : ResponsibilityContext
         {

@@ -28,7 +28,7 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
             this.Operator = @operator;
         }
         ///<inheritdoc/>
-        public async Task DecorateAsync(RuleContext context)
+        public Task DecorateAsync(RuleContext context)
         {
             var left = context.Dequeue<T>();
 
@@ -92,6 +92,8 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
             }
 
             context.Enqueue(result);
+
+            return Task.CompletedTask;
         }
 
     }

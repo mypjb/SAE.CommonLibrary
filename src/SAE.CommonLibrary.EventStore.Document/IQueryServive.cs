@@ -4,10 +4,11 @@ using System.Text;
 
 namespace SAE.CommonLibrary.EventStore.Document
 {
-    [Obsolete("暂未使用！")]
+
     /// <summary>
     /// 查询接口
     /// </summary>
+    [Obsolete("暂未使用！")]
     public interface IQueryServive
     {
         

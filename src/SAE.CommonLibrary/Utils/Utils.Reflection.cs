@@ -95,6 +95,7 @@ namespace SAE.CommonLibrary
             /// <typeparam name="T">类型</typeparam>
             /// <param name="name">方法名称</param>
             /// <param name="flags">方法标识</param>
+            /// <param name="types"></param>
             /// <returns>方法信息</returns>
             public static MethodInfo GetMethodInfo<T>(string name, BindingFlags flags = BindingFlags.InvokeMethod, params Type[] types)
             {

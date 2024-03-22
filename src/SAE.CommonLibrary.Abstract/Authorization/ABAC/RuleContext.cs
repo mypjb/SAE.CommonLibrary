@@ -73,7 +73,6 @@ namespace SAE.CommonLibrary.Abstract.Authorization.ABAC
         /// 入队
         /// </summary>
         /// <param name="o">待入队的对象</param>
-        /// <summary>
         public void Enqueue(object o)
         {
             this._queue.Enqueue(o);

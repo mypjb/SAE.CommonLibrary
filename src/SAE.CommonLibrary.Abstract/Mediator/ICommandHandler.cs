@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace SAE.CommonLibrary.Abstract.Mediator
 {
     /// <summary>
-    /// 通过<seealso cref="IMediator.Send{TResponse}(object)"/>调用命令
+    /// 通过<seealso cref="IMediator.SendAsync(object, Type)"/>调用命令
     /// </summary>
     /// <typeparam name="TCommand">命令</typeparam>
     public interface ICommandHandler<TCommand> : IMediatorHandler
@@ -19,7 +19,7 @@ namespace SAE.CommonLibrary.Abstract.Mediator
     }
 
     /// <summary>
-    /// 通过<seealso cref="IMediator.Send{TResponse}(object)"/>
+    /// 通过<seealso cref="IMediator.SendAsync(object, Type, Type)"/>
     /// 调用命令并返回<typeparamref name="TResponse"/>
     /// </summary>
     /// <typeparam name="TCommand">命令类型</typeparam>
