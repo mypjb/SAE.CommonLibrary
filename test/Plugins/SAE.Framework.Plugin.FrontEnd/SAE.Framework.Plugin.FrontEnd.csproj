@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\SAE.Framework.AspNetCore.Plugin\SAE.Framework.AspNetCore.Plugin.csproj" />
+    <ProjectReference Include="..\SAE.Framework.Plugin.Constant\SAE.Framework.Plugin.Constant.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="package.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

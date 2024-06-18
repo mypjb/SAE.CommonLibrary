@@ -1,6 +1,0 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-  <ItemGroup>
-    <ProjectReference Include="..\SAE.CommonLibrary.DependencyInjection\SAE.CommonLibrary.DependencyInjection.csproj" />
-    <ProjectReference Include="..\SAE.CommonLibrary\SAE.CommonLibrary.csproj" />
-  </ItemGroup>
-</Project>

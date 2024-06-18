@@ -1,7 +1,0 @@
-{
-  "Name": "FrontEnd",
-  "Path": "SAE.CommonLibrary.Plugin.FrontEnd.dll",
-  "Description": "this is a frontend plugin",
-  "Version": "1.0.0.0",
-  "Status": true
-}

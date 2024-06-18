@@ -1,0 +1,154 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SAE.Framework.DependencyInjection</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.Extensions.DependencyInjection.DIDependencyInjectionExtension">
+            <summary>
+            autofac 注入配置
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.DIDependencyInjectionExtension.BuildAutofacProvider(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Autofac.ContainerBuilder})">
+            <summary>
+            注入autofac依赖容器
+            </summary>
+            <param name="serviceDescriptors">服务集合</param>
+            <param name="delegate">容器委托</param>
+            <returns><see cref="T:System.IServiceProvider"/></returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.DIDependencyInjectionExtension.BuildAutofacProvider(Microsoft.Extensions.DependencyInjection.IServiceCollection,Autofac.ContainerBuilder)">
+            <summary>
+            注入autofac依赖容器
+            </summary>
+            <param name="serviceDescriptors">服务集合</param>
+            <param name="builder">容器构建对象</param>
+            <returns><see cref="T:System.IServiceProvider"/></returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.DIDependencyInjectionExtension.BuildAutofacProvider(Microsoft.Extensions.DependencyInjection.IServiceCollection,Autofac.IContainer)">
+            <summary>
+            注入autofac依赖容器
+            </summary>
+            <param name="serviceDescriptors">服务集合</param>
+            <param name="container">容器对象</param>
+            <returns><see cref="T:System.IServiceProvider"/></returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.DIDependencyInjectionExtension.AddServiceFacade(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            注册服务门面<seealso cref="T:SAE.Framework.ServiceFacade"/>
+            </summary>
+            <param name="serviceDescriptors">服务集合</param>
+            <returns><paramref name="serviceDescriptors"/></returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.DIDependencyInjectionExtension.UseServiceFacade(System.IServiceProvider)">
+            <summary>
+            初始化<seealso cref="T:SAE.Framework.ServiceFacade"/>
+            </summary>
+            <param name="serviceProvider">服务提供者</param>
+            <returns><paramref name="serviceProvider"/></returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.DIDependencyInjectionExtension.IsRegister(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Type)">
+            <summary>
+            是否注册
+            </summary>
+            <param name="serviceDescriptors">服务集合</param>
+            <param name="ServiceType">服务类型</param>
+            <returns>true:已注册</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.DIDependencyInjectionExtension.IsRegister(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Type,System.Type)">
+            <summary>
+            判断<paramref name="ServiceType"/>是否有<paramref name="implementationType"/>实现
+            </summary>
+            <param name="serviceDescriptors">服务集合</param>
+            <param name="ServiceType">服务类型</param>
+            <param name="implementationType">实现类型</param>
+            <returns>true:已注册</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.DIDependencyInjectionExtension.IsRegister``1(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            是否注册
+            </summary>
+            <typeparam name="TService">服务类型</typeparam>
+            <param name="serviceDescriptors">服务集合</param>
+            <returns>true:已注册</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.DIDependencyInjectionExtension.IsRegister``2(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            <typeparamref name="TService"/> is register<typeparamref name="TImplementation"/> imp
+            </summary>
+            <typeparam name="TService">接口</typeparam>
+            <typeparam name="TImplementation">服务实现</typeparam>
+            <param name="serviceDescriptors">服务集合</param>
+            <returns>true:已注册</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.Hosting.GenericHostBuilderExtensions.UseAutofacProviderFactory(Microsoft.Extensions.Hosting.IHostBuilder)">
+            <summary>
+            使用autofac作为依赖注入容器
+            </summary>
+            <param name="builder">构建器</param>
+            <returns><paramref name="builder"/></returns>
+        </member>
+        <member name="M:Microsoft.Extensions.Hosting.GenericHostBuilderExtensions.UseAutofacProviderFactory(Microsoft.Extensions.Hosting.IHostBuilder,System.Action{Autofac.ContainerBuilder})">
+            <summary>
+            使用autofac作为依赖注入容器
+            </summary>
+            <param name="builder">构建器</param>
+            <param name="configurationAction">容器注册委托</param>
+            <returns><paramref name="builder"/></returns>
+        </member>
+        <member name="T:SAE.Framework.ServiceFacade">
+            <summary>
+            服务门面
+            </summary>
+        </member>
+        <member name="M:SAE.Framework.ServiceFacade.#ctor(System.IServiceProvider)">
+            <summary>
+            ctor
+            </summary>
+            <param name="serviceProvider">服务提供者</param>
+        </member>
+        <member name="P:SAE.Framework.ServiceFacade.ServiceProvider">
+            <summary>
+            返回当前线程的服务提供者
+            </summary>
+        </member>
+        <member name="M:SAE.Framework.ServiceFacade.GetService``1">
+            <summary>
+            获得<typeparamref name="TService"/>
+            </summary>
+            <typeparam name="TService">服务接口</typeparam>
+            <returns><typeparamref name="TService"/>对象</returns>
+        </member>
+        <member name="T:SAE.Framework.DependencyInjection.ServiceProviderExtension">
+            <summary>
+            服务提供者扩展
+            </summary>
+        </member>
+        <member name="M:SAE.Framework.DependencyInjection.ServiceProviderExtension.IsRegistered``1(System.IServiceProvider)">
+            <summary>
+            <typeparamref name="TService"/>是否注册
+            </summary>
+            <typeparam name="TService">服务类型</typeparam>
+            <param name="serviceProvider">服务提供者</param>
+            <returns>true:已注册</returns>
+        </member>
+        <member name="M:SAE.Framework.DependencyInjection.ServiceProviderExtension.TryGetService``1(System.IServiceProvider,``0@)">
+            <summary>
+            <typeparamref name="TService"/>是否注册
+            </summary>
+            <typeparam name="TService">服务类型</typeparam>
+            <param name="serviceProvider">服务提供者</param>
+            <param name="service">服务对象</param>
+            <returns>true:已注册</returns>
+        </member>
+        <member name="M:SAE.Framework.DependencyInjection.ServiceProviderExtension.TryGetServices``1(System.IServiceProvider,System.Collections.Generic.IEnumerable{``0}@)">
+            <summary>
+            <typeparamref name="TService"/>是否注册
+            </summary>
+            <typeparam name="TService">服务类型</typeparam>
+            <param name="serviceProvider">服务提供者</param>
+            <param name="services">服务对象集合</param>
+            <returns>true:已注册</returns>
+        </member>
+    </members>
+</doc>

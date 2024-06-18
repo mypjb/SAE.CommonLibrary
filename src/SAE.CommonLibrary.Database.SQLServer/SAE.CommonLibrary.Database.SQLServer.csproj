@@ -1,8 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SAE.CommonLibrary.Database\SAE.CommonLibrary.Database.csproj" />
-  </ItemGroup>
-</Project>

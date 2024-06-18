@@ -1,8 +1,8 @@
 <Project>
 	<PropertyGroup Condition="'$(MSBuildProjectName)' != 'BenchmarkInternal'">
-		<Version>8.0.0.13</Version>
+		<Version>8.0.0.14</Version>
 		<TargetFramework>net8.0</TargetFramework>
-		<RepositoryUrl>https://github.com/mypjb/SAE.CommonLibrary</RepositoryUrl>
+		<RepositoryUrl>https://github.com/mypjb/SAE.Framework</RepositoryUrl>
 		<RepositoryType>github</RepositoryType>
 		<PackageTags>SAE</PackageTags>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>

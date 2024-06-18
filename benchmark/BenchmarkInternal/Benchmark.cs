@@ -1,5 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
-using SAE.CommonLibrary.ObjectMapper;
+using SAE.Framework.ObjectMapper;
 using System.Collections.Generic;
 
 namespace BenchmarkInternal

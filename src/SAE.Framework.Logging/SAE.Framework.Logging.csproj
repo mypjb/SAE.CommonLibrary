@@ -1,0 +1,5 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">  
+  <ItemGroup>
+    <ProjectReference Include="..\SAE.Framework\SAE.Framework.csproj" />
+  </ItemGroup>
+</Project>

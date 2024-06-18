@@ -1,0 +1,462 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SAE.Framework.Extension.HttpClient</name>
+    </assembly>
+    <members>
+        <member name="T:SAE.Framework.Extension.Constants">
+            <summary>
+            HttpClient Extension常量
+            </summary>
+        </member>
+        <member name="F:SAE.Framework.Extension.Constants.Expires">
+            <summary>
+            到期占比
+            </summary>
+        </member>
+        <member name="F:SAE.Framework.Extension.Constants.Timeout">
+            <summary>
+            超时时间
+            </summary>
+        </member>
+        <member name="F:SAE.Framework.Extension.Constants.OAuthTimeout">
+            <summary>
+            授权请求超时时间
+            </summary>
+        </member>
+        <member name="F:SAE.Framework.Extension.Constants.OAuthManageTokenInvalid">
+            <summary>
+            Token无效时是否进行重试
+            </summary>
+        </member>
+        <member name="F:SAE.Framework.Extension.Constants.Scope">
+            <summary>
+            Scope
+            </summary>
+        </member>
+        <member name="F:SAE.Framework.Extension.Constants.HttpMessageInvokerHandler">
+            <summary>
+            HttpMessageInvoker Handler 自定名称
+            </summary>
+        </member>
+        <member name="T:SAE.Framework.Extension.HttpClientExtension">
+            <summary>
+            HttpClient扩展配置类
+            </summary>
+        </member>
+        <member name="P:SAE.Framework.Extension.HttpClientExtension.LoggerRecord">
+            <summary>
+            日志记录器
+            </summary>
+        </member>
+        <member name="M:SAE.Framework.Extension.HttpClientExtension.UseLogging(System.Net.Http.HttpClient,System.Func{SAE.Framework.Logging.ILogging})">
+            <summary>
+            使用记录器
+            </summary>
+            <param name="httpClient"><see cref="T:System.Net.Http.HttpClient"/></param>
+            <param name="record">记录器</param>
+            <returns><paramref name="httpClient"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Extension.HttpClientExtension.Clone(System.Net.Http.HttpRequestMessage)">
+            <summary>
+            克隆<paramref name="request"/>请求体
+            </summary>
+            <param name="request"><see cref="T:System.Net.Http.HttpRequestMessage"/></param>
+            <returns><paramref name="request"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Extension.HttpClientExtension.AddHeader(System.Net.Http.HttpRequestMessage,System.String,System.String)">
+            <summary>
+            添加请求头
+            </summary>
+            <param name="request"><see cref="T:System.Net.Http.HttpRequestMessage"/></param>
+            <param name="key">key</param>
+            <param name="value">value</param>
+            <returns><paramref name="request"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Extension.HttpClientExtension.AddHeader(System.Net.Http.HttpRequestMessage,System.String,System.String[])">
+            <summary>
+            添加请求头
+            </summary>
+            <param name="request"><see cref="T:System.Net.Http.HttpRequestMessage"/></param>
+            <param name="key">key</param>
+            <param name="values">value集合</param>
+            <returns><paramref name="request"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Extension.HttpClientExtension.AddContent(System.Net.Http.HttpRequestMessage,System.String,System.String)">
+            <summary>
+            以字符串的形式添加数据
+            </summary>
+            <param name="request"><see cref="T:System.Net.Http.HttpRequestMessage"/></param>
+            <param name="value">内容</param>
+            <param name="mediaType"><paramref name="value"/>类型</param>
+            <returns><paramref name="request"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Extension.HttpClientExtension.AddContent(System.Net.Http.HttpRequestMessage,System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            以键值对的形式添加数据
+            </summary>
+            <param name="request"><see cref="T:System.Net.Http.HttpRequestMessage"/></param>
+            <param name="nameValue">键值对</param>
+            <returns><paramref name="request"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Extension.HttpClientExtension.AddJsonContent``1(System.Net.Http.HttpRequestMessage,``0)">
+            <summary>
+            以Json形式添加数据
+            </summary>
+            <typeparam name="TModel"><paramref name="model"/>类型</typeparam>
+            <param name="request"><see cref="T:System.Net.Http.HttpRequestMessage"/></param>
+            <param name="model">待Json序列化的对象</param>
+            <returns><paramref name="request"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Extension.HttpClientExtension.AddContent(System.Net.Http.HttpRequestMessage,System.IO.Stream)">
+            <summary>
+            添加流Content
+            </summary>
+            <param name="request"><see cref="T:System.Net.Http.HttpRequestMessage"/></param>
+            <param name="stream">流</param>
+            <returns><paramref name="request"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Extension.HttpClientExtension.AddContent(System.Net.Http.HttpRequestMessage,System.Net.Http.HttpContent)">
+            <summary>
+            添加HttpContent
+            </summary>
+            <param name="request"><see cref="T:System.Net.Http.HttpRequestMessage"/></param>
+            <param name="content"><see cref="T:System.Net.Http.HttpContent"/></param>
+            <returns><paramref name="request"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Extension.HttpClientExtension.AddProperty(System.Net.Http.HttpRequestMessage,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            添加请求属性集
+            </summary>
+            <param name="request"><see cref="T:System.Net.Http.HttpRequestMessage"/></param>
+            <param name="Properties">属性对象</param>
+            <returns><paramref name="request"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Extension.HttpClientExtension.AsAsync``1(System.Net.Http.HttpResponseMessage)">
+            <summary>
+            获取请求报文，如果请求失败则触发<seealso cref="T:System.Net.Http.HttpRequestException"/>。
+            </summary>
+            <typeparam name="T">返序列化对象</typeparam>
+            <param name="response">响应</param>
+            <returns><paramref name="response"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Extension.HttpClientExtension.UseDefaultMiddleware(System.Net.Http.HttpClient)">
+            <summary>
+            使用默认的中间件
+            </summary>
+            <param name="httpClient"><see cref="T:System.Net.Http.HttpClient"/></param>
+            <returns><paramref name="httpClient"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Extension.HttpClientExtension.Use(System.Net.Http.HttpClient,System.Net.Http.DelegatingHandler)">
+            <summary>
+            使用<paramref name="handler"/>作为中间件
+            </summary>
+            <param name="httpClient"><see cref="T:System.Net.Http.HttpClient"/></param>
+            <param name="handler">处理程序</param>
+            <returns><paramref name="httpClient"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Extension.HttpClientExtension.UsePolly(System.Net.Http.HttpClient,System.Int32,System.Net.HttpStatusCode[])">
+            <summary>
+            添加Polly代理。当请求出现<paramref name="httpStatusCodes"/>或<seealso cref="T:System.Net.Http.HttpRequestException"/>异常时.
+            将为进行<paramref name="retryCount"/>次重试
+            </summary>
+            <param name="httpClient">请求客户端</param>
+            <param name="retryCount">失败重试次数默认10次</param>
+            <param name="httpStatusCodes">当出现错误响应码，将进行重试,默认响应码:
+            <seealso cref="F:System.Net.HttpStatusCode.RequestTimeout"/>,
+            <seealso cref="F:System.Net.HttpStatusCode.InternalServerError"/>,
+            <seealso cref="F:System.Net.HttpStatusCode.BadGateway"/>,
+            <seealso cref="F:System.Net.HttpStatusCode.ServiceUnavailable"/>,
+            <seealso cref="F:System.Net.HttpStatusCode.GatewayTimeout"/></param>
+            <returns><paramref name="httpClient"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Extension.HttpClientExtension.UseExceptionHandler(System.Net.Http.HttpClient,System.Func{System.Net.Http.HttpResponseMessage,System.Threading.Tasks.Task})">
+            <summary>
+            使用<paramref name="handler"/>作为异常处理中间件
+            </summary>
+            <param name="httpClient"><see cref="T:System.Net.Http.HttpClient"/></param>
+            <param name="handler">处理程序</param>
+            <returns><paramref name="httpClient"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Extension.HttpClientExtension.UseDefaultExceptionHandler(System.Net.Http.HttpClient)">
+            <summary>
+            使用默认错误处理程序
+            </summary>
+            <param name="httpClient"><see cref="T:System.Net.Http.HttpClient"/></param>
+            <returns><paramref name="httpClient"/></returns>
+            <exception cref="T:SAE.Framework.SAEException">异常对象</exception>
+        </member>
+        <member name="M:SAE.Framework.Extension.HttpClientExtension.UseChunkHandler(System.Net.Http.HttpClient)">
+            <summary>
+            使用分块上传处理程序
+            </summary>
+            <param name="httpClient"><see cref="T:System.Net.Http.HttpClient"/></param>
+            <returns><paramref name="httpClient"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Extension.HttpClientExtension.UseOAuth(System.Net.Http.HttpClient,SAE.Framework.Extension.Middleware.OAuthOptions)">
+            <summary>
+            加入OAuth授权中间件
+            </summary>
+            <param name="httpClient"><see cref="T:System.Net.Http.HttpClient"/></param>
+            <param name="options">授权信息</param>
+            <returns><paramref name="httpClient"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Extension.HttpClientExtension.DownloadAsync(System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage,System.Int64)">
+            <summary>
+            分段下载文件
+            </summary>
+            <param name="httpClient"><see cref="T:System.Net.Http.HttpClient"/></param>
+            <param name="httpRequestMessage">请求体</param>
+            <param name="chunkSize">分段大小</param>
+            <returns>文件流</returns>
+        </member>
+        <member name="T:SAE.Framework.Extension.HttpClientExtension.ProxyHandler">
+            <summary>
+            代理处理程序
+            </summary>
+        </member>
+        <member name="M:SAE.Framework.Extension.HttpClientExtension.ProxyHandler.#ctor(System.Net.Http.HttpMessageHandler)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SAE.Framework.Extension.HttpClientExtension.ProxyHandler.#ctor(System.Action{System.Net.Http.HttpRequestMessage},System.Net.Http.HttpMessageHandler)">
+            <summary>
+            ctor
+            </summary>
+            <param name="requestProxy">请求代理</param>
+            <param name="innerHandler">内部执行程序</param>
+        </member>
+        <member name="M:SAE.Framework.Extension.HttpClientExtension.ProxyHandler.#ctor(System.Func{System.Func{System.Threading.Tasks.Task{System.Net.Http.HttpResponseMessage}},System.Threading.Tasks.Task{System.Net.Http.HttpResponseMessage}},System.Net.Http.HttpMessageHandler)">
+            <summary>
+            ctor
+            </summary>
+            <param name="proxy">响应代理</param>
+            <param name="innerHandler">内部执行程序</param>
+        </member>
+        <member name="M:SAE.Framework.Extension.HttpClientExtension.ProxyHandler.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:SAE.Framework.Extension.ChunkStreamContent">
+            <summary>
+            分段上传内容流
+            </summary>
+        </member>
+        <member name="F:SAE.Framework.Extension.ChunkStreamContent.DefaultChunkSize">
+            <summary>
+            默认块大小5MB
+            </summary>
+        </member>
+        <member name="P:SAE.Framework.Extension.ChunkStreamContent.ChunkSize">
+            <summary>
+            块大小
+            </summary>
+        </member>
+        <member name="P:SAE.Framework.Extension.ChunkStreamContent.FileName">
+            <summary>
+            文件名
+            </summary>
+        </member>
+        <member name="M:SAE.Framework.Extension.ChunkStreamContent.#ctor(System.IO.Stream,System.String)">
+            <summary>
+            创建大块文件流内容
+            </summary>
+            <param name="content">文件流</param>
+            <param name="fileName">文件名</param>
+        </member>
+        <member name="M:SAE.Framework.Extension.ChunkStreamContent.#ctor(System.IO.Stream,System.String,System.Int32)">
+            <summary>
+            创建大块文件流内容
+            </summary>
+            <param name="stream">文件流</param>
+            <param name="fileName">文件名</param>
+            <param name="chunkSize">分片大小</param>
+        </member>
+        <member name="T:SAE.Framework.Extension.Middleware.ChunkUploadMiddleware">
+            <summary>
+            分段上传处理程序
+            </summary>
+        </member>
+        <member name="M:SAE.Framework.Extension.Middleware.ChunkUploadMiddleware.#ctor(System.Net.Http.HttpMessageHandler)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SAE.Framework.Extension.Middleware.ChunkUploadMiddleware.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SAE.Framework.Extension.Middleware.ChunkUploadMiddleware.UploadCoreAsync(System.Net.Http.HttpRequestMessage,SAE.Framework.Extension.ChunkStreamContent,System.Threading.CancellationToken)">
+            <summary>
+            上传核心处理程序
+            </summary>
+            <param name="httpRequestMessage">请求</param>
+            <param name="chunkStreamContent">分段流</param>
+            <param name="cancellationToken">取消令牌</param>
+            <returns>响应正文</returns>
+        </member>
+        <member name="T:SAE.Framework.Extension.Middleware.ExceptionMiddleware">
+            <summary>
+            错误中间件
+            </summary>
+            <remarks>
+            在调用发生错误时，会拦截请求。
+            </remarks>
+        </member>
+        <member name="M:SAE.Framework.Extension.Middleware.ExceptionMiddleware.#ctor(System.Func{System.Net.Http.HttpResponseMessage,System.Threading.Tasks.Task})">
+            <summary>
+            ctor
+            </summary>
+            <param name="handler">请求异常时，会执行执行该委托</param>
+        </member>
+        <member name="M:SAE.Framework.Extension.Middleware.ExceptionMiddleware.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:SAE.Framework.Extension.Middleware.OAuthMiddleware">
+            <summary>
+            授权中间件
+            </summary>
+        </member>
+        <member name="F:SAE.Framework.Extension.Middleware.OAuthMiddleware._lock">
+            <summary>
+            锁对象
+            </summary>
+        </member>
+        <member name="P:SAE.Framework.Extension.Middleware.OAuthMiddleware.Token">
+            <summary>
+            request token
+            </summary>
+        </member>
+        <member name="M:SAE.Framework.Extension.Middleware.OAuthMiddleware.#ctor(SAE.Framework.Extension.Middleware.OAuthOptions)">
+            <summary>
+            ctor
+            </summary>
+            <param name="options">
+            授权配置
+            </param>
+        </member>
+        <member name="M:SAE.Framework.Extension.Middleware.OAuthMiddleware.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SAE.Framework.Extension.Middleware.OAuthMiddleware.RequestTokenAsync(System.Net.Http.HttpRequestMessage)">
+            <summary>
+            附加请求token
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SAE.Framework.Extension.Middleware.OAuthMiddleware.RequestToken">
+            <summary>
+            请求令牌
+            </summary>
+        </member>
+        <member name="M:SAE.Framework.Extension.Middleware.OAuthMiddleware.RequestToken.#ctor(System.String,System.Int32)">
+            <summary>
+            请求令牌
+            </summary>
+            <param name="token">令牌</param>
+            <param name="expiresIn">截止时间</param>
+        </member>
+        <member name="P:SAE.Framework.Extension.Middleware.OAuthMiddleware.RequestToken.AccessToken">
+            <summary>
+            token
+            </summary>
+        </member>
+        <member name="P:SAE.Framework.Extension.Middleware.OAuthMiddleware.RequestToken.Deadline">
+            <summary>
+            截止时间
+            </summary>
+        </member>
+        <member name="M:SAE.Framework.Extension.Middleware.OAuthMiddleware.RequestToken.Check">
+            <summary>
+            检查令牌是否过期
+            </summary>
+            <returns>true:未过期</returns>
+        </member>
+        <member name="T:SAE.Framework.Extension.Middleware.OAuthOptions">
+            <summary>
+            授权配置
+            </summary>
+        </member>
+        <member name="M:SAE.Framework.Extension.Middleware.OAuthOptions.#ctor">
+            <summary>
+            ctor
+            </summary>
+        </member>
+        <member name="F:SAE.Framework.Extension.Middleware.OAuthOptions.Option">
+            <summary>
+            配置节名称
+            </summary>
+        </member>
+        <member name="P:SAE.Framework.Extension.Middleware.OAuthOptions.Authority">
+            <summary>
+            授权地址
+            </summary>
+        </member>
+        <member name="P:SAE.Framework.Extension.Middleware.OAuthOptions.Scope">
+            <summary>
+            授权域
+            </summary>
+        </member>
+        <member name="P:SAE.Framework.Extension.Middleware.OAuthOptions.AppId">
+            <summary>
+            应用id
+            </summary>
+        </member>
+        <member name="P:SAE.Framework.Extension.Middleware.OAuthOptions.AppSecret">
+            <summary>
+            应用Secret
+            </summary>
+        </member>
+        <member name="P:SAE.Framework.Extension.Middleware.OAuthOptions.Expires">
+            <summary>
+            过期百分比默认超过70时间就重置
+            </summary>
+        </member>
+        <member name="P:SAE.Framework.Extension.Middleware.OAuthOptions.Client">
+            <summary>
+            发送授权的HttpClient
+            </summary>
+        </member>
+        <member name="P:SAE.Framework.Extension.Middleware.OAuthOptions.ManageTokenInvalid">
+            <summary>
+            Token无效时是否进行重试
+            </summary>
+            <remarks>
+            默认true,进行重试。
+            </remarks>
+        </member>
+        <member name="M:SAE.Framework.Extension.Middleware.OAuthOptions.Check(System.Boolean)">
+            <summary>
+            检查是否正确设置了配置
+            </summary>
+            <param name="error">true：错误时触发异常</param>
+            <returns></returns>
+        </member>
+        <member name="T:SAE.Framework.Extension.Middleware.PollyMiddleware">
+            <summary>
+            重试中间件
+            </summary>
+            <remarks>
+            在特定的请求异常时，会重试指定次数
+            </remarks>
+        </member>
+        <member name="M:SAE.Framework.Extension.Middleware.PollyMiddleware.#ctor(System.Int32,System.Collections.Generic.IEnumerable{System.Net.HttpStatusCode})">
+            <summary>
+            ctor
+            </summary>
+            <param name="retryCount">重试次数</param>
+            <param name="httpStatusCodes">异常状态码,默认为401、408、500、502、503、504</param>
+        </member>
+        <member name="M:SAE.Framework.Extension.Middleware.PollyMiddleware.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Microsoft.Extensions.DependencyInjection.ConfigurationMicrosoftDependencyInjectionExtension">
+            <summary>
+            依赖注入配置
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ConfigurationMicrosoftDependencyInjectionExtension.AddOAuthClient(Microsoft.Extensions.Options.OptionsBuilder{SAE.Framework.Extension.Middleware.OAuthOptions})">
+            <summary>
+            注册一个添加OAuth认证的HttpClient
+            </summary>
+            <param name="optionsBuilder"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

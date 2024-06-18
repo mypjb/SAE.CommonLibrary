@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <Compile Remove="Mediator\IRequestHandler.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SAE.Framework.DependencyInjection\SAE.Framework.DependencyInjection.csproj" />
+    <ProjectReference Include="..\SAE.Framework\SAE.Framework.csproj" />
+    <ProjectReference Include="..\SAE.Framework.Caching\SAE.Framework.Caching.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\" />
+  </ItemGroup>
+</Project>

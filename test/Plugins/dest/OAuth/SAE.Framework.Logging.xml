@@ -1,0 +1,407 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SAE.Framework.Logging</name>
+    </assembly>
+    <members>
+        <member name="T:SAE.Framework.Logging.EmptyLogging">
+            <summary>
+            空的日志记录器,使用日志对控制台进行输出。
+            </summary>
+        </member>
+        <member name="M:SAE.Framework.Logging.EmptyLogging.IsEnabled(SAE.Framework.Logging.Level)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SAE.Framework.Logging.EmptyLogging.Write(System.String,SAE.Framework.Logging.Level,System.Exception)">
+            <inheritdoc/>
+        </member>
+        <member name="T:SAE.Framework.Logging.EmptyLoggingFactory">
+            <summary>
+            空的日志工厂实现
+            </summary>
+        </member>
+        <member name="M:SAE.Framework.Logging.EmptyLoggingFactory.Create(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="T:SAE.Framework.Logging.Level">
+            <summary>
+            日志类型
+            </summary>
+        </member>
+        <member name="F:SAE.Framework.Logging.Level.Trace">
+            <summary>
+            跟踪
+            </summary>
+        </member>
+        <member name="F:SAE.Framework.Logging.Level.Debug">
+            <summary>
+            调试
+            </summary>
+        </member>
+        <member name="F:SAE.Framework.Logging.Level.Info">
+            <summary>
+            信息
+            </summary>
+        </member>
+        <member name="F:SAE.Framework.Logging.Level.Warn">
+            <summary>
+            警告
+            </summary>
+        </member>
+        <member name="F:SAE.Framework.Logging.Level.Error">
+            <summary>
+            错误
+            </summary>
+        </member>
+        <member name="F:SAE.Framework.Logging.Level.Fatal">
+            <summary>
+            致命错误
+            </summary>
+        </member>
+        <member name="T:SAE.Framework.Logging.ILogging">
+            <summary>
+            日志组件（以下API均为异步实现，不支持线程堵塞）
+            </summary>
+        </member>
+        <member name="M:SAE.Framework.Logging.ILogging.IsEnabled(SAE.Framework.Logging.Level)">
+            <summary>
+            该日志级别是否启用
+            </summary>
+            <param name="level"></param>
+            <returns>true:启用</returns>
+        </member>
+        <member name="M:SAE.Framework.Logging.ILogging.Write(System.String,SAE.Framework.Logging.Level,System.Exception)">
+            <summary>
+            写入日志并指定写入类型，和异常触发者
+            </summary>
+            <param name="message">日志消息</param>
+            <param name="level">日志类型</param>
+            <param name="exception">异常</param>
+            <returns>日志记录器</returns>
+        </member>
+        <member name="T:SAE.Framework.Logging.ILogging`1">
+            <summary>
+            日志组件泛型接口
+            </summary>
+            <typeparam name="TCategory">日志记录器的类型</typeparam>
+        </member>
+        <member name="T:SAE.Framework.Logging.ILoggingFactory">
+            <summary>
+            日志工厂
+            </summary>
+        </member>
+        <member name="M:SAE.Framework.Logging.ILoggingFactory.Create(System.String)">
+            <summary>
+            创建具有指定名称的ILog
+            </summary>
+            <param name="logName">记录器的名称</param>
+            <returns>返回一个指定的记录器</returns>
+        </member>
+        <member name="T:SAE.Framework.Logging.Logging`1">
+            <summary>
+            日志适配器
+            </summary>
+            <typeparam name="TCategoryName"></typeparam>
+        </member>
+        <member name="M:SAE.Framework.Logging.Logging`1.#ctor(SAE.Framework.Logging.ILoggingFactory)">
+            <summary>
+            ctor
+            </summary>
+            <param name="factory">日志记录器工厂</param>
+        </member>
+        <member name="M:SAE.Framework.Logging.Logging`1.IsEnabled(SAE.Framework.Logging.Level)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SAE.Framework.Logging.Logging`1.Write(System.String,SAE.Framework.Logging.Level,System.Exception)">
+            <inheritdoc/>
+        </member>
+        <member name="T:SAE.Framework.Logging.LoggingExtension">
+            <summary>
+            日志扩展
+            </summary>
+        </member>
+        <member name="M:SAE.Framework.Logging.LoggingExtension.Debug(SAE.Framework.Logging.ILogging,System.String)">
+            <summary>
+            记录<see cref="F:SAE.Framework.Logging.Level.Debug"/>级别日志
+            </summary>
+            <param name="logging">日志接口</param>
+            <param name="message">格式化的字符串</param>
+            <returns><paramref name="logging"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Logging.LoggingExtension.Debug(SAE.Framework.Logging.ILogging,System.String,System.Object[])">
+            <summary>
+            记录<see cref="F:SAE.Framework.Logging.Level.Debug"/>级别日志
+            </summary>
+            <param name="logging">日志接口</param>
+            <param name="format">格式化的字符串</param>
+            <param name="args">参数集合</param>
+            <returns><paramref name="logging"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Logging.LoggingExtension.Debug(SAE.Framework.Logging.ILogging,System.IFormatProvider,System.String,System.Object[])">
+            <summary>
+            记录<see cref="F:SAE.Framework.Logging.Level.Debug"/>级别日志
+            </summary>
+            <param name="logging">日志接口</param>
+            <param name="provider">字符串格式化提供程序</param>
+            <param name="format">格式化的字符串</param>
+            <param name="args">参数集合</param>
+            <returns><paramref name="logging"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Logging.LoggingExtension.Info(SAE.Framework.Logging.ILogging,System.String)">
+            <summary>
+            记录<see cref="F:SAE.Framework.Logging.Level.Info"/>级别日志
+            </summary>
+            <param name="logging">日志接口</param>
+            <param name="message">格式化的字符串</param>
+            <returns><paramref name="logging"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Logging.LoggingExtension.Info(SAE.Framework.Logging.ILogging,System.String,System.Object[])">
+            <summary>
+            记录<see cref="F:SAE.Framework.Logging.Level.Info"/>级别日志
+            </summary>
+            <param name="logging">日志接口</param>
+            <param name="format">格式化的字符串</param>
+            <param name="args">参数集合</param>
+            <returns><paramref name="logging"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Logging.LoggingExtension.Info(SAE.Framework.Logging.ILogging,System.IFormatProvider,System.String,System.Object[])">
+            <summary>
+            记录<see cref="F:SAE.Framework.Logging.Level.Info"/>级别日志
+            </summary>
+            <param name="logging">日志接口</param>
+            <param name="provider">字符串格式化提供程序</param>
+            <param name="format">格式化的字符串</param>
+            <param name="args">参数集合</param>
+            <returns><paramref name="logging"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Logging.LoggingExtension.Warn(SAE.Framework.Logging.ILogging,System.String)">
+            <summary>
+            记录<see cref="F:SAE.Framework.Logging.Level.Warn"/>级别日志
+            </summary>
+            <param name="logging">日志接口</param>
+            <param name="message">格式化的字符串</param>
+            <returns><paramref name="logging"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Logging.LoggingExtension.Warn(SAE.Framework.Logging.ILogging,System.String,System.Object[])">
+            <summary>
+            记录<see cref="F:SAE.Framework.Logging.Level.Warn"/>级别日志
+            </summary>
+            <param name="logging">日志接口</param>
+            <param name="format">格式化的字符串</param>
+            <param name="args">参数集合</param>
+            <returns><paramref name="logging"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Logging.LoggingExtension.Warn(SAE.Framework.Logging.ILogging,System.IFormatProvider,System.String,System.Object[])">
+            <summary>
+            记录<see cref="F:SAE.Framework.Logging.Level.Warn"/>级别日志
+            </summary>
+            <param name="logging">日志接口</param>
+            <param name="provider">字符串格式化提供程序</param>
+            <param name="format">格式化的字符串</param>
+            <param name="args">参数集合</param>
+            <returns><paramref name="logging"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Logging.LoggingExtension.Error(SAE.Framework.Logging.ILogging,System.Exception)">
+            <summary>
+            记录<see cref="F:SAE.Framework.Logging.Level.Error"/>级别日志
+            </summary>
+            <param name="logging">日志接口</param>
+            <param name="exception">异常</param>
+            <returns><paramref name="logging"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Logging.LoggingExtension.Error(SAE.Framework.Logging.ILogging,System.String)">
+            <summary>
+            记录<see cref="F:SAE.Framework.Logging.Level.Error"/>级别日志
+            </summary>
+            <param name="logging">日志接口</param>
+            <param name="message">格式化的字符串</param>
+            <returns><paramref name="logging"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Logging.LoggingExtension.Error(SAE.Framework.Logging.ILogging,System.Exception,System.String)">
+            <summary>
+            记录<see cref="F:SAE.Framework.Logging.Level.Error"/>级别日志
+            </summary>
+            <param name="logging">日志接口</param>
+            <param name="exception"></param>
+            <param name="message">格式化的字符串</param>
+            <returns><paramref name="logging"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Logging.LoggingExtension.Error(SAE.Framework.Logging.ILogging,System.String,System.Object[])">
+            <summary>
+            记录<see cref="F:SAE.Framework.Logging.Level.Error"/>级别日志
+            </summary>
+            <param name="logging">日志接口</param>
+            <param name="format">格式化的字符串</param>
+            <param name="args">参数集合</param>
+            <returns><paramref name="logging"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Logging.LoggingExtension.Error(SAE.Framework.Logging.ILogging,System.Exception,System.String,System.Object[])">
+            <summary>
+            记录<see cref="F:SAE.Framework.Logging.Level.Error"/>级别日志
+            </summary>
+            <param name="logging">日志接口</param>
+            <param name="exception"></param>
+            <param name="format">格式化的字符串</param>
+            <param name="args">参数集合</param>
+            <returns><paramref name="logging"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Logging.LoggingExtension.Error(SAE.Framework.Logging.ILogging,System.IFormatProvider,System.String,System.Object[])">
+            <summary>
+            记录<see cref="F:SAE.Framework.Logging.Level.Error"/>级别日志
+            </summary>
+            <param name="logging">日志接口</param>
+            <param name="provider">字符串格式化提供程序</param>
+            <param name="format">格式化的字符串</param>
+            <param name="args">参数集合</param>
+            <returns><paramref name="logging"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Logging.LoggingExtension.Error(SAE.Framework.Logging.ILogging,System.Exception,System.IFormatProvider,System.String,System.Object[])">
+            <summary>
+            记录<see cref="F:SAE.Framework.Logging.Level.Error"/>级别日志
+            </summary>
+            <param name="logging">日志接口</param>
+            <param name="exception"></param>
+            <param name="provider">字符串格式化提供程序</param>
+            <param name="format">格式化的字符串</param>
+            <param name="args">参数集合</param>
+            <returns><paramref name="logging"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Logging.LoggingExtension.Fatal(SAE.Framework.Logging.ILogging,System.String)">
+            <summary>
+            记录<see cref="F:SAE.Framework.Logging.Level.Fatal"/>级别日志
+            </summary>
+            <param name="logging">日志接口</param>
+            <param name="message">格式化的字符串</param>
+            <returns><paramref name="logging"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Logging.LoggingExtension.Fatal(SAE.Framework.Logging.ILogging,System.String,System.Object[])">
+            <summary>
+            记录<see cref="F:SAE.Framework.Logging.Level.Fatal"/>级别日志
+            </summary>
+            <param name="logging">日志接口</param>
+            <param name="format">格式化的字符串</param>
+            <param name="args">参数集合</param>
+            <returns><paramref name="logging"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Logging.LoggingExtension.Fatal(SAE.Framework.Logging.ILogging,System.IFormatProvider,System.String,System.Object[])">
+            <summary>
+            记录<see cref="F:SAE.Framework.Logging.Level.Fatal"/>级别日志
+            </summary>
+            <param name="logging">日志接口</param>
+            <param name="provider">字符串格式化提供程序</param>
+            <param name="format">格式化的字符串</param>
+            <param name="args">参数集合</param>
+            <returns><paramref name="logging"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Logging.LoggingExtension.Trace(SAE.Framework.Logging.ILogging,System.String)">
+            <summary>
+            记录<see cref="F:SAE.Framework.Logging.Level.Trace"/>级别日志
+            </summary>
+            <param name="logging">日志接口</param>
+            <param name="message">格式化的字符串</param>
+            <returns><paramref name="logging"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Logging.LoggingExtension.Trace(SAE.Framework.Logging.ILogging,System.String,System.Object[])">
+            <summary>
+            记录<see cref="F:SAE.Framework.Logging.Level.Trace"/>级别日志
+            </summary>
+            <param name="logging">日志接口</param>
+            <param name="format">格式化的字符串</param>
+            <param name="args">参数集合</param>
+            <returns><paramref name="logging"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Logging.LoggingExtension.Trace(SAE.Framework.Logging.ILogging,System.IFormatProvider,System.String,System.Object[])">
+            <summary>
+            记录<see cref="F:SAE.Framework.Logging.Level.Trace"/>级别日志
+            </summary>
+            <param name="logging">日志接口</param>
+            <param name="provider">字符串格式化提供程序</param>
+            <param name="format">格式化的字符串</param>
+            <param name="args">参数集合</param>
+            <returns><paramref name="logging"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Logging.LoggingExtension.Write(SAE.Framework.Logging.ILogging,SAE.Framework.Logging.Level,System.Exception,System.IFormatProvider,System.String,System.Object[])">
+            <summary>
+            写入日志
+            </summary>
+            <param name="logging">日志记录器</param>
+            <param name="level">日志级别</param>
+            <param name="exception">异常信息</param>
+            <param name="provider">日志信息格式化器</param>
+            <param name="format">待格式化字符串</param>
+            <param name="args">参数</param>
+            <returns><paramref name="logging"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Logging.LoggingExtension.Write(SAE.Framework.Logging.ILogging,SAE.Framework.Logging.Level,System.IFormatProvider,System.String,System.Object[])">
+            <summary>
+            写入日志
+            </summary>
+            <param name="logging">日志记录器</param>
+            <param name="level">日志级别</param>
+            <param name="provider">日志信息格式化器</param>
+            <param name="format">待格式化字符串</param>
+            <param name="args">参数</param>
+            <returns><paramref name="logging"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Logging.LoggingExtension.Write(SAE.Framework.Logging.ILogging,SAE.Framework.Logging.Level,System.String,System.Object[])">
+            <summary>
+            写入日志
+            </summary>
+            <param name="logging">日志记录器</param>
+            <param name="level">日志级别</param>
+            <param name="format">待格式化字符串</param>
+            <param name="args">参数</param>
+            <returns><paramref name="logging"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Logging.LoggingExtension.Write(SAE.Framework.Logging.ILogging,System.String,SAE.Framework.Logging.Level)">
+            <summary>
+            写入日志
+            </summary>
+            <param name="logging">日志记录器</param>
+            <param name="message">写入信息</param>
+            <param name="level">日志级别</param>
+            <returns><paramref name="logging"/></returns>
+        </member>
+        <member name="M:SAE.Framework.Logging.LoggingExtension.Create(SAE.Framework.Logging.ILoggingFactory)">
+            <summary>
+            创建日志记录器
+            </summary>
+            <param name="factory">日志工厂</param>
+            <returns>日志记录器</returns>
+        </member>
+        <member name="M:SAE.Framework.Logging.LoggingExtension.Create``1(SAE.Framework.Logging.ILoggingFactory)">
+            <summary>
+            创建日志记录器
+            </summary>
+            <param name="factory">日志工厂</param>
+            <typeparam name="TCategory">日志类型</typeparam>
+            <returns><see cref="T:SAE.Framework.Logging.ILogging"/></returns>
+        </member>
+        <member name="T:Microsoft.Extensions.DependencyInjection.SAELoggingDependencyInjectionExtension">
+            <summary>
+            日志记录器依赖注入
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.SAELoggingDependencyInjectionExtension.AddLogger``1(SAE.Framework.ISAEFrameworkBuilder)">
+            <summary>
+            添加<see cref="T:SAE.Framework.Logging.ILoggingFactory"/>实现
+            </summary>
+            <param name="builder">服务集合</param>
+            <returns><paramref name="builder"/></returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.SAELoggingDependencyInjectionExtension.AddDefaultLogger(SAE.Framework.ISAEFrameworkBuilder)">
+            <summary>
+            添加空的日志记录工厂
+            </summary>
+            <param name="builder">服务集合</param>
+            <returns><paramref name="builder"/></returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.SAELoggingDependencyInjectionExtension.IsAddEmptyLoggingFactory(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            是否注册了<see cref="T:SAE.Framework.Logging.EmptyLoggingFactory"/>
+            </summary>
+            <param name="services">服务集合</param>
+            <returns>true：已存在</returns>
+        </member>
+    </members>
+</doc>

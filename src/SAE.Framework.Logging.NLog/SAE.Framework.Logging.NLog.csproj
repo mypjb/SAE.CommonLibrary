@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
+    <PackageReference Include="NLog" Version="5.2.8" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.8" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\SAE.Framework.Configuration.Microsoft\SAE.Framework.Configuration.Microsoft.csproj" />
+    <ProjectReference Include="..\SAE.Framework.DependencyInjection\SAE.Framework.DependencyInjection.csproj" />
+    <ProjectReference Include="..\SAE.Framework.Logging\SAE.Framework.Logging.csproj" />
+  </ItemGroup>
+</Project>

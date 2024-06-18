@@ -1,0 +1,6 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\SAE.Framework.DependencyInjection\SAE.Framework.DependencyInjection.csproj" />
+    <ProjectReference Include="..\SAE.Framework\SAE.Framework.csproj" />
+  </ItemGroup>
+</Project>

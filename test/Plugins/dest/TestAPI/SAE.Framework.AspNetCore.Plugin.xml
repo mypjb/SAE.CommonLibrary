@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SAE.Framework.AspNetCore.Plugin</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.Extensions.DependencyInjection.PluginAspNetCoreDependencyInjectionExtension">
+            <summary>
+            aspnetcore 插件配置
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.PluginAspNetCoreDependencyInjectionExtension.AddPluginManage(SAE.Framework.ISAEFrameworkBuilder)">
+            <summary>
+            添加插件管理(web)
+            </summary>
+            <param name="builder">服务集合</param>
+            <returns><paramref name="builder"/></returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.PluginAspNetCoreDependencyInjectionExtension.AddPluginManage(SAE.Framework.ISAEFrameworkBuilder,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            添加插件管理(web)
+            </summary>
+            <param name="builder">服务集合</param>
+            <param name="configuration">配置对象</param>
+            <returns><paramref name="builder"/></returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.PluginAspNetCoreDependencyInjectionExtension.AddPluginManage(SAE.Framework.ISAEFrameworkBuilder,SAE.Framework.Plugin.PluginOptions)">
+            <summary>
+            添加插件管理(web)
+            </summary>
+            <param name="builder">服务集合</param>
+            <param name="options">插件配置</param>
+            <returns><paramref name="builder"/></returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.PluginAspNetCoreDependencyInjectionExtension.UsePluginManage(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            使用插件管理
+            </summary>
+            <param name="builder">构建器</param>
+            <returns><paramref name="builder"/></returns>
+        </member>
+        <member name="T:SAE.Framework.AspNetCore.Plugin.WebPlugin">
+            <summary>
+            web插件
+            </summary>
+        </member>
+        <member name="P:SAE.Framework.AspNetCore.Plugin.WebPlugin.SAE#Framework#Plugin#IPlugin#Name">
+            <inheritdoc/>
+        </member>
+        <member name="P:SAE.Framework.AspNetCore.Plugin.WebPlugin.SAE#Framework#Plugin#IPlugin#Description">
+            <inheritdoc/>
+        </member>
+        <member name="P:SAE.Framework.AspNetCore.Plugin.WebPlugin.SAE#Framework#Plugin#IPlugin#Version">
+            <inheritdoc/>
+        </member>
+        <member name="P:SAE.Framework.AspNetCore.Plugin.WebPlugin.SAE#Framework#Plugin#IPlugin#Path">
+            <inheritdoc/>
+        </member>
+        <member name="P:SAE.Framework.AspNetCore.Plugin.WebPlugin.SAE#Framework#Plugin#IPlugin#Status">
+            <inheritdoc/>
+        </member>
+        <member name="P:SAE.Framework.AspNetCore.Plugin.WebPlugin.SAE#Framework#Plugin#IPlugin#Order">
+            <inheritdoc/>
+        </member>
+        <member name="M:SAE.Framework.AspNetCore.Plugin.WebPlugin.PluginConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            配置依赖
+            </summary>
+            <param name="services">服务集合</param>
+        </member>
+        <member name="M:SAE.Framework.AspNetCore.Plugin.WebPlugin.PluginConfigure(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            配置服务
+            </summary>
+            <param name="app">构造器</param>
+        </member>
+        <member name="M:SAE.Framework.AspNetCore.Plugin.WebPlugin.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="T:SAE.Framework.AspNetCore.Plugin.WebPluginManage">
+            <summary>
+            配置管理器
+            </summary>
+        </member>
+        <member name="M:SAE.Framework.AspNetCore.Plugin.WebPluginManage.#ctor(SAE.Framework.Plugin.PluginOptions)">
+            <summary>
+            ctor
+            </summary>
+            <param name="pluginOptions">插件配置</param>
+        </member>
+        <member name="M:SAE.Framework.AspNetCore.Plugin.WebPluginManage.LoadPlugin">
+            <inheritdoc/>
+        </member>
+        <member name="M:SAE.Framework.AspNetCore.Plugin.WebPluginManage.Load(SAE.Framework.Plugin.IPlugin)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SAE.Framework.AspNetCore.Plugin.WebPluginManage.UnLoad(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="P:SAE.Framework.AspNetCore.Plugin.WebPluginManage.Plugins">
+            <inheritdoc/>
+        </member>
+    </members>
+</doc>

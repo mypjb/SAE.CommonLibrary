@@ -1,8 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-  <ItemGroup>
-    <PackageReference Include="MySqlConnector" Version="2.3.5" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SAE.CommonLibrary.Database\SAE.CommonLibrary.Database.csproj" />
-  </ItemGroup>
-</Project>

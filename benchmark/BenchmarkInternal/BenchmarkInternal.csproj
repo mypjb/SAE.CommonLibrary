@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\SAE.CommonLibrary.ObjectMapper.TinyMapper\SAE.CommonLibrary.ObjectMapper.TinyMapper.csproj" />
+    <ProjectReference Include="..\..\src\SAE.Framework.ObjectMapper.TinyMapper\SAE.Framework.ObjectMapper.TinyMapper.csproj" />
   </ItemGroup>
 
 </Project>

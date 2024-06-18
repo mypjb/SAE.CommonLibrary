@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<NoWarn>CS1591</NoWarn>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\SAE.Framework.ObjectMapper\SAE.Framework.ObjectMapper.csproj" />
+	</ItemGroup>
+</Project>

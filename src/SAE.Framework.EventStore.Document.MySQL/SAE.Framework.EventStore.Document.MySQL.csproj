@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<ItemGroup>
+		<PackageReference Include="Dapper" Version="2.1.35" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\SAE.Framework.Database.MySQL\SAE.Framework.Database.MySQL.csproj" />
+		<ProjectReference Include="..\SAE.Framework.Database\SAE.Framework.Database.csproj" />
+		<ProjectReference Include="..\SAE.Framework.EventStore.Document\SAE.Framework.EventStore.Document.csproj" />
+	</ItemGroup>
+
+</Project>
