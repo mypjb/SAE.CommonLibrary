@@ -583,7 +583,11 @@ namespace SAE.Framework.Caching
             else
             {
                 value = await valueFactory.Invoke();
-                await cache.AddAsync(key, value);
+
+                if (value != null)
+                {
+                    await cache.AddAsync(key, value);
+                }
             }
 
             return value;

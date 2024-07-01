@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 using SAE.Framework.Extension;
 using SAE.Framework.Logging;
 using SAE.Framework.Scope;
@@ -43,15 +44,12 @@ namespace SAE.Framework.Configuration.Microsoft.MultiTenant
             this._scopeFactory = scopeFactory;
             this._logging = logging;
 
-            var changeToken = configuration.GetReloadToken();
-
-            changeToken?.RegisterChangeCallback(s =>
+            ChangeToken.OnChange(configuration.GetReloadToken, () =>
             {
                 logging.Info("configuration change clear cache begin");
                 cache.Clear();
                 logging.Info("configuration change clear cache end");
-            }, this);
-
+            });
         }
         /// <inheritdoc/>
         public override TOptions Get(string name)

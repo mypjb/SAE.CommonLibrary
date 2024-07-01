@@ -96,16 +96,9 @@ namespace SAE.Framework.Abstract.Authorization.ABAC
 
                 var contextString = context.ToString();
 
-                var key = $"{authDescriptor.Key}:{contextString.ToMd5()}";
-
-                this._logging.Info($"当前规则上下文缓存键:{key}");
-
                 this._logging.Debug($"当前规则上下文:{contextString}");
 
-                result = await this._cache.GetOrAddAsync(key, async () =>
-                {
-                    return await this.AuthCoreAsync(context, authDescriptor);
-                });
+                return await this.AuthCoreAsync(context, authDescriptor);
             }
 
             this._logging.Info($"授权{(result ? "成功" : "失败")}!");

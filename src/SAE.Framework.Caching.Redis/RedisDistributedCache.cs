@@ -51,12 +51,17 @@ namespace SAE.Framework.Caching.Redis
         public async Task<bool> AddAsync<T>(CacheDescription<T> description)
         {
             bool result = false;
-            await this.DatabaseOperation(async db =>
+
+            if (description.Value != null)
             {
-                var value = description.Value.ToJsonString();
-                result = await db.StringSetAsync(description.Key, value);
-                this._logging.Debug($"add cache '{description.Key}':{value}");
-            });
+                await this.DatabaseOperation(async db =>
+                            {
+                                var value = description.Value.ToJsonString();
+                                result = await db.StringSetAsync(description.Key, value);
+                                this._logging.Debug($"add cache '{description.Key}':{value}");
+                            });
+            }
+
             return result;
         }
         /// <inheritdoc/>
@@ -72,8 +77,20 @@ namespace SAE.Framework.Caching.Redis
                 IList<Task<bool>> tasks = new List<Task<bool>>();
 
                 foreach (var description in descriptions)
-                    tasks.Add(batch.StringSetAsync(description.Key, description.Value.ToJsonString(), description.GetTimeSpan()));
+                {
+                    if (description != null)
+                    {
+                        tasks.Add(batch.StringSetAsync(description.Key, description.Value.ToJsonString(), description.GetTimeSpan()));
+                    }
+                    else
+                    {
+                        tasks.Add(Task.FromResult(false));
+                    }
+
+                }
+
                 batch.Execute();
+                
                 await tasks.ForEachAsync(async task =>
                 {
                     result.Add(await task);

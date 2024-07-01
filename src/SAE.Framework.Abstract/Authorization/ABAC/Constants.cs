@@ -16,6 +16,10 @@ namespace SAE.Framework.Abstract.Authorization.ABAC
         /// </summary>
         public const char PropertyPrefix = '$';
         /// <summary>
+        /// 缓存前缀
+        /// </summary>
+        public const string CachePrefix = "auth_abac_";
+        /// <summary>
         /// 正则
         /// </summary>
         public class Regex

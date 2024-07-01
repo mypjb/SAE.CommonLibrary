@@ -25,6 +25,8 @@ namespace SAE.Framework.Caching.Memory
         ///<inheritdoc/>
         public Task<bool> AddAsync<T>(CacheDescription<T> description)
         {
+            if (description.Value == null) return Task.FromResult(false);
+
             using (var entry = this._cache.CreateEntry(description.Key))
             {
                 entry.Value = description.Value;
@@ -54,12 +56,12 @@ namespace SAE.Framework.Caching.Memory
         ///<inheritdoc/>
         public async Task<IEnumerable<bool>> AddAsync<T>(IEnumerable<CacheDescription<T>> descriptions)
         {
-            IList<bool> resutls = new List<bool>();
+            IList<bool> results = new List<bool>();
             foreach (var description in descriptions)
             {
-                resutls.Add(await this.AddAsync(description));
+                results.Add(await this.AddAsync(description));
             }
-            return resutls;
+            return results;
         }
         ///<inheritdoc/>
         public async Task<bool> ClearAsync()
@@ -106,7 +108,7 @@ namespace SAE.Framework.Caching.Memory
             }
             return results;
         }
-        
+
         /// <inheritdoc/>
         public Task<bool> ExistAsync(string key)
         {

@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using SAE.Framework.Abstract.Decorator;
+using SAE.Framework.Caching;
 using SAE.Framework.Extension;
 using SAE.Framework.Logging;
 
@@ -24,19 +25,35 @@ namespace SAE.Framework.Abstract.Authorization.ABAC
         /// 服务提供者
         /// </summary>
         private readonly IServiceProvider _serviceProvider;
+        private readonly IMemoryCache _memoryCache;
+
         /// <summary>
         /// ctor
         /// </summary>
         /// <param name="logging">日志记录器</param>
         /// <param name="serviceProvider">服务提供者</param>
+        /// <param name="memoryCache">内存</param>
         public DefaultRuleDecoratorBuilder(ILogging<DefaultRuleDecoratorBuilder> logging,
-                                           IServiceProvider serviceProvider)
+                                           IServiceProvider serviceProvider,
+                                           IMemoryCache memoryCache)
         {
             this._logging = logging;
             this._serviceProvider = serviceProvider;
+            this._memoryCache = memoryCache;
         }
         ///<inheritdoc/>
         public virtual IDecorator<RuleContext> Build(string expression)
+        {
+            return this._memoryCache.GetOrAdd($"{Constants.CachePrefix}{expression}", () =>
+            {
+                return this.BuildCore(expression);
+            }, CacheTime.OneYear);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expression"></param>
+        protected virtual IDecorator<RuleContext> BuildCore(string expression)
         {
             this._logging.Info($"开始解析表达式：{expression}");
 
