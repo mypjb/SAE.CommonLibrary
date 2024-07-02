@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using SAE.Framework.Caching;
@@ -26,7 +27,7 @@ namespace SAE.Framework.Abstract.Authorization.ABAC
         /// <summary>
         /// 缓存
         /// </summary>
-        protected readonly ICache _cache;
+        protected readonly IMemoryCache _memoryCache;
         /// <summary>
         /// 规则上下文
         /// </summary>
@@ -58,7 +59,7 @@ namespace SAE.Framework.Abstract.Authorization.ABAC
         {
             this._authorizationPoliciesOptionsMonitor = authorizationPoliciesOptionsMonitor;
             this._authDescriptorsOptionsMonitor = authDescriptorsOptionsMonitor;
-            this._cache = memoryCache;
+            this._memoryCache = memoryCache;
             this._ruleContextFactory = ruleContextFactory;
             this._ruleDecoratorBuilder = ruleDecoratorBuilder;
             this._logging = logging;
@@ -73,7 +74,7 @@ namespace SAE.Framework.Abstract.Authorization.ABAC
         /// </summary>
         protected virtual async Task ClearCacheAsync()
         {
-            await this._cache.ClearAsync();
+            await this._memoryCache.ClearAsync();
         }
         /// <inheritdoc/>
         public async Task<bool> AuthAsync()
@@ -158,23 +159,26 @@ namespace SAE.Framework.Abstract.Authorization.ABAC
         /// <returns>授权描述符</returns>
         public virtual async Task<AuthDescriptor> GetAuthDescriptorAsync()
         {
-            var authDescriptors = this._authDescriptorsOptionsMonitor.CurrentValue ?? new List<TAuthDescriptor>();
+            var key = await this.GetAuthDescriptorKeyAsync();
 
-            if (authDescriptors.Count > 0)
+            this._logging.Info($"使用key查找授权描述符集合:{key}");
+
+            return await this._memoryCache.GetOrAddAsync($"{Constants.Cache.GetAuthDescriptor}{key}", async () =>
             {
-                this._logging.Warn($"找到授权描述符集合:{authDescriptors.Count}");
+                var authDescriptors = this._authDescriptorsOptionsMonitor.CurrentValue ?? new List<TAuthDescriptor>();
 
-                var key = await this.GetAuthDescriptorKeyAsync();
+                if (authDescriptors.Count > 0)
+                {
+                    this._logging.Warn($"找到授权描述符集合:{authDescriptors.Count}");
 
-                this._logging.Info($"使用key查找授权描述符集合:{key}");
-
-                return await this.FindAuthDescriptorCoreAsync(key, authDescriptors);
-            }
-            else
-            {
-                this._logging.Warn("未找到授权描述符集合");
-                return null;
-            }
+                    return await this.FindAuthDescriptorCoreAsync(key, authDescriptors);
+                }
+                else
+                {
+                    this._logging.Warn("未找到授权描述符集合");
+                    return null;
+                }
+            }, CacheTime.OneYear);
         }
         /// <summary>
         /// 获得授权策略

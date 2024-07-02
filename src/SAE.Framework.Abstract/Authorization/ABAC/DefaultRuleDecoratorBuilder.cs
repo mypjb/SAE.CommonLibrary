@@ -44,7 +44,7 @@ namespace SAE.Framework.Abstract.Authorization.ABAC
         ///<inheritdoc/>
         public virtual IDecorator<RuleContext> Build(string expression)
         {
-            return this._memoryCache.GetOrAdd($"{Constants.CachePrefix}{expression}", () =>
+            return this._memoryCache.GetOrAdd($"{Constants.Cache.Build}{expression}", () =>
             {
                 return this.BuildCore(expression);
             }, CacheTime.OneYear);
