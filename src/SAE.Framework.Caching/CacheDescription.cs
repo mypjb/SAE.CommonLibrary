@@ -37,7 +37,7 @@ namespace SAE.Framework.Caching
         public CacheDescription(string key, T value)
         {
             Assert.Build(key).NotNullOrWhiteSpace("请提供有效的 'key'");
-            Assert.Build(value).NotNull("请提供有效的 'value'");
+            // Assert.Build(value).NotNull("请提供有效的 'value'");
             this.Key = key;
             this.Value = value;
         }
