@@ -113,7 +113,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 }
                 catch (Exception ex)
                 {
-                    logging.Error(ex, $"load '{plugin.Name}' failure");
+                    logging.Error($"load '{plugin.Name}' failure", ex);
 #pragma warning disable CA2200 // 再次引发以保留堆栈详细信息
                     throw ex;
 #pragma warning restore CA2200 // 再次引发以保留堆栈详细信息

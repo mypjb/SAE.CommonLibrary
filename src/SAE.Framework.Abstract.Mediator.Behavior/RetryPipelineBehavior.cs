@@ -66,10 +66,10 @@ namespace SAE.Framework.Abstract.Mediator.Behavior
                 num++;
                 if (num > optionNum)
                 {
-                    this._logging.Error($"{num}/{optionNum},重试次数用尽，直接触发异常。data:{command.ToJsonString()}");
+                    this._logging.Error(() => $"{num}/{optionNum},重试次数用尽，直接触发异常。data:{command.ToJsonString()}", ex);
                     throw ex;
                 }
-                this._logging.Error(ex, $"命令执行失败'{num}/{optionNum}'次，准备进行重试。data:{command.ToJsonString()}");
+                this._logging.Error(() => $"命令执行失败'{num}/{optionNum}'次，准备进行重试。data:{command.ToJsonString()}", ex);
                 await this.ExecutionCoreAsync(command, next, num);
             }
         }
@@ -119,10 +119,10 @@ namespace SAE.Framework.Abstract.Mediator.Behavior
                 num++;
                 if (num > optionNum)
                 {
-                    this._logging.Error($"{num}/{optionNum},重试次数用尽，直接触发异常。data:{command.ToJsonString()}");
+                    this._logging.Error($"{num}/{optionNum},重试次数用尽，直接触发异常。data:{command.ToJsonString()}", ex);
                     throw ex;
                 }
-                this._logging.Error(ex, $"命令执行失败'{num}/{optionNum}'次，准备进行重试。data:{command.ToJsonString()}");
+                this._logging.Error(() => $"命令执行失败'{num}/{optionNum}'次，准备进行重试。data:{command.ToJsonString()}", ex);
                 return await this.ExecutionCoreAsync(command, next, num);
             }
         }

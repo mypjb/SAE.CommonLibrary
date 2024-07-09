@@ -31,19 +31,19 @@ namespace SAE.Framework.Logging.Test
         [InlineData(Level.Trace)]
         public void Write(Level type)
         {
-            _logging.Write($"this level is {type}", type);
+            _logging.Write(type, $"this level is {type}");
         }
         [Fact]
         public void Info()
         {
             this._logging.Info("this is info output");
-            this._logging.Info("1.{0},2.{1},3.{2},-----4.{3}", "pjb", "cwj", 24, "...");
+            this._logging.Info(() => "1.{0},2.{1},3.{2},-----4.{3}");
         }
         [Fact]
         public void Debug()
         {
             _logging.Debug("this is debug output");
-            this._logging.Debug("1.{0}2.{1}", "pjb", "---");
+            this._logging.Debug(() => "1.{0}2.{1}");
         }
         [Fact]
         public void Error()
@@ -55,14 +55,14 @@ namespace SAE.Framework.Logging.Test
             }
             catch (Exception error)
             {
-                _logging.Error(error, "this is error output");
+                _logging.Error("this is error output", error);
             }
 
         }
         [Fact]
         public void Fatal()
         {
-            this._logging.Error(new Exception("this is custom error"),"custom error");
+            this._logging.Error("custom error", new Exception("this is custom error"));
             this._logging.Error("this is error output");
             this._logging.Fatal("this is Fatal output");
         }

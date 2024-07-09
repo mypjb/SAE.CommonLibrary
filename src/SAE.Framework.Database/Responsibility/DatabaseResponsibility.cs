@@ -32,9 +32,6 @@ namespace SAE.Framework.Database.Responsibility
                 await this.HandleCoreAsync(context);
 
             await base.HandleAsync(context);
-
-            Assert.Build(!context.Complete && this.Responsibility == null)
-                  .False($"不支持这个'{context.Options.Provider}'数据库驱动");
         }
         /// <summary>
         /// 上下文的提供者和当前对象是否匹配

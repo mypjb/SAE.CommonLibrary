@@ -102,7 +102,7 @@ namespace SAE.Framework.Database
                 }
                 catch (Exception ex)
                 {
-                    this._logging.Error(ex, $"{message}初始化失败,请检查语句或链接是否正常。initialCommand：{options.InitialCommand}");
+                    this._logging.Error($"{message}初始化失败,请检查语句或链接是否正常。initialCommand：{options.InitialCommand}", ex);
                 }
             }
         }
@@ -142,7 +142,7 @@ namespace SAE.Framework.Database
             catch (Exception ex)
             {
                 status = 0;
-                this._logging.Error(ex, $"在对'{options.Name}'进行数据库检查时出错了,initialDetectionCommand：\r\n{options.InitialDetectionCommand}");
+                this._logging.Error($"在对'{options.Name}'进行数据库检查时出错了,initialDetectionCommand：\r\n{options.InitialDetectionCommand}", ex);
             }
             return status != 0;
         }

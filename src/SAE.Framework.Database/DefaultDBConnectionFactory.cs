@@ -88,6 +88,10 @@ namespace SAE.Framework.Database
             var context = new DatabaseResponsibilityContext(options);
 
             await this._responsibility.HandleAsync(context);
+
+            Assert.Build(!context.Complete)
+                  .False($"不支持这个'{options.Provider}'数据库驱动");
+
             return context;
         }
 

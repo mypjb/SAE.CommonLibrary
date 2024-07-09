@@ -30,10 +30,10 @@ namespace SAE.Framework.AspNetCore.Filters
         {
             if (context.Exception == null || context.ExceptionHandled)
             {
-                this._logging.Error(context.Exception, "异常已被处理");
+                this._logging.Error("异常已被处理", context.Exception);
                 return Task.CompletedTask;
             }
-            this._logging.Error(context.Exception, context.Exception.Message);
+            this._logging.Error(context.Exception.Message, context.Exception);
             return Task.CompletedTask;
         }
     }

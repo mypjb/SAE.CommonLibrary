@@ -144,7 +144,7 @@ namespace SAE.Framework.Configuration
                 this.Logging.Info("重新加载配置");
             }
         }
-        
+
         /// <inheritdoc/>
         public override void Load()
         {
@@ -297,7 +297,7 @@ namespace SAE.Framework.Configuration
             }
             catch (Exception ex)
             {
-                this.Logging.Warn("旧配置流行释放失败，这可能该流被提前释放导致的", ex);
+                this.Logging.Error("旧配置流行释放失败，这可能该流被提前释放导致的", ex);
             }
         }
 
@@ -351,6 +351,6 @@ namespace SAE.Framework.Configuration
                 }
             }
         }
-     
+
     }
 }

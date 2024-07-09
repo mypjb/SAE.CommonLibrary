@@ -63,7 +63,7 @@ namespace SAE.Framework.AspNetCore.Scope
         /// <param name="options"></param>
         private void OnChange(MultiTenantOptions options)
         {
-            this._logging.Info($"configuration tenant :\r\n{options.ToJsonString()}");
+            this._logging.Info(()=> $"configuration tenant :\r\n{options.ToJsonString()}");
             this.Options = options;
         }
         /// <inheritdoc/>

@@ -9,38 +9,35 @@ namespace SAE.Framework.Logging
     /// </summary>
     public static class LoggingExtension
     {
-
         #region Debug
         /// <summary>
         /// 记录<see cref="Level.Debug"/>级别日志
         /// </summary>
         /// <param name="logging">日志接口</param>
-        /// <param name="message">格式化的字符串</param>
+        /// <param name="message">日志信息</param>
         /// <returns><paramref name="logging"/></returns>
         public static ILogging Debug(this ILogging logging, string message)
             => logging.Write(Level.Debug, message);
 
-
         /// <summary>
-        /// 记录<see cref="Level.Debug"/>级别日志
+        /// 传入一个委托，当<see cref="Level.Debug"/>被启用时，会调用委托获取日志信息。
         /// </summary>
+        /// <remarks>
+        /// 此函数是为了解决<em>日志信息</em>的生成需要占用硬件大量资源。
+        /// </remarks>
         /// <param name="logging">日志接口</param>
-        /// <param name="format">格式化的字符串</param>
-        /// <param name="args">参数集合</param>
+        /// <param name="messageDelegate">消息委托</param>
         /// <returns><paramref name="logging"/></returns>
-        public static ILogging Debug(this ILogging logging, string format, params object[] args)
-            => logging.Write(Level.Debug, format, args);
+        public static ILogging Debug(this ILogging logging, Func<string> messageDelegate)
+        {
+            if (logging.IsEnabled(Level.Debug))
+            {
+                logging.Debug(messageDelegate.Invoke());
+            }
 
-        /// <summary>
-        /// 记录<see cref="Level.Debug"/>级别日志
-        /// </summary>
-        /// <param name="logging">日志接口</param>
-        /// <param name="provider">字符串格式化提供程序</param>
-        /// <param name="format">格式化的字符串</param>
-        /// <param name="args">参数集合</param>
-        /// <returns><paramref name="logging"/></returns>
-        public static ILogging Debug(this ILogging logging, IFormatProvider provider, string format, params object[] args)
-            => logging.Write(Level.Debug, provider, format, args);
+            return logging;
+        }
+
         #endregion
 
         #region Info
@@ -49,32 +46,29 @@ namespace SAE.Framework.Logging
         /// 记录<see cref="Level.Info"/>级别日志
         /// </summary>
         /// <param name="logging">日志接口</param>
-        /// <param name="message">格式化的字符串</param>
+        /// <param name="message">日志信息</param>
         /// <returns><paramref name="logging"/></returns>
         public static ILogging Info(this ILogging logging, string message)
             => logging.Write(Level.Info, message);
 
-
         /// <summary>
-        /// 记录<see cref="Level.Info"/>级别日志
+        /// 传入一个委托，当<see cref="Level.Info"/>被启用时，会调用委托获取日志信息。
         /// </summary>
+        /// <remarks>
+        /// 此函数是为了解决<em>日志信息</em>的生成需要占用硬件大量资源。
+        /// </remarks>
         /// <param name="logging">日志接口</param>
-        /// <param name="format">格式化的字符串</param>
-        /// <param name="args">参数集合</param>
+        /// <param name="messageDelegate">消息委托</param>
         /// <returns><paramref name="logging"/></returns>
-        public static ILogging Info(this ILogging logging, string format, params object[] args)
-            => logging.Write(Level.Info, format, args);
+        public static ILogging Info(this ILogging logging, Func<string> messageDelegate)
+        {
+            if (logging.IsEnabled(Level.Info))
+            {
+                logging.Info(messageDelegate.Invoke());
+            }
 
-        /// <summary>
-        /// 记录<see cref="Level.Info"/>级别日志
-        /// </summary>
-        /// <param name="logging">日志接口</param>
-        /// <param name="provider">字符串格式化提供程序</param>
-        /// <param name="format">格式化的字符串</param>
-        /// <param name="args">参数集合</param>
-        /// <returns><paramref name="logging"/></returns>
-        public static ILogging Info(this ILogging logging, IFormatProvider provider, string format, params object[] args)
-            => logging.Write(Level.Info, provider, format, args);
+            return logging;
+        }
 
         #endregion
 
@@ -83,32 +77,31 @@ namespace SAE.Framework.Logging
         /// 记录<see cref="Level.Warn"/>级别日志
         /// </summary>
         /// <param name="logging">日志接口</param>
-        /// <param name="message">格式化的字符串</param>
+        /// <param name="message">日志信息</param>
         /// <returns><paramref name="logging"/></returns>
         public static ILogging Warn(this ILogging logging, string message)
             => logging.Write(Level.Warn, message);
 
-
         /// <summary>
-        /// 记录<see cref="Level.Warn"/>级别日志
+        /// 传入一个委托，当<see cref="Level.Warn"/>被启用时，会调用委托获取日志信息。
         /// </summary>
+        /// <remarks>
+        /// 此函数是为了解决<em>日志信息</em>的生成需要占用硬件大量资源。
+        /// </remarks>
         /// <param name="logging">日志接口</param>
-        /// <param name="format">格式化的字符串</param>
-        /// <param name="args">参数集合</param>
+        /// <param name="messageDelegate">消息委托</param>
         /// <returns><paramref name="logging"/></returns>
-        public static ILogging Warn(this ILogging logging, string format, params object[] args)
-            => logging.Write(Level.Warn, format, args);
+        public static ILogging Warn(this ILogging logging, Func<string> messageDelegate)
+        {
+            if (logging.IsEnabled(Level.Warn))
+            {
+                logging.Warn(messageDelegate.Invoke());
+            }
 
-        /// <summary>
-        /// 记录<see cref="Level.Warn"/>级别日志
-        /// </summary>
-        /// <param name="logging">日志接口</param>
-        /// <param name="provider">字符串格式化提供程序</param>
-        /// <param name="format">格式化的字符串</param>
-        /// <param name="args">参数集合</param>
-        /// <returns><paramref name="logging"/></returns>
-        public static ILogging Warn(this ILogging logging, IFormatProvider provider, string format, params object[] args)
-            => logging.Write(Level.Warn, provider, format, args);
+            return logging;
+        }
+
+
         #endregion
 
         #region Error
@@ -120,13 +113,52 @@ namespace SAE.Framework.Logging
         /// <param name="exception">异常</param>
         /// <returns><paramref name="logging"/></returns>
         public static ILogging Error(this ILogging logging, Exception exception)
-            => logging.Write(Level.Error, exception, null, exception?.Message);
+            => logging.Write(Level.Error, exception?.Message, exception);
+
+        /// <summary>
+        /// 传入一个委托，当<see cref="Level.Error"/>被启用时，会调用委托获取日志信息。
+        /// </summary>
+        /// <remarks>
+        /// 此函数是为了解决<em>日志信息</em>的生成需要占用硬件大量资源。
+        /// </remarks>
+        /// <param name="logging">日志接口</param>
+        /// <param name="messageDelegate">消息委托</param>
+        /// <returns><paramref name="logging"/></returns>
+        public static ILogging Error(this ILogging logging, Func<string> messageDelegate)
+        {
+            if (logging.IsEnabled(Level.Error))
+            {
+                logging.Error(messageDelegate.Invoke());
+            }
+
+            return logging;
+        }
+
+        /// <summary>
+        /// 传入一个委托，当<see cref="Level.Error"/>被启用时，会调用委托获取日志信息。
+        /// </summary>
+        /// <remarks>
+        /// 此函数是为了解决<em>日志信息</em>的生成需要占用硬件大量资源。
+        /// </remarks>
+        /// <param name="logging">日志接口</param>
+        /// <param name="messageDelegate">消息委托</param>
+        /// <param name="exception">触发的异常</param>
+        /// <returns><paramref name="logging"/></returns>
+        public static ILogging Error(this ILogging logging, Func<string> messageDelegate, Exception exception)
+        {
+            if (logging.IsEnabled(Level.Error))
+            {
+                logging.Error(messageDelegate.Invoke(), exception);
+            }
+
+            return logging;
+        }
 
         /// <summary>
         /// 记录<see cref="Level.Error"/>级别日志
         /// </summary>
         /// <param name="logging">日志接口</param>
-        /// <param name="message">格式化的字符串</param>
+        /// <param name="message">日志信息</param>
         /// <returns><paramref name="logging"/></returns>
         public static ILogging Error(this ILogging logging, string message)
             => logging.Write(Level.Error, message);
@@ -136,54 +168,11 @@ namespace SAE.Framework.Logging
         /// </summary>
         /// <param name="logging">日志接口</param>
         /// <param name="exception"></param>
-        /// <param name="message">格式化的字符串</param>
+        /// <param name="message">日志信息</param>
         /// <returns><paramref name="logging"/></returns>
-        public static ILogging Error(this ILogging logging, Exception exception, string message)
-            => logging.Write(Level.Error, exception, null, message);
+        public static ILogging Error(this ILogging logging, string message, Exception exception)
+            => logging.Write(Level.Error, message, exception);
 
-        /// <summary>
-        /// 记录<see cref="Level.Error"/>级别日志
-        /// </summary>
-        /// <param name="logging">日志接口</param>
-        /// <param name="format">格式化的字符串</param>
-        /// <param name="args">参数集合</param>
-        /// <returns><paramref name="logging"/></returns>
-        public static ILogging Error(this ILogging logging, string format, params object[] args)
-            => logging.Write(Level.Error, format, args);
-
-        /// <summary>
-        /// 记录<see cref="Level.Error"/>级别日志
-        /// </summary>
-        /// <param name="logging">日志接口</param>
-        /// <param name="exception"></param>
-        /// <param name="format">格式化的字符串</param>
-        /// <param name="args">参数集合</param>
-        /// <returns><paramref name="logging"/></returns>
-        public static ILogging Error(this ILogging logging, Exception exception, string format, params object[] args)
-            => logging.Write(Level.Error, exception: exception, provider: null, format: format, args: args);
-
-        /// <summary>
-        /// 记录<see cref="Level.Error"/>级别日志
-        /// </summary>
-        /// <param name="logging">日志接口</param>
-        /// <param name="provider">字符串格式化提供程序</param>
-        /// <param name="format">格式化的字符串</param>
-        /// <param name="args">参数集合</param>
-        /// <returns><paramref name="logging"/></returns>
-        public static ILogging Error(this ILogging logging, IFormatProvider provider, string format, params object[] args)
-            => logging.Write(Level.Error, provider, format, args);
-
-        /// <summary>
-        /// 记录<see cref="Level.Error"/>级别日志
-        /// </summary>
-        /// <param name="logging">日志接口</param>
-        /// <param name="exception"></param>
-        /// <param name="provider">字符串格式化提供程序</param>
-        /// <param name="format">格式化的字符串</param>
-        /// <param name="args">参数集合</param>
-        /// <returns><paramref name="logging"/></returns>
-        public static ILogging Error(this ILogging logging, Exception exception, IFormatProvider provider, string format, params object[] args)
-            => logging.Write(Level.Error, exception: exception, provider: provider, format: format, args: args);
 
         #endregion
 
@@ -193,32 +182,11 @@ namespace SAE.Framework.Logging
         /// 记录<see cref="Level.Fatal"/>级别日志
         /// </summary>
         /// <param name="logging">日志接口</param>
-        /// <param name="message">格式化的字符串</param>
+        /// <param name="message">日志信息</param>
         /// <returns><paramref name="logging"/></returns>
         public static ILogging Fatal(this ILogging logging, string message)
             => logging.Write(Level.Fatal, message);
 
-
-        /// <summary>
-        /// 记录<see cref="Level.Fatal"/>级别日志
-        /// </summary>
-        /// <param name="logging">日志接口</param>
-        /// <param name="format">格式化的字符串</param>
-        /// <param name="args">参数集合</param>
-        /// <returns><paramref name="logging"/></returns>
-        public static ILogging Fatal(this ILogging logging, string format, params object[] args)
-            => logging.Write(Level.Fatal, format, args);
-
-        /// <summary>
-        /// 记录<see cref="Level.Fatal"/>级别日志
-        /// </summary>
-        /// <param name="logging">日志接口</param>
-        /// <param name="provider">字符串格式化提供程序</param>
-        /// <param name="format">格式化的字符串</param>
-        /// <param name="args">参数集合</param>
-        /// <returns><paramref name="logging"/></returns>
-        public static ILogging Fatal(this ILogging logging, IFormatProvider provider, string format, params object[] args)
-            => logging.Write(Level.Fatal, provider, format, args);
         #endregion
 
         #region Trace
@@ -227,32 +195,30 @@ namespace SAE.Framework.Logging
         /// 记录<see cref="Level.Trace"/>级别日志
         /// </summary>
         /// <param name="logging">日志接口</param>
-        /// <param name="message">格式化的字符串</param>
+        /// <param name="message">日志信息</param>
         /// <returns><paramref name="logging"/></returns>
         public static ILogging Trace(this ILogging logging, string message)
             => logging.Write(Level.Trace, message);
 
-
         /// <summary>
-        /// 记录<see cref="Level.Trace"/>级别日志
+        /// 传入一个委托，当<see cref="Level.Trace"/>被启用时，会调用委托获取日志信息。
         /// </summary>
+        /// <remarks>
+        /// 此函数是为了解决<em>日志信息</em>的生成需要占用硬件大量资源。
+        /// </remarks>
         /// <param name="logging">日志接口</param>
-        /// <param name="format">格式化的字符串</param>
-        /// <param name="args">参数集合</param>
+        /// <param name="messageDelegate">消息委托</param>
         /// <returns><paramref name="logging"/></returns>
-        public static ILogging Trace(this ILogging logging, string format, params object[] args)
-            => logging.Write(Level.Trace, format, args);
+        public static ILogging Trace(this ILogging logging, Func<string> messageDelegate)
+        {
+            if (logging.IsEnabled(Level.Trace))
+            {
+                logging.Trace(messageDelegate.Invoke());
+            }
 
-        /// <summary>
-        /// 记录<see cref="Level.Trace"/>级别日志
-        /// </summary>
-        /// <param name="logging">日志接口</param>
-        /// <param name="provider">字符串格式化提供程序</param>
-        /// <param name="format">格式化的字符串</param>
-        /// <param name="args">参数集合</param>
-        /// <returns><paramref name="logging"/></returns>
-        public static ILogging Trace(this ILogging logging, IFormatProvider provider, string format, params object[] args)
-            => logging.Write(Level.Trace, provider, format, args);
+            return logging;
+        }
+
 
         #endregion
 
@@ -264,45 +230,13 @@ namespace SAE.Framework.Logging
         /// <param name="logging">日志记录器</param>
         /// <param name="level">日志级别</param>
         /// <param name="exception">异常信息</param>
-        /// <param name="provider">日志信息格式化器</param>
-        /// <param name="format">待格式化字符串</param>
-        /// <param name="args">参数</param>
+        /// <param name="message">待格式化字符串</param>
         /// <returns><paramref name="logging"/></returns>
-        public static ILogging Write(this ILogging logging, Level level, Exception exception, IFormatProvider provider, string format, params object[] args)
+        public static ILogging Write(this ILogging logging, Level level, string message, Exception exception)
         {
 
-            if (format.IsNullOrWhiteSpace() || !logging.IsEnabled(level))
+            if (message.IsNullOrWhiteSpace() || !logging.IsEnabled(level))
                 return logging;
-
-            var message = format;
-
-            if (args != null && args.Any())
-            {
-                string[] strArray = new string[args.Length];
-
-                for (var i = 0; i < args.Length; i++)
-                {
-                    var arg = args[i];
-                    if (arg is string)
-                    {
-                        strArray.SetValue(arg, i);
-                    }
-                    else
-                    {
-                        var json = arg.ToJsonString();
-                        strArray.SetValue(json.IsNullOrWhiteSpace() ? json : arg.ToString(), i);
-                    }
-                }
-
-                if (provider == null)
-                {
-                    message = string.Format(message, strArray);
-                }
-                else
-                {
-                    message = string.Format(provider, message, strArray);
-                }
-            }
 
             return logging.Write(message, level, exception: exception);
         }
@@ -311,37 +245,17 @@ namespace SAE.Framework.Logging
         /// </summary>
         /// <param name="logging">日志记录器</param>
         /// <param name="level">日志级别</param>
-        /// <param name="provider">日志信息格式化器</param>
-        /// <param name="format">待格式化字符串</param>
-        /// <param name="args">参数</param>
+        /// <param name="message">待格式化字符串</param>
         /// <returns><paramref name="logging"/></returns>
-        public static ILogging Write(this ILogging logging, Level level, IFormatProvider provider, string format, params object[] args)
-            => logging.Write(level: level, exception: null, provider: provider, format: format, args: args);
-        /// <summary>
-        /// 写入日志
-        /// </summary>
-        /// <param name="logging">日志记录器</param>
-        /// <param name="level">日志级别</param>
-        /// <param name="format">待格式化字符串</param>
-        /// <param name="args">参数</param>
-        /// <returns><paramref name="logging"/></returns>
-        public static ILogging Write(this ILogging logging, Level level, string format, params object[] args)
-            => logging.Write(level: level, exception: null, provider: null, format: format, args: args);
-        /// <summary>
-        /// 写入日志
-        /// </summary>
-        /// <param name="logging">日志记录器</param>
-        /// <param name="message">写入信息</param>
-        /// <param name="level">日志级别</param>
-        /// <returns><paramref name="logging"/></returns>
-        public static ILogging Write(this ILogging logging, string message, Level level)
-            => logging.Write(level, null,null, message);
+        public static ILogging Write(this ILogging logging, Level level, string message)
+            => logging.Write(level, message, null);
+
         #endregion
         /// <summary>
         /// 创建日志记录器
         /// </summary>
         /// <param name="factory">日志工厂</param>
-        /// <returns>日志记录器</returns>
+        /// <returns><see cref="ILogging"/></returns>
         public static ILogging Create(this ILoggingFactory factory) => factory.Create("Default");
         /// <summary>
         /// 创建日志记录器

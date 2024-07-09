@@ -52,7 +52,7 @@ namespace SAE.Framework.AspNetCore.Filters
                     context.Result = new JsonResult(errorOutput);
                     context.HttpContext.Response.StatusCode = errorOutput.ToHttpStatusCode();
                     context.ExceptionHandled = true;
-                    this._logging.Error(context.Exception, $"{errorOutput.ToJsonString()}");
+                    this._logging.Error($"{errorOutput.ToJsonString()}", context.Exception);
                 }
 
             }
