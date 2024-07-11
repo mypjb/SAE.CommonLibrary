@@ -1,0 +1,8 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<ItemGroup>
+		<ProjectReference Include="..\SAE.Framework.Configuration.Microsoft\SAE.Framework.Configuration.Microsoft.csproj" />
+		<ProjectReference Include="..\SAE.Framework.Data\SAE.Framework.Data.csproj" />
+		<ProjectReference Include="..\SAE.Framework.EventStore\SAE.Framework.EventStore.csproj" />
+		<ProjectReference Include="..\SAE.Framework.MessageQueue\SAE.Framework.MessageQueue.csproj" />
+	</ItemGroup>
+</Project>

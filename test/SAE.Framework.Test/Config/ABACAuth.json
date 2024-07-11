@@ -1,0 +1,106 @@
+{
+  "auth": {
+    "abac": {
+      "policies": [
+        {
+          "id": "1",
+          "name": "auth ok",
+          "rule": "$user.auth==true && $user.name == 'pjb'"
+        },
+        {
+          "id": "2",
+          "name": "not auth and berthDate < 1995-01-01 01:00:00",
+          "rule": "$user.auth!=false && $user.birthDate < 1995-01-01 01:00:00"
+        },
+        {
+          "id": "3",
+          "name": "/auth/api/home",
+          "rule": "$user.auth==true && $user.role regex \"^admin$\" && 1995-01-01 01:00:00 > $user.birthDate"
+        },
+        {
+          "id": "4",
+          "name": "/auth/api/home",
+          "rule": "$user.auth==true && $user.gender regex '^((man)\\|(woman))$' && $user.birthDate <= 1995-01-01 01:00:00"
+        },
+        {
+          "id": "5",
+          "name": "/auth/home/custom",
+          "rule": "$user.auth==true && $user.scope in 'ap' && 1995-01-01 01:00:00 >= $user.birthDate"
+        },
+        {
+          "id": "6",
+          "name": "/auth/home/custom/test",
+          "rule": "$user.auth==true && $user.name == 'pjb' && $user.scope == 'man' && $user.birthDate >= 1994-02-28 01:00:00 && $user.role == \"admin\""
+        },
+        {
+          "id": "7",
+          "name": "/noauth/api/student",
+          "rule": "!$user.auth && $client.ip == '127.0.0.1' && $request.scheme in 'http' && $request.scheme regex '^https?$'"
+        },
+        {
+          "id": "8",
+          "name": "/noauth/api/student",
+          "rule": "$client.ip == '127.0.0.1' && $request.scheme in 'http' && $request.scheme regex '^https?$'"
+        },
+        {
+          "id": "9",
+          "name": "/noauth/api/student/display/[\\w]+",
+          "rule": "$request.host == \"localhost\""
+        },
+        {
+          "id": "10",
+          "name": "admin",
+          "rule": "$user.role == 'admin'"
+        }
+      ],
+      "descriptors": [
+        {
+          "method": "delete",
+          "path": "/auth/api/home",
+          "policyIds": [ 1, 10 ]
+        },
+        {
+          "method": "get",
+          "path": "/auth/api/home",
+          "policyIds": [ 2, 10 ]
+        },
+        {
+          "method": "post",
+          "path": "/auth/api/home",
+          "policyIds": [ 3, 10 ]
+        },
+        {
+          "method": "put",
+          "path": "/auth/api/home",
+          "policyIds": [ 4, 10 ]
+        },
+        {
+          "method": "get",
+          "path": "/auth/home/custom",
+          "policyIds": [ 5, 10 ]
+        },
+        {
+          "method": "post",
+          "path": "/auth/home/custom/test",
+          "policyIds": [ 6, 10 ]
+        },
+        {
+          "method": "post",
+          "path": "/noauth/api/student",
+          "policyIds": [ 7, 10 ]
+        },
+        {
+          "method": "put",
+          "path": "/noauth/api/student",
+          "policyIds": [ 8, 10 ]
+        },
+        {
+          "method": "get",
+          "path": "/noauth/api/student/display/[\\w]+",
+          "matchPattern": 1,
+          "policyIds": [ 9, 10 ]
+        }
+      ]
+    }
+  }
+}

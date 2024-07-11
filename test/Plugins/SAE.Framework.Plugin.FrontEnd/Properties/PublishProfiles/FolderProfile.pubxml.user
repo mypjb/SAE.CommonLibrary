@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+此文件由 Web 项目的发布/打包过程使用。可以通过编辑此 MSBuild 文件
+自定义此过程的行为。为了解与此相关的更多内容，请访问 https://go.microsoft.com/fwlink/?LinkID=208121。 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>E:\Program\GitHub\SAE\CommonLibrary\test\Plugins\SAE.CommonLibrary.Plugin.FrontEnd\../dest/FrontEnd</_PublishTargetUrl>
+    <History>True|2024-06-18T06:27:33.2510551Z||;True|2024-06-18T14:27:24.2117600+08:00||;True|2024-03-15T14:24:34.9976581+08:00||;True|2021-07-11T17:22:46.6444920+08:00||;True|2021-07-11T17:20:21.2247182+08:00||;True|2021-07-11T16:51:16.6167511+08:00||;True|2021-07-11T16:37:39.2961000+08:00||;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>

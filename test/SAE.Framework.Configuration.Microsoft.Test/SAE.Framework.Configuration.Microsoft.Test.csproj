@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+    <PackageReference Include="xunit" Version="2.7.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.7">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="6.0.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\SAE.Framework.Configuration.Microsoft\SAE.Framework.Configuration.Microsoft.csproj" />
+    <ProjectReference Include="..\..\src\SAE.Framework.Extension.HttpClient\SAE.Framework.Extension.HttpClient.csproj" />
+    <ProjectReference Include="..\..\src\SAE.Framework.Logging.NLog\SAE.Framework.Logging.NLog.csproj" />
+    <ProjectReference Include="..\..\src\SAE.Framework\SAE.Framework.csproj" />
+    <ProjectReference Include="..\SAE.Framework.Test\SAE.Framework.Test.csproj" />
+    <ProjectReference Include="..\..\src\SAE.Framework.Database\SAE.Framework.Database.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Config\test.Test.Stage.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Config\test.Development.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Config\test.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Config\test.Production.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

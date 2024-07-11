@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<ItemGroup>
+		<ProjectReference Include="..\..\src\SAE.Framework.Abstract\SAE.Framework.Abstract.csproj" />
+		<ProjectReference Include="..\..\src\SAE.Framework.EventStore.Document\SAE.Framework.EventStore.Document.csproj" />
+	</ItemGroup>
+
+</Project>

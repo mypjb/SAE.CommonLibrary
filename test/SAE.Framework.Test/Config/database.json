@@ -1,0 +1,12 @@
+﻿{
+  "database": [
+    {
+      "Name": "default",
+      "Provider": "mysql",
+      "ConnectionString": "Data Source=mysql.db.lass.net;Database=sae_lib_test;User ID=root;Password=Aa123456;pooling=true;port=3306;sslmode=none;CharSet=utf8;allowPublicKeyRetrieval=true",
+      "InitialCommand": "CREATE DATABASE IF NOT EXISTS sae_lib_test;use sae_lib_test;create table if not exists `event_stream`(id varchar(128) not null,timestamp datetime not null,version bigint not null,data longtext)ENGINE=InnoDB DEFAULT CHARSET=utf8;create table if not exists `snapshot`(id varchar(128) not null,version bigint not null,data longtext not null)engine=InnoDB default charset=utf8;",
+      "InitialConnectionString": "Data Source=mysql.db.lass.net;User ID=root;Password=Aa123456;pooling=true;port=3306;sslmode=none;CharSet=utf8;allowPublicKeyRetrieval=true",
+      "InitialDetectionCommand": "SELECT count(1) FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'sae_lib_test'"
+    }
+  ]
+}

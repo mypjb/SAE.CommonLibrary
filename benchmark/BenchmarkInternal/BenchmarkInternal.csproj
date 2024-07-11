@@ -1,18 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<TargetFramework>net6.0</TargetFramework>
+	<TargetFramework>net8.0</TargetFramework>
     <Configurations>Debug;Release</Configurations>
     <OutputType>exe</OutputType>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.13.12" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\SAE.CommonLibrary.ObjectMapper.TinyMapper\SAE.CommonLibrary.ObjectMapper.TinyMapper.csproj" />
+    <ProjectReference Include="..\..\src\SAE.Framework.ObjectMapper.TinyMapper\SAE.Framework.ObjectMapper.TinyMapper.csproj" />
   </ItemGroup>
 
 </Project>

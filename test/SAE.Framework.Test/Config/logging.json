@@ -1,0 +1,31 @@
+﻿{
+  "Nlog": {
+    "autoReload": "true",
+    "internalLogLevel": "Warn",
+    "internalLogFile": "logs/internal-nlog.log",
+    "targets": {
+      "file": {
+        "type": "File",
+        "fileName": "logs/${shortdate}.log",
+        "layout": "${level}: ${logger}[${threadid}] ${longdate}${newline}        ${message} ${exception:message,stacktrace}",
+        "maxArchiveFiles": "10"
+      },
+      "console": {
+        "type": "ColoredConsole",
+        "layout": "${level}: ${logger}[${threadid}] ${longdate}${newline}        ${message} ${exception:message,stacktrace}",
+      }
+    },
+    "rules": [
+      {
+        "logger": "*",
+        "minLevel": "Trace",
+        "writeTo": "file"
+      },
+      {
+        "logger": "*",
+        "minLevel": "Trace",
+        "writeTo": "console"
+      }
+    ]
+  }
+}

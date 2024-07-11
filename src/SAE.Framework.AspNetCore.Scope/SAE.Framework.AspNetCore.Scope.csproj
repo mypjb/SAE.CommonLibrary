@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\SAE.Framework.Scope\SAE.Framework.Scope.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\SAE.Framework.Logging\SAE.Framework.Logging.csproj" />
+		<ProjectReference Include="..\SAE.Framework.Configuration.Microsoft\SAE.Framework.Configuration.Microsoft.csproj" />
+	</ItemGroup>
+</Project>

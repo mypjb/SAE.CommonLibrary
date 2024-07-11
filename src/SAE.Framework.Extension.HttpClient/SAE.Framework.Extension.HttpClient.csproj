@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<ItemGroup>
+		<PackageReference Include="IdentityModel" Version="6.2.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
+		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\SAE.Framework.Logging\SAE.Framework.Logging.csproj" />
+		<ProjectReference Include="..\SAE.Framework\SAE.Framework.csproj" />
+	</ItemGroup>
+
+</Project>

@@ -1,13 +1,15 @@
 <Project>
 	<!--Test project props file-->
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<IsPackable>false</IsPackable>
 		<IsPackable>false</IsPackable>
 		<FileVersion>$(Version)</FileVersion>
 		<PackageIcon>nuget.png</PackageIcon>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<PackageVersion>$(Version)</PackageVersion>
+		<GenerateDocumentationFile>false</GenerateDocumentationFile>
+		<NoWarn>CS1591</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Include="$(MSBuildStartupDirectory)/nuget.png">
